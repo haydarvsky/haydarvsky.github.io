@@ -173,7 +173,7 @@ h1{font-size:clamp(40px,8vw,68px);font-weight:900;color:var(--cream);margin:0}
 }
 
 /* ===== الأقسام ===== */
-.sections{padding:74px 0 20px;position:relative}
+.sections{padding:74px 0 0;position:relative}
 .shead{text-align:center;margin-bottom:44px}
 .shead h2{font-size:clamp(28px,5vw,40px);color:var(--green)}
 .shead p{margin:10px 0 0;font-size:18px;color:rgba(42,26,15,.62)}
@@ -237,7 +237,12 @@ a.card:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 }
 
 /* ===== التواصل ===== */
-.contact{margin-top:76px;background:var(--green);color:var(--cream);padding:58px 0 52px;position:relative;overflow:hidden}
+/* التواصلُ والتذييلُ كتلةٌ واحدةٌ متّصلةُ التدرّج — لا فاصلَ كريميّاً بينهما */
+.contact{
+  margin-top:76px;color:var(--cream);
+  background:linear-gradient(to bottom, var(--green) 0%, #0C3E2F 62%, var(--green-deep) 100%);
+  padding:62px 0 46px;position:relative;overflow:hidden;
+}
 .contact::before{
   content:'';position:absolute;inset:0;
   background:radial-gradient(70% 120% at 50% 0%, rgba(217,164,65,.13), transparent 60%);
@@ -313,8 +318,13 @@ a.card:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 .socials a.soon{opacity:.34;pointer-events:none}
 
 /* ===== التذييل ===== */
-footer{background:var(--green-deep);color:var(--cream);padding:30px 0 36px;text-align:center}
+footer{background:var(--green-deep);color:var(--cream);padding:6px 0 36px;text-align:center}
 footer .wrap{display:flex;flex-direction:column;align-items:center;gap:12px}
+/* خطٌّ ذهبيٌّ رقيقٌ يفصلُ التذييلَ دون قطعِ اللون */
+footer::before{
+  content:'';display:block;width:120px;height:1px;margin:0 auto 26px;
+  background:linear-gradient(to left,rgba(217,164,65,0),rgba(217,164,65,.45),rgba(217,164,65,0));
+}
 footer .mark{height:52px;opacity:.5}
 footer .sig{font-size:17px;opacity:.6}
 footer .copy{font-size:15px;opacity:.38}
