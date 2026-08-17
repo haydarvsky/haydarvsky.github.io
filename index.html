@@ -9,7 +9,15 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="حيدر المعاتيق — أبو إيليا">
 <meta property="og:description" content="إخراجُ الكتب وتنضيدها · الهويةُ البصرية · أدواتُ إنديزاين · التدريب">
-<meta property="og:image" content="img/portrait.jpg">
+<meta property="og:url" content="https://haydarvsky.github.io/">
+<meta property="og:image" content="https://haydarvsky.github.io/img/share.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ar_AR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="حيدر المعاتيق — أبو إيليا">
+<meta name="twitter:description" content="إخراجُ الكتب وتنضيدها · الهويةُ البصرية · أدواتُ إنديزاين · التدريب">
+<meta name="twitter:image" content="https://haydarvsky.github.io/img/share.png">
 <link rel="icon" href="img/logo-cream.svg">
 <link rel="preload" href="fonts/sakkal-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/poster-900.woff2" as="font" type="font/woff2" crossorigin>
@@ -18,49 +26,57 @@
 </head>
 <body>
 
+<div class="progress" aria-hidden="true"><i></i></div>
+
 <section class="hero">
   <img class="watermark" src="img/logo-cream.svg" alt="" aria-hidden="true">
+  <div class="grain" aria-hidden="true"></div>
 
   <header class="top">
     <div class="wrap">
-      <img class="mark" src="img/logo-cream.svg" alt="شعار حيدر">
-      <span class="kunya">حيدرفسكي</span>
+      <img class="mark" src="img/logo-cream.svg" alt="شعار حيدر" data-in style="--d:60ms;--in-y:-10px">
+      <span class="kunya" data-in style="--d:160ms;--in-y:-10px">حيدرفسكي</span>
     </div>
   </header>
 
   <div class="wrap">
     <div class="intro">
 
-      <div class="portrait">
+      <div class="portrait" data-in style="--d:120ms">
         <figure><img src="img/portrait.jpg" alt="حيدر المعاتيق" width="900" height="1205"></figure>
       </div>
 
-      <h1>حيدر المعاتيق</h1>
-      <div class="kunya-line"><span>أبو إيليا</span></div>
+      <h1 data-in style="--d:300ms;--in-y:22px">حيدر المعاتيق</h1>
+      <div class="kunya-line" data-in style="--d:420ms;--in-y:10px"><span>أبو إيليا</span></div>
 
       <div class="roles">
-        <span>إخراجُ الكتب</span>
-        <span>التنضيد</span>
-        <span>الهويةُ البصرية</span>
-        <span>أدواتُ إنديزاين</span>
-        <span>التدريب</span>
+        <span data-in style="--d:640ms">إخراجُ الكتب</span>
+        <span data-in style="--d:685ms">التنضيد</span>
+        <span data-in style="--d:730ms">الهويةُ البصرية</span>
+        <span data-in style="--d:775ms">أدواتُ إنديزاين</span>
+        <span data-in style="--d:820ms">التدريب</span>
       </div>
 
-      <p class="bio">
+      <p class="bio" data-in style="--d:900ms">
         أُخرِجُ الكتابَ من أوّلِ سطرٍ فيه إلى غلافِه: تدقيقاً وتنضيداً وفهرسةً وتصميماً.
         وأكتبُ في تحقيقِ النصوصِ والشعر، وأبني لإنديزاين أدواتٍ تُختصرُ بها أيّامُ العملِ إلى دقائق،
         وأُدرِّبُ على التصميمِ وصناعةِ المحتوى بالذكاءِ الاصطناعيّ.
       </p>
 
       <div class="cta">
-        <a class="btn btn-a" href="#المحتوى">
+        <a class="btn btn-a" href="#المحتوى" data-magnet data-in style="--d:1020ms">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
           تصفَّح أعمالي
         </a>
-        <a class="btn btn-b" href="#تواصل">للتواصل</a>
+        <a class="btn btn-b" href="#تواصل" data-in style="--d:1090ms">للتواصل</a>
       </div>
 
     </div>
+  </div>
+
+  <div class="cue" data-in style="--d:1260ms" aria-hidden="true">
+    <span class="rail"></span>
+    <span>انزلْ للأقسام</span>
   </div>
 </section>
 
@@ -75,7 +91,7 @@
     <div class="grid">
 
       <!-- المقالات -->
-      <a class="card rev" href="https://haydarvsky.github.io/articles/">
+      <a class="card rev" href="https://haydarvsky.github.io/articles/" data-step="0">
         <span class="ico" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M5 3.5h9.5L19 8v12.5H5z"/><path d="M14.5 3.5V8H19"/><path d="M8 12h8M8 15.5h8M8 8.5h3"/></svg>
         </span>
@@ -87,7 +103,7 @@
       </a>
 
       <!-- معرض الكتب -->
-      <a class="card rev" href="https://haydarvsky.github.io/books/">
+      <a class="card rev" href="https://haydarvsky.github.io/books/" data-step="1">
         <span class="ico" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M4 5.5h5.5a2.5 2.5 0 0 1 2.5 2.5v11a2 2 0 0 0-2-2H4z"/><path d="M20 5.5h-5.5A2.5 2.5 0 0 0 12 8v11a2 2 0 0 1 2-2h6z"/></svg>
         </span>
@@ -99,7 +115,7 @@
       </a>
 
       <!-- الهوية البصرية -->
-      <div class="card soon rev">
+      <div class="card soon rev" data-step="2">
         <span class="ico" aria-hidden="true">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="8.6" r="1.5"/><circle cx="8.8" cy="13.4" r="1.5"/><circle cx="15.2" cy="13.4" r="1.5"/></svg>
         </span>
@@ -109,7 +125,7 @@
       </div>
 
       <!-- مكتبة المرئيات -->
-      <div class="card soon rev">
+      <div class="card soon rev" data-step="0">
         <span class="ico" aria-hidden="true">
           <svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="3"/><path d="M14 12l-4-2.4v4.8z"/></svg>
         </span>
@@ -119,7 +135,7 @@
       </div>
 
       <!-- متجر السكربتات -->
-      <a class="card rev" href="https://haydarvsky.gumroad.com/" target="_blank" rel="noopener">
+      <a class="card rev" href="https://haydarvsky.gumroad.com/" target="_blank" rel="noopener" data-step="1">
         <span class="ico" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M4.5 8h15l-1.2 11.5H5.7z"/><path d="M9 8V6.4a3 3 0 0 1 6 0V8"/></svg>
         </span>
@@ -131,7 +147,7 @@
       </a>
 
       <!-- المكتبة التعليمية -->
-      <div class="card soon rev">
+      <div class="card soon rev" data-step="2">
         <span class="ico" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M12 4.5L21 9l-9 4.5L3 9z"/><path d="M6.5 11v4.6c0 1.3 2.5 2.4 5.5 2.4s5.5-1.1 5.5-2.4V11"/></svg>
         </span>
@@ -147,20 +163,28 @@
     <div class="wrap">
       <h2>للتواصل</h2>
       <p>لطلبِ عملٍ أو استشارةٍ أو سؤالٍ عن أداة</p>
+      <a class="wa soon" href="#" data-net="whatsapp" data-magnet data-in style="--in-y:16px">
+        <span class="wa-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.4-4.4A8.5 8.5 0 1 1 20.5 11.7z"/><path d="M9.2 8.9c.3-.6.8-.6 1.1-.1l.6.9c.2.3.1.6-.1.8l-.4.4c-.1.2-.1.4 0 .6.5.8 1.2 1.4 2 1.9.2.1.4.1.6 0l.4-.4c.2-.2.5-.3.8-.1l.9.6c.5.3.5.8-.1 1.1-.9.5-2-.2-3.3-1.2-1.1-.9-2-2-2.5-3-.3-.6-.3-1.1 0-1.5z"/></svg>
+        </span>
+        <span class="wa-tx">
+          <b>راسلني على واتساب</b>
+          <i>واتساب بزنس · أسرعُ طريقةٍ للوصول إليّ</i>
+        </span>
+        <svg class="wa-go" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6l-6 6 6 6"/></svg>
+      </a>
+
       <div class="socials">
-        <a class="soon" href="#" aria-label="واتساب" data-net="whatsapp">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 11.7a8.5 8.5 0 0 1-12.6 7.4L3.5 20.5l1.4-4.4A8.5 8.5 0 1 1 20.5 11.7z"/><path d="M9.2 8.9c.3-.6.8-.6 1.1-.1l.6.9c.2.3.1.6-.1.8l-.4.4c-.1.2-.1.4 0 .6.5.8 1.2 1.4 2 1.9.2.1.4.1.6 0l.4-.4c.2-.2.5-.3.8-.1l.9.6c.5.3.5.8-.1 1.1-.9.5-2-.2-3.3-1.2-1.1-.9-2-2-2.5-3-.3-.6-.3-1.1 0-1.5z"/></svg>
-        </a>
-        <a class="soon" href="#" aria-label="إكس" data-net="x">
+        <a class="soon" href="#" aria-label="إكس" data-net="x" data-in style="--d:60ms;--in-y:14px">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 4.5l15 15M19.5 4.5l-15 15"/></svg>
         </a>
-        <a class="soon" href="#" aria-label="إنستغرام" data-net="instagram">
+        <a class="soon" href="#" aria-label="إنستغرام" data-net="instagram" data-in style="--d:120ms;--in-y:14px">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.8" y="3.8" width="16.4" height="16.4" rx="5"/><circle cx="12" cy="12" r="3.9"/><circle cx="16.7" cy="7.3" r=".9" fill="currentColor" stroke="none"/></svg>
         </a>
-        <a class="soon" href="#" aria-label="لِنكدإن" data-net="linkedin">
+        <a class="soon" href="#" aria-label="لِنكدإن" data-net="linkedin" data-in style="--d:180ms;--in-y:14px">
           <svg viewBox="0 0 24 24"><rect x="3.8" y="3.8" width="16.4" height="16.4" rx="3.4"/><path d="M8 10.6v6.1M8 7.9v.1"/><path d="M12.2 16.7v-6.1M12.2 13.2c0-1.6.9-2.6 2.2-2.6s2.2 1 2.2 2.6v3.5"/></svg>
         </a>
-        <a class="soon" href="#" aria-label="يوتيوب" data-net="youtube">
+        <a class="soon" href="#" aria-label="يوتيوب" data-net="youtube" data-in style="--d:240ms;--in-y:14px">
           <svg viewBox="0 0 24 24"><rect x="2.8" y="5.6" width="18.4" height="12.8" rx="4"/><path d="M14.2 12l-4.1-2.4v4.8z"/></svg>
         </a>
       </div>
@@ -172,39 +196,130 @@
   <div class="wrap">
     <img class="mark" src="img/logo-cream.svg" alt="شعار حيدر">
     <div class="sig">حيدر المعاتيق — أبو إيليا</div>
-    <div class="copy">جميعُ الحقوق محفوظة · ٢٠٢٦</div>
+    <div class="copy">جميعُ الحقوق محفوظة — ٢٠٢٦</div>
   </div>
 </footer>
 
 <script>
 /* روابط التواصل — يكفي وضعُ الرابط هنا ليعملَ الأيقونة */
 var SOCIAL = {
-  whatsapp : '',
-  x        : '',
-  instagram: '',
-  linkedin : '',
-  youtube  : ''
+  whatsapp : 'https://wa.me/message/YNVDPPK3BIOJE1',
+  x        : 'https://x.com/Haydarvsky_',
+  instagram: 'https://www.instagram.com/haydar.almaateeq/',
+  linkedin : 'https://www.linkedin.com/in/%D8%AD%D9%8A%D8%AF%D8%B1-%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D8%AA%D9%8A%D9%82-95b846248/',
+  youtube  : 'https://www.youtube.com/@Haydarvsky'
 };
-document.querySelectorAll('.socials a[data-net]').forEach(function(a){
+document.querySelectorAll('[data-net]').forEach(function(a){
   var url = SOCIAL[a.dataset.net];
   if(url){ a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.classList.remove('soon'); }
 });
 
-/* الظهور بالتمرير */
-var revs = document.querySelectorAll('.rev');
+/* ============ منظومةُ الحركة ============ */
+var REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+var FINE    = matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+/* ١) دخولُ البطل: ينتظرُ الخطوطَ كي لا يقفزَ النصّ، بسقفِ ٩٠٠ms */
+var ins = document.querySelectorAll('.hero [data-in]');
+function enterHero(){ ins.forEach(function(el){ el.classList.add('in'); }); }
+var started = false;
+function startOnce(){
+  if(started) return; started = true;
+  requestAnimationFrame(enterHero);
+  /* بعد انتهاء التعاقب تُصفَّر مُهَلُه كي لا تتأخّرَ التحوّلاتُ التالية (كإخفاءِ دعوةِ التمرير) */
+  setTimeout(function(){ ins.forEach(function(el){ el.style.setProperty('--d','0ms'); }); }, 2100);
+}
+if(document.fonts && document.fonts.ready){ document.fonts.ready.then(startOnce); }
+setTimeout(startOnce, 900);
+
+/* ٢) الظهورُ بالتمرير: تعاقبٌ ٦٠ms داخل كلِّ صفٍّ من الشبكة */
+var revs = document.querySelectorAll('.rev, main [data-in], footer [data-in]');
 function revealAll(){ revs.forEach(function(el){ el.classList.add('in'); }); }
 if('IntersectionObserver' in window){
   var io = new IntersectionObserver(function(es){
-    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-  },{rootMargin:'0px 0px -8% 0px'});
-  revs.forEach(function(el,i){
-    el.style.transitionDelay = (Math.min(i,6)*55)+'ms';
-    io.observe(el);
-  });
-  setTimeout(revealAll, 2500); /* شبكةُ أمان: لا يبقى شيءٌ مخفيّاً */
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var el = e.target;
+      if(el.dataset.step) el.style.transitionDelay = (parseInt(el.dataset.step,10)*60)+'ms';
+      el.classList.add('in');
+      io.unobserve(el);
+    });
+  },{rootMargin:'0px 0px -10% 0px'});
+  revs.forEach(function(el){ io.observe(el); });
+  setTimeout(revealAll, 3000); /* شبكةُ أمان: لا يبقى شيءٌ مخفيّاً */
 }else{
   revealAll();
 }
+
+/* ٣) شريطُ التقدّم + إخفاءُ دعوةِ التمرير — قراءةٌ واحدةٌ في كلِّ إطار */
+var bar = document.querySelector('.progress i');
+var ticking = false;
+function onScroll(){
+  if(ticking) return;
+  ticking = true;
+  requestAnimationFrame(function(){
+    var y = window.scrollY || 0;
+    var max = document.documentElement.scrollHeight - innerHeight;
+    bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(y/max,1) : 0) + ')';
+    document.body.classList.toggle('scrolled', y > 40);
+    if(!REDUCED){
+      var wm = document.querySelector('.watermark');
+      if(wm) wm.style.transform = 'translate3d(0,' + (y*0.12) + 'px,0)';
+    }
+    ticking = false;
+  });
+}
+addEventListener('scroll', onScroll, {passive:true});
+onScroll();
+
+/* ٤) الوهجُ يتبعُ المؤشّرَ داخلَ البطاقة (على الفأرة فقط) */
+if(FINE){
+  document.querySelectorAll('a.card').forEach(function(card){
+    card.addEventListener('mousemove', function(e){
+      var r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
+      card.style.setProperty('--my', ((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
+    });
+  });
+}
+
+/* ٥) الزرُّ الذهبيُّ ينجذبُ للمؤشّر (عنصرٌ واحدٌ فقط كي لا تكثرَ الحركة) */
+if(FINE && !REDUCED){
+  document.querySelectorAll('[data-magnet]').forEach(function(el){
+    el.style.transition += ', transform 380ms cubic-bezier(.16,.84,.44,1)';
+    el.addEventListener('mousemove', function(e){
+      var r = el.getBoundingClientRect();
+      el.style.transform = 'translate('
+        + ((e.clientX-r.left-r.width/2)*0.16).toFixed(1) + 'px,'
+        + ((e.clientY-r.top-r.height/2)*0.28).toFixed(1) + 'px)';
+    });
+    el.addEventListener('mouseleave', function(){ el.style.transform = ''; });
+  });
+}
+
+/* ٦) ميلٌ لطيفٌ للصورة يتبعُ المؤشّر */
+if(FINE && !REDUCED){
+  var pf = document.querySelector('.portrait');
+  if(pf){
+    addEventListener('mousemove', function(e){
+      var r = pf.getBoundingClientRect();
+      if(r.bottom < 0) return;
+      var cx = (e.clientX - (r.left+r.width/2)) / innerWidth;
+      var cy = (e.clientY - (r.top+r.height/2)) / innerHeight;
+      pf.style.setProperty('--rx', (cx*7).toFixed(2)+'deg');
+      pf.style.setProperty('--ry', (-cy*5).toFixed(2)+'deg');
+    }, {passive:true});
+  }
+}
+
+/* ٧) انتقالٌ ناعمٌ للمراسي مع مراعاةِ تقليلِ الحركة */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click', function(ev){
+    var t = document.querySelector(a.getAttribute('href'));
+    if(!t) return;
+    ev.preventDefault();
+    t.scrollIntoView({behavior: REDUCED ? 'auto' : 'smooth', block:'start'});
+  });
+});
 </script>
 </body>
 </html>

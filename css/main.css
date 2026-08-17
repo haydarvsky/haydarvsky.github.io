@@ -12,6 +12,13 @@
   --card:#FFFDF8;
   --line:rgba(15,76,58,.14);
   --maxw:1100px;
+
+  /* منظومةُ الحركة: منحنى واحد وإيقاعٌ واحد في الصفحة كلّها */
+  --e-out:cubic-bezier(.22,.61,.36,1);
+  --e-soft:cubic-bezier(.16,.84,.44,1);
+  --t-fast:170ms;
+  --t-mid:260ms;
+  --t-slow:640ms;
 }
 
 /* الخطوط */
@@ -84,8 +91,15 @@ img,svg{max-width:100%;display:block}
 /* الصورة في إطار محرابي */
 .portrait{
   width:min(216px,52vw);margin:0 auto 30px;position:relative;
+  perspective:900px;
 }
-.portrait figure{margin:0;position:relative}
+.portrait figure{
+  margin:0;position:relative;
+  transform:rotateX(var(--ry,0deg)) rotateY(var(--rx,0deg));
+  transform-style:preserve-3d;
+  transition:transform 420ms var(--e-soft);
+}
+.js .portrait[data-in]{--in-y:26px;--in-s:.94;filter:blur(7px)}
 .portrait img{
   width:100%;height:auto;
   border-radius:50% 50% 22px 22px / 42% 42% 22px 22px;
@@ -127,15 +141,36 @@ h1{font-size:clamp(40px,8vw,68px);font-weight:900;color:var(--cream);margin:0}
 
 .cta{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:34px}
 .btn{
+  position:relative;overflow:hidden;cursor:pointer;
   display:inline-flex;align-items:center;gap:10px;
-  padding:11px 26px;border-radius:100px;font-size:18px;font-weight:700;
-  border:1px solid transparent;transition:transform .18s ease, background .18s ease, border-color .18s ease;
+  padding:12px 28px;border-radius:100px;font-size:18px;font-weight:700;
+  min-height:46px;border:1px solid transparent;
+  transition:background var(--t-mid) var(--e-out), border-color var(--t-mid) var(--e-out),
+             color var(--t-mid) var(--e-out), box-shadow var(--t-mid) var(--e-out);
 }
-.btn svg{width:19px;height:19px;stroke-width:1.7}
-.btn-a{background:var(--gold);color:var(--green-ink)}
-.btn-a:hover{transform:translateY(-2px);background:#e6b45a}
+.btn svg{width:19px;height:19px;stroke-width:1.7;transition:transform var(--t-mid) var(--e-out)}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.btn:active{transform:scale(.97) !important;transition-duration:var(--t-fast)}
+
+.btn-a{background:var(--gold);color:var(--green-ink);box-shadow:0 8px 22px rgba(217,164,65,.22)}
+.btn-a:hover{background:#e6b45a;box-shadow:0 14px 30px rgba(217,164,65,.3)}
+.btn-a:hover svg{transform:translateY(3px)}
+/* لمعةٌ تعبرُ الزرَّ عند التمرير عليه */
+.btn-a::after{
+  content:'';position:absolute;top:0;bottom:0;width:44%;
+  right:-60%;pointer-events:none;
+  background:linear-gradient(to left,rgba(255,255,255,0),rgba(255,255,255,.55),rgba(255,255,255,0));
+  transform:skewX(-18deg);
+}
+.btn-a:hover::after{animation:sheen 720ms var(--e-out)}
+@keyframes sheen{from{right:-60%}to{right:120%}}
+
 .btn-b{border-color:rgba(232,223,204,.34);color:var(--cream)}
-.btn-b:hover{transform:translateY(-2px);border-color:var(--gold);color:var(--gold)}
+.btn-b:hover{border-color:var(--gold);color:var(--gold);background:rgba(217,164,65,.08)}
+
+@media (prefers-reduced-motion:reduce){
+  .btn-a:hover::after{animation:none}
+}
 
 /* ===== الأقسام ===== */
 .sections{padding:74px 0 20px;position:relative}
@@ -152,9 +187,17 @@ h1{font-size:clamp(40px,8vw,68px);font-weight:900;color:var(--cream);margin:0}
   position:relative;display:flex;flex-direction:column;gap:14px;
   background:var(--card);border:1px solid var(--line);border-radius:20px;
   padding:26px 26px 22px;
-  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
-  min-height:100%;
+  transition:transform var(--t-mid) var(--e-out), box-shadow var(--t-mid) var(--e-out), border-color var(--t-mid) var(--e-out);
+  min-height:100%;overflow:hidden;
 }
+.card>*{position:relative;z-index:1}
+/* وهجٌ ذهبيٌّ يتبعُ المؤشّر داخل البطاقة */
+.card::before{
+  content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(220px circle at var(--mx,50%) var(--my,0%), rgba(217,164,65,.18), transparent 72%);
+  opacity:0;transition:opacity var(--t-mid) ease;
+}
+a.card:hover::before,a.card:focus-visible::before{opacity:1}
 .card .ico{
   width:50px;height:50px;border-radius:14px;display:grid;place-items:center;
   background:rgba(15,76,58,.07);color:var(--green);flex:none;
@@ -169,12 +212,20 @@ h1{font-size:clamp(40px,8vw,68px);font-weight:900;color:var(--cream);margin:0}
 }
 .card .go svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
 
-a.card:hover{transform:translateY(-5px);border-color:rgba(194,120,10,.45);box-shadow:0 18px 40px rgba(15,76,58,.13)}
-a.card:hover .ico{background:var(--green);color:var(--cream)}
-a.card:hover .go svg{transform:translateX(-5px)}
+a.card{cursor:pointer}
+a.card:hover{transform:translateY(-6px) scale(1.012);border-color:rgba(194,120,10,.45);box-shadow:0 20px 44px rgba(15,76,58,.15)}
+a.card:active{transform:translateY(-2px) scale(.992);transition-duration:var(--t-fast)}
+a.card:hover .ico{background:var(--green);color:var(--cream);transform:rotate(-3deg) scale(1.06)}
+a.card:hover .go svg{transform:translateX(-6px)}
+a.card:hover .go{color:var(--green)}
 a.card:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+.card .ico{transition:background var(--t-mid) var(--e-out), color var(--t-mid) var(--e-out), transform var(--t-mid) var(--e-out)}
+.card .go{transition:color var(--t-mid) var(--e-out)}
 
-.card.soon{background:rgba(255,253,248,.5);border-style:dashed}
+.card.soon{background:rgba(255,253,248,.5);border-style:dashed;cursor:default}
+.card.soon:hover{border-color:rgba(194,120,10,.34)}
+.card.soon:hover .badge{border-color:rgba(194,120,10,.7);color:var(--amber)}
+.card.soon .badge{transition:border-color var(--t-mid) var(--e-out), color var(--t-mid) var(--e-out)}
 .card.soon .ico{background:rgba(42,26,15,.05);color:rgba(15,76,58,.45)}
 .card.soon h3{color:rgba(15,76,58,.72)}
 .card.soon p{color:rgba(42,26,15,.55)}
@@ -194,6 +245,61 @@ a.card:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
 .contact .wrap{position:relative;text-align:center}
 .contact h2{font-size:clamp(26px,4.5vw,34px);color:var(--cream)}
 .contact p{margin:10px 0 26px;font-size:18px;opacity:.72}
+/* زرُّ الواتساب: القناةُ الأولى — أكبرُ وأبرزُ من البقيّة */
+.wa{
+  position:relative;overflow:hidden;cursor:pointer;
+  display:inline-flex;align-items:center;gap:18px;
+  margin:0 auto 30px;padding:16px 30px 16px 24px;
+  background:var(--gold);color:var(--green-ink);
+  border:1px solid rgba(255,255,255,.35);border-radius:100px;
+  box-shadow:0 16px 40px rgba(217,164,65,.28);
+  text-align:right;
+  transition:background var(--t-mid) var(--e-out), box-shadow var(--t-mid) var(--e-out);
+}
+.wa-ico{
+  width:52px;height:52px;flex:none;border-radius:50%;
+  display:grid;place-items:center;
+  background:rgba(6,34,25,.1);
+  transition:transform var(--t-mid) var(--e-out), background var(--t-mid) var(--e-out);
+}
+.wa-ico svg{width:30px;height:30px;fill:none;stroke:var(--green-ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.wa-tx{display:flex;flex-direction:column;line-height:1.5}
+.wa-tx b{font-family:'Sakkal Saad Poster','Sakkal Saad',serif;font-weight:700;font-size:23px}
+.wa-tx i{font-style:normal;font-size:15.5px;opacity:.72}
+.wa-go{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.6;transition:transform var(--t-mid) var(--e-out)}
+.wa:hover{background:#e6b45a;box-shadow:0 22px 52px rgba(217,164,65,.4)}
+.wa:hover .wa-ico{transform:scale(1.06) rotate(-4deg);background:rgba(6,34,25,.16)}
+.wa:hover .wa-go{transform:translateX(-6px)}
+.wa:active{transform:scale(.985) !important;transition-duration:var(--t-fast)}
+.wa:focus-visible{outline:2px solid var(--cream);outline-offset:4px}
+/* هالةٌ تنبضُ نبضاً هادئاً لتجذبَ العين */
+.wa::before{
+  content:'';position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;
+  border:1px solid rgba(232,223,204,.75);
+  animation:waHalo 2.8s var(--e-soft) infinite;
+}
+@keyframes waHalo{0%{transform:scale(1);opacity:.55}70%{transform:scale(1.055);opacity:0}100%{opacity:0}}
+/* لمعةٌ تعبرُ الزرّ */
+.wa::after{
+  content:'';position:absolute;top:0;bottom:0;width:38%;right:-60%;pointer-events:none;
+  background:linear-gradient(to left,rgba(255,255,255,0),rgba(255,255,255,.5),rgba(255,255,255,0));
+  transform:skewX(-18deg);
+}
+.wa:hover::after{animation:sheen 760ms var(--e-out)}
+.wa.soon{opacity:.4;pointer-events:none}
+@media (prefers-reduced-motion:reduce){
+  .wa::before{animation:none;opacity:.5}
+  .wa:hover::after{animation:none}
+}
+@media (max-width:520px){
+  .wa{gap:14px;padding:13px 22px 13px 18px;width:100%;max-width:420px;justify-content:center}
+  .wa-ico{width:44px;height:44px}
+  .wa-ico svg{width:26px;height:26px}
+  .wa-tx b{font-size:20px}
+  .wa-tx i{font-size:14.5px}
+  .wa-go{display:none}
+}
+
 .socials{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
 .socials a{
   width:54px;height:54px;border-radius:50%;
@@ -213,20 +319,87 @@ footer .mark{height:52px;opacity:.5}
 footer .sig{font-size:17px;opacity:.6}
 footer .copy{font-size:15px;opacity:.38}
 
-/* ===== الظهور بالتمرير ===== */
-.js .rev{opacity:0;transform:translateY(18px);transition:opacity .6s ease, transform .6s ease}
+/* ===== الظهور: بالتحميل وبالتمرير ===== */
+.js [data-in]{
+  opacity:0;
+  transform:translateY(var(--in-y,18px)) scale(var(--in-s,1));
+  transition:opacity var(--t-slow) var(--e-out) var(--d,0ms),
+             transform var(--t-slow) var(--e-out) var(--d,0ms),
+             filter var(--t-slow) var(--e-out) var(--d,0ms);
+  will-change:opacity,transform;
+}
+.js [data-in].in{opacity:1;transform:none;filter:none;will-change:auto}
+
+.js .rev{opacity:0;transform:translateY(20px) scale(.982);transition:opacity var(--t-slow) var(--e-out), transform var(--t-slow) var(--e-out)}
 .js .rev.in{opacity:1;transform:none}
+
+/* الخطّان الذهبيّان ينفتحان حول الكنية */
+.js .kunya-line::before,.js .kunya-line::after{
+  transform:scaleX(0);transform-origin:center;
+  transition:transform 700ms var(--e-out) 520ms;
+}
+.js .kunya-line.in::before,.js .kunya-line.in::after{transform:scaleX(1)}
+
+/* خطُّ عنوانِ القسم ينمو */
+.js .shead .rule{transform:scaleX(0);transform-origin:left;transition:transform 700ms var(--e-out) 180ms}
+.js .shead.in .rule{transform:scaleX(1)}
+
+/* ===== شريطُ تقدّمِ التمرير ===== */
+.progress{position:fixed;top:0;right:0;left:0;height:2px;z-index:60;pointer-events:none}
+.progress i{
+  display:block;height:100%;width:100%;
+  background:linear-gradient(to left,var(--gold),var(--amber));
+  transform:scaleX(0);transform-origin:right;
+}
+
+/* ===== دعوةُ التمرير ===== */
+.cue{
+  position:relative;z-index:2;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  padding-bottom:26px;color:var(--cream);opacity:.55;
+  transition:opacity var(--t-mid) ease;
+}
+.cue .rail{width:1px;height:44px;background:linear-gradient(to bottom,rgba(232,223,204,0),rgba(232,223,204,.6));position:relative;overflow:hidden}
+.cue .rail::after{
+  content:'';position:absolute;inset-inline:0;top:-16px;height:16px;
+  background:linear-gradient(to bottom,rgba(217,164,65,0),var(--gold));
+  animation:railRun 2.1s var(--e-soft) infinite;
+}
+@keyframes railRun{0%{transform:translateY(0);opacity:0}25%{opacity:1}100%{transform:translateY(60px);opacity:0}}
+.cue span{font-size:15px}
+/* أخصُّ من قاعدةِ الدخول `.js [data-in].in` كي يفوزَ الإخفاءُ عند التمرير */
+.js .cue[data-in].in{opacity:.55}
+.js body.scrolled .cue[data-in].in{opacity:0}
+
+/* ===== حبيباتُ الورق فوق البطل ===== */
+.hero .grain{
+  position:absolute;inset:0;z-index:1;pointer-events:none;opacity:.055;
+  mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 @media (prefers-reduced-motion:reduce){
-  .js .rev{opacity:1;transform:none;transition:none}
-  *{transition:none !important}
+  .js [data-in],.js .rev{opacity:1 !important;transform:none !important;filter:none !important;transition:none}
+  .js .kunya-line::before,.js .kunya-line::after,.js .shead .rule{transform:scaleX(1);transition:none}
+  .cue .rail::after{animation:none;opacity:.7;transform:translateY(20px)}
+  *{transition-duration:1ms !important;animation-duration:1ms !important}
 }
 
 @media (max-width:640px){
   body{font-size:18px}
-  .intro{padding-top:34px}
-  .hero{padding-bottom:70px}
-  .bio{font-size:18.5px}
+  .intro{padding:22px 0 14px}
+  .hero{padding-bottom:34px}
+  .portrait{width:min(178px,44vw);margin-bottom:22px}
+  h1{font-size:clamp(36px,10vw,52px)}
+  .kunya-line{margin-top:10px;font-size:18px}
+  .roles{margin-top:14px;gap:4px 14px;font-size:16.5px}
+  .bio{margin-top:18px;font-size:17.5px;line-height:1.95}
+  .cta{margin-top:26px;gap:10px}
+  .btn{padding:11px 22px;font-size:17px}
+  .cue{padding-bottom:14px}
+  .cue .rail{height:32px}
   .card{padding:22px 22px 20px}
   .sections{padding-top:56px}
+  .contact{margin-top:60px}
   .top .kunya{display:none}
 }
