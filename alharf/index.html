@@ -228,6 +228,10 @@ body{font-family:'Sakkal Saad',serif;direction:rtl;-webkit-font-smoothing:antial
 .tbl tr:nth-child(odd) td{background:var(--white);}
 .tbl td.nm{font-weight:800;color:var(--deep);font-size:23.5px;}
 .tbl td.no{color:var(--ink-soft);font-size:21px;}
+.tbl.compact td{padding:17px 16px;font-size:21px;}
+.tbl.compact th{padding:18px 16px;font-size:22px;}
+.tbl.compact td.nm{font-size:22px;}
+.tbl.compact td.no{font-size:19.5px;}
 .tag{display:inline-block;background:rgba(201,162,39,.14);border:1px solid rgba(201,162,39,.5);color:var(--gold-deep);font-weight:800;font-size:17px;padding:5px 16px;border-radius:30px;margin-inline-start:12px;vertical-align:middle;}
 
 /* ============ صفوف مرقّمة (الرؤية مع لوح) ============ */
@@ -732,26 +736,51 @@ body{font-family:'Sakkal Saad',serif;direction:rtl;-webkit-font-smoothing:antial
   <div class="head">
     <span class="kicker">أين نقفُ اليوم</span>
     <div class="grule"></div>
-    <div class="title">خريطةُ دعمِ العربيَّةِ في أدواتِ التَّصميمِ والفيديو</div>
+    <div class="title">متى حسمَ الآخرونَ المسألة؟</div>
+    <div class="lede">ليست العربيَّةُ مستحيلةً تقنيًّا: كلُّ منافسٍ في هذا الجدولِ حسمَها في سنةٍ معلومة. والاستثناءُ وحدَه هو مَن لم يفعل.</div>
   </div>
-  <div class="body" style="top:318px;">
-    <table class="tbl">
-      <tr><th style="width:30%;">الأداة</th><th style="width:34%;">الحال</th><th>الملاحظة</th></tr>
-      <tr><td class="nm">أدوبي — إنديزاين وإليستريتر</td><td>دعمٌ كامل<span class="tag">مدعوم</span></td><td class="no">HarfBuzz مُشكِّلُ «المحرِّكِ العالميِّ الجاهز»</td></tr>
-      <tr><td class="nm">أفتر إفكتس وبريمير</td><td>دعمٌ كامل<span class="tag">مدعوم</span></td><td class="no">عبرَ محرِّكِ النَّصِّ الموحَّد</td></tr>
-      <tr><td class="nm">فيغما</td><td>دعمٌ رسميّ<span class="tag">مدعوم</span></td><td class="no">مع حدودٍ توثِّقُها الشَّركةُ في خلطِ الاتِّجاهات</td></tr>
-      <tr><td class="nm">أفينيتي</td><td>لا دعمَ ولا خطَّة<span class="tag" style="background:rgba(165,52,42,.12);border-color:rgba(165,52,42,.5);color:#A5342A;">غائب</span></td><td class="no">مفتوحٌ منذ ٢٠١٥ · محرِّكُ نصٍّ خاصٌّ لا يدعمُ الاتِّجاه</td></tr>
-      <tr><td class="nm">كاب كت</td><td>حروفٌ مقطَّعةٌ ومقلوبة<span class="tag" style="background:rgba(165,52,42,.12);border-color:rgba(165,52,42,.5);color:#A5342A;">غائب</span></td><td class="no">شكاوى موثَّقةٌ بلا بيانٍ رسميّ</td></tr>
+  <div class="body" style="top:356px;">
+    <table class="tbl compact">
+      <tr><th style="width:32%;">الأداة</th><th style="width:24%;">سنةُ الحسم</th><th>الملاحظة</th></tr>
+      <tr><td class="nm">أفتر إفكتس وبريمير</td><td>٢٠١٧ ← ٢٠٢١<span class="tag">مدعوم</span></td><td class="no">محرِّكُ النَّصِّ الموحَّد</td></tr>
+      <tr><td class="nm">فاينل كت برو</td><td>٢٠١٨<span class="tag">مدعوم</span></td><td class="no">يرثُ تشكيلَ نظامِ ماك</td></tr>
+      <tr><td class="nm">دافنشي ريزولف</td><td>٢٠٢١<span class="tag">مدعوم</span></td><td class="no">في أداةِ النَّصِّ المتقدِّمة</td></tr>
+      <tr><td class="nm">فيغما</td><td>٢٠٢٢<span class="tag">مدعوم</span></td><td class="no">النَّصُّ حُلّ، والتَّخطيطُ ما يزالُ بإضافاتِ طرفٍ ثالث</td></tr>
+      <tr><td class="nm">كوارك إكسبرس</td><td>٢٠٢٣<span class="tag">مدعوم</span></td><td class="no">العربيَّةُ والعبريَّةُ والأرديَّةُ دعمًا أصيلًا</td></tr>
+      <tr><td class="nm">أفينيتي</td><td>طُلِبَ ٢٠١٥ — لا شيء<span class="tag" style="background:rgba(165,52,42,.12);border-color:rgba(165,52,42,.5);color:#A5342A;">غائب</span></td><td class="no">محرِّكُ نصٍّ خاصٌّ لا يدعمُ الاتِّجاه</td></tr>
+      <tr><td class="nm">بلندر</td><td>مفتوحٌ منذ ٢٠١٩<span class="tag" style="background:rgba(165,52,42,.12);border-color:rgba(165,52,42,.5);color:#A5342A;">غائب</span></td><td class="no">المكتباتُ موجودةٌ في شفرتِه لكنَّها مُطفأة</td></tr>
     </table>
   </div>
-  <div class="body bar gold" style="top:898px;font-size:24px;">
-    <div class="diamond"></div>
-    <span>حتَّى المدعومُ منها يقفُ عند حدِّ «النَّصِّ يظهرُ صحيحًا» — لا عندَ عمقِ التَّركيبِ الَّذي يستحقُّه الحرف.</span>
-  </div>
+  <div class="srcnote">المصادر: ملاحظاتُ الإصداراتِ ووثائقُ الدَّعمِ الرَّسميَّةُ لكلِّ جهة · ومستودعُ بلندر المفتوح.</div>
   <div class="foot"><div class="hairline"></div><div class="frow"><span>محرّك الحرف — مقترحُ مبادرة</span><span class="f-logo"></span><span>مجمع الملك سلمان العالمي للغة العربية</span></div></div>
 </section>
 
-<!-- ١٩ لماذا لا تستمع -->
+<!-- ١٩ بلندر: السببُ الحقيقيّ -->
+<section class="slide">
+  <div class="head">
+    <span class="kicker">اعترافٌ من الجهةِ الأخرى</span>
+    <div class="grule"></div>
+    <div class="title">ليست خصومةً… بل غيابُنا نحنُ عن طاولةِ التَّطوير</div>
+    <div class="lede">في بلندر — أشهرِ برنامجٍ ثلاثيِّ الأبعادِ مفتوحِ المصدر — مكتبتا التَّشكيلِ والاتِّجاهِ موجودتانِ في شفرتِه لكنَّهما مُطفأتان، والمشكلةُ مفتوحةٌ منذ عام ٢٠١٩. وحينَ سُئلَ المطوِّرُ عن السَّبب، أجابَ بما لم تقلْه شركةٌ تجاريَّةٌ قطُّ بهذه الصَّراحة.</div>
+  </div>
+  <div class="body" style="top:452px;">
+    <div class="event">
+      <span class="et">هارلي أتشيسون — مطوِّرٌ في بلندر، أكتوبر ٢٠٢١</span>
+      <div class="eb">«لا يُتوقَّعُ حلُّ هذه المشكلاتِ قريبًا، <b style="color:var(--gold-soft);">لأنَّنا ببساطةٍ نفتقرُ إلى مطوِّرينَ يستعملونَ لغاتٍ تحتاجُ تشكيلًا</b>… وما لم نحصلْ على عونٍ من مطوِّرٍ عربيّ، لا أتوقَّعُ تحسُّنًا في هذا قبلَ سنةٍ أو سنتين.»</div>
+    </div>
+    <div style="margin-top:34px;font-size:26px;line-height:1.68;color:var(--ink-soft);">
+      وفي نوفمبر ٢٠٢٤ عادَ فناشدَ علنًا طلبًا للمساعدة، وسألَ: «لعلَّ مثلَ هذه الشُّروحِ موجودةٌ — لكن بالعربيَّةِ وحدَها؟»
+    </div>
+  </div>
+  <div class="body bar green" style="top:842px;font-size:25px;">
+    <div class="diamond"></div>
+    <span>هذه ليست شكوى — بل بابٌ مفتوح. ما ينقصُ الميدانَ ليس المالَ ولا الإذن، بل جهةٌ عربيَّةٌ تجلسُ إلى الطَّاولةِ وتُسهم.</span>
+  </div>
+  <div class="srcnote">المصدر: مستودعُ بلندر المفتوحُ ومنتدى مطوِّريه — التَّذكرةُ ٦٧٤٥٢ مفتوحةٌ منذ يوليو ٢٠١٩.</div>
+  <div class="foot"><div class="hairline"></div><div class="frow"><span>محرّك الحرف — مقترحُ مبادرة</span><span class="f-logo"></span><span>مجمع الملك سلمان العالمي للغة العربية</span></div></div>
+</section>
+
+<!-- ٢٠ لماذا لا تستمع -->
 <section class="slide">
   <div class="head">
     <span class="kicker">السُّؤالُ الأصعب</span>
@@ -778,10 +807,15 @@ body{font-family:'Sakkal Saad',serif;direction:rtl;-webkit-font-smoothing:antial
       <div class="ic"><svg viewBox="0 0 48 48"><circle cx="16" cy="16" r="6"/><path d="M4 40 C4 30 28 30 28 40"/><circle cx="34" cy="18" r="5"/><path d="M30 38 C32 31 44 31 44 39"/></svg></div>
       <div class="b2">لا جهةٌ عربيَّةٌ واحدةٌ تفاوضُ على هذا الملفِّ التِّقنيِّ تحديدًا، كما تفعلُ المجامعُ في قضايا المعجمِ والسِّياسةِ اللُّغويَّة.</div>
     </div>
+    <div class="tcard">
+      <div class="h"><div class="diamond"></div><span>وغيابُنا عن الشَّفرةِ نفسِها</span></div>
+      <div class="ic"><svg viewBox="0 0 48 48"><path d="M17 14 L7 24 L17 34"/><path d="M31 14 L41 24 L31 34"/><path d="M26 9 L22 39"/></svg></div>
+      <div class="b2">في المشاريعِ المفتوحةِ لا يمنعُنا أحد — لكنَّ الشَّفرةَ تنتظرُ مطوِّرًا يعرفُ العربيَّةَ ويجلسُ إليها. وهذا بابٌ يُفتَحُ بالمشاركةِ لا بالمطالبة.</div>
+    </div>
   </div>
-  <div class="body bar gold" style="top:816px;font-size:25px;">
+  <div class="body bar gold" style="top:834px;font-size:25px;">
     <div class="diamond"></div>
-    <span>لا خصومةَ في الأمر — بل غيابُ سوقٍ يفرضُ الأولويَّة. والسُّوقُ يحتاجُ صوتًا مؤسَّسيًّا، لا أصواتَ أفرادٍ متفرِّقين.</span>
+    <span>لا خصومةَ في الأمر — بل غيابُ سوقٍ يفرضُ الأولويَّة، وغيابُ يدٍ عربيَّةٍ تُشاركُ في البناء.</span>
   </div>
   <div class="foot"><div class="hairline"></div><div class="frow"><span>محرّك الحرف — مقترحُ مبادرة</span><span class="f-logo"></span><span>مجمع الملك سلمان العالمي للغة العربية</span></div></div>
 </section>
