@@ -66,6 +66,8 @@
     /* ورقةُ التنسيق */
     var css = document.createElement('link'); css.rel = 'stylesheet'; css.href = ROOT + '/nav/nav.css';
     document.head.appendChild(css);
+    /* أيقونةُ التبويب إن لم تكن للصفحةِ أيقونة (يمنعُ طلبَ favicon.ico الفاشل) */
+    if (!document.querySelector('link[rel~="icon"]')) { var ic = document.createElement('link'); ic.rel = 'icon'; ic.href = LOGO; document.head.appendChild(ic); }
 
     var path = location.pathname;
     var seg = meta('hv-section') || (path.split('/')[1] || '');
@@ -73,7 +75,9 @@
     var sec = SEC[seg];
     var atSecRoot = (path === sec.p) || (path === sec.p + 'index.html') || (seg === '' && (path === '/' || path === '/index.html'));
     var parent = meta('hv-parent'), parentTitle = meta('hv-parent-title');
-    var pageTitle = meta('hv-title') || clean(document.title);
+    /* عنوانُ الصفحةِ في المسار: الوسمُ ثمّ h1 (إن كان قصيراً) ثمّ عنوانُ التبويب */
+    var h1 = document.querySelector('h1'), h1t = h1 ? h1.textContent.replace(/\s+/g, ' ').trim() : '';
+    var pageTitle = meta('hv-title') || ((h1t && h1t.length <= 70) ? h1t : clean(document.title));
     var backUrl = parent ? (parent.charAt(0) === '/' ? ROOT + parent : parent) : (seg ? ROOT + sec.p : ROOT + '/');
     var adminUrl = ROOT + (sec.admin || '/admin/');
 
@@ -114,15 +118,20 @@
         + '<div class="hv-acts">' + acts + '</div>'
         + '</div></nav>');
       document.body.insertBefore(nav, document.body.firstChild);
-      /* عناصرُ الصفحةِ اللاصقةُ في الأعلى تنزلُ تحتَ الشريط */
-      requestAnimationFrame(function () {
-        var h = nav.offsetHeight || 52;
+      /* عناصرُ الصفحةِ اللاصقةُ في الأعلى تنزلُ تحتَ الشريط — يُقاسُ ارتفاعُه بعد وصولِ ورقتِه لا قبلَها */
+      var fixed = false;
+      function fixSticky() {
+        if (fixed) return; fixed = true;
+        var h = Math.min(nav.offsetHeight || 53, 80);
         Array.prototype.forEach.call(document.body.children, function (c) {
           if (c === nav) return;
           var cs = getComputedStyle(c);
           if (cs.position === 'sticky' && parseInt(cs.top, 10) === 0) c.style.top = h + 'px';
         });
-      });
+      }
+      css.addEventListener('load', function () { requestAnimationFrame(fixSticky); });
+      css.addEventListener('error', function () { fixed = true; });
+      setTimeout(function () { if (!fixed && css.sheet) fixSticky(); }, 2500);
     }
 
     /* الرجوع: إلى الصفحةِ السابقةِ إن كانت من الموقع، وإلا إلى الأمّ */
