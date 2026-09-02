@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الحقيبةُ التدريبية — حيدر المعاتيق</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0A3428">
+<meta name="hv-title" content="الحقيبةُ التدريبية">
+<link rel="icon" href="img/logo-cream.svg">
+<link rel="preload" href="fonts/sakkal-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/edu.css">
+<script>document.documentElement.className+=' js';</script>
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body data-page="haqiba">
+
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<header class="head">
+  <img class="watermark" src="img/logo-cream.svg" alt="" aria-hidden="true">
+  <div class="wrap">
+    <div class="bar">
+      <img class="mark" src="img/logo-cream.svg" alt="شعار حيدر" data-in style="--d:40ms;--in-y:-10px">
+    </div>
+    <h1 data-in style="--d:220ms">الحقيبةُ التدريبية</h1>
+    <p class="sub" data-in style="--d:320ms">شرائحُ الدوراتِ وأدواتُها الحيّةُ وكتيّباتُها، للمدرِّبين والمعلّمين المشاركين.</p>
+    <div class="rule"></div>
+    <div class="tools" data-in style="--d:420ms" id="tools" hidden>
+      <label class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/></svg>
+        <input id="q" type="search" placeholder="ابحثْ في الحقيبة…" aria-label="ابحث في الحقيبة" autocomplete="off">
+      </label>
+      <div class="chips" id="chips" role="group" aria-label="تصفيةٌ بالدورة"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="gate" id="gate">
+      <span class="lk" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><circle cx="12" cy="15.5" r="1.2" fill="currentColor"/></svg>
+      </span>
+      <h2>أدخلْ مفتاحَ الحقيبة</h2>
+      <p>هذه الموادُّ خاصّةٌ بالمشاركين في الدورات. اكتبِ المفتاحَ الذي أُعطيتَه في الدورة.</p>
+      <form autocomplete="off">
+        <input type="password" inputmode="numeric" placeholder="••••" aria-label="مفتاح الحقيبة" autocomplete="off">
+        <button type="submit">دخول</button>
+      </form>
+      <p class="err" aria-live="polite"></p>
+      <p class="hint">إن لم يكن معك المفتاح، اطلبْه من المدرِّب.</p>
+    </section>
+
+    <div id="content" hidden>
+      <div class="unlocked-note">
+        <span>الحقيبةُ مفتوحةٌ لهذه الجلسة.</span>
+        <button type="button" id="relock">أقفلْها</button>
+      </div>
+      <div class="count" id="count" aria-live="polite"></div>
+      <div id="secs"></div>
+      <div id="empty" hidden>
+        <div class="empty"><b>لا مادّةَ بهذا الوصف</b><br><button type="button" id="reset">أعِدْ إظهارَ الكلّ</button></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a class="back" href="./">
+      المكتبةُ التعليمية
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l6 6-6 6"/></svg>
+    </a>
+    <img class="mark" src="img/logo-cream.svg" alt="شعار حيدر">
+    <div class="sig">حيدر المعاتيق — أبو إيليا</div>
+    <div class="copy">جميعُ الحقوق محفوظة — ٢٠٢٦</div>
+  </div>
+</footer>
+
+<script src="js/edu.js"></script>
+<script>
+/* أدواتُ البحثِ تظهرُ بعد الفتح */
+(function(){var c=document.getElementById('content'),t=document.getElementById('tools');
+new MutationObserver(function(){t.hidden=c.hidden;}).observe(c,{attributes:true,attributeFilter:['hidden']});})();
+</script>
+</body>
+</html>

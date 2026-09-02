@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهارات التفكير والمذاكرة - صفحة 185</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #303c9c;
+            --badge-bg: #28276d;
+            --dashed-border: #9299c5;
+            --text-dark: #333333;
+            --bg-color: #f8f9fa;
+            
+            /* رسمة الدب المدمجة باستخدام SVG (قابلة للتعديل برمجياً لعمل اللغز) */
+            --bear-svg: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Ears --%3E%3Ccircle cx='25' cy='25' r='12' fill='%235A3A22'/%3E%3Ccircle cx='25' cy='25' r='6' fill='%233A2210'/%3E%3Ccircle cx='75' cy='25' r='12' fill='%235A3A22'/%3E%3Ccircle cx='75' cy='25' r='6' fill='%233A2210'/%3E%3C!-- Head --%3E%3Ccircle cx='50' cy='50' r='35' fill='%236B4423'/%3E%3C!-- Snout --%3E%3Cellipse cx='50' cy='65' rx='18' ry='14' fill='%23D2B48C'/%3E%3C!-- Nose --%3E%3Cpath d='M 43 60 L 57 60 L 50 68 Z' fill='%23111'/%3E%3C!-- Mouth --%3E%3Cpath d='M 50 68 V 72 M 45 75 Q 50 72 50 72 Q 50 72 55 75' stroke='%23111' stroke-width='1.5' fill='none'/%3E%3C!-- Bowtie --%3E%3Cpath d='M 50 85 L 35 78 L 35 92 Z M 50 85 L 65 78 L 65 92 Z' fill='%23111'/%3E%3Ccircle cx='50' cy='85' r='4' fill='%23333'/%3E%3C!-- Glasses --%3E%3Crect x='22' y='38' width='24' height='20' rx='3' fill='rgba(255,255,255,0.1)' stroke='%23111' stroke-width='3'/%3E%3Crect x='54' y='38' width='24' height='20' rx='3' fill='rgba(255,255,255,0.1)' stroke='%23111' stroke-width='3'/%3E%3Cline x1='46' y1='45' x2='54' y2='45' stroke='%23111' stroke-width='3'/%3E%3C!-- Eyes --%3E%3Ccircle cx='34' cy='48' r='2' fill='%23000'/%3E%3Ccircle cx='66' cy='48' r='2' fill='%23000'/%3E%3C!-- Reflections (اللمعة في النظارة) --%3E%3Cline class='reflection' x1='25' y1='42' x2='35' y2='52' stroke='rgba(255,255,255,0.8)' stroke-width='2'/%3E%3Cline class='reflection' x1='57' y1='42' x2='67' y2='52' stroke='rgba(255,255,255,0.8)' stroke-width='2'/%3E%3C/svg%3E");
+            
+            /* الدب المختلف (بدون لمعة في النظارة ليكون هو الحل) */
+            --bear-svg-different: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3C!-- Ears --%3E%3Ccircle cx='25' cy='25' r='12' fill='%235A3A22'/%3E%3Ccircle cx='25' cy='25' r='6' fill='%233A2210'/%3E%3Ccircle cx='75' cy='25' r='12' fill='%235A3A22'/%3E%3Ccircle cx='75' cy='25' r='6' fill='%233A2210'/%3E%3C!-- Head --%3E%3Ccircle cx='50' cy='50' r='35' fill='%236B4423'/%3E%3C!-- Snout --%3E%3Cellipse cx='50' cy='65' rx='18' ry='14' fill='%23D2B48C'/%3E%3C!-- Nose --%3E%3Cpath d='M 43 60 L 57 60 L 50 68 Z' fill='%23111'/%3E%3C!-- Mouth --%3E%3Cpath d='M 50 68 V 72 M 45 75 Q 50 72 50 72 Q 50 72 55 75' stroke='%23111' stroke-width='1.5' fill='none'/%3E%3C!-- Bowtie --%3E%3Cpath d='M 50 85 L 35 78 L 35 92 Z M 50 85 L 65 78 L 65 92 Z' fill='%23111'/%3E%3Ccircle cx='50' cy='85' r='4' fill='%23333'/%3E%3C!-- Glasses --%3E%3Crect x='22' y='38' width='24' height='20' rx='3' fill='rgba(255,255,255,0.1)' stroke='%23111' stroke-width='3'/%3E%3Crect x='54' y='38' width='24' height='20' rx='3' fill='rgba(255,255,255,0.1)' stroke='%23111' stroke-width='3'/%3E%3Cline x1='46' y1='45' x2='54' y2='45' stroke='%23111' stroke-width='3'/%3E%3C!-- Eyes --%3E%3Ccircle cx='34' cy='48' r='2' fill='%23000'/%3E%3Ccircle cx='66' cy='48' r='2' fill='%23000'/%3E%3C/svg%3E");
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #2c2c2c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Cairo', sans-serif;
+            padding: 20px;
+        }
+
+        /* حاوية الصفحة بحجم A4 قياسي وثابت */
+        .book-page {
+            background-color: #ffffff;
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                linear-gradient(135deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(225deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(45deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(315deg, rgba(240,240,250,0.5) 25%, transparent 25%);
+            background-position: 10px 0, 10px 0, 0 0, 0 0;
+            background-size: 100px 100px;
+            background-repeat: repeat;
+        }
+
+        /* الترويسة العلوية - لصفحة يُسرى (تمتد من اليسار) */
+        .page-header {
+            position: relative;
+            height: 60px;
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+
+        .header-shape {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 10px 40px;
+            font-size: 22px;
+            font-weight: 800;
+            position: absolute;
+            top: 15px;
+            left: 0; /* تم التعديل لتلتصق باليسار */
+            width: 85%;
+            /* القص المائل الآن على اليمين */
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
+        }
+
+        /* المحتوى الرئيسي */
+        .content-wrapper {
+            flex: 1 1 auto;
+            padding: 0 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        /* منطقة العنوان والشارة */
+        .top-info-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .question-text {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        .exercise-badge {
+            background-color: var(--badge-bg);
+            color: white;
+            padding: 6px 35px;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        /* الصندوق المتقطع الكبير للغز */
+        .dashed-container {
+            border: 2px dashed var(--dashed-border);
+            width: 100%;
+            padding: 20px;
+            position: relative;
+            background-color: #fff;
+            margin-bottom: auto; /* لدفعه للأعلى قليلاً */
+        }
+
+        /* زوايا الصندوق المتقطع */
+        .dashed-container::before,
+        .dashed-container::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-color: var(--dashed-border);
+            border-style: solid;
+        }
+        .dashed-container::before { top: -2px; right: -2px; border-width: 2px 2px 0 0; }
+        .dashed-container::after { bottom: -2px; left: -2px; border-width: 0 0 2px 2px; }
+
+        /* منطقة خلفية الصورة والتدرج اللوني */
+        .puzzle-image-area {
+            background: linear-gradient(to right, #2a9d8f, #2b5876, #4e4376);
+            width: 100%;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        /* حاوية الدببة */
+        .bears-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .bear-box {
+            width: 160px;
+            height: 160px;
+            background-image: var(--bear-svg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            /* إضافة ظل خفيف لإعطاء بروز */
+            filter: drop-shadow(0px 8px 5px rgba(0,0,0,0.3));
+        }
+
+        /* الدب المختلف (بدون اللمعة في النظارة) */
+        .bear-different {
+            background-image: var(--bear-svg-different);
+        }
+
+        /* صف الحروف (أ ب ج) */
+        .labels-row {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .label-letter {
+            font-size: 38px;
+            font-weight: 900;
+            color: #ffe600; /* أصفر فاقع */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* ظل لتوضيح الحرف فوق الخلفية */
+            width: 160px;
+            text-align: center;
+        }
+
+        /* التذييل السفلي - لصفحة يُسرى (الرقم على اليسار والعنوان على اليمين) */
+        .page-footer {
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            flex-shrink: 0;
+            flex-direction: row; /* الترتيب الطبيعي لـ rtl (العنوان يمين، الرقم يسار) */
+        }
+
+        .page-number {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .footer-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* إعدادات الطباعة الصارمة لورقة A4 مثالية */
+        @media print {
+            @page { size: A4; margin: 0; }
+            body {
+                background-color: #ffffff;
+                padding: 0; margin: 0;
+                display: block;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .book-page {
+                width: 210mm; height: 297mm;
+                box-shadow: none; margin: 0;
+                page-break-after: avoid; page-break-before: avoid; page-break-inside: avoid;
+            }
+        }
+
+        /* توافقية الشاشات الصغيرة للمعاينة */
+        @media (max-width: 800px) {
+            .book-page { width: 100%; height: auto; min-height: 297mm; }
+            .content-wrapper { padding: 0 20px; }
+            .bear-box { width: 90px; height: 90px; }
+            .label-letter { font-size: 28px; width: 90px; }
+            .puzzle-image-area { height: 250px; }
+            .page-footer { padding: 15px 20px; }
+        }
+    </style>
+
+<meta name="hv-nav" content="bar">
+<meta name="hv-title" content="مهاراتُ التفكيرِ والمذاكرة — ص١٨٥">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+    <div class="book-page">
+        <!-- الترويسة -->
+        <div class="page-header">
+            <div class="header-shape">
+                مهارات التفكير والمذاكرة
+            </div>
+        </div>
+
+        <!-- المحتوى الرئيسي -->
+        <div class="content-wrapper">
+            
+            <!-- منطقة العنوان والشارة -->
+            <div class="top-info-area">
+                <div class="question-text">أي صورة للدب تختلف عن البقية؟</div>
+                <div class="exercise-badge">تمرين</div>
+            </div>
+
+            <!-- الصندوق المتقطع -->
+            <div class="dashed-container">
+                
+                <!-- منطقة اللوحة الملونة -->
+                <div class="puzzle-image-area">
+                    
+                    <!-- الدببة الثلاثة -->
+                    <div class="bears-row">
+                        <div class="bear-box"></div> <!-- الدب أ -->
+                        <div class="bear-box bear-different"></div> <!-- الدب ب (المختلف: النظارة لا تلمع) -->
+                        <div class="bear-box"></div> <!-- الدب ج -->
+                    </div>
+
+                    <!-- الحروف أسفل الدببة -->
+                    <div class="labels-row">
+                        <div class="label-letter">أ</div>
+                        <div class="label-letter">ب</div>
+                        <div class="label-letter">ج</div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- التذييل لصفحة يسرى (العنوان يميناً والرقم يساراً) -->
+        <div class="page-footer">
+            <div class="footer-title">الفصل الرابع: كيف تزيد طاقتك الاستيعابية</div>
+            <div class="page-number">185</div>
+        </div>
+    </div>
+
+</body>
+</html>

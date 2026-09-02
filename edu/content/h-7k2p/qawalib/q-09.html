@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الخط الزمني — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input, .tp-textarea { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; resize: vertical; }
+.tp-input:focus, .tp-textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-textarea { min-height: 70px; }
+.tp-event-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.tp-event-card .tp-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; }
+.tp-event-num { background: var(--amber); color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.tp-event-grid { display: grid; grid-template-columns: 110px 1fr; gap: 8px; margin-bottom: 8px; }
+.tp-remove { background: rgba(220,38,38,0.4); color: white; border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-right: auto; }
+.tp-remove:hover { background: rgba(220,38,38,0.7); }
+.tp-add-btn { background: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.3); color: var(--bg-cream); padding: 12px; border-radius: 10px; cursor: pointer; font-family: 'Tajawal', sans-serif; width: 100%; font-size: 0.95rem; }
+.tp-add-btn:hover { background: rgba(255,255,255,0.18); border-color: var(--amber-soft); }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+
+.timeline-track { position: relative; padding: 50px 20px 20px; max-width: 900px; margin: 0 auto; }
+.timeline-line { position: absolute; top: 70px; left: 40px; right: 40px; height: 4px; background: linear-gradient(to left, var(--emerald-deep), var(--amber)); border-radius: 999px; }
+.timeline-events { display: flex; justify-content: space-between; gap: 8px; position: relative; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; }
+.timeline-event { background: var(--bg-cream); border: 3px solid var(--emerald-deep); color: var(--emerald-deep); padding: 12px 16px; border-radius: 999px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 700; font-size: 1rem; transition: all 0.3s; flex-shrink: 0; min-width: 90px; text-align: center; position: relative; z-index: 1; }
+.timeline-event:hover { transform: translateY(-4px); border-color: var(--amber); }
+.timeline-event.active { background: var(--amber); color: white; border-color: var(--amber); transform: translateY(-4px) scale(1.08); box-shadow: 0 8px 20px rgba(217, 119, 6, 0.3); }
+.timeline-detail { background: var(--bg-cream); border: 1px solid var(--line); border-radius: 16px; padding: 28px 32px; margin-top: 32px; max-width: 800px; margin-left: auto; margin-right: auto; animation: fadeIn 0.4s; }
+.timeline-detail h4 { font-family: 'Reem Kufi', sans-serif; color: var(--emerald-deep); font-size: 1.4rem; margin-bottom: 12px; }
+.timeline-detail p { color: var(--ink); line-height: 1.8; font-size: 1.05rem; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 600px) { .tp-event-grid { grid-template-columns: 1fr; } .tp-header { flex-direction: column; align-items: flex-start; } .preview-title { font-size: 1.5rem; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="الخط الزمني">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — الخطُّ الزمني</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>الخطُّ الزمنيُّ مثاليٌّ لعرضِ الأحداثِ التاريخيَّةِ بترتيبِها.</strong> اكتبِ السنةَ، وعنوانَ الحدث، وتفاصيلَه. عند النقرِ على أيِّ نقطةٍ يَظهرُ شرحُها كاملًا. مناسبٌ للسيرةِ النبويَّة، والحضارات، والاكتشافاتِ العلميَّة، ومراحلِ النموِّ.
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="أحداثُ التاريخِ الإسلامي" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="انقر على أيِّ نقطةٍ زمنيَّةٍ لتقرأَ تفاصيلَها" oninput="updatePreview()">
+        </div>
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">الأحداث (مرتَّبةً تلقائيًّا حسبَ السنة)</label>
+          <div id="events-container"></div>
+          <button class="tp-add-btn" onclick="addEvent()">+ إضافةُ حدثٍ جديد</button>
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادة</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">خطٌّ زمني</h1>
+      <p class="preview-subtitle" id="preview-subtitle"></p>
+    </div>
+    <div class="timeline-track">
+      <div class="timeline-line"></div>
+      <div class="timeline-events" id="timeline-events"></div>
+    </div>
+    <div class="timeline-detail" id="timeline-detail">
+      <h4>اختر حدثًا</h4>
+      <p>انقر على أيِّ نقطةٍ زمنيَّةٍ في الخطِّ أعلاه لِيَظهرَ شرحُها هنا.</p>
+    </div>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+const defaultEvents = [
+  { year: '٦١٠', title: 'بدءُ نزولِ الوحي', detail: 'نزولُ جبريلَ عليه السلام على النبيِّ محمَّدٍ ﷺ في غارِ حراء، إيذانًا ببدءِ نزولِ القرآنِ الكريم وبعثةِ خاتمِ الأنبياء.' },
+  { year: '٦٢٢', title: 'الهجرةُ النبويَّة', detail: 'هجرةُ النبيِّ ﷺ من مكَّةَ إلى المدينةِ المنوَّرة، وتأسيسُ أوَّلِ دولةٍ إسلاميَّة، ومنها بدأ التقويمُ الهجريُّ.' },
+  { year: '٦٣٢', title: 'حجَّةُ الوداع', detail: 'آخرُ حجَّةٍ للنبيِّ ﷺ، وفيها ألقى خطبتَه الجامعةَ التي أرسَتْ قواعدَ المجتمعِ المسلمِ في الحقوقِ والمساواةِ والعدالة.' },
+  { year: '٧٥٠', title: 'قيامُ الدولةِ العبَّاسيَّة', detail: 'انتقالُ الخلافةِ إلى بني العبَّاس، ومعها بدأ العصرُ الذهبيُّ للحضارةِ الإسلاميَّةِ في العلومِ والترجمةِ والعمران.' },
+  { year: '١٢٥٨', title: 'سقوطُ بغداد', detail: 'غزوُ المغولِ بغدادَ على يدِ هولاكو، ونهايةُ الخلافةِ العبَّاسيَّة. نقطةُ تحوُّلٍ كبرى في التاريخِ الإسلاميِّ.' }
+];
+let events = JSON.parse(JSON.stringify(defaultEvents));
+let activeEvent = 0;
+
+function renderEditor() {
+  const container = document.getElementById('events-container');
+  container.innerHTML = '';
+  events.forEach((ev, idx) => {
+    const div = document.createElement('div');
+    div.className = 'tp-event-card';
+    div.innerHTML = `
+      <label class="tp-label">
+        <span class="tp-event-num">${idx+1}</span><span>الحدث ${idx+1}</span>
+        ${events.length > 1 ? `<button class="tp-remove" onclick="removeEvent(${idx})">حذف</button>` : ''}
+      </label>
+      <div class="tp-event-grid">
+        <input type="text" class="tp-input" placeholder="السنة" value="${escapeAttr(ev.year)}" oninput="updateEv(${idx}, 'year', this.value)" style="text-align:center; font-family:'Reem Kufi',sans-serif; font-weight:700;">
+        <input type="text" class="tp-input" placeholder="عنوان الحدث" value="${escapeAttr(ev.title)}" oninput="updateEv(${idx}, 'title', this.value)">
+      </div>
+      <textarea class="tp-textarea" placeholder="تفاصيل الحدث" oninput="updateEv(${idx}, 'detail', this.value)">${escapeHTML(ev.detail)}</textarea>
+    `;
+    container.appendChild(div);
+  });
+}
+function updateEv(idx, key, value) { events[idx][key] = value; updatePreview(); }
+function removeEvent(idx) { events.splice(idx, 1); if (activeEvent >= events.length) activeEvent = 0; renderEditor(); updatePreview(); }
+function addEvent() { events.push({ year: 'سنة', title: 'حدث جديد', detail: 'تفاصيل الحدث' }); renderEditor(); updatePreview(); }
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'خطٌّ زمني';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'خط زمني') + ' — موقع تعليمي';
+
+  const eventsContainer = document.getElementById('timeline-events');
+  eventsContainer.innerHTML = '';
+  events.forEach((ev, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'timeline-event' + (idx === activeEvent ? ' active' : '');
+    btn.textContent = ev.year || '—';
+    btn.onclick = () => { activeEvent = idx; updatePreview(); };
+    eventsContainer.appendChild(btn);
+  });
+
+  const detail = document.getElementById('timeline-detail');
+  if (events[activeEvent]) {
+    const ev = events[activeEvent];
+    detail.innerHTML = `<h4>${escapeHTML(ev.year)} — ${escapeHTML(ev.title)}</h4><p>${escapeHTML(ev.detail)}</p>`;
+  }
+
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'خط زمني';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const eventsJSON = JSON.stringify(events);
+  const sig = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHTML(title)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"><style>:root{--emerald-deep:#0F4C3A;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.timeline-track{position:relative;padding:50px 20px 20px;max-width:900px;margin:0 auto}.timeline-line{position:absolute;top:70px;left:40px;right:40px;height:4px;background:linear-gradient(to left,var(--emerald-deep),var(--amber));border-radius:999px}.timeline-events{display:flex;justify-content:space-between;gap:8px;position:relative;flex-wrap:nowrap;overflow-x:auto;padding-bottom:8px}.timeline-event{background:var(--bg-cream);border:3px solid var(--emerald-deep);color:var(--emerald-deep);padding:12px 16px;border-radius:999px;cursor:pointer;font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:1rem;transition:all 0.3s;flex-shrink:0;min-width:90px;text-align:center;position:relative;z-index:1}.timeline-event:hover{transform:translateY(-4px);border-color:var(--amber)}.timeline-event.active{background:var(--amber);color:white;border-color:var(--amber);transform:translateY(-4px) scale(1.08);box-shadow:0 8px 20px rgba(217,119,6,0.3)}.timeline-detail{background:var(--bg-cream);border:1px solid var(--line);border-radius:16px;padding:28px 32px;margin-top:32px;max-width:800px;margin-left:auto;margin-right:auto;animation:fadeIn 0.4s}.timeline-detail h4{font-family:'Reem Kufi',sans-serif;color:var(--emerald-deep);font-size:1.4rem;margin-bottom:12px}.timeline-detail p{color:var(--ink);line-height:1.8;font-size:1.05rem}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.preview-title{font-size:1.5rem}}</style></head><body><div class="page"><div class="preview-wrap"><div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div><div class="timeline-track"><div class="timeline-line"></div><div class="timeline-events" id="events-bar"></div></div><div class="timeline-detail" id="detail"></div>${sig}</div></div><script>
+const events = ${eventsJSON};
+let active = 0;
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function render() {
+  const bar = document.getElementById('events-bar'); bar.innerHTML='';
+  events.forEach((ev, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'timeline-event' + (idx === active ? ' active' : '');
+    btn.textContent = ev.year;
+    btn.onclick = () => { active = idx; render(); };
+    bar.appendChild(btn);
+  });
+  const ev = events[active];
+  document.getElementById('detail').innerHTML = '<h4>' + escapeHTML(ev.year) + ' — ' + escapeHTML(ev.title) + '</h4><p>' + escapeHTML(ev.detail) + '</p>';
+}
+render();
+<\/script></body></html>`;
+  downloadHTML(finalHTML, title);
+}
+
+function downloadHTML(html, title) {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'خط زمني').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s) { return String(s || '').replace(/"/g, '&quot;'); }
+function resetForm() { if (confirm('إعادةُ كلِّ القيمِ إلى الافتراضي؟')) location.reload(); }
+
+renderEditor();
+updatePreview();
+</script>
+</body>
+</html>

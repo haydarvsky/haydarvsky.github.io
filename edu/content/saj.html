@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>السجع — أ. حيدر المعاتيق</title>
+<style>
+/* ── FONTS ── */
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-100.woff2') format('woff2'); font-weight:100; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-300.woff2') format('woff2'); font-weight:300; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-400.woff2') format('woff2'); font-weight:400; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-500.woff2') format('woff2'); font-weight:500; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-700.woff2') format('woff2'); font-weight:700; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-800.woff2') format('woff2'); font-weight:800; }
+
+/* ── TOKENS ── */
+:root {
+  --gold:        #C9A84C;
+  --gold-lt:     #E8C97A;
+  --gold-dk:     #8A6820;
+  --green-bg:    #060D08;
+  --green-mid:   #0C2016;
+  --green-card:  rgba(255,255,255,0.038);
+  --green-border:rgba(201,168,76,0.18);
+  --cream:       #F4EFE4;
+  --dim:         rgba(244,239,228,0.55);
+
+  /* Rhyme palette */
+  --r-ba:   #FFD55A;   /* ب  */
+  --r-ta:   #FF8C8C;   /* ة  */
+  --r-lam:  #7DD3F0;   /* ل  */
+  --r-ya:   #C9AAFF;   /* ي  */
+  --r-aat:  #82F0A8;   /* ات */
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  font-family:'SakkalSaad',sans-serif;
+  background:var(--green-bg);
+  color:var(--cream);
+}
+
+/* ════════════════════════════════
+   CINEMATIC BARS
+   ════════════════════════════════ */
+#cine-top,#cine-bot{
+  position:fixed;left:0;right:0;z-index:999;
+  background:#000;
+  height:36px;
+  transition:height .5s ease;
+  pointer-events:none;
+}
+#cine-top{top:0;}
+#cine-bot{bottom:0;}
+body.playing #cine-top,body.playing #cine-bot{height:0;}
+
+/* ════════════════════════════════
+   PROGRESS BAR
+   ════════════════════════════════ */
+#progress{
+  position:fixed;top:36px;left:0;height:2px;z-index:998;
+  background:linear-gradient(90deg,var(--gold-dk),var(--gold),var(--gold-lt));
+  box-shadow:0 0 10px var(--gold);
+  transition:width .7s cubic-bezier(.4,0,.2,1), top .5s ease;
+  pointer-events:none;
+}
+body.playing #progress{top:0;}
+
+/* ════════════════════════════════
+   SLIDE ENGINE
+   ════════════════════════════════ */
+#stage{
+  position:fixed;inset:0;
+  overflow:hidden;
+}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:60px 5vw 70px;
+  overflow:hidden;
+
+  opacity:0;
+  transform:scale(1.06);
+  filter:blur(10px) brightness(.7);
+  transition:
+    opacity .75s cubic-bezier(.4,0,.2,1),
+    transform .75s cubic-bezier(.4,0,.2,1),
+    filter .75s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+  will-change:transform,opacity,filter;
+}
+.slide.active{
+  opacity:1;
+  transform:scale(1);
+  filter:blur(0) brightness(1);
+  pointer-events:auto;
+}
+.slide.exit{
+  opacity:0;
+  transform:scale(.94);
+  filter:blur(10px) brightness(.6);
+}
+
+/* noise texture */
+.slide::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.025;mix-blend-mode:screen;
+}
+
+/* slide-specific BG */
+.s1{background:radial-gradient(ellipse 120% 120% at 50% 50%,#112a1a 0%,#070e09 70%);}
+.s2{background:radial-gradient(ellipse 140% 100% at 20% 60%,#0d2417 0%,#060c08 65%);}
+.s3{background:radial-gradient(ellipse 130% 120% at 75% 40%,#0e2518 0%,#050c07 70%);}
+.s4{background:radial-gradient(ellipse 110% 120% at 40% 50%,#0b1e12 0%,#050c07 65%);}
+
+/* ── shared inner helpers ── */
+.inner{
+  position:relative;z-index:2;
+  width:100%;max-width:900px;
+}
+.slide-h2{
+  font-size:clamp(32px,4.8vw,56px);font-weight:800;
+  color:var(--gold);text-align:center;
+  line-height:1.1;
+}
+.gold-rule{
+  width:70px;height:2px;margin:12px auto 16px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.scrollable{
+  overflow-y:auto;
+  max-height:calc(100vh - 130px);
+  padding-left:4px;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(201,168,76,.25) transparent;
+}
+.scrollable::-webkit-scrollbar{width:3px;}
+.scrollable::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:2px;}
+
+/* ════════════════════════════════
+   SLIDE 1 — TITLE
+   ════════════════════════════════ */
+.s1 .orbit{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid rgba(201,168,76,.08);
+  animation:breathe 5s ease-in-out infinite;
+}
+.s1 .o1{width:340px;height:340px;}
+.s1 .o2{width:530px;height:530px;animation-delay:.4s;}
+.s1 .o3{width:740px;height:740px;animation-delay:.8s;}
+@keyframes breathe{
+  0%,100%{opacity:.2;transform:translate(-50%,-50%) scale(1);}
+  50%{opacity:.55;transform:translate(-50%,-50%) scale(1.025);}
+}
+.s1 .eyebrow{
+  font-size:clamp(13px,1.7vw,18px);font-weight:300;
+  color:rgba(201,168,76,.6);letter-spacing:5px;
+  margin-bottom:18px;text-align:center;
+}
+.s1 .big-title{
+  font-size:clamp(80px,14vw,150px);font-weight:800;
+  color:var(--gold);text-align:center;line-height:.95;
+  text-shadow:0 0 100px rgba(201,168,76,.2),0 0 40px rgba(201,168,76,.12);
+}
+.s1 .by-line{
+  font-size:clamp(18px,2.2vw,26px);font-weight:300;
+  color:var(--dim);margin-top:20px;text-align:center;
+  letter-spacing:2px;
+}
+
+/* ════════════════════════════════
+   SLIDE 2 — DEFINITION
+   ════════════════════════════════ */
+.card{
+  background:var(--green-card);
+  border:1px solid var(--green-border);
+  border-radius:12px;
+  padding:18px 24px;
+  margin-bottom:12px;
+}
+.def-text{
+  font-size:clamp(18px,2.4vw,27px);font-weight:400;
+  line-height:2.1;color:var(--cream);
+}
+.note{
+  background:rgba(201,168,76,.07);
+  border-right:3px solid var(--gold);
+  border-radius:8px;
+  padding:14px 20px;
+  font-size:clamp(16px,1.9vw,22px);font-weight:500;
+  color:var(--gold-lt);margin-bottom:12px;
+  line-height:1.9;
+}
+.khutba-label{
+  font-size:clamp(17px,2vw,23px);font-weight:700;
+  color:var(--gold);margin:4px 0 8px;
+}
+.khutba{
+  font-size:clamp(17px,2.1vw,24px);font-weight:400;
+  line-height:2.4;text-align:justify;
+  color:var(--cream);
+}
+/* rhyme spans */
+.rb { color:var(--r-ba);  font-weight:700; }
+.rt { color:var(--r-ta);  font-weight:700; }
+.rl { color:var(--r-lam); font-weight:700; }
+.ry { color:var(--r-ya);  font-weight:700; }
+.ra { color:var(--r-aat); font-weight:700; }
+
+.legend{
+  display:flex;flex-wrap:wrap;gap:10px 20px;
+  margin-top:10px;justify-content:center;
+}
+.leg-item{display:flex;align-items:center;gap:7px;font-size:clamp(13px,1.6vw,18px);color:var(--dim);}
+.leg-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;}
+
+/* ════════════════════════════════
+   SLIDE 3 — EXAMPLES
+   ════════════════════════════════ */
+.src-tag{
+  font-size:clamp(13px,1.4vw,16px);font-weight:700;
+  color:var(--gold);margin-bottom:7px;
+  display:flex;align-items:center;gap:8px;
+}
+.quran-txt{
+  font-size:clamp(20px,2.7vw,32px);font-weight:500;
+  color:var(--gold-lt);line-height:2.1;margin-bottom:6px;
+}
+.ex-txt{
+  font-size:clamp(18px,2.2vw,26px);font-weight:400;
+  color:var(--cream);line-height:2;margin-bottom:6px;
+}
+.ex-note{
+  font-size:clamp(14px,1.6vw,18px);font-weight:300;
+  color:var(--dim);padding-top:7px;
+  border-top:1px solid rgba(201,168,76,.1);
+}
+.section-label{
+  font-size:clamp(17px,2vw,24px);font-weight:700;
+  color:var(--gold);margin:14px 0 7px;
+  display:flex;align-items:center;gap:8px;
+}
+
+/* ════════════════════════════════
+   SLIDE 4 — EXERCISES
+   ════════════════════════════════ */
+.ex-block{
+  background:var(--green-card);
+  border:1px solid var(--green-border);
+  border-radius:12px;
+  padding:18px 22px;
+  margin-bottom:14px;
+}
+.ex-block-title{
+  font-size:clamp(18px,2.1vw,25px);font-weight:700;
+  color:var(--gold);padding-bottom:10px;
+  border-bottom:1px solid rgba(201,168,76,.15);
+  margin-bottom:14px;
+}
+.q-item{margin-bottom:16px;}
+.q-txt{
+  font-size:clamp(17px,2vw,23px);font-weight:500;
+  color:var(--cream);line-height:1.85;margin-bottom:9px;
+}
+.opts{display:flex;flex-direction:column;gap:7px;}
+.opt{
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(201,168,76,.18);
+  border-radius:8px;
+  padding:11px 18px;
+  text-align:right;
+  cursor:pointer;
+  color:var(--cream);
+  font-family:'SakkalSaad',sans-serif;
+  font-size:clamp(15px,1.8vw,21px);font-weight:400;
+  transition:background .25s,border-color .25s,transform .2s;
+  display:flex;align-items:center;gap:10px;
+  position:relative;overflow:hidden;
+}
+.opt::before{
+  content:'';
+  position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.06),transparent);
+  transform:translateX(120%);
+  transition:transform .4s ease;
+}
+.opt:hover:not(.done)::before{transform:translateX(-120%);}
+.opt:hover:not(.done){
+  background:rgba(201,168,76,.09);
+  border-color:rgba(201,168,76,.45);
+  transform:translateX(-3px);
+}
+.opt.correct{background:rgba(46,160,67,.18);border-color:#3dba58;color:#a0f0b0;}
+.opt.wrong  {background:rgba(220,50,50,.15); border-color:#d03030;color:#f0a0a0;}
+.opt.reveal {background:rgba(46,160,67,.08); border-color:rgba(61,186,88,.3);color:rgba(160,240,176,.7);}
+.opt .ico{font-size:17px;flex-shrink:0;min-width:20px;}
+
+/* ════════════════════════════════
+   NAV
+   ════════════════════════════════ */
+#nav{
+  position:fixed;bottom:48px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:18px;
+  z-index:997;
+  background:rgba(6,13,8,.65);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(201,168,76,.15);
+  border-radius:50px;
+  padding:10px 22px;
+  transition:bottom .5s ease;
+}
+body.playing #nav{bottom:12px;}
+
+.nav-btn{
+  background:none;
+  border:1px solid rgba(201,168,76,.4);
+  color:var(--gold);
+  width:38px;height:38px;
+  border-radius:50%;
+  cursor:pointer;
+  font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s;
+  user-select:none;
+}
+.nav-btn:hover{background:var(--gold);color:var(--green-bg);}
+.nav-btn:disabled{opacity:.25;cursor:default;}
+.dots{display:flex;gap:7px;align-items:center;}
+.dot{
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(201,168,76,.25);
+  cursor:pointer;transition:all .3s;
+}
+.dot.on{background:var(--gold);transform:scale(1.5);}
+#slide-num{
+  font-size:13px;font-weight:300;
+  color:rgba(201,168,76,.5);
+  letter-spacing:1px;min-width:36px;text-align:center;
+}
+
+/* HUD */
+#hud{
+  position:fixed;top:44px;right:24px;z-index:997;
+  font-size:11px;font-weight:300;
+  color:rgba(201,168,76,.35);letter-spacing:1px;
+  transition:top .5s ease;
+}
+body.playing #hud{top:8px;}
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="السَّجْع">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body class="playing">
+
+<div id="cine-top"></div>
+<div id="cine-bot"></div>
+<div id="progress" style="width:25%"></div>
+<div id="hud">← → للتنقل</div>
+
+<div id="stage">
+
+  <!-- ══════════════ SLIDE 1 ══════════════ -->
+  <section class="slide s1 active" data-i="0">
+    <div class="s1 orbit o1"></div>
+    <div class="s1 orbit o2"></div>
+    <div class="s1 orbit o3"></div>
+    <div style="text-align:center;position:relative;z-index:2;">
+      <div class="s1 eyebrow">دروس البلاغة</div>
+      <div class="s1 big-title">السَّجْع</div>
+      <div class="gold-rule" style="width:120px;margin:16px auto;"></div>
+      <div class="s1 by-line">إعداد: أ. حيدر المعاتيق</div>
+    </div>
+  </section>
+
+  <!-- ══════════════ SLIDE 2 ══════════════ -->
+  <section class="slide s2" data-i="1">
+    <div class="inner scrollable">
+      <div class="slide-h2">ما هو السجع؟</div>
+      <div class="gold-rule"></div>
+
+      <div class="card">
+        <div class="def-text">
+          السجع ظاهرة أسلوبية راقية من ظواهر الإيقاع في النثر العربي، إذ يُعدّ من أبرز المحسنات اللفظية التي اعتنى بها البلاغيون وأولوها اهتماماً بالغاً في مؤلفاتهم.
+          <br><br>
+          <strong style="color:var(--gold)">السجع اصطلاحاً:</strong> هو توافق الفاصلتين — أواخر الجمل — في الحرف الأخير وحركته.
+        </div>
+      </div>
+
+      <div class="note">
+        ⚠️ <strong>ملاحظة هامة جداً:</strong> السجع من المحسنات اللفظية التي تقع في <u>النثر فقط</u>، وما يقابله في الشعر يُسمّى <strong>القافية</strong> أو <strong>التصريع</strong>.
+      </div>
+
+      <div class="khutba-label">🕌 مثال: خطبة بلاغية — مواطن السجع مُلوَّنة</div>
+
+      <div class="card khutba">
+الحمدُ للهِ مُنْزِلِ <span class="rb">الكِتَاب</span>، ومُجْرِي <span class="rb">السَّحَاب</span>، وهَازِمِ <span class="rb">الأَحْزَاب</span>، مُسَبِّبِ <span class="rb">الأَسْبَاب</span>، وفَاتِحِ <span class="rb">الأَبْوَاب</span>. والصَّلاةُ والسَّلامُ على النَّبيِّ <span class="rb">الأَوَّاب</span>، وعلى آلِهِ <span class="rb">الأَصْحَاب</span>، ومَنْ تَبِعَهُم بِإحسانٍ إلى يَوْمِ <span class="rb">المَآب</span>.
+<br><br>
+أمَّا بَعْدُ أيُّهَا <span class="rb">الشَّبَاب</span>: أنتم أملُ <span class="rt">الأُمَّة</span>، وأصحابُ <span class="rt">الهِمَّة</span>، وبُناةُ <span class="rt">القِمَّة</span>. إنَّ العِلمَ نورُ <span class="rl">العُقُول</span>، ومِفتاحُ <span class="rl">الوُصُول</span>، بهِ تَزولُ <span class="rt">الجَهَالَة</span>، وتتحقَّقُ <span class="rt">الرِّسَالَة</span>. فاحفظوا أغلى <span class="ra">الأَوْقَات</span>، قبلَ فَوَاتِ <span class="ra">اللَّحَظَات</span>، وسارِعُوا إلى <span class="ra">المَكْرُمَات</span>، واتركوا دربَ <span class="ra">المُهْلِكَات</span>. فمَنْ صَدَقَ في <span class="rb">الطَّلَب</span>، نَالَ أعلى <span class="rb">الرُّتَب</span>، ومَنْ سَهِرَ <span class="ry">اللَّيَالِي</span>، أدركَ <span class="ry">المَعَالِي</span>.
+<br><br>
+اللهمَّ اغفرْ لنا <span class="ra">الزَّلَّات</span>، وأقِلْ لنا <span class="ra">العَثَرَات</span>، وضاعِفْ لنا <span class="ra">الحَسَنَات</span>، وتجاوَزْ عن <span class="ra">السَّيِّئَات</span>. والحمدُ للهِ رَبِّ العَالَمِين.
+      </div>
+
+      <div class="legend">
+        <div class="leg-item"><div class="leg-dot" style="background:var(--r-ba)"></div>توافق حرف الباء</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--r-ta)"></div>توافق التاء المربوطة</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--r-lam)"></div>توافق حرف اللام</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--r-ya)"></div>توافق الياء المقصورة</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--r-aat)"></div>توافق حرف التاء (ات)</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ SLIDE 3 ══════════════ -->
+  <section class="slide s3" data-i="2">
+    <div class="inner scrollable">
+      <div class="slide-h2">الأمثلة</div>
+      <div class="gold-rule"></div>
+
+      <!-- Quran -->
+      <div class="section-label">
+        <span style="font-size:20px">①</span> من القرآن الكريم
+        <span style="font-size:12px;font-weight:300;color:var(--dim)">(الفاصلة القرآنية)</span>
+      </div>
+
+      <div class="card">
+        <div class="quran-txt">﴿فِي سِدْرٍ مَّخْضُودٍ ۞ وَطَلْحٍ مَّنضُودٍ ۞ وَظِلٍّ مَّمْدُودٍ﴾</div>
+        <div class="ex-note">انتهت الفواصل بحرف الدال المضموم مما أحدث إيقاعاً متناغماً جميلاً.</div>
+      </div>
+
+      <div class="card">
+        <div class="quran-txt">﴿وَالنَّجْمِ إِذَا هَوَى ۞ مَا ضَلَّ صَاحِبُكُمْ وَمَا غَوَى﴾</div>
+        <div class="ex-note">انتهت الفواصل بالألف المقصورة: هَوَى / غَوَى.</div>
+      </div>
+
+      <div class="note" style="font-size:clamp(12px,1.3vw,15px);margin-bottom:12px;">
+        📌 لا نُسمّي السجع في الآيات القرآنية «سجعاً»، بل نسمّيه <strong>الفاصلة القرآنية</strong> احترامًا وتأدبًا مع كلام الله، وتفريقاً له عن كلام البشر.
+      </div>
+
+      <!-- Hadith -->
+      <div class="section-label"><span style="font-size:20px">②</span> من الحديث الشريف</div>
+      <div class="card">
+        <div class="ex-txt">قال رسول الله ﷺ: <span style="color:var(--gold-lt);">"اللهم أعطِ مُنفقاً <span class="rb">خَلَفاً</span>، وأعطِ ممسكاً <span class="rb">تَلَفاً</span>"</span></div>
+        <div class="ex-note">التوافق في حرف الفاء والألف: خَلَفاً / تَلَفاً.</div>
+      </div>
+
+      <!-- Arab proverbs -->
+      <div class="section-label"><span style="font-size:20px">③</span> من المأثور وخطب العرب</div>
+      <div class="card">
+        <div class="ex-txt" style="color:var(--gold-lt);">"الإنسان بآدابِـهِ، لا بزيّه <span class="rb">وثيابِـهِ</span>"</div>
+        <div class="ex-note">التوافق في حرف الباء مع الهاء الضمير: آدابِهِ / ثيابِهِ.</div>
+      </div>
+      <div class="card">
+        <div class="ex-txt" style="color:var(--gold-lt);">"الحرُّ إذا وعَدَ <span class="ry">وَفَى</span>، وإذا أعانَ <span class="ry">كَفَى</span>، وإذا مَلَكَ <span class="ry">عَفَى</span>"</div>
+        <div class="ex-note">التوافق في الفاء والألف المقصورة: وَفَى / كَفَى / عَفَى.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ SLIDE 4 ══════════════ -->
+  <section class="slide s4" data-i="3">
+    <div class="inner scrollable">
+      <div class="slide-h2">التدريبات</div>
+      <div class="gold-rule"></div>
+
+      <!-- Ex 1 -->
+      <div class="ex-block">
+        <div class="ex-block-title">📝 التدريب الأول: استخراج السجع</div>
+
+        <div class="q-item">
+          <div class="q-txt">١. "الصوم حرمان مشروع، وتأديب بالجوع" — على أي حرف بُني السجع؟</div>
+          <div class="opts">
+            <button class="opt" data-c="0"><span class="ico"></span>حرف الراء</button>
+            <button class="opt" data-c="1"><span class="ico"></span>حرف العين</button>
+            <button class="opt" data-c="0"><span class="ico"></span>حرف الصاد</button>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-txt">٢. "ربّ تقبل توبتي، واغسل حوبتي، وأجب دعوتي" — على أي حرف بُني السجع؟</div>
+          <div class="opts">
+            <button class="opt" data-c="0"><span class="ico"></span>الواو</button>
+            <button class="opt" data-c="1"><span class="ico"></span>التاء والياء</button>
+            <button class="opt" data-c="0"><span class="ico"></span>حرف الباء</button>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-txt">٣. "المؤمن غُرّ كريم، والفاجر خِبّ لئيم" — ما وجه السجع؟</div>
+          <div class="opts">
+            <button class="opt" data-c="0"><span class="ico"></span>توافق حرف الراء</button>
+            <button class="opt" data-c="0"><span class="ico"></span>توافق حرف الفاء</button>
+            <button class="opt" data-c="1"><span class="ico"></span>توافق حرف الميم</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 2 -->
+      <div class="ex-block">
+        <div class="ex-block-title">✍️ التدريب الثاني: أكمل الفراغ</div>
+
+        <div class="q-item">
+          <div class="q-txt">١. "من كثرت إحسانه، كثر ......"</div>
+          <div class="opts">
+            <button class="opt" data-c="1"><span class="ico"></span>إخوانه</button>
+            <button class="opt" data-c="0"><span class="ico"></span>صفاته</button>
+            <button class="opt" data-c="0"><span class="ico"></span>أعماله</button>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-txt">٢. "العاقل من تدارك زلته، واعترف بـ ......"</div>
+          <div class="opts">
+            <button class="opt" data-c="0"><span class="ico"></span>خطأه</button>
+            <button class="opt" data-c="1"><span class="ico"></span>هفوته</button>
+            <button class="opt" data-c="0"><span class="ico"></span>نقصه</button>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-txt">٣. "الصداقة تحفة تزداد قيمتها بالزمن، وكنز يغلى بمرور ......"</div>
+          <div class="opts">
+            <button class="opt" data-c="0"><span class="ico"></span>الأيام</button>
+            <button class="opt" data-c="1"><span class="ico"></span>المِحَن</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ex 3 -->
+      <div class="ex-block">
+        <div class="ex-block-title">✅ التدريب الثالث: صواب أم خطأ؟</div>
+
+        <div class="q-item">
+          <div class="q-txt">١. "السجع يقع في الشعر والنثر معاً"</div>
+          <div class="opts">
+            <button class="opt" data-c="0"><span class="ico"></span>✅ صواب</button>
+            <button class="opt" data-c="1"><span class="ico"></span>❌ خطأ</button>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-txt">٢. "سر جمال السجع إحداث جرس موسيقي يطرب الأذن"</div>
+          <div class="opts">
+            <button class="opt" data-c="1"><span class="ico"></span>✅ صواب</button>
+            <button class="opt" data-c="0"><span class="ico"></span>❌ خطأ</button>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-txt">٣. الجملة: "الليل داجٍ، والنهار ساجٍ" — هل تحتوي على سجع؟</div>
+          <div class="opts">
+            <button class="opt" data-c="1"><span class="ico"></span>✅ نعم</button>
+            <button class="opt" data-c="0"><span class="ico"></span>❌ لا تحتوي على سجع</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /scrollable -->
+  </section>
+
+</div><!-- /stage -->
+
+<!-- NAV -->
+<nav id="nav">
+  <button class="nav-btn" id="btn-prev" title="السابق" disabled="">▶</button>
+  <div class="dots" id="dots">
+    <div class="dot on" data-g="0"></div>
+    <div class="dot" data-g="1"></div>
+    <div class="dot" data-g="2"></div>
+    <div class="dot" data-g="3"></div>
+  </div>
+  <span id="slide-num">١ / ٤</span>
+  <button class="nav-btn" id="btn-next" title="التالي">◀</button>
+</nav>
+
+<script>
+/* ── state ── */
+const slides = Array.from(document.querySelectorAll('.slide'));
+const dots   = Array.from(document.querySelectorAll('.dot'));
+const nums   = ['١','٢','٣','٤'];
+let cur = 0, animating = false;
+
+const progressBar = document.getElementById('progress');
+const slideNum    = document.getElementById('slide-num');
+const btnPrev     = document.getElementById('btn-prev');
+const btnNext     = document.getElementById('btn-next');
+
+/* remove cinematic bars after 1 s */
+setTimeout(()=>document.body.classList.add('playing'), 900);
+
+/* ── transition ── */
+function goTo(n){
+  if(n === cur || animating || n < 0 || n >= slides.length) return;
+  animating = true;
+
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('exit');
+
+  const prev = cur;
+  cur = n;
+
+  slides[cur].classList.add('active');
+  dots.forEach((d,i)=> d.classList.toggle('on', i===cur));
+  slideNum.textContent = nums[cur] + ' / ٤';
+  progressBar.style.width = ((cur+1)/slides.length*100)+'%';
+  btnPrev.disabled = (cur===0);
+  btnNext.disabled = (cur===slides.length-1);
+
+  setTimeout(()=>{
+    slides[prev].classList.remove('exit');
+    animating = false;
+  }, 780);
+}
+
+/* ── controls ── */
+btnNext.addEventListener('click', ()=> goTo(cur+1));
+btnPrev.addEventListener('click', ()=> goTo(cur-1));
+dots.forEach(d => d.addEventListener('click', ()=> goTo(+d.dataset.g)));
+
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowDown') goTo(cur+1);
+  if(e.key==='ArrowRight'||e.key==='ArrowUp')  goTo(cur-1);
+});
+
+/* touch swipe */
+let tx=0;
+document.addEventListener('touchstart', e=> tx=e.touches[0].clientX, {passive:true});
+document.addEventListener('touchend', e=>{
+  const d = tx - e.changedTouches[0].clientX;
+  if(Math.abs(d)>48) goTo(d>0 ? cur+1 : cur-1);
+}, {passive:true});
+
+/* ── quiz ── */
+document.querySelectorAll('.opts').forEach(group=>{
+  group.querySelectorAll('.opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if(group.dataset.done) return;
+      group.dataset.done = '1';
+      const correct = +btn.dataset.c === 1;
+      group.querySelectorAll('.opt').forEach(b=>{
+        const isC = +b.dataset.c === 1;
+        b.disabled = true;
+        if(b === btn){
+          b.classList.add(correct ? 'correct' : 'wrong');
+          b.querySelector('.ico').textContent = correct ? '✓' : '✗';
+        } else if(isC && !correct){
+          b.classList.add('reveal');
+          b.querySelector('.ico').textContent = '✓';
+        }
+      });
+    });
+  });
+});
+</script>
+
+
+</body></html>

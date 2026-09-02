@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهارات التفكير والمذاكرة - صفحة 213</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #303c9c;
+            --badge-bg: #3c2a80; /* لون الترويسة البنفسجي الغامق كما في الصورة */
+            --dashed-border: #9299c5;
+            --text-dark: #333333;
+            --text-gray: #555555;
+            --bg-color: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #2c2c2c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Cairo', sans-serif;
+            padding: 20px;
+        }
+
+        /* حاوية الصفحة بحجم A4 قياسي وثابت */
+        .book-page {
+            background-color: #ffffff;
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                linear-gradient(135deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(225deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(45deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(315deg, rgba(240,240,250,0.5) 25%, transparent 25%);
+            background-position: 10px 0, 10px 0, 0 0, 0 0;
+            background-size: 100px 100px;
+            background-repeat: repeat;
+        }
+
+        /* الترويسة العلوية */
+        .page-header {
+            position: relative;
+            height: 60px;
+            margin-bottom: 25px;
+            flex-shrink: 0;
+        }
+
+        .header-shape {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 10px 40px;
+            font-size: 22px;
+            font-weight: 800;
+            position: absolute;
+            top: 15px;
+            right: 0;
+            width: 85%;
+            clip-path: polygon(100% 0, 0 0, 5% 100%, 100% 100%);
+        }
+
+        /* المحتوى الرئيسي */
+        .content-wrapper {
+            flex: 1 1 auto;
+            padding: 0 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        /* القسم العلوي: النصوص والصورة */
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .text-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-title {
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .subtitle::before {
+            content: '•';
+            font-size: 24px;
+            line-height: 0;
+        }
+
+        .paragraph-text {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-gray);
+            line-height: 1.8;
+            text-align: justify;
+            margin-bottom: 15px;
+        }
+
+        .graphic-content {
+            width: 220px;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* الصندوق المتقطع للتمرين */
+        .dashed-container {
+            border: 2px dashed var(--dashed-border);
+            width: 100%;
+            position: relative;
+            background-color: rgba(255,255,255,0.9);
+            margin-top: 15px;
+            padding: 35px 30px 25px 30px;
+            flex: 1 1 auto;
+        }
+
+        /* زوايا الصندوق المتقطع */
+        .dashed-container::before,
+        .dashed-container::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-color: var(--dashed-border);
+            border-style: solid;
+        }
+        .dashed-container::before { top: -2px; right: -2px; border-width: 2px 2px 0 0; }
+        .dashed-container::after { bottom: -2px; left: -2px; border-width: 0 0 2px 2px; }
+
+        /* منطقة عناوين الصندوق المتقطع (تمرين + استبانة) */
+        .box-header-area {
+            position: absolute;
+            top: -20px;
+            left: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .exercise-badge {
+            background-color: var(--badge-bg);
+            color: white;
+            padding: 8px 35px;
+            font-size: 20px;
+            font-weight: 800;
+            position: absolute;
+            right: 25px;
+            top: 0;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .box-title {
+            background-color: #fff;
+            padding: 0 20px;
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--text-dark);
+            z-index: 1;
+        }
+
+        /* قائمة التحقق (Checklist) */
+        .checklist {
+            list-style: none;
+            padding: 0;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .checklist li {
+            position: relative;
+            padding-right: 30px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* علامة الصح */
+        .checklist li::before {
+            content: '✔';
+            position: absolute;
+            right: 0;
+            top: 0;
+            color: #444;
+            font-size: 18px;
+        }
+
+        /* التذييل السفلي - لصفحة يُسرى (الرقم على اليسار والعنوان على اليمين) */
+        .page-footer {
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            flex-shrink: 0;
+            flex-direction: row; /* الترتيب الطبيعي لـ rtl (العنوان يمين، الرقم يسار) */
+        }
+
+        .page-number {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .footer-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* إعدادات الطباعة الصارمة لورقة A4 مثالية */
+        @media print {
+            @page { size: A4; margin: 0; }
+            body {
+                background-color: #ffffff;
+                padding: 0; margin: 0;
+                display: block;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .book-page {
+                width: 210mm; height: 297mm;
+                box-shadow: none; margin: 0;
+                page-break-after: avoid; page-break-before: avoid; page-break-inside: avoid;
+            }
+        }
+
+        /* توافقية الشاشات الصغيرة للمعاينة */
+        @media (max-width: 800px) {
+            .book-page { width: 100%; height: auto; min-height: 297mm; }
+            .content-wrapper { padding: 0 20px; }
+            .top-section { flex-direction: column; }
+            .graphic-content { width: 100%; height: 200px; margin-top: 20px; }
+            .exercise-badge { position: relative; right: auto; margin-bottom: 10px; display: inline-block; }
+            .box-header-area { position: relative; top: 0; flex-direction: column; margin-bottom: 20px; }
+            .page-footer { padding: 15px 20px; }
+            .dashed-container { padding: 25px 15px 15px 15px; }
+        }
+    </style>
+
+<meta name="hv-nav" content="bar">
+<meta name="hv-title" content="مهاراتُ التفكيرِ والمذاكرة — ص٢١٣">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+    <div class="book-page">
+        <!-- الترويسة -->
+        <div class="page-header">
+            <div class="header-shape">
+                مهارات التفكير والمذاكرة
+            </div>
+        </div>
+
+        <!-- المحتوى الرئيسي -->
+        <div class="content-wrapper">
+            
+            <!-- القسم العلوي: النص والشكل البصري -->
+            <div class="top-section">
+                
+                <div class="text-content">
+                    <div class="main-title">كيف تدير وقتك؟ وكم عدد الساعات الدراسية المتاحة لك أثناء اليوم؟</div>
+                    <div class="subtitle">أولاً: هل تدير وقتك بالطريقة الجيدة؟</div>
+                    
+                    <div class="paragraph-text">
+                        هل شعرت أحيانًا بأن يومك قصير جدًا، وأنه لا يكفي للمذاكرة وأداء المهام التي ترغب في إنجازها؟ بلغة بسيطة ومباشرة، قد نفسر ذلك بأنها صعوبات في إدارة الوقت. وغالبًا ما يشتكي الناس من ضيق الوقت، وعدم كفايته لإنجاز المهام المتعددة؛ لأنهم يجهلون الإدارة الجيدة له. ولكن في الحقيقة عليك أن تعرف وتحدد عمليًا عدد الساعات التي تهدر أثناء يومك؛ لتعرف مدى تحقيقك لعملية التخطيط وإدارة الوقت.
+                    </div>
+                    
+                    <div class="paragraph-text" style="color: var(--text-dark); font-weight: 700;">
+                        التمرين التالي سيساعدك بمعرفة مدى كفاءة إدارتك للوقت.
+                    </div>
+                </div>
+
+                <!-- الرسمة المتجهية (بديل للصورة 3D) -->
+                <div class="graphic-content">
+                    <svg viewBox="0 0 200 280" width="100%" height="100%">
+                        <!-- الظل السفلي -->
+                        <ellipse cx="100" cy="260" rx="60" ry="12" fill="rgba(0,0,0,0.1)" />
+                        
+                        <!-- علامة الاستفهام الحمراء (بتأثير طبقات) -->
+                        <g transform="translate(10, 10)">
+                            <!-- الظل الخلفي للعلامة -->
+                            <path d="M 50 60 C 50 10, 140 10, 140 60 C 140 100, 95 110, 95 160" stroke="#8a171a" stroke-width="45" stroke-linecap="round" fill="none" transform="translate(-5, 5)" opacity="0.5"/>
+                            <circle cx="95" cy="215" r="22" fill="#8a171a" transform="translate(-5, 5)" opacity="0.5"/>
+                            
+                            <!-- العلامة الرئيسية -->
+                            <path d="M 50 60 C 50 10, 140 10, 140 60 C 140 100, 95 110, 95 160" stroke="#c0292b" stroke-width="45" stroke-linecap="round" fill="none" />
+                            <circle cx="95" cy="215" r="22" fill="#c0292b" />
+                            
+                            <!-- لمعة بسيطة للإيحاء بالعمق (3D) -->
+                            <path d="M 50 60 C 50 10, 140 10, 140 60 C 140 100, 95 110, 95 160" stroke="#e84c4e" stroke-width="15" stroke-linecap="round" fill="none" opacity="0.6" transform="translate(5, -5)" />
+                        </g>
+
+                        <!-- رسمة الشخصية المفكرة (Silhouette) -->
+                        <g transform="translate(80, 110)">
+                            <!-- الرأس -->
+                            <circle cx="30" cy="20" r="18" fill="#e0e0e0" />
+                            <!-- الجسم -->
+                            <path d="M 18 45 C 10 80, 18 115, 25 115 L 35 115 C 42 115, 48 80, 42 45 Z" fill="#d0d0d0" />
+                            <!-- القدمين -->
+                            <path d="M 25 115 L 20 160 L 28 160 L 30 115 Z" fill="#b0b0b0" />
+                            <path d="M 35 115 L 42 160 L 34 160 L 30 115 Z" fill="#c0c0c0" />
+                            <!-- ذراع التفكير (تسند الذقن) -->
+                            <path d="M 40 55 L 50 75 L 35 25" stroke="#f0f0f0" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                            <!-- الذراع الأخرى (مكتفة) -->
+                            <path d="M 20 55 L 8 75 L 30 85" stroke="#c8c8c8" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                        </g>
+                    </svg>
+                </div>
+
+            </div>
+
+            <!-- الصندوق المتقطع -->
+            <div class="dashed-container">
+                
+                <div class="box-header-area">
+                    <div class="box-title">استبانة إدارة الوقت</div>
+                    <div class="exercise-badge">تمرين</div>
+                </div>
+
+                <ul class="checklist">
+                    <li>اختبر قدرتك في الاستفادة من وقتك بإدارة الذات بالإجابة عن هذه الأسئلة؟</li>
+                    <li>إذا كان مجموع الدرجات:</li>
+                    <li>أعلى من 65 درجة؛ فهو شخص يدير وقته بكفاءة.</li>
+                    <li>من 45 إلى 64؛ فهو شخص يدير الوقت بكفاءة متوسطة.</li>
+                    <li>أقل من 44؛ فهو شخص يحتاج أن ينمي مهارة إدارة الوقت لديه.</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+        <!-- التذييل لصفحة يسرى (العنوان يميناً والرقم يساراً) -->
+        <div class="page-footer">
+            <div class="footer-title">الفصل الخامس: مهارات الاستذكار</div>
+            <div class="page-number">213</div>
+        </div>
+    </div>
+
+</body>
+</html>

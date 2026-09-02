@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حديث النفس - إلياس فرحات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* تعريف ملفات خط سقال سعد المرفقة */
+        @font-face {
+            font-family: 'SakkalSaad';
+            src: url('../fonts/sakkal-100.woff2') format('woff2');
+            font-weight: 200;
+        }
+        @font-face {
+            font-family: 'SakkalSaad';
+            src: url('../fonts/sakkal-300.woff2') format('woff2');
+            font-weight: 300;
+        }
+        @font-face {
+            font-family: 'SakkalSaad';
+            src: url('../fonts/sakkal-400.woff2') format('woff2');
+            font-weight: 400;
+        }
+        @font-face {
+            font-family: 'SakkalSaad';
+            src: url('../fonts/sakkal-500.woff2') format('woff2');
+            font-weight: 500;
+        }
+        @font-face {
+            font-family: 'SakkalSaad';
+            src: url('../fonts/sakkal-700.woff2') format('woff2');
+            font-weight: 700;
+        }
+        @font-face {
+            font-family: 'SakkalSaad';
+            src: url('../fonts/sakkal-800.woff2') format('woff2');
+            font-weight: 800;
+        }
+
+        body {
+            font-family: 'SakkalSaad', serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #f8fafc; /* Slate 50 */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-image: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+        }
+        .slide {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+            transform: translateY(20px);
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        .slide.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .shatr {
+            font-size: 2.25rem;
+            line-height: 2;
+            text-align: center;
+            color: #e2e8f0;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .word-span {
+            display: inline-block;
+            transition: color 0.3s ease, transform 0.2s ease;
+            cursor: pointer;
+            padding: 0 0.2rem;
+        }
+        .word-span:hover {
+            color: #fbbf24; /* تغيير اللون للأصفر الكهرماني */
+            transform: translateY(-3px) scale(1.05); /* تأثير بروز خفيف للكلمة */
+        }
+        .diff-word {
+            border-bottom: 2px dotted #fbbf24; /* خط متقطع للكلمات الصعبة */
+        }
+        .vocab-box {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid #c2b280; /* Gold/Bronze accent */
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 3rem;
+            text-align: center;
+            font-size: 1.5rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            min-height: 90px; /* تثبيت الارتفاع لمنع اهتزاز الشاشة */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .vocab-word {
+            color: #fbbf24; /* Amber 400 */
+            font-weight: bold;
+        }
+    </style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="حديثُ النفس — إلياس فرحات">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+    <!-- الحاشية العلوية الثابتة (الإعداد) - تم تعديلها لتكون في المنتصف -->
+    <div class="fixed top-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-3 text-amber-200/80 bg-slate-800/30 backdrop-blur-md px-4 py-2 rounded-full border border-amber-400/20 shadow-lg z-50 cursor-default transition-all hover:bg-slate-800/50 hover:border-amber-400/40">
+        <!-- الأيقونة (مع وضع أيقونة افتراضية كبديل في حال عدم العثور على الصورة) -->
+        <img src="icon.png" alt="أيقونة" class="w-8 h-8 rounded-full object-cover border border-amber-400/30 shadow-sm" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmJiZjI0IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBhdGggZD0iTTE5IDIxdi0yYTRgNCAwIDAgMC00LTRINWE0IDQgMCAwIDAtNCA0djIiPjwvcGF0aD48Y2lyY2xlIGN4PSIxMiIgY3k9IjciIHI9IjQiPjwvY2lyY2xlPjwvc3ZnPg=='">
+        <span class="text-base" style="font-weight: 300;">إعداد: أ. حيدر المعاتيق</span>
+    </div>
+
+    <div id="container" class="w-full flex justify-center items-center">
+        <!-- سيتم حقن الشرائح هنا عبر الجافاسكريبت -->
+    </div>
+
+    <script>
+        const slidesData = [
+            {
+                type: 'title',
+                title: 'حديث النفس',
+                poet: 'للشاعر: إلياس فرحات'
+            },
+            {
+                type: 'verse',
+                shatr1: 'أَقُولُ لِنَفْسِي كُلَّمَا عَضَّهَا الأَسَى',
+                shatr2: 'فَآلَمَهَا : صَبْرَاً فَفِي الصَّبْرِ مَكْسَبُ',
+                word: 'الأَسَى',
+                meaning: 'الحزن الشديد والألم الذي ينهش الروح.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'لِئَنْ كَانَ صَعْبَاً حَمْلُكِ الْهَمَّ وَالأَذَى',
+                shatr2: 'فَحَمْلُكِ مَنَّ النَّاسِ لاَ شَكَّ أَصْعَبُ',
+                word: 'مَنَّ النَّاسِ',
+                meaning: 'تفاخرهم بالعطاء وإظهار الفضل الذي يكسر عزة النفس.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'فَلَوْلاَ إِبَاءٌ مَازَجَ الطَّبْعَ لَمْ أَكُنْ',
+                shatr2: 'لِمِثْلِي مَجِيءٌ فِي البَرَارِي وَمَذْهَبُ',
+                word: 'إِبَاءٌ',
+                meaning: 'الأنفة والترفع ورفض الخضوع للذل والمهانة.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'وَلَوْلاَ رَجَائِي أَنْ تَظَلَّي بَعِيدَةً',
+                shatr2: 'عَنِ الضَّيْمِ لَمْ يُوطَأْ بِرِجْلِيَ سَبْسَبُ',
+                word: 'سَبْسَبُ',
+                meaning: 'الأرض الواسعة المقفرة أو الصحراء المترامية الأطراف.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'فَلاَ تَعْذِلِي صَحْبَاً دَرُوا بِي وَمَا عَنَوا',
+                shatr2: 'بِأَمْرِي فَهُمْ مِنِّي إِلَى الفَقْرِ أَقْرَبُ',
+                word: 'تَعْذِلِي',
+                meaning: 'تلومي وتعاتبي بشدة (العذل هو اللوم).'
+            },
+            {
+                type: 'verse',
+                shatr1: 'وَلاَ تَأْمَلِي مِنْ غَيْرِ صَحْبِي مَعُونَةً',
+                shatr2: 'مَا تُخْضَبُ الكَفَّانِ وَالقَلْبُ مُجْدِبُ',
+                word: 'مُجْدِبُ',
+                meaning: 'قاحل وخالٍ من الخير والمشاعر، من الجدب وهو جفاف الأرض.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'وَلاَ تَرْتَجِي الإِخْلاَصَ مِنْ كُلِّ بَاسِمٍ',
+                shatr2: 'فَفِي البَاسِمِينَ الْمُبْغِضُ الْمُتَحَبِّبُ',
+                word: 'الْمُتَحَبِّبُ',
+                meaning: 'الذي يتكلف إظهار الحب والمودة زيفاً، وهو يضمر الكراهية.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'وَلَوْ كَانَ كُلُّ المُظْهِرِينَ لِيَ الوَفَا',
+                shatr2: 'وَفِيِّينَ لَمْ يُعْجِزْكِ يَا نَفْسُ مَطْلَبُ',
+                word: 'يُعْجِزْكِ',
+                meaning: 'يصعب عليكِ نيله، أو يصبح مستحيلاً.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'عَتِبْتُ عَلَى نَاسٍ أَضَاعُوا مَوَدَّتِي',
+                shatr2: 'وَكُلُّ كَرِيمٍ خَانَهُ الصَّحْبُ يَعْتَبُ',
+                word: 'يَعْتَبُ',
+                meaning: 'يُظهر لومه وعدم رضاه لمن يحبهم (العتاب لغة المحبين).'
+            },
+            {
+                type: 'verse',
+                shatr1: 'فَقَدْ زَعَمُوا أَنِّي هَجَوْتُ حَبِيبَهُمْ',
+                shatr2: 'وَأَنِّي سَأَهْجُو غَيْرَهُ حِينَ أَخْطُبُ',
+                word: 'هَجَوْتُ',
+                meaning: 'ذممت وانتقدت بشدة (الهجاء هو الشعر الذي يُذكر فيه مساوئ الآخرين).'
+            },
+            {
+                type: 'verse',
+                shatr1: 'وَلَسْتُ بِهَجَّاءٍ .. وَلَكِنَّهُ الْهَوَى',
+                shatr2: 'إِذَا قَادَ نَفْسَ الْمَرْءِ فَالنُّورُ غَيْهَبُ',
+                word: 'غَيْهَبُ',
+                meaning: 'الظلام الدامس والظلمة الشديدة التي تحجب الرؤية.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'أَنَا مَنْ يَرَى أَنَّ الرِّيَاءَ مَعَرَّةٌ',
+                shatr2: 'وَأَنَّ خَبِيثَ القَوْلِ فِي الصِّدْقِ طَيِّبُ',
+                word: 'مَعَرَّةٌ',
+                meaning: 'عيبٌ، ونقصٌ، وعارٌ يجب الترفع عنه.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'وَمَا أَنَا إِلاَّ كَالزَّمَانِ وَأَهْلِهِ',
+                shatr2: 'أَعَافُ وَأَسْتَحْلِي وَأَرْضَى وَأَغْضَبُ',
+                word: 'أَعَافُ',
+                meaning: 'أكره وأشمئز وأترك الشيء كراهيةً له.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'فَأَيُّ هِجَاءٍ فِي مَقَالِي لِعَقْرَبٍ',
+                shatr2: 'لَهُ وَلَعٌ بِالشَّرِّ إِنَّكَ عَقْرَبُ',
+                word: 'وَلَعٌ',
+                meaning: 'تعلّق شديد وحب مفرط (هنا يقصد الشغف بإيذاء الآخرين).'
+            },
+            {
+                type: 'verse',
+                shatr1: 'فَيَا نَفْسُ إِلاَّ أَنْتِ مَا لَكِ وَاعْلَمِي',
+                shatr2: 'بِأَنَّ كُلَّ بَرْقٍ غَيْر بَرْقِكِ خُلَّبُ',
+                word: 'خُلَّبُ',
+                meaning: 'البرق الذي لا غيث (مطر) معه، ويُضرب مثلاً لمن يَعِد ولا يَفِي.'
+            },
+            {
+                type: 'verse',
+                shatr1: 'تَعِبْتِ إِذَا اسْتَنْظَرْتِ خَيْرَاً مِنَ الوَرَى',
+                shatr2: 'وَمُسْتَقْطِرُ السَّلْوَى مِنَ الصَّابِ يَتْعَبُ',
+                word: 'الصَّابِ',
+                meaning: 'شجرٌ عصارتُه شديدة المرارة (يستحيل أن يُستخرج منه العسل/السلوى).'
+            }
+        ];
+
+        let currentIndex = 0;
+        const container = document.getElementById('container');
+
+        // معالجة الشطر لتحويل كل كلمة إلى عنصر يمكن التفاعل معه بالماوس
+        function processShatr(shatrText, diffWord, diffMeaning) {
+            if (!shatrText) return '';
+            
+            // إذا كانت الكلمة الصعبة موجودة في هذا الشطر
+            if (diffWord && shatrText.includes(diffWord)) {
+                const parts = shatrText.split(diffWord);
+                const html1 = parts[0].split(' ').filter(w=>w).map(w => `<span class="word-span">${w}</span>`).join(' ');
+                const html2 = parts[1].split(' ').filter(w=>w).map(w => `<span class="word-span">${w}</span>`).join(' ');
+                
+                // تغليف الكلمة الصعبة بخصائص إضافية
+                const diffHtml = `<span class="word-span diff-word" data-word="${diffWord}" data-meaning="${diffMeaning}">${diffWord}</span>`;
+                
+                return `${html1} ${diffHtml} ${html2}`.trim();
+            } else {
+                // تقسيم الكلمات العادية وتغليفها
+                return shatrText.split(' ').filter(w=>w).map(w => `<span class="word-span">${w}</span>`).join(' ');
+            }
+        }
+
+        // بناء الشرائح في الـ DOM
+        function buildSlides() {
+            slidesData.forEach((slide, index) => {
+                const slideDiv = document.createElement('div');
+                slideDiv.className = `slide ${index === 0 ? 'active' : ''}`;
+                slideDiv.id = `slide-${index}`;
+
+                if (slide.type === 'title') {
+                    slideDiv.innerHTML = `
+                        <div class="text-center">
+                            <h1 class="text-6xl text-amber-400 mb-8" style="font-weight: 800;">${slide.title}</h1>
+                            <p class="text-3xl mb-4" style="font-weight: 700;">${slide.poet}</p>
+                        </div>
+                    `;
+                } else {
+                    const processedShatr1 = processShatr(slide.shatr1, slide.word, slide.meaning);
+                    const processedShatr2 = processShatr(slide.shatr2, slide.word, slide.meaning);
+
+                    slideDiv.innerHTML = `
+                        <div class="shatr">${processedShatr1}</div>
+                        <br><br>
+                        <div class="shatr">${processedShatr2}</div>
+                        
+                        <div class="vocab-box" id="vocab-${index}">
+                            <span class="vocab-word">${slide.word}</span>: ${slide.meaning}
+                        </div>
+                    `;
+                }
+                container.appendChild(slideDiv);
+            });
+        }
+
+        // دالة الانتقال للشريحة التالية
+        function nextSlide() {
+            if (currentIndex < slidesData.length - 1) {
+                document.getElementById(`slide-${currentIndex}`).classList.remove('active');
+                currentIndex++;
+                // تأخير بسيط لإعطاء تأثير انتقال سلس
+                setTimeout(() => {
+                    document.getElementById(`slide-${currentIndex}`).classList.add('active');
+                }, 100);
+            }
+        }
+
+        // دالة الانتقال للشريحة السابقة (اختياري)
+        function prevSlide() {
+            if (currentIndex > 0) {
+                document.getElementById(`slide-${currentIndex}`).classList.remove('active');
+                currentIndex--;
+                setTimeout(() => {
+                    document.getElementById(`slide-${currentIndex}`).classList.add('active');
+                }, 100);
+            }
+        }
+
+        // الاستماع لحدث الضغط على لوحة المفاتيح
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space' || event.code === 'ArrowRight' || event.code === 'ArrowDown') {
+                event.preventDefault(); // لمنع نزول الصفحة لأسفل
+                nextSlide();
+            } else if (event.code === 'ArrowLeft' || event.code === 'ArrowUp') {
+                event.preventDefault();
+                prevSlide();
+            }
+        });
+
+        // الاستماع لحدث النقر (للجوالات أو الماوس)
+        document.addEventListener('click', (e) => {
+            // منع الانتقال إذا كان النقر على صندوق المعاني نفسه
+            if (e.target.closest('.vocab-box')) return;
+            nextSlide();
+        });
+
+        // تهيئة العرض
+        buildSlides();
+    </script>
+</body>
+</html>

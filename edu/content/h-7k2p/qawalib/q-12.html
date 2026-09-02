@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المخططات التفاعلية — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input, .tp-textarea { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; resize: vertical; }
+.tp-input:focus, .tp-textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-textarea { min-height: 60px; }
+.tp-diagram-picker { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.tp-diagram-option { background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: all 0.2s; }
+.tp-diagram-option:hover { background: rgba(255,255,255,0.12); border-color: var(--amber-soft); }
+.tp-diagram-option.active { background: rgba(217, 119, 6, 0.2); border-color: var(--amber); }
+.tp-diagram-option .icon { font-size: 2rem; margin-bottom: 6px; }
+.tp-diagram-option .name { font-family: 'Reem Kufi', sans-serif; font-size: 0.9rem; font-weight: 500; }
+.tp-part-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
+.tp-part-card .tp-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; }
+.tp-part-num { background: var(--amber); color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+
+.diagram-area { display: grid; grid-template-columns: 1.3fr 1fr; gap: 24px; max-width: 1000px; margin: 0 auto; }
+.diagram-svg-wrap { background: var(--bg-cream); border: 1px solid var(--line); border-radius: 14px; padding: 24px; display: flex; align-items: center; justify-content: center; min-height: 400px; }
+.diagram-svg-wrap svg { max-width: 100%; height: auto; }
+.hotspot { cursor: pointer; transition: all 0.3s; }
+.hotspot:hover { filter: brightness(1.15); }
+.hotspot.active { filter: drop-shadow(0 0 10px var(--amber)); }
+.hotspot-marker { fill: var(--amber); stroke: white; stroke-width: 3; cursor: pointer; }
+.hotspot-marker.active { fill: var(--emerald-deep); }
+.hotspot-num { fill: white; font-family: 'Reem Kufi', sans-serif; font-weight: 700; font-size: 18px; pointer-events: none; }
+.diagram-info { background: var(--bg-cream); border: 1px solid var(--line); border-radius: 14px; padding: 24px; min-height: 300px; }
+.info-empty { color: var(--ink-soft); text-align: center; padding: 40px 0; }
+.info-card { animation: fadeIn 0.3s; }
+.info-card h4 { font-family: 'Reem Kufi', sans-serif; color: var(--emerald-deep); font-size: 1.3rem; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.info-card h4 .num { background: var(--amber); color: white; width: 32px; height: 32px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.95rem; flex-shrink: 0; }
+.info-card p { color: var(--ink); line-height: 1.8; font-size: 1rem; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.parts-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding-top: 18px; border-top: 1px dashed var(--line); }
+.part-pill { background: white; border: 1px solid var(--line); padding: 6px 14px; border-radius: 999px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-size: 0.88rem; transition: all 0.2s; display: flex; align-items: center; gap: 6px; }
+.part-pill:hover { border-color: var(--amber); }
+.part-pill.active { background: var(--amber); color: white; border-color: var(--amber); }
+.part-pill .num { background: var(--emerald-deep); color: white; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; }
+.part-pill.active .num { background: white; color: var(--amber); }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 700px) { .diagram-area { grid-template-columns: 1fr; } .preview-title { font-size: 1.5rem; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="المخططات التفاعلية">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — المخطَّطاتُ التفاعليَّة</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>اختر مخطَّطًا، ثُمَّ اكتبْ تعريفًا لكلِّ جزء.</strong> النقاطُ الزرقاءُ في المخطَّطِ تُمثِّلُ مواضعَ مرقَّمةً يَنقرُ الطالبُ عليها فيَظهرُ شرحُها. كلُّ مخطَّطٍ له خمسُ نقاطٍ ثابتةُ المواضع.
+      </div>
+
+      <div>
+        <label class="tp-label" style="display:block; margin-bottom:10px;">اختر المخطَّط</label>
+        <div class="tp-diagram-picker" id="diagram-picker">
+          <div class="tp-diagram-option active" data-diagram="plant" onclick="selectDiagram('plant')">
+            <div class="icon">🌱</div><div class="name">النبتة</div>
+          </div>
+          <div class="tp-diagram-option" data-diagram="cell" onclick="selectDiagram('cell')">
+            <div class="icon">🔬</div><div class="name">الخلية</div>
+          </div>
+          <div class="tp-diagram-option" data-diagram="circuit" onclick="selectDiagram('circuit')">
+            <div class="icon">⚡</div><div class="name">الدائرة الكهربائية</div>
+          </div>
+          <div class="tp-diagram-option" data-diagram="earth" onclick="selectDiagram('earth')">
+            <div class="icon">🌍</div><div class="name">طبقات الأرض</div>
+          </div>
+          <div class="tp-diagram-option" data-diagram="water" onclick="selectDiagram('water')">
+            <div class="icon">💧</div><div class="name">دورة الماء</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="أجزاءُ النبتة" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="انقر على أيِّ نقطةٍ لتعرفَ وظيفتَها" oninput="updatePreview()">
+        </div>
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">الأجزاءُ الخمسة (التسميةُ والوظيفةُ لكلِّ نقطة)</label>
+          <div id="parts-container"></div>
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادة</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">المخطَّط</h1>
+      <p class="preview-subtitle" id="preview-subtitle"></p>
+    </div>
+    <div class="diagram-area">
+      <div class="diagram-svg-wrap" id="diagram-svg-wrap"></div>
+      <div class="diagram-info" id="diagram-info">
+        <div class="info-empty">انقر على أيِّ نقطةٍ مرقَّمةٍ في المخطَّط لمعرفةِ تفاصيلِها.</div>
+      </div>
+    </div>
+    <div class="parts-list" id="parts-list"></div>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+// ============ SVG DIAGRAMS ============
+const diagrams = {
+  plant: {
+    svg: `<svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="leafG" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#16a34a"/><stop offset="100%" stop-color="#15803d"/>
+        </linearGradient>
+        <linearGradient id="stemG" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#65a30d"/><stop offset="100%" stop-color="#4d7c0f"/>
+        </linearGradient>
+      </defs>
+      <!-- Soil -->
+      <ellipse cx="200" cy="430" rx="160" ry="20" fill="#78350f"/>
+      <path d="M 60 430 Q 200 470 340 430 L 340 470 Q 200 490 60 470 Z" fill="#92400e"/>
+      <!-- Roots -->
+      <path d="M 200 430 Q 180 460 160 480 M 200 430 Q 220 460 240 480 M 200 430 L 200 485 M 200 430 Q 170 470 140 475 M 200 430 Q 230 470 260 475" stroke="#78350f" stroke-width="3" fill="none"/>
+      <!-- Stem -->
+      <rect x="195" y="200" width="10" height="230" fill="url(#stemG)" rx="2"/>
+      <!-- Leaves -->
+      <ellipse cx="155" cy="260" rx="50" ry="20" fill="url(#leafG)" transform="rotate(-25 155 260)"/>
+      <ellipse cx="245" cy="320" rx="50" ry="20" fill="url(#leafG)" transform="rotate(25 245 320)"/>
+      <ellipse cx="155" cy="370" rx="45" ry="18" fill="url(#leafG)" transform="rotate(-30 155 370)"/>
+      <!-- Flower -->
+      <circle cx="200" cy="170" r="20" fill="#facc15"/>
+      <circle cx="180" cy="155" r="18" fill="#fbbf24"/>
+      <circle cx="220" cy="155" r="18" fill="#fbbf24"/>
+      <circle cx="180" cy="185" r="18" fill="#fbbf24"/>
+      <circle cx="220" cy="185" r="18" fill="#fbbf24"/>
+      <circle cx="200" cy="170" r="10" fill="#D97706"/>
+      <!-- Hotspots -->
+      <g class="hotspot-group" data-part="0"><circle class="hotspot-marker" cx="200" cy="170" r="14"/><text class="hotspot-num" x="200" y="176" text-anchor="middle">١</text></g>
+      <g class="hotspot-group" data-part="1"><circle class="hotspot-marker" cx="155" cy="260" r="14"/><text class="hotspot-num" x="155" y="266" text-anchor="middle">٢</text></g>
+      <g class="hotspot-group" data-part="2"><circle class="hotspot-marker" cx="200" cy="330" r="14"/><text class="hotspot-num" x="200" y="336" text-anchor="middle">٣</text></g>
+      <g class="hotspot-group" data-part="3"><circle class="hotspot-marker" cx="200" cy="430" r="14"/><text class="hotspot-num" x="200" y="436" text-anchor="middle">٤</text></g>
+      <g class="hotspot-group" data-part="4"><circle class="hotspot-marker" cx="200" cy="475" r="14"/><text class="hotspot-num" x="200" y="481" text-anchor="middle">٥</text></g>
+    </svg>`,
+    defaults: [
+      { name: 'الزهرة', desc: 'العضو التكاثري للنبتة، تُنتجُ البذورَ بعد التلقيح.' },
+      { name: 'الورقة', desc: 'مصنعُ الغذاء، تقومُ بعمليَّةِ البناءِ الضوئي.' },
+      { name: 'الساق', desc: 'تَحملُ الأوراقَ والأزهار، وتنقلُ الماءَ والغذاء.' },
+      { name: 'سطحُ التربة', desc: 'البيئةُ التي تحتضنُ الجذورَ وتمدُّها بالعناصر.' },
+      { name: 'الجذور', desc: 'تثبِّتُ النبتةَ وتمتصُّ الماءَ والأملاحَ المعدنيَّة.' }
+    ]
+  },
+  cell: {
+    svg: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="cellG"><stop offset="0%" stop-color="#fef9c3"/><stop offset="100%" stop-color="#fde68a"/></radialGradient>
+      </defs>
+      <!-- Cell membrane -->
+      <ellipse cx="200" cy="200" rx="170" ry="140" fill="url(#cellG)" stroke="#1a6b54" stroke-width="3"/>
+      <!-- Nucleus -->
+      <circle cx="200" cy="200" r="50" fill="#a78bfa" stroke="#7c3aed" stroke-width="3"/>
+      <circle cx="200" cy="200" r="20" fill="#7c3aed"/>
+      <!-- Mitochondria -->
+      <ellipse cx="290" cy="150" rx="35" ry="20" fill="#f87171" stroke="#dc2626" stroke-width="2"/>
+      <ellipse cx="120" cy="270" rx="30" ry="18" fill="#f87171" stroke="#dc2626" stroke-width="2"/>
+      <!-- Vacuole -->
+      <circle cx="120" cy="150" r="35" fill="#7dd3fc" stroke="#0284c7" stroke-width="2" opacity="0.7"/>
+      <!-- ER -->
+      <path d="M 230 270 Q 270 260 290 280 Q 310 300 290 320 Q 250 330 230 310" fill="#fdba74" stroke="#c2410c" stroke-width="2"/>
+      <!-- Hotspots -->
+      <g class="hotspot-group" data-part="0"><circle class="hotspot-marker" cx="200" cy="200" r="14"/><text class="hotspot-num" x="200" y="206" text-anchor="middle">١</text></g>
+      <g class="hotspot-group" data-part="1"><circle class="hotspot-marker" cx="370" cy="200" r="14"/><text class="hotspot-num" x="370" y="206" text-anchor="middle">٢</text></g>
+      <g class="hotspot-group" data-part="2"><circle class="hotspot-marker" cx="290" cy="150" r="14"/><text class="hotspot-num" x="290" y="156" text-anchor="middle">٣</text></g>
+      <g class="hotspot-group" data-part="3"><circle class="hotspot-marker" cx="120" cy="150" r="14"/><text class="hotspot-num" x="120" y="156" text-anchor="middle">٤</text></g>
+      <g class="hotspot-group" data-part="4"><circle class="hotspot-marker" cx="270" cy="300" r="14"/><text class="hotspot-num" x="270" y="306" text-anchor="middle">٥</text></g>
+    </svg>`,
+    defaults: [
+      { name: 'النواة', desc: 'مركزُ التحكُّم في الخلية، تحوي المادَّةَ الوراثيَّةَ (DNA).' },
+      { name: 'الغشاءُ الخلوي', desc: 'حدودُ الخليَّة، يَتحكَّمُ في دخولِ المواد وخروجِها.' },
+      { name: 'الميتوكوندريا', desc: 'مصانعُ الطاقة، تُنتجُ ATP عبر التنفُّسِ الخلويِّ.' },
+      { name: 'الفجوة', desc: 'تَخزنُ الماءَ والمغذِّيات، وأكبرُ في الخلايا النباتيَّة.' },
+      { name: 'الشبكةُ الإندوبلازميَّة', desc: 'تَنقلُ المواد داخل الخليَّة وتُصنِّعُ البروتينات.' }
+    ]
+  },
+  circuit: {
+    svg: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <!-- Wires -->
+      <rect x="80" y="100" width="240" height="200" fill="none" stroke="#1F2937" stroke-width="4"/>
+      <!-- Battery -->
+      <rect x="160" y="80" width="80" height="40" fill="white" stroke="#1F2937" stroke-width="3"/>
+      <line x1="180" y1="92" x2="180" y2="108" stroke="#1F2937" stroke-width="4"/>
+      <line x1="220" y1="88" x2="220" y2="112" stroke="#1F2937" stroke-width="4"/>
+      <text x="200" y="75" text-anchor="middle" fill="#1F2937" font-family="Reem Kufi" font-weight="600" font-size="14">البطارية</text>
+      <!-- Switch -->
+      <circle cx="80" cy="200" r="6" fill="#1F2937"/>
+      <line x1="80" y1="200" x2="115" y2="180" stroke="#1F2937" stroke-width="4"/>
+      <circle cx="120" cy="180" r="6" fill="#1F2937"/>
+      <!-- Lamp -->
+      <circle cx="320" cy="200" r="30" fill="#fef9c3" stroke="#D97706" stroke-width="3"/>
+      <line x1="305" y1="190" x2="335" y2="210" stroke="#D97706" stroke-width="2"/>
+      <line x1="335" y1="190" x2="305" y2="210" stroke="#D97706" stroke-width="2"/>
+      <!-- Resistor -->
+      <rect x="170" y="290" width="60" height="20" fill="white" stroke="#1F2937" stroke-width="3"/>
+      <text x="200" y="335" text-anchor="middle" fill="#1F2937" font-family="Reem Kufi" font-weight="600" font-size="14">المقاومة</text>
+      <!-- Hotspots -->
+      <g class="hotspot-group" data-part="0"><circle class="hotspot-marker" cx="200" cy="100" r="14"/><text class="hotspot-num" x="200" y="106" text-anchor="middle">١</text></g>
+      <g class="hotspot-group" data-part="1"><circle class="hotspot-marker" cx="320" cy="200" r="14"/><text class="hotspot-num" x="320" y="206" text-anchor="middle">٢</text></g>
+      <g class="hotspot-group" data-part="2"><circle class="hotspot-marker" cx="200" cy="300" r="14"/><text class="hotspot-num" x="200" y="306" text-anchor="middle">٣</text></g>
+      <g class="hotspot-group" data-part="3"><circle class="hotspot-marker" cx="100" cy="190" r="14"/><text class="hotspot-num" x="100" y="196" text-anchor="middle">٤</text></g>
+      <g class="hotspot-group" data-part="4"><circle class="hotspot-marker" cx="80" cy="100" r="14"/><text class="hotspot-num" x="80" y="106" text-anchor="middle">٥</text></g>
+    </svg>`,
+    defaults: [
+      { name: 'البطاريّة', desc: 'مصدرُ الطاقةِ الكهربائيَّة، تَدفعُ التيارَ في الدائرة.' },
+      { name: 'المصباح', desc: 'حِملٌ يُحوِّلُ الكهرباءَ إلى ضوءٍ وحرارة.' },
+      { name: 'المقاومة', desc: 'تَحدُّ من تدفُّقِ التيار، مقاسةٌ بالأوم.' },
+      { name: 'المفتاح', desc: 'يَفتحُ الدائرةَ ويَغلقُها للتحكُّمِ في التيار.' },
+      { name: 'السلك', desc: 'مسارٌ موصلٌ يَنقلُ التيارَ بين العناصر.' }
+    ]
+  },
+  earth: {
+    svg: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="coreG"><stop offset="0%" stop-color="#fef08a"/><stop offset="100%" stop-color="#dc2626"/></radialGradient>
+      </defs>
+      <!-- Crust -->
+      <circle cx="200" cy="200" r="180" fill="#1a6b54"/>
+      <!-- Mantle -->
+      <circle cx="200" cy="200" r="150" fill="#92400e"/>
+      <!-- Outer core -->
+      <circle cx="200" cy="200" r="90" fill="#f97316"/>
+      <!-- Inner core -->
+      <circle cx="200" cy="200" r="40" fill="url(#coreG)"/>
+      <!-- Hotspots -->
+      <g class="hotspot-group" data-part="0"><circle class="hotspot-marker" cx="200" cy="200" r="14"/><text class="hotspot-num" x="200" y="206" text-anchor="middle">١</text></g>
+      <g class="hotspot-group" data-part="1"><circle class="hotspot-marker" cx="260" cy="200" r="14"/><text class="hotspot-num" x="260" y="206" text-anchor="middle">٢</text></g>
+      <g class="hotspot-group" data-part="2"><circle class="hotspot-marker" cx="320" cy="200" r="14"/><text class="hotspot-num" x="320" y="206" text-anchor="middle">٣</text></g>
+      <g class="hotspot-group" data-part="3"><circle class="hotspot-marker" cx="370" cy="200" r="14"/><text class="hotspot-num" x="370" y="206" text-anchor="middle">٤</text></g>
+      <g class="hotspot-group" data-part="4"><circle class="hotspot-marker" cx="200" cy="380" r="14"/><text class="hotspot-num" x="200" y="386" text-anchor="middle">٥</text></g>
+    </svg>`,
+    defaults: [
+      { name: 'النواةُ الداخليَّة', desc: 'كرةٌ صلبةٌ من الحديدِ والنيكل، حرارتُها تُقاربُ حرارةَ سطحِ الشمس.' },
+      { name: 'النواةُ الخارجيَّة', desc: 'طبقةٌ سائلةٌ من الحديدِ المصهور، تُولِّدُ المجالَ المغناطيسيَّ للأرض.' },
+      { name: 'الوشاح', desc: 'الطبقةُ الأكبرُ، صخورٌ شبهُ سائلةٍ يَتحرَّكُ فيها الحملُ الحراري.' },
+      { name: 'القشرة', desc: 'الطبقةُ الخارجيَّةُ الرقيقةُ التي نَعيشُ عليها، صخوريَّةٌ صلبة.' },
+      { name: 'الغلافُ المغناطيسي', desc: 'حقلٌ مغناطيسيٌّ يَحمي الأرضَ من الإشعاعاتِ الكونيَّة.' }
+    ]
+  },
+  water: {
+    svg: `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+      <!-- Sky -->
+      <rect x="0" y="0" width="400" height="200" fill="#dbeafe"/>
+      <!-- Sun -->
+      <circle cx="60" cy="60" r="25" fill="#facc15"/>
+      <!-- Clouds -->
+      <ellipse cx="200" cy="80" rx="50" ry="20" fill="white"/>
+      <ellipse cx="170" cy="70" rx="30" ry="18" fill="white"/>
+      <ellipse cx="230" cy="70" rx="30" ry="18" fill="white"/>
+      <!-- Ground -->
+      <rect x="0" y="200" width="400" height="200" fill="#65a30d"/>
+      <!-- Mountain -->
+      <polygon points="280,200 340,100 400,200" fill="#78716c"/>
+      <!-- Lake -->
+      <ellipse cx="100" cy="320" rx="80" ry="25" fill="#0ea5e9"/>
+      <!-- Rain drops -->
+      <line x1="180" y1="105" x2="175" y2="125" stroke="#0284c7" stroke-width="3"/>
+      <line x1="200" y1="110" x2="195" y2="130" stroke="#0284c7" stroke-width="3"/>
+      <line x1="220" y1="105" x2="215" y2="125" stroke="#0284c7" stroke-width="3"/>
+      <!-- Arrows: evaporation -->
+      <path d="M 100 300 Q 70 200 150 100" stroke="#D97706" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+      <!-- Hotspots -->
+      <g class="hotspot-group" data-part="0"><circle class="hotspot-marker" cx="100" cy="320" r="14"/><text class="hotspot-num" x="100" y="326" text-anchor="middle">١</text></g>
+      <g class="hotspot-group" data-part="1"><circle class="hotspot-marker" cx="120" cy="200" r="14"/><text class="hotspot-num" x="120" y="206" text-anchor="middle">٢</text></g>
+      <g class="hotspot-group" data-part="2"><circle class="hotspot-marker" cx="200" cy="80" r="14"/><text class="hotspot-num" x="200" y="86" text-anchor="middle">٣</text></g>
+      <g class="hotspot-group" data-part="3"><circle class="hotspot-marker" cx="200" cy="120" r="14"/><text class="hotspot-num" x="200" y="126" text-anchor="middle">٤</text></g>
+      <g class="hotspot-group" data-part="4"><circle class="hotspot-marker" cx="340" cy="180" r="14"/><text class="hotspot-num" x="340" y="186" text-anchor="middle">٥</text></g>
+    </svg>`,
+    defaults: [
+      { name: 'البحيرات والمحيطات', desc: 'مصدرُ الماءِ الأساسيُّ في دورةِ الماءِ الطبيعيَّة.' },
+      { name: 'التبخُّر', desc: 'يتحوَّلُ الماءُ من سائلٍ إلى بخارٍ بحرارةِ الشمس.' },
+      { name: 'التكاثف', desc: 'يَتكثَّفُ بخارُ الماءِ في الجوِّ مكوِّنًا الغيوم.' },
+      { name: 'هطولُ المطر', desc: 'يَسقطُ الماءُ من الغيومِ على شكلِ مطرٍ أو ثلج.' },
+      { name: 'التدفُّق', desc: 'يَجري الماءُ من المرتفعاتِ ليعودَ إلى البحارِ والأنهار.' }
+    ]
+  }
+};
+
+let currentDiagram = 'plant';
+let parts = JSON.parse(JSON.stringify(diagrams.plant.defaults));
+let activePart = -1;
+
+function selectDiagram(key) {
+  currentDiagram = key;
+  parts = JSON.parse(JSON.stringify(diagrams[key].defaults));
+  activePart = -1;
+  document.querySelectorAll('.tp-diagram-option').forEach(el => {
+    el.classList.toggle('active', el.dataset.diagram === key);
+  });
+  // Update title to match
+  const names = { plant: 'أجزاءُ النبتة', cell: 'مكوِّناتُ الخليَّة', circuit: 'الدائرةُ الكهربائيَّة', earth: 'طبقاتُ الأرض', water: 'دورةُ الماء' };
+  document.getElementById('ctrl-title').value = names[key];
+  renderEditor();
+  updatePreview();
+}
+
+function renderEditor() {
+  const container = document.getElementById('parts-container');
+  container.innerHTML = '';
+  parts.forEach((p, idx) => {
+    const div = document.createElement('div');
+    div.className = 'tp-part-card';
+    div.innerHTML = `
+      <label class="tp-label">
+        <span class="tp-part-num">${arabicNum(idx+1)}</span><span>الجزء ${arabicNum(idx+1)}</span>
+      </label>
+      <input type="text" class="tp-input" placeholder="اسم الجزء" value="${escapeAttr(p.name)}" oninput="updatePart(${idx}, 'name', this.value)" style="margin-bottom:6px;">
+      <textarea class="tp-textarea" placeholder="الوصف" oninput="updatePart(${idx}, 'desc', this.value)">${escapeHTML(p.desc)}</textarea>
+    `;
+    container.appendChild(div);
+  });
+}
+function updatePart(idx, key, value) { parts[idx][key] = value; updatePreview(); }
+
+function arabicNum(n) { return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]); }
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'مخطَّط';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'مخطط') + ' — موقع تعليمي';
+
+  // SVG diagram
+  document.getElementById('diagram-svg-wrap').innerHTML = diagrams[currentDiagram].svg;
+  document.querySelectorAll('.hotspot-group').forEach(g => {
+    const idx = parseInt(g.dataset.part);
+    g.style.cursor = 'pointer';
+    g.addEventListener('click', () => { activePart = idx; updatePreview(); });
+    if (idx === activePart) g.querySelector('.hotspot-marker').classList.add('active');
+  });
+
+  // Info panel
+  const info = document.getElementById('diagram-info');
+  if (activePart >= 0 && parts[activePart]) {
+    const p = parts[activePart];
+    info.innerHTML = `<div class="info-card"><h4><span class="num">${arabicNum(activePart+1)}</span> ${escapeHTML(p.name)}</h4><p>${escapeHTML(p.desc)}</p></div>`;
+  } else {
+    info.innerHTML = '<div class="info-empty">انقر على أيِّ نقطةٍ مرقَّمةٍ في المخطَّط لمعرفةِ تفاصيلِها.</div>';
+  }
+
+  // Parts pills
+  const pills = document.getElementById('parts-list');
+  pills.innerHTML = '';
+  parts.forEach((p, idx) => {
+    const pill = document.createElement('button');
+    pill.className = 'part-pill' + (idx === activePart ? ' active' : '');
+    pill.innerHTML = `<span class="num">${arabicNum(idx+1)}</span><span>${escapeHTML(p.name)}</span>`;
+    pill.onclick = () => { activePart = idx; updatePreview(); };
+    pills.appendChild(pill);
+  });
+
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'مخطَّط';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const svg = diagrams[currentDiagram].svg;
+  const partsJSON = JSON.stringify(parts);
+  const sig = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHTML(title)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"><style>:root{--emerald-deep:#0F4C3A;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.diagram-area{display:grid;grid-template-columns:1.3fr 1fr;gap:24px;max-width:1000px;margin:0 auto}.diagram-svg-wrap{background:var(--bg-cream);border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;align-items:center;justify-content:center;min-height:400px}.diagram-svg-wrap svg{max-width:100%;height:auto}.hotspot-marker{fill:var(--amber);stroke:white;stroke-width:3;cursor:pointer;transition:all 0.2s}.hotspot-marker:hover{fill:var(--emerald-deep)}.hotspot-marker.active{fill:var(--emerald-deep);filter:drop-shadow(0 0 8px var(--amber))}.hotspot-num{fill:white;font-family:'Reem Kufi',sans-serif;font-weight:700;font-size:18px;pointer-events:none}.diagram-info{background:var(--bg-cream);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:300px}.info-empty{color:var(--ink-soft);text-align:center;padding:40px 0}.info-card{animation:fadeIn 0.3s}.info-card h4{font-family:'Reem Kufi',sans-serif;color:var(--emerald-deep);font-size:1.3rem;margin-bottom:12px;display:flex;align-items:center;gap:10px}.info-card h4 .num{background:var(--amber);color:white;width:32px;height:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0}.info-card p{color:var(--ink);line-height:1.8;font-size:1rem}@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}.parts-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px;padding-top:18px;border-top:1px dashed var(--line)}.part-pill{background:white;border:1px solid var(--line);padding:6px 14px;border-radius:999px;cursor:pointer;font-family:'Reem Kufi',sans-serif;font-size:0.88rem;transition:all 0.2s;display:flex;align-items:center;gap:6px}.part-pill:hover{border-color:var(--amber)}.part-pill.active{background:var(--amber);color:white;border-color:var(--amber)}.part-pill .num{background:var(--emerald-deep);color:white;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700}.part-pill.active .num{background:white;color:var(--amber)}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:700px){.diagram-area{grid-template-columns:1fr}.preview-title{font-size:1.5rem}}</style></head><body><div class="page"><div class="preview-wrap"><div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div><div class="diagram-area"><div class="diagram-svg-wrap" id="svg-wrap">${svg}</div><div class="diagram-info" id="info"><div class="info-empty">انقر على أيِّ نقطةٍ مرقَّمةٍ في المخطَّط لمعرفةِ تفاصيلِها.</div></div></div><div class="parts-list" id="pills"></div>${sig}</div></div><script>
+const parts = ${partsJSON};
+let active = -1;
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function arabicNum(n){return String(n).replace(/\\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[+d]);}
+function render(){
+  document.querySelectorAll('.hotspot-marker').forEach(m=>m.classList.remove('active'));
+  document.querySelectorAll('.hotspot-group').forEach(g=>{
+    const idx=parseInt(g.dataset.part);
+    g.style.cursor='pointer';
+    g.onclick=()=>{active=idx;render();};
+    if(idx===active)g.querySelector('.hotspot-marker').classList.add('active');
+  });
+  const info=document.getElementById('info');
+  if(active>=0&&parts[active]){const p=parts[active];info.innerHTML='<div class="info-card"><h4><span class="num">'+arabicNum(active+1)+'</span> '+escapeHTML(p.name)+'</h4><p>'+escapeHTML(p.desc)+'</p></div>';}
+  else{info.innerHTML='<div class="info-empty">انقر على أيِّ نقطةٍ مرقَّمةٍ في المخطَّط لمعرفةِ تفاصيلِها.</div>';}
+  const pills=document.getElementById('pills');pills.innerHTML='';
+  parts.forEach((p,idx)=>{
+    const pill=document.createElement('button');
+    pill.className='part-pill'+(idx===active?' active':'');
+    pill.innerHTML='<span class="num">'+arabicNum(idx+1)+'</span><span>'+escapeHTML(p.name)+'</span>';
+    pill.onclick=()=>{active=idx;render();};
+    pills.appendChild(pill);
+  });
+}
+render();
+<\/script></body></html>`;
+  downloadHTML(finalHTML, title);
+}
+
+function downloadHTML(html, title) {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'مخطط').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s) { return String(s || '').replace(/"/g, '&quot;'); }
+function resetForm() { if (confirm('إعادةُ كلِّ القيمِ إلى الافتراضي؟')) location.reload(); }
+
+renderEditor();
+updatePreview();
+</script>
+</body>
+</html>

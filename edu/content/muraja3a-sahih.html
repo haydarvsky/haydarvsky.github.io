@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مراجعة سريعة · الفعل الصحيح والمعتل · إعداد أ. حيدر المعاتيق</title>
+
+<style>
+  /* ===== SakkalSaad ===== */
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-100.woff2') format('woff2'); font-weight:100; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-300.woff2') format('woff2'); font-weight:300; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-700.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-800.woff2') format('woff2'); font-weight:800; font-display:swap; }
+
+  :root{
+    --ink:#1A1F2E; --ink-soft:#4A5165;
+    --paper:#F6EFE2; --paper-2:#FBF6EC; --paper-3:#FFFFFF;
+    --accent:#0E6F5C; --accent-2:#0A4F42;
+    --gold:#C89B4A; --gold-soft:#E8C886;
+    --rose:#B43E50; --rose-2:#8A2C3C;
+    --leaf:#2B7A57;
+    --line:#E2D8C2;
+    --shadow:0 18px 60px -22px rgba(26,31,46,.45);
+    --font:"SakkalSaad","Segoe UI",system-ui,-apple-system,sans-serif;
+    --font-display:"SakkalSaad","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;overflow-x:hidden;}
+  body{
+    font-family:var(--font); color:var(--ink); font-weight:400;
+    background:
+      radial-gradient(1200px 600px at 90% -10%, rgba(200,155,74,.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(14,111,92,.14), transparent 60%),
+      var(--paper);
+    line-height:1.7; min-height:100%; font-size:18px;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:fixed; top:0; right:0; left:0; height:64px;
+    background:rgba(251,246,236,.9);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 26px; z-index:50;
+  }
+  .topbar .brand{ font-family:var(--font-display); font-size:19px; color:var(--accent); font-weight:700; }
+  .topbar .brand span{ color:var(--gold); }
+  .topbar .slide-info{ font-size:16px; color:var(--ink-soft); }
+  .topbar .slide-info b{ color:var(--accent); font-size:18px; font-weight:700; }
+  .progress-line{ position:fixed; top:64px; right:0; left:0; height:4px; background:rgba(14,111,92,.1); z-index:50; }
+  .progress-line>span{ display:block; height:100%; background:linear-gradient(90deg,var(--gold-soft),var(--gold),var(--accent)); width:0; transition:width .5s cubic-bezier(.2,.8,.2,1); }
+
+  /* ===== Stage ===== */
+  .stage{ padding-top:90px; padding-bottom:110px; min-height:100vh; }
+  .slide{ display:none; max-width:1200px; margin:0 auto; padding:clamp(24px,3vw,48px); }
+  .slide.active{ display:block; animation:slideIn .55s cubic-bezier(.2,.8,.2,1); }
+  @keyframes slideIn{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+  .slide.active>*{ animation:fadeUp .6s cubic-bezier(.2,.8,.2,1) both; }
+  .slide.active>*:nth-child(1){ animation-delay:.05s; }
+  .slide.active>*:nth-child(2){ animation-delay:.15s; }
+  .slide.active>*:nth-child(3){ animation-delay:.28s; }
+  .slide.active>*:nth-child(4){ animation-delay:.42s; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+
+  /* ===== Title slide ===== */
+  .title-slide{
+    min-height:calc(100vh - 90px); display:none;
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:50px 24px;
+  }
+  .title-slide.active{ display:flex; }
+  .title-ornament{ width:140px; height:140px; opacity:.85; margin-bottom:28px; animation:spin 32s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .title-eyebrow{
+    font-family:var(--font-display); font-size:16px; letter-spacing:7px; font-weight:500;
+    color:var(--gold); border-top:1px solid var(--gold); border-bottom:1px solid var(--gold);
+    padding:9px 22px; margin-bottom:36px;
+  }
+  .title-main{
+    font-family:var(--font-display); font-size:clamp(44px,7vw,88px);
+    color:var(--ink); line-height:1.1; font-weight:800;
+    letter-spacing:-1px; max-width:900px;
+  }
+  .title-main .em{ color:var(--accent); position:relative; }
+  .title-main .em::after{
+    content:""; position:absolute; right:0; left:0; bottom:-.05em;
+    height:.12em; background:linear-gradient(90deg,transparent,var(--gold),transparent); border-radius:8px;
+  }
+  .title-sub{
+    margin-top:22px; font-family:var(--font-display);
+    font-size:clamp(20px,2.4vw,28px); color:var(--ink-soft); font-weight:500;
+  }
+  .title-divider{ width:320px; max-width:80%; margin:42px auto 28px; display:flex; align-items:center; gap:16px; }
+  .title-divider .l, .title-divider .r{ flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+  .title-divider .dot{ width:12px; height:12px; background:var(--gold); transform:rotate(45deg); }
+  .title-author{ font-family:var(--font-display); font-size:clamp(20px,2.2vw,26px); color:var(--ink-soft); font-weight:300; }
+  .title-author b{ color:var(--accent); font-weight:700; }
+  .title-cta{
+    margin-top:50px; background:var(--accent); color:var(--paper-2);
+    border:none; padding:16px 42px; border-radius:14px;
+    font-family:var(--font); font-size:19px; font-weight:700; cursor:pointer;
+    box-shadow:0 14px 36px -14px var(--accent); transition:all .3s ease; letter-spacing:1px;
+  }
+  .title-cta:hover{ background:var(--accent-2); transform:translateY(-3px); }
+  .title-cta::after{ content:" ←"; }
+
+  /* ===== Generic slide layout ===== */
+  .slide-num{ display:inline-block; font-size:15px; color:var(--gold); letter-spacing:4px; font-weight:700; margin-bottom:12px; }
+  .slide-title{ font-family:var(--font-display); font-size:clamp(32px,4.5vw,52px); color:var(--accent); margin-bottom:18px; line-height:1.15; font-weight:800; }
+  .slide-instruction{
+    font-family:var(--font-display); font-size:clamp(20px,2.4vw,26px); color:var(--ink-soft);
+    margin-bottom:28px; line-height:1.5; font-weight:500;
+    border-right:4px solid var(--gold); padding-right:16px;
+  }
+
+  /* ============================================ */
+  /* ===== INFOGRAPHIC: 3 LETTERS (slide 2) ===== */
+  /* ============================================ */
+  .infographic{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:24px;
+    padding:clamp(28px,4vw,48px); box-shadow:var(--shadow);
+    margin-bottom:24px;
+    position:relative; overflow:hidden;
+  }
+  .infographic::before{
+    content:""; position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 10% 0%, rgba(200,155,74,.06), transparent 40%),
+      radial-gradient(circle at 90% 100%, rgba(14,111,92,.06), transparent 40%);
+    pointer-events:none;
+  }
+  .infographic-title{
+    text-align:center;
+    font-family:var(--font-display);
+    font-size:clamp(22px,2.8vw,30px);
+    color:var(--ink-soft); font-weight:600;
+    margin-bottom:30px;
+    position:relative;
+  }
+  .infographic-title::after{
+    content:""; display:block;
+    width:100px; height:3px;
+    background:var(--gold);
+    margin:14px auto 0;
+    border-radius:999px;
+  }
+
+  /* Big letter showcase */
+  .three-letters{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
+    position:relative; z-index:1;
+  }
+  @media (max-width:700px){ .three-letters{ grid-template-columns:1fr; } }
+  .letter-stage{
+    text-align:center; padding:18px 12px;
+    border:2px solid var(--gold-soft);
+    border-radius:20px;
+    background:linear-gradient(180deg, white 0%, var(--paper-2) 100%);
+    transition:all .3s ease;
+    position:relative;
+  }
+  .letter-stage:hover{
+    transform:translateY(-6px);
+    box-shadow:0 24px 50px -24px rgba(200,155,74,.5);
+    border-color:var(--gold);
+  }
+  .letter-mega{
+    font-family:var(--font-display);
+    font-size:clamp(110px,14vw,180px);
+    line-height:.9; font-weight:800;
+    background:linear-gradient(135deg, var(--accent), var(--gold));
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:6px;
+  }
+  .letter-stage .letter-label{
+    font-family:var(--font-display); font-size:22px; font-weight:800; color:var(--accent-2);
+    margin-bottom:8px;
+  }
+  .letter-stage .letter-examples{
+    display:flex; flex-direction:column; gap:6px;
+    font-size:18px; color:var(--ink-soft); font-weight:600;
+    border-top:1px dashed var(--line); padding-top:12px; margin-top:10px;
+  }
+  .letter-stage .letter-examples b{ color:var(--rose); font-weight:800; }
+
+  /* ============================================ */
+  /* ===== INFOGRAPHIC: SPLIT (slide 3) ========= */
+  /* ============================================ */
+  .split-graphic{
+    display:grid; grid-template-columns:1fr 1fr; gap:24px;
+    margin-bottom:24px;
+  }
+  @media (max-width:700px){ .split-graphic{ grid-template-columns:1fr; } }
+  .split-card{
+    border-radius:24px; padding:clamp(24px,3vw,36px);
+    color:white; position:relative; overflow:hidden;
+    box-shadow:var(--shadow);
+    min-height:280px;
+    display:flex; flex-direction:column;
+  }
+  .split-card.sound{
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+  .split-card.weak{
+    background:linear-gradient(135deg, var(--rose), var(--rose-2));
+  }
+  .split-card::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(232,200,134,.18) 1px, transparent 0);
+    background-size:20px 20px; opacity:.4; pointer-events:none;
+  }
+  .split-icon{
+    width:80px; height:80px; border-radius:20px;
+    background:rgba(255,255,255,.15);
+    border:2px solid rgba(232,200,134,.5);
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:18px;
+    font-size:46px; font-weight:800;
+    font-family:var(--font-display);
+    color:var(--gold-soft);
+    position:relative; z-index:1;
+  }
+  .split-name{
+    font-family:var(--font-display); font-size:clamp(28px,3.5vw,38px);
+    font-weight:800; color:var(--gold-soft);
+    margin-bottom:6px; position:relative; z-index:1;
+  }
+  .split-rule{
+    font-size:clamp(18px,2vw,22px); line-height:1.55;
+    margin-bottom:auto; opacity:.95;
+    position:relative; z-index:1;
+    padding-bottom:16px;
+  }
+  .split-examples{
+    display:flex; gap:8px; flex-wrap:wrap;
+    border-top:1px solid rgba(232,200,134,.3);
+    padding-top:16px; position:relative; z-index:1;
+  }
+  .split-examples span{
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(232,200,134,.4);
+    color:var(--gold-soft);
+    padding:6px 16px; border-radius:999px;
+    font-family:var(--font-display); font-weight:700;
+    font-size:clamp(18px,2.1vw,22px);
+  }
+
+  /* "VS" connector */
+  .vs-divider{
+    text-align:center; margin:8px 0 30px;
+  }
+  .vs-divider .vs{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:64px; height:64px; border-radius:50%;
+    background:var(--gold);
+    color:white;
+    font-family:var(--font-display); font-size:24px; font-weight:800;
+    box-shadow:0 12px 30px -12px var(--gold);
+  }
+
+  /* ============================================ */
+  /* ===== INFOGRAPHIC: 3 SOUND TYPES =========== */
+  /* ============================================ */
+  .pos-graphic{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:24px;
+    padding:clamp(24px,3vw,40px); box-shadow:var(--shadow); margin-bottom:24px;
+  }
+  .pos-row{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:18px;
+  }
+  @media (max-width:760px){ .pos-row{ grid-template-columns:1fr; } }
+  .pos-cell{
+    background:linear-gradient(180deg, white 0%, var(--paper-2) 100%);
+    border:2px solid var(--line);
+    border-top:5px solid var(--accent);
+    border-radius:18px;
+    padding:20px;
+    transition:all .3s ease;
+    position:relative;
+  }
+  .pos-cell:hover{
+    transform:translateY(-5px);
+    box-shadow:0 20px 40px -20px rgba(14,111,92,.3);
+    border-color:var(--gold);
+    border-top-color:var(--gold);
+  }
+  .pos-cell.weak-cell{ border-top-color:var(--rose); }
+  .pos-cell.weak-cell:hover{ border-top-color:var(--gold); box-shadow:0 20px 40px -20px rgba(180,62,80,.3); }
+  .pos-num{
+    position:absolute; top:-14px; right:18px;
+    width:32px; height:32px; border-radius:50%;
+    background:var(--gold); color:white;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:16px;
+    font-family:var(--font);
+    box-shadow:0 6px 14px -4px var(--gold);
+  }
+  .pos-name{
+    font-family:var(--font-display); font-size:28px; font-weight:800;
+    color:var(--accent); margin-bottom:8px; line-height:1;
+  }
+  .pos-cell.weak-cell .pos-name{ color:var(--rose); }
+  .pos-rule{
+    font-size:17px; color:var(--ink-soft); line-height:1.55;
+    padding:10px 0 12px;
+    border-bottom:1px dashed var(--line);
+    margin-bottom:12px;
+  }
+  .pos-rule b{ color:var(--ink); font-weight:800; }
+  .pos-examples{ display:flex; gap:6px; flex-wrap:wrap; }
+  .pos-examples .ex{
+    background:rgba(14,111,92,.08); color:var(--accent-2);
+    padding:5px 14px; border-radius:999px;
+    font-family:var(--font-display); font-weight:700;
+    font-size:21px;
+  }
+  .pos-cell.weak-cell .pos-examples .ex{
+    background:rgba(180,62,80,.08); color:var(--rose);
+  }
+
+  /* ============================================ */
+  /* ===== POSITION DIAGRAM (slide 5) =========== */
+  /* ============================================ */
+  .position-diagram{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:24px;
+    padding:clamp(28px,4vw,48px); box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  .verb-frame{
+    margin:0 auto 30px;
+    background:linear-gradient(180deg, white 0%, var(--paper-2) 100%);
+    border:2px solid var(--gold-soft);
+    border-radius:20px;
+    padding:22px;
+    max-width:560px;
+    text-align:center;
+    box-shadow:0 14px 30px -16px rgba(200,155,74,.4);
+    position:relative;
+  }
+  .verb-frame-label{
+    position:absolute; top:-12px; right:50%; transform:translateX(50%);
+    background:var(--gold); color:white;
+    padding:4px 16px; border-radius:999px;
+    font-size:13px; font-weight:700; letter-spacing:2px;
+  }
+  .verb-letters{
+    display:flex; justify-content:center; gap:12px;
+    margin-bottom:14px;
+  }
+  .verb-letter{
+    width:84px; height:84px;
+    display:flex; align-items:center; justify-content:center;
+    background:white;
+    border:3px solid var(--accent);
+    color:var(--accent);
+    border-radius:18px;
+    font-family:var(--font-display);
+    font-size:54px; font-weight:800; line-height:1;
+    position:relative;
+  }
+  .verb-letter.weak-pos{
+    border-color:var(--rose);
+    color:var(--rose);
+    background:rgba(180,62,80,.05);
+  }
+  .verb-letter .pos-tag{
+    position:absolute;
+    bottom:-26px; left:50%; transform:translateX(-50%);
+    font-size:13px; font-weight:700;
+    color:var(--ink-soft);
+    background:var(--paper);
+    padding:2px 10px; border-radius:6px;
+    white-space:nowrap;
+    border:1px solid var(--line);
+  }
+  .verb-letter.weak-pos .pos-tag{
+    background:var(--rose); color:white; border-color:var(--rose);
+  }
+  .verb-frame .verb-name{
+    margin-top:18px;
+    font-family:var(--font-display);
+    font-size:24px; font-weight:800;
+    color:var(--ink-soft);
+  }
+
+  /* Selector buttons */
+  .pos-selector{
+    display:flex; gap:10px; flex-wrap:wrap;
+    justify-content:center;
+    margin:14px 0;
+  }
+  .pos-btn{
+    background:white; border:2px solid var(--line);
+    padding:11px 22px; border-radius:14px;
+    font-family:var(--font-display); font-weight:800;
+    font-size:21px; color:var(--ink);
+    cursor:pointer; transition:all .25s ease;
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    min-width:130px;
+  }
+  .pos-btn:hover{
+    border-color:var(--rose); transform:translateY(-3px);
+    box-shadow:0 12px 24px -12px var(--rose);
+  }
+  .pos-btn.active{
+    background:var(--rose); color:white; border-color:var(--rose);
+    box-shadow:0 12px 24px -10px var(--rose);
+  }
+  .pos-btn small{
+    font-size:13px; font-weight:600; opacity:.85;
+    letter-spacing:1px;
+  }
+
+  /* ============================================ */
+  /* ===== MNEMONIC (slide 6) =================== */
+  /* ============================================ */
+  .mnemonic-card{
+    background:linear-gradient(135deg, var(--gold) 0%, #B68940 100%);
+    color:white; border-radius:24px;
+    padding:clamp(28px,4vw,48px);
+    text-align:center;
+    box-shadow:var(--shadow);
+    margin-bottom:24px;
+    position:relative; overflow:hidden;
+  }
+  .mnemonic-card::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,.18) 1px, transparent 0);
+    background-size:24px 24px; opacity:.4; pointer-events:none;
+  }
+  .mnemonic-label{
+    display:inline-block;
+    font-size:14px; letter-spacing:5px;
+    background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.4);
+    padding:6px 18px; border-radius:999px;
+    margin-bottom:20px; font-weight:700;
+    position:relative; z-index:1;
+  }
+  .mnemonic-text{
+    font-family:var(--font-display);
+    font-size:clamp(28px,4vw,42px);
+    font-weight:800; line-height:1.4;
+    position:relative; z-index:1;
+    margin-bottom:14px;
+  }
+  .mnemonic-text .key{
+    color:#3D2912;
+    text-shadow:0 2px 0 rgba(255,255,255,.4);
+  }
+  .mnemonic-explain{
+    font-size:clamp(18px,2vw,21px); opacity:.95;
+    position:relative; z-index:1;
+    line-height:1.6;
+  }
+
+  /* Quick reference table */
+  .quickref{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:22px;
+    padding:clamp(20px,2.5vw,28px); box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  .quickref-title{
+    font-family:var(--font-display); font-size:22px; font-weight:800;
+    color:var(--accent); margin-bottom:18px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .quickref-title::before{
+    content:""; width:6px; height:24px; background:var(--gold);
+    border-radius:3px;
+  }
+  .qr-table{
+    width:100%; border-collapse:separate; border-spacing:0 6px;
+  }
+  .qr-table th, .qr-table td{
+    padding:12px 16px; text-align:right;
+    background:var(--paper);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .qr-table th{
+    background:var(--accent); color:white;
+    font-family:var(--font-display); font-weight:800; font-size:17px;
+  }
+  .qr-table th:first-child{ border-radius:0 12px 12px 0; border-top-color:var(--accent); border-bottom-color:var(--accent); }
+  .qr-table th:last-child{ border-radius:12px 0 0 12px; border-top-color:var(--accent); border-bottom-color:var(--accent); }
+  .qr-table td{
+    font-size:18px;
+  }
+  .qr-table tr td:first-child{ border-radius:0 12px 12px 0; border-right:3px solid var(--gold); }
+  .qr-table tr td:last-child{ border-radius:12px 0 0 12px; }
+  .qr-table tr.weak-row td:first-child{ border-right-color:var(--rose); }
+  .qr-table .verb-cell{
+    font-family:var(--font-display); font-size:22px; font-weight:800;
+    color:var(--accent-2);
+  }
+  .qr-table .weak-row .verb-cell{ color:var(--rose); }
+  .qr-table .type-cell{
+    font-family:var(--font-display); font-weight:700;
+    color:var(--ink-soft);
+  }
+
+  /* ============================================ */
+  /* ===== QUICK QUIZ (slide 7) ================= */
+  /* ============================================ */
+  .quiz-section{
+    background:var(--paper-3); border:2px dashed var(--gold); border-radius:22px;
+    padding:clamp(22px,3vw,32px); box-shadow:var(--shadow);
+  }
+  .quiz-header{
+    display:flex; align-items:center; flex-wrap:wrap; gap:14px;
+    margin-bottom:20px;
+  }
+  .quiz-label{
+    font-family:var(--font-display); font-size:15px; color:var(--paper-2);
+    background:var(--gold); padding:7px 18px; border-radius:999px;
+    font-weight:700; display:inline-flex; align-items:center; gap:6px;
+  }
+  .quiz-progress{
+    margin-right:auto;
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--paper); border:1px solid var(--line);
+    padding:7px 16px; border-radius:999px;
+  }
+  .quiz-progress span{ color:var(--ink-soft); font-weight:700; font-size:14px; }
+  .quiz-progress b{ color:var(--accent); font-size:16px; font-weight:800; }
+  .quiz-bar{
+    width:100px; height:6px; background:rgba(14,111,92,.1);
+    border-radius:999px; overflow:hidden;
+  }
+  .quiz-bar>span{
+    display:block; height:100%; width:0;
+    background:linear-gradient(90deg, var(--gold-soft), var(--accent));
+    transition:width .45s cubic-bezier(.2,.8,.2,1);
+  }
+
+  .flash-card{
+    background:white; border:2px solid var(--line); border-radius:18px;
+    padding:24px 26px; margin-bottom:14px;
+    box-shadow:0 10px 24px -16px rgba(26,31,46,.3);
+    transition:all .3s ease;
+    position:relative;
+  }
+  .flash-card.answered-correct{ border-color:rgba(43,122,87,.45); background:rgba(43,122,87,.04); }
+  .flash-card.answered-wrong{ border-color:rgba(180,62,80,.45); background:rgba(180,62,80,.04); }
+  .flash-q{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .flash-q-num{
+    background:var(--gold); color:white;
+    border-radius:50%; width:34px; height:34px;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:16px; flex-shrink:0;
+    font-family:var(--font);
+  }
+  .flash-card.answered-correct .flash-q-num{ background:var(--leaf); }
+  .flash-card.answered-wrong .flash-q-num{ background:var(--rose); }
+  .flash-q-text{
+    font-family:var(--font-display); font-size:21px; font-weight:700; color:var(--ink);
+    flex:1; min-width:200px;
+  }
+  .flash-q-verb{
+    font-family:var(--font-display); font-size:32px; font-weight:800; color:var(--accent-2);
+    background:rgba(14,111,92,.05);
+    padding:6px 18px; border-radius:12px;
+    border:2px solid rgba(14,111,92,.2);
+  }
+  .flash-card.answered-correct .flash-q-verb{ color:var(--leaf); border-color:var(--leaf); background:rgba(43,122,87,.08); }
+  .flash-card.answered-wrong .flash-q-verb{ color:var(--rose); border-color:var(--rose); background:rgba(180,62,80,.08); }
+  .flash-opts{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));
+    gap:10px;
+  }
+  .flash-opts button{
+    background:var(--paper); border:2px solid var(--line);
+    padding:12px 16px; border-radius:12px;
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+    cursor:pointer; transition:all .2s ease; color:var(--ink);
+    text-align:center;
+  }
+  .flash-opts button:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .flash-opts button.correct{ background:var(--leaf); color:white; border-color:var(--leaf); }
+  .flash-opts button.wrong{ background:var(--rose); color:white; border-color:var(--rose); }
+  .flash-opts button.show{ background:rgba(43,122,87,.15); color:var(--leaf); border-color:var(--leaf); }
+  .flash-opts button.locked{ pointer-events:none; }
+
+  .flash-explain{
+    margin-top:14px; padding:12px 16px;
+    background:rgba(180,62,80,.05);
+    border:1.5px dashed rgba(180,62,80,.35);
+    border-radius:12px;
+    display:none; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .flash-explain.show{ display:flex; animation:fadeUp .35s ease; }
+  .flash-explain .ic{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%;
+    background:var(--rose); color:white; font-size:14px; flex-shrink:0;
+  }
+  .flash-explain .note{
+    flex:1; font-size:16px; color:var(--ink); line-height:1.55;
+  }
+  .flash-explain .note b{ color:var(--rose-2); }
+
+  .celebrate{
+    position:absolute; top:-12px; right:50%; transform:translateX(50%);
+    background:var(--leaf); color:white;
+    padding:5px 14px; border-radius:999px;
+    font-size:13px; font-weight:700; font-family:var(--font);
+    white-space:nowrap; pointer-events:none; z-index:5;
+    animation:celebrate 1.6s ease forwards;
+    box-shadow:0 6px 16px -6px rgba(43,122,87,.6);
+  }
+  @keyframes celebrate{
+    0%{ opacity:0; transform:translate(50%, 8px) scale(.85); }
+    20%{ opacity:1; transform:translate(50%, 0) scale(1); }
+    80%{ opacity:1; transform:translate(50%, -6px) scale(1); }
+    100%{ opacity:0; transform:translate(50%, -22px) scale(.95); }
+  }
+
+  /* ===== Final ===== */
+  .final-card{
+    text-align:center;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+    color:var(--paper-2); border-radius:28px; padding:clamp(36px,5vw,64px);
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .final-card::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(232,200,134,.18) 1px, transparent 0);
+    background-size:24px 24px; opacity:.5;
+  }
+  .final-card .ribbon{ font-size:70px; margin-bottom:8px; }
+  .final-card h2{ font-family:var(--font-display); font-size:34px; color:var(--gold-soft); margin-bottom:16px; font-weight:800; }
+  .final-card .big-score{ font-family:var(--font-display); font-size:clamp(60px,8vw,96px); font-weight:800; color:var(--paper-2); line-height:1; margin:8px 0; }
+  .final-card .pct{ color:var(--gold-soft); font-size:28px; font-weight:700; }
+  .final-card .msg{ font-size:19px; margin:20px 0; color:rgba(246,239,226,.95); }
+
+  /* ===== Final summary infographic ===== */
+  .summary-tree{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:22px;
+    padding:clamp(20px,3vw,32px); box-shadow:var(--shadow);
+    margin-top:22px;
+  }
+  .summary-tree h3{
+    font-family:var(--font-display); font-size:22px; color:var(--accent); margin-bottom:18px;
+    text-align:center; font-weight:800;
+  }
+  .tree-flow{
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+  .tree-root{
+    background:var(--accent); color:white;
+    padding:14px 32px; border-radius:14px;
+    font-family:var(--font-display); font-size:24px; font-weight:800;
+    box-shadow:0 12px 28px -12px var(--accent);
+  }
+  .tree-arrows{
+    display:flex; gap:6px; color:var(--gold);
+    font-size:24px; font-weight:800;
+  }
+  .tree-branches{
+    display:flex; gap:14px; flex-wrap:wrap; justify-content:center;
+  }
+  .tree-branch-group{
+    flex:1; min-width:280px;
+    border-radius:18px; padding:18px;
+    border:2px solid;
+  }
+  .tree-branch-group.sound{ background:rgba(14,111,92,.05); border-color:var(--accent); }
+  .tree-branch-group.weak{ background:rgba(180,62,80,.05); border-color:var(--rose); }
+  .tree-branch-title{
+    font-family:var(--font-display); font-size:21px; font-weight:800;
+    margin-bottom:14px; text-align:center;
+    padding-bottom:10px; border-bottom:1.5px dashed;
+  }
+  .sound .tree-branch-title{ color:var(--accent); border-bottom-color:rgba(14,111,92,.3); }
+  .weak .tree-branch-title{ color:var(--rose); border-bottom-color:rgba(180,62,80,.3); }
+  .tree-leaves{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+  }
+  .tree-leaf{
+    background:white;
+    border:1.5px solid; border-radius:10px;
+    padding:8px 16px;
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+  }
+  .sound .tree-leaf{ border-color:rgba(14,111,92,.3); color:var(--accent); }
+  .weak .tree-leaf{ border-color:rgba(180,62,80,.3); color:var(--rose); }
+
+  /* ===== Navbar ===== */
+  .navbar{
+    position:fixed; bottom:0; right:0; left:0;
+    background:rgba(251,246,236,.94);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);
+    padding:16px 26px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; z-index:50;
+  }
+  .nav-btn{
+    background:var(--accent); color:var(--paper-2); border:none;
+    padding:12px 22px; border-radius:12px;
+    font-family:var(--font); font-weight:700; font-size:16px;
+    cursor:pointer; transition:all .25s ease;
+  }
+  .nav-btn:hover{ background:var(--accent-2); transform:translateY(-2px); }
+  .nav-btn.ghost{ background:transparent; color:var(--accent); border:2px solid var(--accent); }
+  .nav-btn.ghost:hover{ background:var(--accent); color:var(--paper-2); }
+  .nav-btn:disabled{ opacity:.35; cursor:not-allowed; transform:none; }
+  .dots{ display:flex; gap:8px; flex:1; justify-content:center; flex-wrap:wrap; }
+  .dot{ width:10px; height:10px; border-radius:50%; background:rgba(14,111,92,.2); cursor:pointer; transition:all .25s ease; }
+  .dot.active{ background:var(--accent); transform:scale(1.4); box-shadow:0 0 0 4px rgba(14,111,92,.15); }
+  .dot.visited{ background:var(--gold); }
+  .nav-score{ font-family:var(--font-display); font-size:16px; color:var(--ink-soft); font-weight:700; }
+  .nav-score b{ color:var(--accent); font-size:18px; font-weight:800; }
+
+  @media (max-width:600px){
+    body{ font-size:16px; }
+    .topbar{ height:56px; }
+    .stage{ padding-top:80px; }
+    .topbar .brand{ font-size:15px; }
+    .navbar{ padding:12px 14px; }
+    .nav-btn{ padding:10px 16px; font-size:14px; }
+    .dot{ width:8px; height:8px; }
+    .verb-letter{ width:64px; height:64px; font-size:38px; }
+    .verb-letter .pos-tag{ font-size:11px; }
+    .pos-btn{ font-size:17px; min-width:auto; padding:10px 16px; }
+    .flash-q-verb{ font-size:26px; padding:5px 14px; }
+    .flash-q-text{ font-size:18px; }
+  }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="مراجعةٌ سريعة: الصحيحُ والمعتلّ">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">مراجعة سريعة <span>·</span> الفعل الصحيح والمعتلّ</div>
+  <div class="slide-info">شريحة <b id="cur">1</b> من <span id="tot">8</span></div>
+</div>
+<div class="progress-line"><span id="pbar" style="width: 0%;"></span></div>
+
+<main class="stage">
+
+  <!-- ===== SLIDE 1: TITLE ===== -->
+  <section class="slide title-slide active" data-slide="1">
+    <svg class="title-ornament" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#C89B4A" stroke-width="1.6">
+        <circle cx="100" cy="100" r="80"></circle>
+        <circle cx="100" cy="100" r="58"></circle>
+        <circle cx="100" cy="100" r="36"></circle>
+        <path d="M100 20 L100 180 M20 100 L180 100"></path>
+        <path d="M40 40 L160 160 M160 40 L40 160"></path>
+        <circle cx="100" cy="100" r="6" fill="#C89B4A"></circle>
+      </g>
+    </svg>
+    <div class="title-eyebrow">في خمس دقائق</div>
+    <h1 class="title-main">
+      مراجعة <span class="em">سريعة</span><br>
+      للفعل الصحيح والمعتلّ
+    </h1>
+    <p class="title-sub">أنفوجرافيكس · تذكير · إتقان</p>
+    <div class="title-divider"><div class="l"></div><div class="dot"></div><div class="r"></div></div>
+    <p class="title-author">إعداد: <b>أ. حيدر المعاتيق</b></p>
+    <button class="title-cta" onclick="goNext()">ابدأ المراجعة</button>
+  </section>
+
+  <!-- ===== SLIDE 2: 3 letters ===== -->
+  <section class="slide" data-slide="2">
+    <span class="slide-num">٠٢ — البداية</span>
+    <h2 class="slide-title">حروف العلّة</h2>
+    <p class="slide-instruction">قبل كل شيء، احفظ هذه الحروف الثلاثة. كل ما تبقّى من الدرس يدور حولها.</p>
+
+    <div class="infographic">
+      <p class="infographic-title">في العربية ثلاثة حروف علّة فقط</p>
+      <div class="three-letters">
+        <div class="letter-stage">
+          <div class="letter-mega">ا</div>
+          <div class="letter-label">الألف</div>
+          <div class="letter-examples">
+            <span><b>قَ</b><b>ا</b><b>لَ</b> — <b>صَ</b><b>ا</b><b>مَ</b></span>
+            <span style="font-size:14px; opacity:.75;">(ألف منقلبة عن واو أو ياء)</span>
+          </div>
+        </div>
+        <div class="letter-stage">
+          <div class="letter-mega">و</div>
+          <div class="letter-label">الواو</div>
+          <div class="letter-examples">
+            <span><b>و</b><b>عَدَ</b> — دَعَ<b>ا</b></span>
+            <span style="font-size:14px; opacity:.75;">(تأتي في الأوّل أو الآخر)</span>
+          </div>
+        </div>
+        <div class="letter-stage">
+          <div class="letter-mega">ي</div>
+          <div class="letter-label">الياء</div>
+          <div class="letter-examples">
+            <span><b>ي</b><b>َبِسَ</b> — رَمَ<b>ى</b></span>
+            <span style="font-size:14px; opacity:.75;">(تأتي في الأوّل أو الآخر)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mnemonic-card">
+      <span class="mnemonic-label">قاعدة ذهبية</span>
+      <p class="mnemonic-text">ا · و · ي = <span class="key">"اوي"</span></p>
+      <p class="mnemonic-explain">تذكّرها بكلمة واحدة: <b>"اوي"</b>. أي حرفٍ من هذه الثلاثة في جذر الفعل = الفعل معتلّ.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 3: sound vs weak ===== -->
+  <section class="slide" data-slide="3">
+    <span class="slide-num">٠٣ — التقسيم الكبير</span>
+    <h2 class="slide-title">صحيحٌ أم معتلّ؟</h2>
+    <p class="slide-instruction">الفعل في العربية إمّا صحيحٌ وإمّا معتلّ. الفرق بينهما حرف واحد فقط.</p>
+
+    <div class="split-graphic">
+      <div class="split-card sound">
+        <div class="split-icon">📗</div>
+        <div class="split-name">الفعل الصحيح</div>
+        <div class="split-rule">تخلو حروفه الأصلية من <b>ا · و · ي</b></div>
+        <div class="split-examples">
+          <span>كَتَبَ</span><span>جَلَسَ</span><span>سَأَلَ</span><span>مَدَّ</span>
+        </div>
+      </div>
+
+      <div class="split-card weak">
+        <div class="split-icon">📕</div>
+        <div class="split-name">الفعل المعتلّ</div>
+        <div class="split-rule">في حروفه الأصلية حرف <b>ا · و · ي</b> أو أكثر</div>
+        <div class="split-examples">
+          <span>وَعَدَ</span><span>قالَ</span><span>دَعا</span><span>وَعى</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="vs-divider"><span class="vs">⇆</span></div>
+
+    <div class="mnemonic-card">
+      <span class="mnemonic-label">طريقة الكشف</span>
+      <p class="mnemonic-text">جرّد الفعل من زيادته، ثم انظر في حروفه الأصلية:<br>أتجد فيها <span class="key">"ا · و · ي"</span>؟</p>
+      <p class="mnemonic-explain">إن وجدتَ → <b>معتلّ</b>. وإن لم تجد → <b>صحيح</b>.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 4: 3 sound types ===== -->
+  <section class="slide" data-slide="4">
+    <span class="slide-num">٠٤ — أقسام الصحيح</span>
+    <h2 class="slide-title">الفعل الصحيح ٣ أقسام</h2>
+    <p class="slide-instruction">إذا تأكّدتَ أن الفعل صحيحٌ، انظر إلى ما فيه من تفاصيل لتحدّد قسمَه بدقّة.</p>
+
+    <div class="pos-graphic">
+      <div class="pos-row">
+        <div class="pos-cell">
+          <div class="pos-num">١</div>
+          <div class="pos-name">السالم</div>
+          <div class="pos-rule">خَلت حروفه من <b>الهمزة</b> ومن <b>التضعيف</b>.</div>
+          <div class="pos-examples">
+            <span class="ex">كَتَبَ</span>
+            <span class="ex">جَلَسَ</span>
+            <span class="ex">دَرَسَ</span>
+          </div>
+        </div>
+        <div class="pos-cell">
+          <div class="pos-num">٢</div>
+          <div class="pos-name">المهموز</div>
+          <div class="pos-rule">في حروفه <b>همزةٌ</b> (في الأول أو الوسط أو الآخر).</div>
+          <div class="pos-examples">
+            <span class="ex">أَكَلَ</span>
+            <span class="ex">سَأَلَ</span>
+            <span class="ex">قَرَأَ</span>
+          </div>
+        </div>
+        <div class="pos-cell">
+          <div class="pos-num">٣</div>
+          <div class="pos-name">المُضعَّف</div>
+          <div class="pos-rule">فيه <b>حرفان أصليّان</b> من جنسٍ واحد، أُدغما في حرف مشدَّد.</div>
+          <div class="pos-examples">
+            <span class="ex">مَدَّ</span>
+            <span class="ex">شَدَّ</span>
+            <span class="ex">رَدَّ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mnemonic-card">
+      <span class="mnemonic-label">مفتاح التذكّر</span>
+      <p class="mnemonic-text">انظر هل في الفعل: <span class="key">همزة؟ تضعيف؟</span></p>
+      <p class="mnemonic-explain">لا هذا ولا ذاك → <b>سالم</b> &nbsp;·&nbsp; همزة → <b>مهموز</b> &nbsp;·&nbsp; تضعيف → <b>مُضعَّف</b></p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 5: weak types — interactive position ===== -->
+  <section class="slide" data-slide="5">
+    <span class="slide-num">٠٥ — أقسام المعتلّ</span>
+    <h2 class="slide-title">المعتلّ يُسمَّى بموقع العلّة</h2>
+    <p class="slide-instruction">الفعل المعتلّ تقسيمُه أسهل ممّا تظنّ: انظر فقط إلى موقع حرف العلّة. اضغط الأزرار لترى أين تقع.</p>
+
+    <div class="position-diagram">
+      <div class="verb-frame">
+        <span class="verb-frame-label">الفعل من ٣ حروف</span>
+        <div class="verb-letters" id="verb-letters">
+          <div class="verb-letter weak-pos" data-pos="1">و<span class="pos-tag">الأوّل</span></div>
+          <div class="verb-letter" data-pos="2">ع<span class="pos-tag">الوسط</span></div>
+          <div class="verb-letter" data-pos="3">د<span class="pos-tag">الآخر</span></div>
+        </div>
+        <div class="verb-name" id="verb-name">وَعَدَ</div>
+      </div>
+
+      <div class="pos-selector">
+        <button class="pos-btn active" onclick="setPosition(&#39;mithaal&#39;, this)">المثال<small>أوّله علّة</small></button>
+        <button class="pos-btn" onclick="setPosition(&#39;ajwaf&#39;, this)">الأجوف<small>وسطه علّة</small></button>
+        <button class="pos-btn" onclick="setPosition(&#39;naaqis&#39;, this)">الناقص<small>آخره علّة</small></button>
+        <button class="pos-btn" onclick="setPosition(&#39;lafeef&#39;, this)">اللفيف<small>حرفا علّة</small></button>
+      </div>
+
+      <div style="text-align:center; margin-top:18px; font-size:17px; color:var(--ink-soft);">
+        <span id="pos-explainer" style="display:inline-block; padding:10px 20px; background:var(--paper); border-radius:12px; border:1.5px dashed var(--line);">
+          <b style="color:var(--rose);">المثال</b>: حرف العلّة في أوّل الفعل، مثل <b style="color:var(--rose-2); font-family:var(--font-display); font-size:21px;">وَعَدَ</b>.
+        </span>
+      </div>
+    </div>
+
+    <div class="mnemonic-card">
+      <span class="mnemonic-label">حيلة بصرية</span>
+      <p class="mnemonic-text">موقع العلّة = اسم القسم</p>
+      <p class="mnemonic-explain">الأوّل = <b>مثال</b> &nbsp;·&nbsp; الوسط = <b>أجوف</b> (أي مجوّف من داخله) &nbsp;·&nbsp; الآخر = <b>ناقص</b> (نقص آخره) &nbsp;·&nbsp; اثنان = <b>لفيف</b> (لُفّت العلّتان معاً)</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 6: Quick reference ===== -->
+  <section class="slide" data-slide="6">
+    <span class="slide-num">٠٦ — جدول مرجعيّ</span>
+    <h2 class="slide-title">طاولة الإسعاف السريعة</h2>
+    <p class="slide-instruction">أسرع طريقة لمراجعة الدرس كلّه: تأمّل كل فعل وكيف نسمّيه ولماذا.</p>
+
+    <div class="quickref">
+      <div class="quickref-title">أمثلة بأنواعها</div>
+      <table class="qr-table">
+        <thead>
+          <tr>
+            <th>الفعل</th>
+            <th>الجذر</th>
+            <th>النوع الكبير</th>
+            <th>القسم</th>
+            <th>السبب</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="verb-cell">كَتَبَ</td>
+            <td>ك-ت-ب</td>
+            <td><b style="color:var(--accent);">صحيح</b></td>
+            <td class="type-cell">سالم</td>
+            <td>لا علّة ولا همزة ولا تضعيف</td>
+          </tr>
+          <tr>
+            <td class="verb-cell">سَأَلَ</td>
+            <td>س-أ-ل</td>
+            <td><b style="color:var(--accent);">صحيح</b></td>
+            <td class="type-cell">مهموز</td>
+            <td>الهمزة في الوسط</td>
+          </tr>
+          <tr>
+            <td class="verb-cell">مَدَّ</td>
+            <td>م-د-د</td>
+            <td><b style="color:var(--accent);">صحيح</b></td>
+            <td class="type-cell">مُضعَّف</td>
+            <td>حرفان من جنس واحد</td>
+          </tr>
+          <tr class="weak-row">
+            <td class="verb-cell">وَعَدَ</td>
+            <td>و-ع-د</td>
+            <td><b style="color:var(--rose);">معتلّ</b></td>
+            <td class="type-cell">مثال</td>
+            <td>العلّة في الأوّل</td>
+          </tr>
+          <tr class="weak-row">
+            <td class="verb-cell">قالَ</td>
+            <td>ق-و-ل</td>
+            <td><b style="color:var(--rose);">معتلّ</b></td>
+            <td class="type-cell">أجوف</td>
+            <td>العلّة في الوسط</td>
+          </tr>
+          <tr class="weak-row">
+            <td class="verb-cell">دَعا</td>
+            <td>د-ع-و</td>
+            <td><b style="color:var(--rose);">معتلّ</b></td>
+            <td class="type-cell">ناقص</td>
+            <td>العلّة في الآخر</td>
+          </tr>
+          <tr class="weak-row">
+            <td class="verb-cell">وَعى</td>
+            <td>و-ع-ي</td>
+            <td><b style="color:var(--rose);">معتلّ</b></td>
+            <td class="type-cell">لفيف</td>
+            <td>حرفا علّة في الفعل</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="summary-tree">
+      <h3>الشجرة الكاملة في لمحة</h3>
+      <div class="tree-flow">
+        <div class="tree-root">الفعل</div>
+        <div class="tree-arrows">↙ ↘</div>
+        <div class="tree-branches">
+          <div class="tree-branch-group sound">
+            <div class="tree-branch-title">📗 الصحيح</div>
+            <div class="tree-leaves">
+              <div class="tree-leaf">سالم</div>
+              <div class="tree-leaf">مهموز</div>
+              <div class="tree-leaf">مُضعَّف</div>
+            </div>
+          </div>
+          <div class="tree-branch-group weak">
+            <div class="tree-branch-title">📕 المعتلّ</div>
+            <div class="tree-leaves">
+              <div class="tree-leaf">مثال</div>
+              <div class="tree-leaf">أجوف</div>
+              <div class="tree-leaf">ناقص</div>
+              <div class="tree-leaf">لفيف</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 7: Quick quiz ===== -->
+  <section class="slide" data-slide="7">
+    <span class="slide-num">٠٧ — اختبر نفسك</span>
+    <h2 class="slide-title">٦ أسئلة سريعة</h2>
+    <p class="slide-instruction">مرّر سريعاً على هذه الأسئلة لتتأكّد أنك أتقنت المراجعة. كل سؤال يستهدف فكرة محورية.</p>
+
+    <div class="quiz-section">
+      <div class="quiz-header">
+        <span class="quiz-label">⚡ سرعة وتركيز</span>
+        <div class="quiz-progress">
+          <span>تمّ <b id="quiz-num">٠</b> من <span>6</span></span>
+          <div class="quiz-bar"><span id="quiz-bar" style="width: 0%;"></span></div>
+        </div>
+      </div>
+      <div id="flash-list"><div class="flash-card" id="flash-1">
+      <div class="flash-q">
+        <div class="flash-q-num">١</div>
+        <div class="flash-q-text">حروف العلّة هي:</div>
+        
+      </div>
+      <div class="flash-opts"><button data-val="ا · و · ي" onclick="answerFlash(1, &#39;ا · و · ي&#39;, this)">ا · و · ي</button><button data-val="ا · ب · ت" onclick="answerFlash(1, &#39;ا · ب · ت&#39;, this)">ا · ب · ت</button><button data-val="و · ي · ه" onclick="answerFlash(1, &#39;و · ي · ه&#39;, this)">و · ي · ه</button><button data-val="أ · ن · م" onclick="answerFlash(1, &#39;أ · ن · م&#39;, this)">أ · ن · م</button></div>
+    </div><div class="flash-card" id="flash-2">
+      <div class="flash-q">
+        <div class="flash-q-num">٢</div>
+        <div class="flash-q-text">الفعل صحيح إذا:</div>
+        
+      </div>
+      <div class="flash-opts"><button data-val="خَلَت أصوله من حروف العلّة" onclick="answerFlash(2, &#39;خَلَت أصوله من حروف العلّة&#39;, this)">خَلَت أصوله من حروف العلّة</button><button data-val="كان قصيراً" onclick="answerFlash(2, &#39;كان قصيراً&#39;, this)">كان قصيراً</button><button data-val="كان من ثلاثة حروف" onclick="answerFlash(2, &#39;كان من ثلاثة حروف&#39;, this)">كان من ثلاثة حروف</button><button data-val="بدأ بهمزة" onclick="answerFlash(2, &#39;بدأ بهمزة&#39;, this)">بدأ بهمزة</button></div>
+    </div><div class="flash-card" id="flash-3">
+      <div class="flash-q">
+        <div class="flash-q-num">٣</div>
+        <div class="flash-q-text">الفعل التالي ما نوعه التفصيلي؟</div>
+        <div class="flash-q-verb">سَأَلَ</div>
+      </div>
+      <div class="flash-opts"><button data-val="سالم" onclick="answerFlash(3, &#39;سالم&#39;, this)">سالم</button><button data-val="مهموز" onclick="answerFlash(3, &#39;مهموز&#39;, this)">مهموز</button><button data-val="مُضعَّف" onclick="answerFlash(3, &#39;مُضعَّف&#39;, this)">مُضعَّف</button><button data-val="أجوف" onclick="answerFlash(3, &#39;أجوف&#39;, this)">أجوف</button></div>
+    </div><div class="flash-card" id="flash-4">
+      <div class="flash-q">
+        <div class="flash-q-num">٤</div>
+        <div class="flash-q-text">الفعل التالي ما نوعه التفصيلي؟</div>
+        <div class="flash-q-verb">مَدَّ</div>
+      </div>
+      <div class="flash-opts"><button data-val="سالم" onclick="answerFlash(4, &#39;سالم&#39;, this)">سالم</button><button data-val="مهموز" onclick="answerFlash(4, &#39;مهموز&#39;, this)">مهموز</button><button data-val="مُضعَّف" onclick="answerFlash(4, &#39;مُضعَّف&#39;, this)">مُضعَّف</button><button data-val="ناقص" onclick="answerFlash(4, &#39;ناقص&#39;, this)">ناقص</button></div>
+    </div><div class="flash-card" id="flash-5">
+      <div class="flash-q">
+        <div class="flash-q-num">٥</div>
+        <div class="flash-q-text">الفعل "وَصَلَ" نوعه:</div>
+        <div class="flash-q-verb">وَصَلَ</div>
+      </div>
+      <div class="flash-opts"><button data-val="مثال" onclick="answerFlash(5, &#39;مثال&#39;, this)">مثال</button><button data-val="أجوف" onclick="answerFlash(5, &#39;أجوف&#39;, this)">أجوف</button><button data-val="ناقص" onclick="answerFlash(5, &#39;ناقص&#39;, this)">ناقص</button><button data-val="لفيف" onclick="answerFlash(5, &#39;لفيف&#39;, this)">لفيف</button></div>
+    </div><div class="flash-card" id="flash-6">
+      <div class="flash-q">
+        <div class="flash-q-num">٦</div>
+        <div class="flash-q-text">الفعل الذي اجتمع فيه حرفا علّة يُسمَّى:</div>
+        
+      </div>
+      <div class="flash-opts"><button data-val="الناقص" onclick="answerFlash(6, &#39;الناقص&#39;, this)">الناقص</button><button data-val="الأجوف" onclick="answerFlash(6, &#39;الأجوف&#39;, this)">الأجوف</button><button data-val="اللفيف" onclick="answerFlash(6, &#39;اللفيف&#39;, this)">اللفيف</button><button data-val="المثال" onclick="answerFlash(6, &#39;المثال&#39;, this)">المثال</button></div>
+    </div></div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 8: Final ===== -->
+  <section class="slide" data-slide="8">
+    <span class="slide-num">٠٨ — انتهت المراجعة</span>
+    <h2 class="slide-title">أحسنت! انتهت المراجعة</h2>
+
+    <div class="final-card">
+      <div class="ribbon">🎯</div>
+      <h2>نتيجتك في المراجعة</h2>
+      <div class="big-score"><span id="final-score">0</span> <span style="opacity:.6;">/</span> <span id="final-total">0</span></div>
+      <div class="pct"><span id="final-pct">0</span>%</div>
+      <p class="msg" id="final-msg">أكمل الأسئلة لرؤية نتيجتك.</p>
+      <button class="nav-btn" style="background:var(--gold); color:var(--ink);" onclick="resetAll()">إعادة المراجعة ↻</button>
+    </div>
+
+    <div class="mnemonic-card" style="margin-top:24px;">
+      <span class="mnemonic-label">الخلاصة في سطر</span>
+      <p class="mnemonic-text">جذر الفعل + موقع العلّة = نوعه</p>
+      <p class="mnemonic-explain">جرّد الفعل، وانظر في حروفه الثلاثة الأصلية. ابدأ بالسؤال: هل فيها <b>"اوي"</b>؟ ثم انظر إلى التفاصيل.</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="navbar">
+  <button class="nav-btn ghost" id="prev-btn" onclick="goPrev()" disabled="">→ السابق</button>
+  <div class="dots" id="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  <div class="nav-score">النتيجة: <b id="score">0</b> / <b id="total">0</b></div>
+  <button class="nav-btn" id="next-btn" onclick="goNext()">التالي ←</button>
+</div>
+
+<script>
+/* ===== Navigation ===== */
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let current = 1;
+const visited = new Set([1]);
+document.getElementById('tot').textContent = totalSlides;
+
+const dotsWrap = document.getElementById('dots');
+for(let i=1;i<=totalSlides;i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===1?' active':'');
+  d.onclick = ()=> goTo(i);
+  dotsWrap.appendChild(d);
+}
+function goTo(n){
+  if(n<1 || n>totalSlides) return;
+  current = n; visited.add(n);
+  slides.forEach(s=> s.classList.toggle('active', parseInt(s.dataset.slide)===n));
+  dotsWrap.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active', (i+1)===n);
+    d.classList.toggle('visited', visited.has(i+1) && (i+1)!==n);
+  });
+  document.getElementById('cur').textContent = n;
+  document.getElementById('pbar').style.width = ((n-1)/(totalSlides-1)*100) + '%';
+  document.getElementById('prev-btn').disabled = (n===1);
+  document.getElementById('next-btn').disabled = (n===totalSlides);
+  document.getElementById('next-btn').textContent = (n===totalSlides) ? 'انتهى' : 'التالي ←';
+  window.scrollTo({ top:0, behavior:'smooth' });
+  if(n===totalSlides) updateFinal();
+}
+function goNext(){ if(current<totalSlides) goTo(current+1); }
+function goPrev(){ if(current>1) goTo(current-1); }
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowLeft') goNext();
+  else if(e.key === 'ArrowRight') goPrev();
+});
+
+/* ===== Score ===== */
+let score=0, total=0;
+function bumpScore(c){
+  total++; if(c) score++;
+  document.getElementById('score').textContent = score;
+  document.getElementById('total').textContent = total;
+}
+function updateFinal(){
+  document.getElementById('final-score').textContent = score;
+  document.getElementById('final-total').textContent = total;
+  const pct = total ? Math.round((score/total)*100) : 0;
+  document.getElementById('final-pct').textContent = pct;
+  const msg = document.getElementById('final-msg');
+  if(total===0) msg.textContent = 'أكمل الأسئلة لرؤية نتيجتك.';
+  else if(pct===100) msg.textContent = 'إتقان تامّ! المراجعة أحرزَتْ هدفها 🌟';
+  else if(pct>=80) msg.textContent = 'مراجعة ممتازة! الدرس راسخٌ في ذهنك.';
+  else if(pct>=60) msg.textContent = 'جيّد جداً، راجع مرّة أخرى الأقسام التي أخطأت فيها.';
+  else msg.textContent = 'عُد إلى الدرس الأصلي ثم أعد المراجعة.';
+}
+
+/* ===== Position interactive (slide 5) ===== */
+const positions = {
+  mithaal:{ letters:[{l:'و',w:true},{l:'ع',w:false},{l:'د',w:false}], name:'وَعَدَ', explainer:'<b style="color:var(--rose);">المثال</b>: حرف العلّة في أوّل الفعل، مثل <b style="color:var(--rose-2); font-family:var(--font-display); font-size:21px;">وَعَدَ</b>.' },
+  ajwaf:  { letters:[{l:'ق',w:false},{l:'و',w:true},{l:'ل',w:false}], name:'قَالَ', explainer:'<b style="color:var(--rose);">الأجوف</b>: حرف العلّة في وسط الفعل، مثل <b style="color:var(--rose-2); font-family:var(--font-display); font-size:21px;">قَالَ</b> (الألف منقلبة عن واو).' },
+  naaqis: { letters:[{l:'د',w:false},{l:'ع',w:false},{l:'و',w:true}], name:'دَعَا', explainer:'<b style="color:var(--rose);">الناقص</b>: حرف العلّة في آخر الفعل، مثل <b style="color:var(--rose-2); font-family:var(--font-display); font-size:21px;">دَعَا</b>.' },
+  lafeef: { letters:[{l:'و',w:true},{l:'ع',w:false},{l:'ي',w:true}], name:'وَعَى', explainer:'<b style="color:var(--rose);">اللفيف</b>: اجتمع فيه حرفا علّة، مثل <b style="color:var(--rose-2); font-family:var(--font-display); font-size:21px;">وَعَى</b>.' },
+};
+function setPosition(key, btn){
+  const p = positions[key];
+  if(!p) return;
+  document.querySelectorAll('.pos-btn').forEach(b=> b.classList.remove('active'));
+  btn.classList.add('active');
+  const wrap = document.getElementById('verb-letters');
+  const positionsLabels = ['الأوّل','الوسط','الآخر'];
+  wrap.innerHTML = p.letters.map((it,i)=>
+    `<div class="verb-letter${it.w?' weak-pos':''}">${it.l}<span class="pos-tag">${positionsLabels[i]}</span></div>`
+  ).join('');
+  document.getElementById('verb-name').textContent = p.name;
+  document.getElementById('pos-explainer').innerHTML = p.explainer;
+}
+
+/* ===== Quick quiz (slide 7) ===== */
+const flashQs = [
+  {
+    text:'حروف العلّة هي:',
+    opts:['ا · و · ي', 'ا · ب · ت', 'و · ي · ه', 'أ · ن · م'],
+    answer:'ا · و · ي',
+    note:'تذكّر القاعدة الذهبية: <b>"اوي"</b>. ثلاثة حروف فقط لا غير.'
+  },
+  {
+    text:'الفعل صحيح إذا:',
+    verb:null,
+    opts:['خَلَت أصوله من حروف العلّة', 'كان قصيراً', 'كان من ثلاثة حروف', 'بدأ بهمزة'],
+    answer:'خَلَت أصوله من حروف العلّة',
+    note:'الميزان هو وجود حروف العلّة في الجذر. الطول ولا الهمزة لا يدخلان في الفرز الكبير.'
+  },
+  {
+    text:'الفعل التالي ما نوعه التفصيلي؟',
+    verb:'سَأَلَ',
+    opts:['سالم','مهموز','مُضعَّف','أجوف'],
+    answer:'مهموز',
+    note:'الجذر (س-أ-ل) فيه همزة في الوسط، والهمزة ليست حرف علّة → فعل صحيح <b>مهموز</b>.'
+  },
+  {
+    text:'الفعل التالي ما نوعه التفصيلي؟',
+    verb:'مَدَّ',
+    opts:['سالم','مهموز','مُضعَّف','ناقص'],
+    answer:'مُضعَّف',
+    note:'أصله (م-د-د)، حرفان أصليّان من جنس واحد أُدغما في حرف مشدَّد → فعل صحيح <b>مُضعَّف</b>.'
+  },
+  {
+    text:'الفعل "وَصَلَ" نوعه:',
+    verb:'وَصَلَ',
+    opts:['مثال','أجوف','ناقص','لفيف'],
+    answer:'مثال',
+    note:'حرف العلّة (و) في أوّل الفعل، وأوّله علّة = <b>مثال</b>.'
+  },
+  {
+    text:'الفعل الذي اجتمع فيه حرفا علّة يُسمَّى:',
+    verb:null,
+    opts:['الناقص','الأجوف','اللفيف','المثال'],
+    answer:'اللفيف',
+    note:'<b>اللفيف</b> سُمّي بذلك لأن حرفي العلّة "لُفّا" معاً في الفعل. مثل: وَعَى، طَوى.'
+  },
+];
+const arDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+const arNum = n => String(n).split('').map(d=> arDigits[+d]||d).join('');
+const answeredFlash = new Set();
+
+function buildFlash(){
+  const wrap = document.getElementById('flash-list');
+  wrap.innerHTML = '';
+  flashQs.forEach((q, i)=>{
+    const id = i+1;
+    const card = document.createElement('div');
+    card.className = 'flash-card';
+    card.id = 'flash-'+id;
+    const verbHtml = q.verb ? `<div class="flash-q-verb">${q.verb}</div>` : '';
+    const opts = q.opts.map(o=>
+      `<button data-val="${o}" onclick="answerFlash(${id}, '${o}', this)">${o}</button>`
+    ).join('');
+    card.innerHTML = `
+      <div class="flash-q">
+        <div class="flash-q-num">${arNum(id)}</div>
+        <div class="flash-q-text">${q.text}</div>
+        ${verbHtml}
+      </div>
+      <div class="flash-opts">${opts}</div>
+    `;
+    wrap.appendChild(card);
+  });
+  updateQuizProgress();
+}
+function answerFlash(id, choice, btn){
+  if(answeredFlash.has(id)) return;
+  answeredFlash.add(id);
+  const q = flashQs[id-1];
+  const card = document.getElementById('flash-'+id);
+  const isCorrect = choice === q.answer;
+  if(isCorrect){
+    btn.classList.add('correct');
+    card.classList.add('answered-correct');
+    /* celebrate */
+    const c = document.createElement('div');
+    c.className = 'celebrate'; c.textContent = '✓ أحسنت';
+    card.appendChild(c);
+    setTimeout(()=> c.remove(), 1700);
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('answered-wrong');
+    card.querySelectorAll('.flash-opts button').forEach(b=>{
+      if(b.dataset.val === q.answer) b.classList.add('show');
+    });
+    /* explanation */
+    const ex = document.createElement('div');
+    ex.className = 'flash-explain show';
+    ex.innerHTML = `<span class="ic">!</span><div class="note">${q.note}</div>`;
+    card.appendChild(ex);
+  }
+  card.querySelectorAll('.flash-opts button').forEach(b=> b.classList.add('locked'));
+  updateQuizProgress();
+  bumpScore(isCorrect);
+}
+function updateQuizProgress(){
+  document.getElementById('quiz-num').textContent = arNum(answeredFlash.size);
+  document.getElementById('quiz-bar').style.width = ((answeredFlash.size / flashQs.length) * 100) + '%';
+}
+
+/* ===== Reset ===== */
+function resetAll(){
+  score=0; total=0; answeredFlash.clear();
+  document.getElementById('score').textContent='0';
+  document.getElementById('total').textContent='0';
+  buildFlash();
+  updateFinal();
+  goTo(1);
+}
+
+/* ===== Init ===== */
+buildFlash();
+goTo(1);
+</script>
+
+
+
+</body></html>

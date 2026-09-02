@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الاختبار التفاعلي — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; --green:#16a34a; --red:#dc2626; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input, .tp-textarea { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; resize: vertical; }
+.tp-input:focus, .tp-textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-textarea { min-height: 70px; }
+.tp-q-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 16px; margin-bottom: 14px; }
+.tp-q-card .tp-label { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 0.95rem; }
+.tp-q-num { background: var(--amber); color: white; width: 26px; height: 26px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.82rem; font-weight: 700; }
+.tp-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.tp-opt-row { background: rgba(0,0,0,0.15); border-radius: 8px; padding: 8px; }
+.tp-opt-row label { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.8); font-size: 0.78rem; cursor: pointer; }
+.tp-opt-row input[type="radio"] { accent-color: var(--amber); cursor: pointer; }
+.tp-remove { background: rgba(220,38,38,0.4); color: white; border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-right: auto; }
+.tp-remove:hover { background: rgba(220,38,38,0.7); }
+.tp-add-btn { background: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.3); color: var(--bg-cream); padding: 12px; border-radius: 10px; cursor: pointer; font-family: 'Tajawal', sans-serif; width: 100%; font-size: 0.95rem; }
+.tp-add-btn:hover { background: rgba(255,255,255,0.18); border-color: var(--amber-soft); }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+
+.quiz-container { max-width: 720px; margin: 0 auto; }
+.quiz-progress { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding: 12px 18px; background: var(--bg-cream); border-radius: 10px; font-family: 'Reem Kufi', sans-serif; }
+.quiz-progress-bar { flex: 1; height: 6px; background: var(--line); border-radius: 999px; margin: 0 12px; overflow: hidden; }
+.quiz-progress-fill { height: 100%; background: var(--amber); transition: width 0.4s; border-radius: 999px; }
+.quiz-question-card { background: var(--bg-cream); border-radius: 16px; padding: 28px; border: 1px solid var(--line); }
+.quiz-question { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; color: var(--emerald-deep); margin-bottom: 20px; line-height: 1.6; }
+.quiz-options { display: grid; gap: 10px; }
+.quiz-option { background: white; border: 2px solid var(--line); border-radius: 10px; padding: 14px 18px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 1rem; text-align: right; transition: all 0.2s; display: flex; align-items: center; gap: 12px; }
+.quiz-option:hover:not(:disabled) { border-color: var(--amber); transform: translateX(-4px); }
+.quiz-option:disabled { cursor: default; }
+.quiz-option-letter { background: var(--emerald-deep); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Reem Kufi', sans-serif; font-weight: 600; flex-shrink: 0; }
+.quiz-option.correct { background: rgba(22, 163, 74, 0.1); border-color: var(--green); }
+.quiz-option.correct .quiz-option-letter { background: var(--green); }
+.quiz-option.wrong { background: rgba(220, 38, 38, 0.08); border-color: var(--red); }
+.quiz-option.wrong .quiz-option-letter { background: var(--red); }
+.quiz-feedback { margin-top: 18px; padding: 16px 20px; border-radius: 10px; display: none; }
+.quiz-feedback.show { display: block; animation: slideDown 0.3s; }
+.quiz-feedback.correct { background: rgba(22, 163, 74, 0.08); border-right: 4px solid var(--green); }
+.quiz-feedback.wrong { background: rgba(220, 38, 38, 0.08); border-right: 4px solid var(--red); }
+.quiz-feedback-title { font-family: 'Reem Kufi', sans-serif; font-weight: 600; margin-bottom: 6px; }
+.quiz-feedback.correct .quiz-feedback-title { color: var(--green); }
+.quiz-feedback.wrong .quiz-feedback-title { color: var(--red); }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.quiz-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+.quiz-btn { background: var(--emerald-deep); color: white; border: none; padding: 12px 24px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 1rem; transition: all 0.2s; }
+.quiz-btn:hover:not(:disabled) { background: var(--emerald); transform: translateY(-2px); }
+.quiz-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.quiz-btn.amber { background: var(--amber); }
+.quiz-btn.amber:hover:not(:disabled) { background: #B45309; }
+.quiz-result { text-align: center; padding: 40px 24px; }
+.quiz-result-icon { font-size: 4rem; margin-bottom: 18px; }
+.quiz-result-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.8rem; color: var(--emerald-deep); margin-bottom: 12px; }
+.quiz-result-score { font-size: 3rem; font-weight: 700; color: var(--amber); font-family: 'Reem Kufi', sans-serif; margin: 16px 0; }
+.quiz-result-msg { color: var(--ink-soft); margin-bottom: 24px; font-size: 1.05rem; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 600px) { .tp-options-grid { grid-template-columns: 1fr; } .tp-header { flex-direction: column; align-items: flex-start; } .preview-title { font-size: 1.5rem; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="الاختبار التفاعلي">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — الاختبارُ التفاعلي</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>اختبارٌ ذكيٌّ بأربعةِ خياراتٍ لكلِّ سؤال.</strong> اختر أيَّ خيارٍ هو الصحيحُ بالنقرِ على الدائرةِ بجانبه. اكتبْ شرحًا تفصيليًّا في الحقلِ الأخيرِ يُعرَضُ بعدَ إجابةِ الطالب — هذا الشرحُ هو ما يَفصلُ بين الاختبارِ الذكيِّ والاختبارِ العادي.
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الاختبار</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="اختبارُ مراجعة" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="أجبْ عن جميعِ الأسئلة، ثُمَّ راجع نتيجتَك" oninput="updatePreview()">
+        </div>
+
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">الأسئلة</label>
+          <div id="questions-container"></div>
+          <button class="tp-add-btn" onclick="addQuestion()">+ إضافةُ سؤالٍ جديد</button>
+        </div>
+
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادة</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">اختبار</h1>
+      <p class="preview-subtitle" id="preview-subtitle"></p>
+    </div>
+    <div class="quiz-container" id="quiz-container"></div>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+const defaultQuestions = [
+  {
+    q: 'ما الذي يُميِّزُ الفعلَ المضارعَ عن الماضي؟',
+    options: ['يدلُّ على حدثٍ وقعَ وانتهى', 'يدلُّ على حدثٍ في الحاضرِ أو المستقبل، ويُسبَقُ بأحدِ حروفِ (أَنَيْتُ)', 'مبنيٌّ للمجهول دائمًا', 'لا يقبلُ الضمائر'],
+    correct: 1,
+    explanation: 'الفعلُ المضارعُ يدلُّ على حدثٍ في الحاضرِ أو المستقبل، ويُسبَقُ بأحدِ حروفِ (أَنَيْتُ). أمَّا الفعلُ الماضي فيدلُّ على حدثٍ وقعَ وانتهى.'
+  },
+  {
+    q: 'كم حرفًا في حروفِ المضارعة؟',
+    options: ['ثلاثةٌ', 'أربعةٌ', 'خمسةٌ', 'ستَّةٌ'],
+    correct: 1,
+    explanation: 'أربعةُ حروف، مجموعةٌ في كلمةِ (أَنَيْتُ): الهمزة، النون، الياء، التاء.'
+  }
+];
+let questions = JSON.parse(JSON.stringify(defaultQuestions));
+let currentQ = 0;
+let answers = [];
+let started = false;
+
+function renderEditor() {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  questions.forEach((q, idx) => {
+    const div = document.createElement('div');
+    div.className = 'tp-q-card';
+    let optsHTML = '<div class="tp-options-grid">';
+    q.options.forEach((opt, oi) => {
+      optsHTML += `
+        <div class="tp-opt-row">
+          <label>
+            <input type="radio" name="correct-${idx}" ${q.correct === oi ? 'checked' : ''} onchange="setCorrect(${idx}, ${oi})">
+            <span>الصواب</span>
+          </label>
+          <input type="text" class="tp-input" placeholder="الخيار ${oi+1}" value="${escapeAttr(opt)}" oninput="updateOption(${idx}, ${oi}, this.value)" style="margin-top:4px; font-size:0.9rem; padding: 8px 10px;">
+        </div>`;
+    });
+    optsHTML += '</div>';
+    div.innerHTML = `
+      <label class="tp-label">
+        <span class="tp-q-num">${idx+1}</span><span>السؤال ${idx+1}</span>
+        ${questions.length > 1 ? `<button class="tp-remove" onclick="removeQuestion(${idx})">حذف</button>` : ''}
+      </label>
+      <input type="text" class="tp-input" placeholder="نصُّ السؤال" value="${escapeAttr(q.q)}" oninput="updateQ(${idx}, 'q', this.value)" style="margin-bottom:10px;">
+      ${optsHTML}
+      <label class="tp-label" style="margin-top:12px; font-size:0.82rem;">شرحُ الإجابةِ الصحيحة (يَظهرُ بعدَ إجابةِ الطالب)</label>
+      <textarea class="tp-textarea" placeholder="اشرح للطالب لماذا هذه الإجابةُ صحيحة" oninput="updateQ(${idx}, 'explanation', this.value)">${escapeHTML(q.explanation)}</textarea>
+    `;
+    container.appendChild(div);
+  });
+}
+function updateQ(idx, key, value) { questions[idx][key] = value; updatePreview(); }
+function updateOption(idx, oi, value) { questions[idx].options[oi] = value; updatePreview(); }
+function setCorrect(idx, oi) { questions[idx].correct = oi; updatePreview(); }
+function removeQuestion(idx) { questions.splice(idx, 1); renderEditor(); resetQuiz(); updatePreview(); }
+function addQuestion() { questions.push({ q: 'سؤال جديد', options: ['الخيار الأول', 'الخيار الثاني', 'الخيار الثالث', 'الخيار الرابع'], correct: 0, explanation: 'الشرح هنا' }); renderEditor(); updatePreview(); }
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'اختبار';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'اختبار') + ' — موقع تعليمي';
+  resetQuiz();
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+function resetQuiz() {
+  currentQ = 0;
+  answers = [];
+  started = false;
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const container = document.getElementById('quiz-container');
+  if (questions.length === 0) { container.innerHTML = '<p style="text-align:center;color:var(--ink-soft);">أضف أسئلةً لِترى الاختبار</p>'; return; }
+  if (currentQ >= questions.length) { renderResult(); return; }
+  const q = questions[currentQ];
+  const userAnswer = answers[currentQ];
+  const answered = userAnswer !== undefined;
+  let optsHTML = '';
+  q.options.forEach((opt, oi) => {
+    let cls = 'quiz-option';
+    if (answered) {
+      if (oi === q.correct) cls += ' correct';
+      else if (oi === userAnswer) cls += ' wrong';
+    }
+    const letter = ['أ', 'ب', 'ج', 'د'][oi];
+    optsHTML += `<button class="${cls}" ${answered ? 'disabled' : ''} onclick="answerQ(${oi})"><span class="quiz-option-letter">${letter}</span><span>${escapeHTML(opt)}</span></button>`;
+  });
+  let feedbackHTML = '';
+  if (answered) {
+    const correct = userAnswer === q.correct;
+    feedbackHTML = `<div class="quiz-feedback show ${correct ? 'correct' : 'wrong'}">
+      <div class="quiz-feedback-title">${correct ? '✓ أَحسنتَ، إجابةٌ صحيحة!' : '✗ إجابةٌ غيرُ صحيحة'}</div>
+      <div>${escapeHTML(q.explanation)}</div>
+    </div>`;
+  }
+  const isLast = currentQ === questions.length - 1;
+  container.innerHTML = `
+    <div class="quiz-progress">
+      <span>السؤال ${currentQ+1} من ${questions.length}</span>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:${((currentQ+1)/questions.length)*100}%"></div></div>
+      <span>${answers.filter(a => a === questions[answers.indexOf(a)]?.correct).length} / ${answers.length}</span>
+    </div>
+    <div class="quiz-question-card">
+      <div class="quiz-question">${escapeHTML(q.q)}</div>
+      <div class="quiz-options">${optsHTML}</div>
+      ${feedbackHTML}
+      <div class="quiz-nav">
+        <button class="quiz-btn" onclick="prevQ()" ${currentQ === 0 ? 'disabled' : ''}>السابق</button>
+        <button class="quiz-btn amber" onclick="nextQ()" ${!answered ? 'disabled' : ''}>${isLast ? 'إنهاءُ الاختبار' : 'التالي'}</button>
+      </div>
+    </div>
+  `;
+}
+
+function answerQ(oi) {
+  answers[currentQ] = oi;
+  renderQuiz();
+}
+function nextQ() { currentQ++; renderQuiz(); }
+function prevQ() { currentQ--; renderQuiz(); }
+
+function renderResult() {
+  const correctCount = answers.filter((a, i) => a === questions[i].correct).length;
+  const total = questions.length;
+  const pct = Math.round((correctCount/total)*100);
+  let icon, msg;
+  if (pct === 100) { icon = '🏆'; msg = 'علامةٌ كاملة! أداءٌ ممتاز.'; }
+  else if (pct >= 75) { icon = '🌟'; msg = 'أَحسنتَ، نتيجةٌ جيِّدةٌ جدًّا!'; }
+  else if (pct >= 50) { icon = '💪'; msg = 'نتيجةٌ مقبولة. راجع الأخطاءَ وأَعِدِ الاختبار.'; }
+  else { icon = '📚'; msg = 'تحتاجُ إلى مراجعةٍ أعمق. لا تستسلم!'; }
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = `
+    <div class="quiz-question-card quiz-result">
+      <div class="quiz-result-icon">${icon}</div>
+      <div class="quiz-result-title">انتهى الاختبار</div>
+      <div class="quiz-result-score">${arabicNum(correctCount)} / ${arabicNum(total)}</div>
+      <div class="quiz-result-msg">${msg}</div>
+      <button class="quiz-btn amber" onclick="resetQuiz()">إعادةُ الاختبار</button>
+    </div>
+  `;
+}
+
+function arabicNum(n) { return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]); }
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'اختبار';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const questionsJSON = JSON.stringify(questions);
+  const sig = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHTML(title)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"><style>:root{--emerald-deep:#0F4C3A;--emerald:#1a6b54;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5;--green:#16a34a;--red:#dc2626}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.quiz-container{max-width:720px;margin:0 auto}.quiz-progress{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;padding:12px 18px;background:var(--bg-cream);border-radius:10px;font-family:'Reem Kufi',sans-serif}.quiz-progress-bar{flex:1;height:6px;background:var(--line);border-radius:999px;margin:0 12px;overflow:hidden}.quiz-progress-fill{height:100%;background:var(--amber);transition:width 0.4s;border-radius:999px}.quiz-question-card{background:var(--bg-cream);border-radius:16px;padding:28px;border:1px solid var(--line)}.quiz-question{font-family:'Reem Kufi',sans-serif;font-size:1.25rem;font-weight:600;color:var(--emerald-deep);margin-bottom:20px;line-height:1.6}.quiz-options{display:grid;gap:10px}.quiz-option{background:white;border:2px solid var(--line);border-radius:10px;padding:14px 18px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:1rem;text-align:right;transition:all 0.2s;display:flex;align-items:center;gap:12px}.quiz-option:hover:not(:disabled){border-color:var(--amber);transform:translateX(-4px)}.quiz-option:disabled{cursor:default}.quiz-option-letter{background:var(--emerald-deep);color:white;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Reem Kufi',sans-serif;font-weight:600;flex-shrink:0}.quiz-option.correct{background:rgba(22,163,74,0.1);border-color:var(--green)}.quiz-option.correct .quiz-option-letter{background:var(--green)}.quiz-option.wrong{background:rgba(220,38,38,0.08);border-color:var(--red)}.quiz-option.wrong .quiz-option-letter{background:var(--red)}.quiz-feedback{margin-top:18px;padding:16px 20px;border-radius:10px;display:none}.quiz-feedback.show{display:block;animation:slideDown 0.3s}.quiz-feedback.correct{background:rgba(22,163,74,0.08);border-right:4px solid var(--green)}.quiz-feedback.wrong{background:rgba(220,38,38,0.08);border-right:4px solid var(--red)}.quiz-feedback-title{font-family:'Reem Kufi',sans-serif;font-weight:600;margin-bottom:6px}.quiz-feedback.correct .quiz-feedback-title{color:var(--green)}.quiz-feedback.wrong .quiz-feedback-title{color:var(--red)}@keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}.quiz-nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px}.quiz-btn{background:var(--emerald-deep);color:white;border:none;padding:12px 24px;border-radius:10px;cursor:pointer;font-family:'Reem Kufi',sans-serif;font-weight:500;font-size:1rem;transition:all 0.2s}.quiz-btn:hover:not(:disabled){background:var(--emerald);transform:translateY(-2px)}.quiz-btn:disabled{opacity:0.4;cursor:not-allowed}.quiz-btn.amber{background:var(--amber)}.quiz-btn.amber:hover:not(:disabled){background:#B45309}.quiz-result{text-align:center;padding:40px 24px}.quiz-result-icon{font-size:4rem;margin-bottom:18px}.quiz-result-title{font-family:'Reem Kufi',sans-serif;font-size:1.8rem;color:var(--emerald-deep);margin-bottom:12px}.quiz-result-score{font-size:3rem;font-weight:700;color:var(--amber);font-family:'Reem Kufi',sans-serif;margin:16px 0}.quiz-result-msg{color:var(--ink-soft);margin-bottom:24px;font-size:1.05rem}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.preview-title{font-size:1.5rem}}</style></head><body><div class="page"><div class="preview-wrap"><div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div><div class="quiz-container" id="quiz-container"></div>${sig}</div></div><script>
+const questions = ${questionsJSON};
+let currentQ = 0; let answers = [];
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function arabicNum(n){return String(n).replace(/\\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[+d]);}
+function renderQuiz(){const container=document.getElementById('quiz-container');if(currentQ>=questions.length){renderResult();return;}const q=questions[currentQ];const userAnswer=answers[currentQ];const answered=userAnswer!==undefined;let optsHTML='';q.options.forEach((opt,oi)=>{let cls='quiz-option';if(answered){if(oi===q.correct)cls+=' correct';else if(oi===userAnswer)cls+=' wrong';}const letter=['أ','ب','ج','د'][oi];optsHTML+='<button class="'+cls+'" '+(answered?'disabled':'')+' onclick="answerQ('+oi+')"><span class="quiz-option-letter">'+letter+'</span><span>'+escapeHTML(opt)+'</span></button>';});let feedbackHTML='';if(answered){const correct=userAnswer===q.correct;feedbackHTML='<div class="quiz-feedback show '+(correct?'correct':'wrong')+'"><div class="quiz-feedback-title">'+(correct?'✓ أَحسنتَ، إجابةٌ صحيحة!':'✗ إجابةٌ غيرُ صحيحة')+'</div><div>'+escapeHTML(q.explanation)+'</div></div>';}const isLast=currentQ===questions.length-1;container.innerHTML='<div class="quiz-progress"><span>السؤال '+arabicNum(currentQ+1)+' من '+arabicNum(questions.length)+'</span><div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width:'+(((currentQ+1)/questions.length)*100)+'%"></div></div><span></span></div><div class="quiz-question-card"><div class="quiz-question">'+escapeHTML(q.q)+'</div><div class="quiz-options">'+optsHTML+'</div>'+feedbackHTML+'<div class="quiz-nav"><button class="quiz-btn" onclick="prevQ()" '+(currentQ===0?'disabled':'')+'>السابق</button><button class="quiz-btn amber" onclick="nextQ()" '+(!answered?'disabled':'')+'>'+(isLast?'إنهاءُ الاختبار':'التالي')+'</button></div></div>';}
+function answerQ(oi){answers[currentQ]=oi;renderQuiz();}
+function nextQ(){currentQ++;renderQuiz();}
+function prevQ(){currentQ--;renderQuiz();}
+function resetQuiz(){currentQ=0;answers=[];renderQuiz();}
+function renderResult(){const correctCount=answers.filter((a,i)=>a===questions[i].correct).length;const total=questions.length;const pct=Math.round((correctCount/total)*100);let icon,msg;if(pct===100){icon='🏆';msg='علامةٌ كاملة! أداءٌ ممتاز.';}else if(pct>=75){icon='🌟';msg='أَحسنتَ، نتيجةٌ جيِّدةٌ جدًّا!';}else if(pct>=50){icon='💪';msg='نتيجةٌ مقبولة. راجع الأخطاءَ وأَعِدِ الاختبار.';}else{icon='📚';msg='تحتاجُ إلى مراجعةٍ أعمق. لا تستسلم!';}document.getElementById('quiz-container').innerHTML='<div class="quiz-question-card quiz-result"><div class="quiz-result-icon">'+icon+'</div><div class="quiz-result-title">انتهى الاختبار</div><div class="quiz-result-score">'+arabicNum(correctCount)+' / '+arabicNum(total)+'</div><div class="quiz-result-msg">'+msg+'</div><button class="quiz-btn amber" onclick="resetQuiz()">إعادةُ الاختبار</button></div>';}
+renderQuiz();
+<\/script></body></html>`;
+  downloadHTML(finalHTML, title);
+}
+
+function downloadHTML(html, title) {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'اختبار').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s) { return String(s || '').replace(/"/g, '&quot;'); }
+function resetForm() { if (confirm('إعادةُ كلِّ القيمِ إلى الافتراضي؟')) location.reload(); }
+
+renderEditor();
+updatePreview();
+</script>
+</body>
+</html>

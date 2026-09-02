@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>السحب والإفلات — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; --green-success:#16a34a; --red-error:#dc2626; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input, .tp-textarea { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; resize: vertical; }
+.tp-input:focus, .tp-textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-textarea { min-height: 100px; }
+.tp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tp-cat-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px; }
+.tp-cat-input .tp-label { font-size: 0.82rem; margin-bottom: 8px; }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+.tp-hint { font-size: 0.85rem; color: rgba(255,255,255,0.75); font-style: italic; margin-top: 6px; }
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+.drag-game { max-width: 900px; margin: 0 auto; }
+.drag-bank { background: var(--bg-cream); border-radius: 12px; padding: 20px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; min-height: 80px; justify-content: center; align-items: center; border: 2px dashed var(--line); }
+.drag-bank:empty::before { content: 'تم نقل كل العناصر'; color: var(--ink-soft); }
+.drag-item { background: var(--emerald-deep); color: var(--bg-cream); padding: 10px 18px; border-radius: 999px; cursor: grab; font-family: 'Reem Kufi', sans-serif; font-weight: 500; transition: all 0.2s; user-select: none; }
+.drag-item:hover { background: var(--emerald); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(15,76,58,0.2); }
+.drag-item.dragging { opacity: 0.5; }
+.drag-zones { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.drag-zone { background: var(--bg-cream); border-radius: 12px; padding: 20px; min-height: 180px; border: 2px solid var(--line); transition: all 0.3s; }
+.drag-zone.over { border-color: var(--amber); background: rgba(217,119,6,0.05); }
+.drag-zone-title { font-family: 'Reem Kufi', sans-serif; color: var(--emerald-deep); font-weight: 600; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 8px; }
+.drag-zone-items { display: flex; flex-wrap: wrap; gap: 8px; }
+.drag-item.placed { background: var(--green-success); cursor: default; }
+.drag-item.shake { animation: shake 0.4s; background: var(--red-error); }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.drag-feedback { text-align: center; padding: 18px; border-radius: 12px; background: var(--bg-cream); margin-top: 20px; font-family: 'Reem Kufi', sans-serif; font-size: 1.1rem; color: var(--emerald-deep); }
+.drag-feedback.success { background: rgba(22,163,74,0.1); color: var(--green-success); font-weight: 600; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 600px) { .tp-row { grid-template-columns: 1fr; } .preview-title { font-size: 1.5rem; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="السحب والإفلات">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — السحبُ والإفلات</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>كيف تستعمل هذا القالب؟</strong>
+        مثاليٌّ لتمارينِ التصنيف. حدِّد ثلاثَ مجموعاتٍ، ثم اكتب العناصرَ التي تنتمي إلى كلِّ مجموعةٍ في حقلِها (كلُّ عنصرٍ في سطر). يَسحبُ الطالبُ العنصرَ إلى مجموعتِه الصحيحة.
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="صنِّفِ الكائنات" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="اسحب كلَّ كلمةٍ إلى المجموعةِ الصحيحة" oninput="updatePreview()">
+        </div>
+
+        <div class="tp-row">
+          <div class="tp-cat-input">
+            <label class="tp-label">المجموعةُ الأولى — الاسم</label>
+            <input type="text" class="tp-input" id="cat-1-name" value="🍎 فواكه" oninput="updatePreview()" style="margin-bottom:8px;">
+            <label class="tp-label">عناصرُها (كلُّ عنصرٍ في سطر)</label>
+            <textarea class="tp-textarea" id="cat-1-items" oninput="updatePreview()">تفَّاحة
+موز
+عنب</textarea>
+          </div>
+          <div class="tp-cat-input">
+            <label class="tp-label">المجموعةُ الثانية — الاسم</label>
+            <input type="text" class="tp-input" id="cat-2-name" value="🥕 خُضَر" oninput="updatePreview()" style="margin-bottom:8px;">
+            <label class="tp-label">عناصرُها</label>
+            <textarea class="tp-textarea" id="cat-2-items" oninput="updatePreview()">جزر
+طماطم
+خيار</textarea>
+          </div>
+        </div>
+
+        <div class="tp-cat-input">
+          <label class="tp-label">المجموعةُ الثالثة — الاسم <span style="font-weight:400; opacity:0.6;">(اختياري)</span></label>
+          <input type="text" class="tp-input" id="cat-3-name" value="🐱 حيوانات" oninput="updatePreview()" style="margin-bottom:8px;">
+          <label class="tp-label">عناصرُها</label>
+          <textarea class="tp-textarea" id="cat-3-items" oninput="updatePreview()">قطَّة
+حصان
+كلب</textarea>
+        </div>
+
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادةُ التعيين</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">صنِّفِ الكائنات</h1>
+      <p class="preview-subtitle" id="preview-subtitle">اسحب كلَّ كلمةٍ إلى مجموعتِها</p>
+    </div>
+    <div class="drag-game">
+      <div class="drag-bank" id="drag-bank"></div>
+      <div class="drag-zones" id="drag-zones"></div>
+      <div class="drag-feedback" id="drag-feedback">🎯 اسحب الكلماتِ إلى المجموعةِ الصحيحة</div>
+    </div>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function getCategories() {
+  const cats = [];
+  for (let i = 1; i <= 3; i++) {
+    const name = document.getElementById('cat-' + i + '-name').value.trim();
+    const items = document.getElementById('cat-' + i + '-items').value.split('\n').map(s => s.trim()).filter(Boolean);
+    if (name && items.length) cats.push({ name, items, key: 'cat-' + i });
+  }
+  return cats;
+}
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'صنِّف';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'صنِّف') + ' — موقع تعليمي';
+
+  const cats = getCategories();
+  const allItems = [];
+  cats.forEach(c => c.items.forEach(item => allItems.push({ text: item, cat: c.key })));
+  // shuffle
+  for (let i = allItems.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [allItems[i], allItems[j]] = [allItems[j], allItems[i]];
+  }
+
+  const bank = document.getElementById('drag-bank');
+  bank.innerHTML = '';
+  allItems.forEach(it => {
+    const el = document.createElement('div');
+    el.className = 'drag-item';
+    el.draggable = true;
+    el.dataset.cat = it.cat;
+    el.textContent = it.text;
+    addDragListeners(el);
+    bank.appendChild(el);
+  });
+
+  const zonesC = document.getElementById('drag-zones');
+  zonesC.innerHTML = '';
+  cats.forEach(c => {
+    const zone = document.createElement('div');
+    zone.className = 'drag-zone';
+    zone.dataset.cat = c.key;
+    zone.innerHTML = `<div class="drag-zone-title">${escapeHTML(c.name)}</div><div class="drag-zone-items"></div>`;
+    addZoneListeners(zone);
+    zonesC.appendChild(zone);
+  });
+
+  document.getElementById('drag-feedback').className = 'drag-feedback';
+  document.getElementById('drag-feedback').textContent = '🎯 اسحب الكلماتِ إلى المجموعةِ الصحيحة';
+
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+let dragged = null;
+
+function addDragListeners(el) {
+  el.addEventListener('dragstart', (e) => { dragged = el; el.classList.add('dragging'); });
+  el.addEventListener('dragend', () => { el.classList.remove('dragging'); });
+}
+
+function addZoneListeners(zone) {
+  zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+  zone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    zone.classList.remove('over');
+    if (!dragged) return;
+    if (dragged.dataset.cat === zone.dataset.cat) {
+      dragged.classList.add('placed');
+      dragged.draggable = false;
+      zone.querySelector('.drag-zone-items').appendChild(dragged);
+      checkCompletion();
+    } else {
+      dragged.classList.add('shake');
+      setTimeout(() => dragged.classList.remove('shake'), 400);
+      const fb = document.getElementById('drag-feedback');
+      fb.textContent = 'هذا ليس مكانَه الصحيحَ، حاول مرَّةً أخرى 🤔';
+      fb.className = 'drag-feedback';
+    }
+  });
+}
+
+function checkCompletion() {
+  const remaining = document.querySelectorAll('#drag-bank .drag-item').length;
+  if (remaining === 0) {
+    const fb = document.getElementById('drag-feedback');
+    fb.textContent = 'أَحسنتَ! لقد صنَّفتَ الجميعَ تصنيفًا صحيحًا 🎉';
+    fb.classList.add('success');
+  }
+}
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'صنِّف';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const cats = getCategories();
+
+  const catsJSON = JSON.stringify(cats);
+  const sigHTML = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHTML(title)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>:root{--emerald-deep:#0F4C3A;--emerald:#1a6b54;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5;--green-success:#16a34a;--red-error:#dc2626}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.drag-game{max-width:900px;margin:0 auto}.drag-bank{background:var(--bg-cream);border-radius:12px;padding:20px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:10px;min-height:80px;justify-content:center;align-items:center;border:2px dashed var(--line)}.drag-bank:empty::before{content:'تم نقل كل العناصر';color:var(--ink-soft)}.drag-item{background:var(--emerald-deep);color:var(--bg-cream);padding:10px 18px;border-radius:999px;cursor:grab;font-family:'Reem Kufi',sans-serif;font-weight:500;transition:all 0.2s;user-select:none}.drag-item:hover{background:var(--emerald);transform:translateY(-2px)}.drag-item.dragging{opacity:0.5}.drag-zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.drag-zone{background:var(--bg-cream);border-radius:12px;padding:20px;min-height:180px;border:2px solid var(--line);transition:all 0.3s}.drag-zone.over{border-color:var(--amber);background:rgba(217,119,6,0.05)}.drag-zone-title{font-family:'Reem Kufi',sans-serif;color:var(--emerald-deep);font-weight:600;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}.drag-zone-items{display:flex;flex-wrap:wrap;gap:8px}.drag-item.placed{background:var(--green-success);cursor:default}.drag-item.shake{animation:shake 0.4s;background:var(--red-error)}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.drag-feedback{text-align:center;padding:18px;border-radius:12px;background:var(--bg-cream);margin-top:20px;font-family:'Reem Kufi',sans-serif;font-size:1.1rem;color:var(--emerald-deep)}.drag-feedback.success{background:rgba(22,163,74,0.1);color:var(--green-success);font-weight:600}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.preview-title{font-size:1.5rem}}</style></head>
+<body><div class="page"><div class="preview-wrap">
+<div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div>
+<div class="drag-game"><div class="drag-bank" id="bank"></div><div class="drag-zones" id="zones"></div><div class="drag-feedback" id="fb">🎯 اسحب الكلماتِ إلى المجموعةِ الصحيحة</div></div>
+${sigHTML}
+</div></div>
+<script>
+const cats = ${catsJSON};
+const items = []; cats.forEach(c => c.items.forEach(it => items.push({text:it,cat:c.key})));
+for(let i=items.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[items[i],items[j]]=[items[j],items[i]];}
+let dragged = null;
+const bank = document.getElementById('bank');
+items.forEach(it => { const el=document.createElement('div'); el.className='drag-item'; el.draggable=true; el.dataset.cat=it.cat; el.textContent=it.text; el.addEventListener('dragstart',()=>{dragged=el;el.classList.add('dragging');}); el.addEventListener('dragend',()=>el.classList.remove('dragging')); bank.appendChild(el); });
+const zones = document.getElementById('zones');
+cats.forEach(c => { const z=document.createElement('div'); z.className='drag-zone'; z.dataset.cat=c.key; z.innerHTML='<div class="drag-zone-title">'+c.name+'</div><div class="drag-zone-items"></div>'; z.addEventListener('dragover',e=>{e.preventDefault();z.classList.add('over');}); z.addEventListener('dragleave',()=>z.classList.remove('over')); z.addEventListener('drop',e=>{e.preventDefault();z.classList.remove('over');if(!dragged)return;if(dragged.dataset.cat===z.dataset.cat){dragged.classList.add('placed');dragged.draggable=false;z.querySelector('.drag-zone-items').appendChild(dragged);if(document.querySelectorAll('#bank .drag-item').length===0){const fb=document.getElementById('fb');fb.textContent='أَحسنتَ! لقد صنَّفتَ الجميعَ تصنيفًا صحيحًا 🎉';fb.classList.add('success');}}else{dragged.classList.add('shake');setTimeout(()=>dragged.classList.remove('shake'),400);document.getElementById('fb').textContent='هذا ليس مكانَه الصحيحَ، حاول مرَّةً أخرى 🤔';}}); zones.appendChild(z); });
+<\/script>
+</body></html>`;
+
+  const blob = new Blob([finalHTML], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'سحب-وإفلات').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function resetForm() { if (confirm('هل تريدُ إعادةَ القيمِ إلى مثالِ البداية؟')) location.reload(); }
+
+updatePreview();
+</script>
+</body></html>

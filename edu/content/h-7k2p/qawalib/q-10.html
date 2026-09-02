@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الشارات والإنجازات — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; }
+.tp-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-badge-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.tp-badge-card .tp-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; }
+.tp-badge-num { background: var(--amber); color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.tp-badge-grid { display: grid; grid-template-columns: 70px 1fr 1fr 110px; gap: 8px; }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+
+.gamify-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 700px; margin: 0 auto 32px; }
+.score-card { background: var(--bg-cream); border-radius: 16px; padding: 24px; text-align: center; border: 1px solid var(--line); }
+.score-label { font-family: 'Reem Kufi', sans-serif; color: var(--ink-soft); font-size: 0.95rem; margin-bottom: 8px; letter-spacing: 1px; }
+.score-value { font-family: 'Reem Kufi', sans-serif; font-size: 3rem; font-weight: 700; color: var(--amber); line-height: 1; }
+.progress-track { height: 8px; background: var(--line); border-radius: 999px; margin-top: 16px; overflow: hidden; }
+.progress-fill { height: 100%; background: linear-gradient(to left, var(--amber), var(--emerald-deep)); transition: width 0.6s; border-radius: 999px; }
+.badges-row { display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+.badge { display: flex; flex-direction: column; align-items: center; gap: 8px; opacity: 0.3; transition: all 0.5s; padding: 14px; }
+.badge.unlocked { opacity: 1; transform: scale(1); animation: unlock 0.6s; }
+@keyframes unlock { 0% { transform: scale(0.6) rotate(-15deg); opacity: 0; } 60% { transform: scale(1.15) rotate(8deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+.badge-icon { font-size: 3rem; filter: grayscale(80%); transition: all 0.4s; }
+.badge.unlocked .badge-icon { filter: grayscale(0); }
+.badge-name { font-family: 'Reem Kufi', sans-serif; font-weight: 600; color: var(--emerald-deep); font-size: 0.95rem; }
+.badge.unlocked .badge-name { color: var(--amber); }
+.badge-points { font-size: 0.78rem; color: var(--ink-soft); }
+.celebrate-btn { display: block; margin: 32px auto 0; background: var(--amber); color: white; border: none; padding: 14px 32px; border-radius: 12px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-size: 1.05rem; font-weight: 500; transition: all 0.2s; }
+.celebrate-btn:hover { background: #B45309; transform: translateY(-2px); }
+.celebrate-btn.secondary { background: var(--ink-soft); margin-top: 8px; }
+.confetti { position: fixed; top: -10px; width: 10px; height: 10px; pointer-events: none; z-index: 9999; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 600px) { .gamify-grid { grid-template-columns: 1fr; } .tp-badge-grid { grid-template-columns: 1fr; } .preview-title { font-size: 1.5rem; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="الشارات والإنجازات">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — الشاراتُ والإنجازات</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>نظامُ نقاطٍ وشاراتٍ تحفيزيٍّ.</strong> حدِّدْ نقاطَ الإنجازاتِ المختلفةِ وشاراتِها. عند فتحِ الموقعِ ينقرُ الطالبُ على زرِّ الإنجاز، فتُضافُ النقاط، وتُفتحُ الشاراتُ تلقائيًّا عند بلوغِ نقاطِها مع مؤثِّرِ احتفال.
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="رحلةُ الإنجاز" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="اجمع النقاطَ، افتحِ الشارات، تَقَدَّم في المستويات" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">نصُّ الزرِّ التحفيزي (مثل: «حلَّ سؤالًا» أو «أَتممَ درسًا»)</label>
+          <input type="text" class="tp-input" id="ctrl-action" value="+ ٢٠ نقطة (إجابةٌ صحيحة)" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">عددُ النقاطِ في كلِّ ضغطة</label>
+          <input type="number" class="tp-input" id="ctrl-step" value="20" min="1" oninput="updatePreview()">
+        </div>
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">الشارات (الرمز / الاسم / الوصف / النقاط المطلوبة)</label>
+          <div id="badges-container"></div>
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادة</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">رحلةُ الإنجاز</h1>
+      <p class="preview-subtitle" id="preview-subtitle"></p>
+    </div>
+    <div class="gamify-grid">
+      <div class="score-card">
+        <div class="score-label">النقاط</div>
+        <div class="score-value" id="game-points">٠</div>
+        <div class="progress-track"><div class="progress-fill" id="game-progress" style="width:0%"></div></div>
+      </div>
+      <div class="score-card">
+        <div class="score-label">الشارات المفتوحة</div>
+        <div class="score-value" id="game-badges">٠</div>
+        <div style="color:var(--ink-soft);font-size:0.9rem;margin-top:16px;">من أصل <span id="total-badges">٥</span> شارات</div>
+      </div>
+    </div>
+    <div class="badges-row" id="badges-row"></div>
+    <button class="celebrate-btn" id="action-btn" onclick="addPoints()">+ ٢٠ نقطة</button>
+    <button class="celebrate-btn secondary" onclick="resetGame()">إعادةُ التعيين</button>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+const defaultBadges = [
+  { icon: '🥉', name: 'مبتدئ', desc: 'أوَّلُ خطوة', points: 20 },
+  { icon: '🥈', name: 'مجتهد', desc: 'تَقَدُّمٌ ملحوظ', points: 60 },
+  { icon: '🥇', name: 'متميِّز', desc: 'أداءٌ قويٌّ', points: 100 },
+  { icon: '⭐', name: 'نجم', desc: 'أداءٌ مذهل', points: 160 },
+  { icon: '👑', name: 'بطل', desc: 'إنجازٌ كامل', points: 220 }
+];
+let badges = JSON.parse(JSON.stringify(defaultBadges));
+let currentPoints = 0;
+
+function renderEditor() {
+  const container = document.getElementById('badges-container');
+  container.innerHTML = '';
+  badges.forEach((b, idx) => {
+    const div = document.createElement('div');
+    div.className = 'tp-badge-card';
+    div.innerHTML = `
+      <label class="tp-label">
+        <span class="tp-badge-num">${idx+1}</span><span>الشارة ${idx+1}</span>
+      </label>
+      <div class="tp-badge-grid">
+        <input type="text" class="tp-input" placeholder="🥉" value="${escapeAttr(b.icon)}" oninput="updateBadge(${idx}, 'icon', this.value)" style="text-align:center; font-size:1.5rem;">
+        <input type="text" class="tp-input" placeholder="الاسم" value="${escapeAttr(b.name)}" oninput="updateBadge(${idx}, 'name', this.value)">
+        <input type="text" class="tp-input" placeholder="الوصف" value="${escapeAttr(b.desc)}" oninput="updateBadge(${idx}, 'desc', this.value)">
+        <input type="number" class="tp-input" placeholder="نقاط" value="${b.points}" min="1" oninput="updateBadge(${idx}, 'points', parseInt(this.value)||0)" style="text-align:center;">
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+function updateBadge(idx, key, value) { badges[idx][key] = value; updatePreview(); }
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'رحلة الإنجاز';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.getElementById('action-btn').textContent = document.getElementById('ctrl-action').value || '+ نقاط';
+  document.title = (document.getElementById('ctrl-title').value || 'إنجازات') + ' — موقع تعليمي';
+
+  document.getElementById('total-badges').textContent = arabicNum(badges.length);
+  const row = document.getElementById('badges-row');
+  row.innerHTML = '';
+  badges.forEach(b => {
+    const div = document.createElement('div');
+    const unlocked = currentPoints >= b.points;
+    div.className = 'badge' + (unlocked ? ' unlocked' : '');
+    div.innerHTML = `
+      <div class="badge-icon">${b.icon || '🏅'}</div>
+      <div class="badge-name">${escapeHTML(b.name)}</div>
+      <div class="badge-points">${arabicNum(b.points)} نقطة</div>
+    `;
+    row.appendChild(div);
+  });
+
+  const unlocked = badges.filter(b => currentPoints >= b.points).length;
+  document.getElementById('game-points').textContent = arabicNum(currentPoints);
+  document.getElementById('game-badges').textContent = arabicNum(unlocked);
+  const maxPoints = badges.length > 0 ? Math.max(...badges.map(b => b.points)) : 100;
+  document.getElementById('game-progress').style.width = Math.min(100, (currentPoints/maxPoints)*100) + '%';
+
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+function addPoints() {
+  const step = parseInt(document.getElementById('ctrl-step').value) || 20;
+  const beforeUnlocked = badges.filter(b => currentPoints >= b.points).length;
+  currentPoints += step;
+  const afterUnlocked = badges.filter(b => currentPoints >= b.points).length;
+  updatePreview();
+  if (afterUnlocked > beforeUnlocked) launchConfetti(20);
+}
+
+function resetGame() {
+  currentPoints = 0;
+  updatePreview();
+}
+
+function launchConfetti(count) {
+  const colors = ['#0F4C3A', '#D97706', '#16a34a', '#dc2626', '#fbbf24'];
+  for (let i = 0; i < count; i++) {
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = Math.random() * 100 + '%';
+    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+    c.style.transform = 'rotate(' + (Math.random() * 360) + 'deg)';
+    document.body.appendChild(c);
+    const duration = 2000 + Math.random() * 1500;
+    c.animate([
+      { transform: 'translateY(0) rotate(0)', opacity: 1 },
+      { transform: 'translateY(' + (window.innerHeight + 50) + 'px) rotate(' + (Math.random() * 720) + 'deg)', opacity: 0 }
+    ], { duration: duration, easing: 'cubic-bezier(0.4, 0, 0.6, 1)' });
+    setTimeout(() => c.remove(), duration);
+  }
+}
+
+function arabicNum(n) { return String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]); }
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'رحلة الإنجاز';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const action = document.getElementById('ctrl-action').value || '+ نقاط';
+  const step = parseInt(document.getElementById('ctrl-step').value) || 20;
+  const badgesJSON = JSON.stringify(badges);
+  const sig = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHTML(title)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"><style>:root{--emerald-deep:#0F4C3A;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.gamify-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:700px;margin:0 auto 32px}.score-card{background:var(--bg-cream);border-radius:16px;padding:24px;text-align:center;border:1px solid var(--line)}.score-label{font-family:'Reem Kufi',sans-serif;color:var(--ink-soft);font-size:0.95rem;margin-bottom:8px;letter-spacing:1px}.score-value{font-family:'Reem Kufi',sans-serif;font-size:3rem;font-weight:700;color:var(--amber);line-height:1}.progress-track{height:8px;background:var(--line);border-radius:999px;margin-top:16px;overflow:hidden}.progress-fill{height:100%;background:linear-gradient(to left,var(--amber),var(--emerald-deep));transition:width 0.6s;border-radius:999px}.badges-row{display:flex;justify-content:center;gap:24px;flex-wrap:wrap;max-width:800px;margin:0 auto}.badge{display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0.3;transition:all 0.5s;padding:14px}.badge.unlocked{opacity:1;transform:scale(1);animation:unlock 0.6s}@keyframes unlock{0%{transform:scale(0.6) rotate(-15deg);opacity:0}60%{transform:scale(1.15) rotate(8deg)}100%{transform:scale(1) rotate(0);opacity:1}}.badge-icon{font-size:3rem;filter:grayscale(80%);transition:all 0.4s}.badge.unlocked .badge-icon{filter:grayscale(0)}.badge-name{font-family:'Reem Kufi',sans-serif;font-weight:600;color:var(--emerald-deep);font-size:0.95rem}.badge.unlocked .badge-name{color:var(--amber)}.badge-points{font-size:0.78rem;color:var(--ink-soft)}.celebrate-btn{display:block;margin:32px auto 0;background:var(--amber);color:white;border:none;padding:14px 32px;border-radius:12px;cursor:pointer;font-family:'Reem Kufi',sans-serif;font-size:1.05rem;font-weight:500;transition:all 0.2s}.celebrate-btn:hover{background:#B45309;transform:translateY(-2px)}.celebrate-btn.secondary{background:var(--ink-soft);margin-top:8px}.confetti{position:fixed;top:-10px;width:10px;height:10px;pointer-events:none;z-index:9999}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.gamify-grid{grid-template-columns:1fr}.preview-title{font-size:1.5rem}}</style></head><body><div class="page"><div class="preview-wrap"><div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div><div class="gamify-grid"><div class="score-card"><div class="score-label">النقاط</div><div class="score-value" id="pts">٠</div><div class="progress-track"><div class="progress-fill" id="prog" style="width:0%"></div></div></div><div class="score-card"><div class="score-label">الشارات المفتوحة</div><div class="score-value" id="bdg">٠</div><div style="color:var(--ink-soft);font-size:0.9rem;margin-top:16px;">من أصل ${arabicNum(badges.length)} شارات</div></div></div><div class="badges-row" id="row"></div><button class="celebrate-btn" onclick="addPts()">${escapeHTML(action)}</button><button class="celebrate-btn secondary" onclick="reset()">إعادةُ التعيين</button>${sig}</div></div><script>
+const badges = ${badgesJSON};
+const step = ${step};
+let pts = 0;
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function arabicNum(n){return String(n).replace(/\\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[+d]);}
+function render(){
+  const row=document.getElementById('row'); row.innerHTML='';
+  badges.forEach(b=>{
+    const div=document.createElement('div');
+    const u=pts>=b.points;
+    div.className='badge'+(u?' unlocked':'');
+    div.innerHTML='<div class="badge-icon">'+(b.icon||'🏅')+'</div><div class="badge-name">'+escapeHTML(b.name)+'</div><div class="badge-points">'+arabicNum(b.points)+' نقطة</div>';
+    row.appendChild(div);
+  });
+  const unlocked=badges.filter(b=>pts>=b.points).length;
+  document.getElementById('pts').textContent=arabicNum(pts);
+  document.getElementById('bdg').textContent=arabicNum(unlocked);
+  const max=badges.length>0?Math.max(...badges.map(b=>b.points)):100;
+  document.getElementById('prog').style.width=Math.min(100,(pts/max)*100)+'%';
+}
+function addPts(){
+  const before=badges.filter(b=>pts>=b.points).length;
+  pts+=step;
+  const after=badges.filter(b=>pts>=b.points).length;
+  render();
+  if(after>before)confetti();
+}
+function reset(){pts=0;render();}
+function confetti(){
+  const colors=['#0F4C3A','#D97706','#16a34a','#dc2626','#fbbf24'];
+  for(let i=0;i<20;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    document.body.appendChild(c);
+    const dur=2000+Math.random()*1500;
+    c.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY('+(window.innerHeight+50)+'px) rotate('+(Math.random()*720)+'deg)',opacity:0}],{duration:dur,easing:'cubic-bezier(0.4,0,0.6,1)'});
+    setTimeout(()=>c.remove(),dur);
+  }
+}
+render();
+<\/script></body></html>`;
+  downloadHTML(finalHTML, title);
+}
+
+function downloadHTML(html, title) {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'إنجازات').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s) { return String(s || '').replace(/"/g, '&quot;'); }
+function resetForm() { if (confirm('إعادةُ كلِّ القيمِ إلى الافتراضي؟')) location.reload(); }
+
+renderEditor();
+updatePreview();
+</script>
+</body>
+</html>

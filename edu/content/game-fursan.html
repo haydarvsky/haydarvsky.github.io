@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحدي فرسان البلاغة - لوحة الشرف</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .timer-ring { transition: stroke-dashoffset 0.1s linear; }
+        @keyframes pulse-red {
+            0%, 100% { background-color: rgba(239, 68, 68, 0.1); }
+            50% { background-color: rgba(239, 68, 68, 0.3); }
+        }
+        .wrong-flash { animation: pulse-red 0.5s ease-in-out; }
+    </style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="تحدّي فرسانِ البلاغة">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body class="p-4 flex items-center justify-center">
+
+    <div id="game-container" class="w-full max-w-4xl glass-panel rounded-[2rem] shadow-2xl overflow-hidden relative min-h-[600px] flex flex-col">
+        
+        <!-- Header Section -->
+        <div id="stats-bar" class="hidden p-6 flex justify-between items-center border-b border-white/10 bg-white/5">
+            <div class="flex items-center gap-4">
+                <div class="bg-indigo-600 p-2 md:p-3 rounded-2xl shadow-lg">
+                    <span id="level-tag" class="font-bold text-xs md:text-sm">المستوى 1</span>
+                </div>
+                <div>
+                    <p class="text-[10px] opacity-50 uppercase">المتسابق: <span id="player-name-display" class="text-white">...</span></p>
+                    <p id="total-score" class="text-xl md:text-2xl font-bold text-yellow-400">0</p>
+                </div>
+            </div>
+
+            <div class="relative flex items-center justify-center w-16 h-16 md:w-20 md:h-20">
+                <svg class="w-full h-full transform -rotate-90">
+                    <circle cx="40" cy="40" r="34" stroke="currentColor" stroke-width="4" fill="transparent" class="text-white/10" />
+                    <circle id="timer-circle" cx="40" cy="40" r="34" stroke="currentColor" stroke-width="4" fill="transparent" 
+                            stroke-dasharray="213.6" stroke-dashoffset="0" class="timer-ring text-indigo-500" />
+                </svg>
+                <span id="timer-text" class="absolute text-lg md:text-xl font-bold">15</span>
+            </div>
+
+            <div class="text-left">
+                <p class="text-[10px] opacity-50 uppercase">التقدم</p>
+                <p id="progress-status" class="text-lg md:text-xl font-bold">1 / 50</p>
+            </div>
+        </div>
+
+        <!-- Gameplay Area -->
+        <div id="play-area" class="hidden p-6 md:p-8 flex-1 flex flex-col">
+            <div id="stage-announcer" class="text-center mb-6 py-1 px-4 bg-indigo-500/10 rounded-full text-indigo-300 text-xs font-bold mx-auto">
+                مرحلة المبتدئين
+            </div>
+            <h2 id="question-text" class="text-xl md:text-2xl font-bold text-center mb-10 leading-relaxed">...</h2>
+            <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-auto"></div>
+        </div>
+        <!-- Login / Start Overlay -->
+        <div id="start-screen" class="absolute inset-0 bg-slate-900 z-50 flex flex-col items-center justify-center p-8 text-center">
+            <div class="text-7xl mb-6">🖋</div>
+            <h1 class="text-3xl md:text-4xl font-bold mb-4 text-white">مرحباً بك في تحدي البلاغة</h1>
+            <p class="text-slate-400 mb-8">أدخل اسمك لتسجيل نتيجتك في لوحة الشرف</p>
+            
+            <input type="text" id="player-input" placeholder="اكتب اسمك هنا..." 
+                   class="w-full max-w-sm p-4 rounded-2xl bg-slate-800 border border-indigo-500/30 text-white text-center text-xl mb-6 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            
+            <button id="start-btn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-12 py-4 rounded-2xl font-bold text-xl shadow-xl transition-all">
+                ابدأ التحدي
+            </button>
+        </div>
+
+        <!-- Leaderboard Overlay -->
+        <div id="leaderboard-screen" class="hidden absolute inset-0 bg-slate-900 z-50 flex flex-col items-center p-6 overflow-y-auto">
+            <h2 class="text-3xl font-bold text-yellow-400 mb-6 flex items-center gap-3">
+                <span>🏆</span> لوحة الشرف <span>🏆</span>
+            </h2>
+            <p class="text-slate-400 text-sm mb-4">النتائجُ محفوظةٌ على هذا الجهاز</p>
+            <div id="leaderboard-list" class="w-full max-w-md space-y-3">
+                <!-- Scores injected here -->
+            </div>
+            <button onclick="location.reload()" class="mt-8 bg-slate-700 hover:bg-slate-600 px-8 py-3 rounded-xl font-bold transition-all">
+                إعادة المحاولة
+            </button>
+        </div>
+
+        <div id="action-feedback" class="absolute bottom-10 left-1/2 -translate-x-1/2 px-8 py-3 rounded-full font-bold text-lg pointer-events-none opacity-0 transition-all z-40"></div>
+    </div>
+
+    <script>
+
+        // لوحةُ الشرفِ محفوظةٌ محلّياً في هذا المتصفّح (لا خادمَ ولا حساب)
+        const LS_KEY = 'fursan-scores';
+        const readScores = () => { try { return JSON.parse(localStorage.getItem(LS_KEY) || '[]'); } catch (e) { return []; } };
+        const addScore = (e) => { const a = readScores(); a.push(e); localStorage.setItem(LS_KEY, JSON.stringify(a.slice(-300))); };
+        const appId = 'rhetoric-local';
+
+        // Questions Array
+        const questions = [
+            { q: "ما نوع المحسن في: (اللهم أعطِ منفقاً خلفاً، وأعطِ ممسكاً تلفاً)؟", options: ["سجع", "طباق", "جناس", "مقابلة"], correct: 0 },
+            { q: "بين (العلم) و (الجهل) يوجد:", options: ["جناس", "طباق", "سجع", "مقابلة"], correct: 1 },
+            { q: "قال تعالى: (ويحل لهم الطيبات ويحرم عليهم الخبائث). هذا مثال على:", options: ["طباق", "سجع", "مقابلة", "جناس"], correct: 2 },
+            { q: "ما نوع المحسن في: (صليت المغرب في المغرب)؟", options: ["جناس تام", "جناس ناقص", "طباق", "سجع"], correct: 0 },
+            { q: "بين (تقهر) و(تنهر) في الآية الكريمة:", options: ["سجع فقط", "جناس ناقص", "طباق", "مقابلة"], correct: 1 },
+            { q: "(لا فض فوك، ولا جف قلمك). المحسن هنا هو:", options: ["سجع", "جناس", "طباق", "مقابلة"], correct: 0 },
+            { q: "بين (الأعمى) و (البصير) في القرآن الكريم:", options: ["طباق سلب", "طباق إيجاب", "جناس", "سجع"], correct: 1 },
+            { q: "(يعلمون) و (لا يعلمون) بينهما:", options: ["طباق إيجاب", "مقابلة", "طباق سلب", "جناس"], correct: 2 },
+            { q: "بين (خيل) و (خير) جناس:", options: ["تام", "ناقص", "اشتقاقي", "لا يوجد"], correct: 1 },
+            { q: "(ليل داج، ونهار ساج). بين الجملتين:", options: ["سجع فقط", "طباق فقط", "سجع وطباق", "جناس"], correct: 2 }
+            // سيتم تكرار الأسئلة لتكملة الـ 50 في المنطق البرمجي أدناه لتوفير المساحة
+        ];
+
+        // Fill questions to 50 for the demo
+        while(questions.length < 50) {
+            const baseQ = questions[questions.length % 10];
+            questions.push({...baseQ, q: baseQ.q + " (تحدي إضافي)"});
+        }
+
+        const ui = {
+            startScreen: document.getElementById('start-screen'),
+            playArea: document.getElementById('play-area'),
+            statsBar: document.getElementById('stats-bar'),
+            playerInput: document.getElementById('player-input'),
+            startBtn: document.getElementById('start-btn'),
+            questionText: document.getElementById('question-text'),
+            optionsContainer: document.getElementById('options-container'),
+            scoreText: document.getElementById('total-score'),
+            timerText: document.getElementById('timer-text'),
+            timerCircle: document.getElementById('timer-circle'),
+            progressText: document.getElementById('progress-status'),
+            levelTag: document.getElementById('level-tag'),
+            nameDisplay: document.getElementById('player-name-display'),
+            feedback: document.getElementById('action-feedback'),
+            leaderboard: document.getElementById('leaderboard-screen'),
+            leaderboardList: document.getElementById('leaderboard-list')
+        };
+
+        ui.startBtn.onclick = () => {
+            playerName = ui.playerInput.value.trim();
+            if (!playerName) {
+                alert("يرجى إدخال اسمك أولاً");
+                return;
+            }
+            if (!user) {
+                alert("جاري التحقق من الاتصال، حاول ثانية");
+                return;
+            }
+            ui.startScreen.classList.add('hidden');
+            ui.playArea.classList.remove('hidden');
+            ui.statsBar.classList.remove('hidden');
+            ui.nameDisplay.innerText = playerName;
+            loadQuestion();
+        };
+
+        function loadQuestion() {
+            const q = questions[currentIdx];
+            const currentLevel = Math.floor(currentIdx / 10) + 1;
+            
+            ui.levelTag.innerText = المستوى ${currentLevel};
+            ui.progressText.innerText = ${currentIdx + 1} / 50;
+            ui.questionText.innerText = q.q;
+
+            ui.optionsContainer.innerHTML = '';
+            q.options.forEach((opt, i) => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 md:p-5 rounded-2xl border border-white/10 bg-white/5 font-bold text-right hover:bg-indigo-600/20 transition-all";
+                btn.innerText = opt;
+                btn.onclick = () => handleAnswer(i);
+                ui.optionsContainer.appendChild(btn);
+            });
+            resetTimer();
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+            timeLeft = TIME_LIMIT;
+            updateTimerUI();
+            timer = setInterval(() => {
+                timeLeft -= 0.1;
+                if (timeLeft <= 0) handleAnswer(-1);
+                updateTimerUI();
+            }, 100);
+        }
+
+        function updateTimerUI() {
+            ui.timerText.innerText = Math.ceil(timeLeft);
+            const offset = (timeLeft / TIME_LIMIT) * 213.6;
+            ui.timerCircle.style.strokeDashoffset = 213.6 - offset;
+        }
+
+        function handleAnswer(selected) {
+            clearInterval(timer);
+            const q = questions[currentIdx];
+            const btns = ui.optionsContainer.querySelectorAll('button');
+            btns.forEach(b => b.disabled = true);
+
+            if (selected === q.correct) {
+                const speedBonus = Math.floor(timeLeft * 10);
+                const gain = 50 + speedBonus;
+                score += gain;
+                showFeedback(+${gain} برافو!, 'bg-green-500/20 text-green-400');
+            } else {
+                score = Math.max(0, score - 30);
+                document.getElementById('game-container').classList.add('wrong-flash');
+                setTimeout(() => document.getElementById('game-container').classList.remove('wrong-flash'), 500);
+                showFeedback(-30 خطأ!, 'bg-red-500/20 text-red-400');
+            }
+
+            ui.scoreText.innerText = score;
+
+            setTimeout(() => {
+                currentIdx++;
+                if (currentIdx < questions.length) {
+                    loadQuestion();
+                } else {
+                    saveAndShowLeaderboard();
+                }
+            }, 1000);
+        }
+
+        function showFeedback(text, cls) {
+            ui.feedback.innerText = text;
+            ui.feedback.className = absolute bottom-10 left-1/2 -translate-x-1/2 px-8 py-3 rounded-full font-bold text-lg transition-all opacity-100 ${cls};
+            setTimeout(() => ui.feedback.style.opacity = '0', 1000);
+        }
+
+        async function saveAndShowLeaderboard() {
+            if (!user) return;
+            
+            ui.playArea.innerHTML = "<div class='text-center mt-20 text-2xl font-bold'>جاري حفظ النتيجة...</div>";
+            
+            addScore({ name: playerName, score: score, timestamp: Date.now() });
+            let leaderboardData = readScores();
+            
+            // Sort in JS (Rule 2)
+            leaderboardData.sort((a, b) => b.score - a.score);
+            
+            ui.leaderboard.classList.remove('hidden');
+            ui.leaderboardList.innerHTML = leaderboardData.slice(0, 10).map((entry, i) => `
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10 ${entry.name === playerName ? 'border-yellow-400/50 bg-yellow-400/5' : ''}">
+                    <div class="flex items-center gap-4">
+                        <span class="text-indigo-400 font-bold">#${i + 1}</span>
+                        <span class="font-bold text-white">${entry.name}</span>
+                    </div>
+                    <span class="text-yellow-400 font-bold">${entry.score}</span>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>

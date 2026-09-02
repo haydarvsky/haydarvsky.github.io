@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>تمارين · الفعل الصحيح والمعتل · إعداد أ. حيدر المعاتيق</title>
+
+<style>
+  /* ===== SakkalSaad ===== */
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-100.woff2') format('woff2'); font-weight:100; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-300.woff2') format('woff2'); font-weight:300; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-700.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-800.woff2') format('woff2'); font-weight:800; font-display:swap; }
+
+  :root{
+    --ink:#1A1F2E; --ink-soft:#4A5165;
+    --paper:#F6EFE2; --paper-2:#FBF6EC; --paper-3:#FFFFFF;
+    --accent:#0E6F5C; --accent-2:#0A4F42;
+    --gold:#C89B4A; --gold-soft:#E8C886;
+    --rose:#B43E50; --rose-2:#8A2C3C;
+    --leaf:#2B7A57;
+    --line:#E2D8C2;
+    --shadow:0 18px 60px -22px rgba(26,31,46,.45);
+    --font:"SakkalSaad","Segoe UI",system-ui,-apple-system,sans-serif;
+    --font-display:"SakkalSaad","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;overflow-x:hidden;}
+  body{
+    font-family:var(--font); color:var(--ink); font-weight:400;
+    background:
+      radial-gradient(1200px 600px at 90% -10%, rgba(200,155,74,.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(14,111,92,.14), transparent 60%),
+      var(--paper);
+    line-height:1.7; min-height:100%; font-size:18px;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:fixed; top:0; right:0; left:0; height:64px;
+    background:rgba(251,246,236,.9);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 26px; z-index:50;
+  }
+  .topbar .brand{ font-family:var(--font-display); font-size:19px; color:var(--accent); font-weight:700; }
+  .topbar .brand span{ color:var(--gold); }
+  .topbar .slide-info{ font-size:16px; color:var(--ink-soft); }
+  .topbar .slide-info b{ color:var(--accent); font-size:18px; font-weight:700; }
+  .progress-line{ position:fixed; top:64px; right:0; left:0; height:4px; background:rgba(14,111,92,.1); z-index:50; }
+  .progress-line>span{ display:block; height:100%; background:linear-gradient(90deg,var(--gold-soft),var(--gold),var(--accent)); width:0; transition:width .5s cubic-bezier(.2,.8,.2,1); }
+
+  /* ===== Stage ===== */
+  .stage{ padding-top:90px; padding-bottom:110px; min-height:100vh; }
+  .slide{ display:none; max-width:1200px; margin:0 auto; padding:clamp(24px,3vw,48px); }
+  .slide.active{ display:block; animation:slideIn .55s cubic-bezier(.2,.8,.2,1); }
+  @keyframes slideIn{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+  .slide.active>*{ animation:fadeUp .6s cubic-bezier(.2,.8,.2,1) both; }
+  .slide.active>*:nth-child(1){ animation-delay:.05s; }
+  .slide.active>*:nth-child(2){ animation-delay:.15s; }
+  .slide.active>*:nth-child(3){ animation-delay:.28s; }
+  .slide.active>*:nth-child(4){ animation-delay:.42s; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+
+  /* ===== TITLE ===== */
+  .title-slide{
+    min-height:calc(100vh - 90px); display:none;
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:50px 24px;
+  }
+  .title-slide.active{ display:flex; }
+  .title-ornament{ width:140px; height:140px; opacity:.85; margin-bottom:28px; animation:spin 32s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .title-eyebrow{
+    font-family:var(--font-display); font-size:16px; letter-spacing:7px; font-weight:500;
+    color:var(--gold); border-top:1px solid var(--gold); border-bottom:1px solid var(--gold);
+    padding:9px 22px; margin-bottom:36px;
+  }
+  .title-main{
+    font-family:var(--font-display); font-size:clamp(44px,7vw,88px);
+    color:var(--ink); line-height:1.1; font-weight:800;
+    letter-spacing:-1px; max-width:900px;
+  }
+  .title-main .em{ color:var(--accent); position:relative; }
+  .title-main .em::after{
+    content:""; position:absolute; right:0; left:0; bottom:-.05em;
+    height:.12em; background:linear-gradient(90deg,transparent,var(--gold),transparent); border-radius:8px;
+  }
+  .title-sub{
+    margin-top:22px; font-family:var(--font-display);
+    font-size:clamp(20px,2.4vw,28px); color:var(--ink-soft); font-weight:500;
+  }
+  .title-divider{ width:320px; max-width:80%; margin:42px auto 28px; display:flex; align-items:center; gap:16px; }
+  .title-divider .l, .title-divider .r{ flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+  .title-divider .dot{ width:12px; height:12px; background:var(--gold); transform:rotate(45deg); }
+  .title-author{ font-family:var(--font-display); font-size:clamp(20px,2.2vw,26px); color:var(--ink-soft); font-weight:300; }
+  .title-author b{ color:var(--accent); font-weight:700; }
+  .title-cta{
+    margin-top:50px; background:var(--accent); color:var(--paper-2);
+    border:none; padding:16px 42px; border-radius:14px;
+    font-family:var(--font); font-size:19px; font-weight:700; cursor:pointer;
+    box-shadow:0 14px 36px -14px var(--accent); transition:all .3s ease; letter-spacing:1px;
+  }
+  .title-cta:hover{ background:var(--accent-2); transform:translateY(-3px); }
+  .title-cta::after{ content:" ←"; }
+
+  /* ===== Slide layout ===== */
+  .slide-num{ display:inline-block; font-size:15px; color:var(--gold); letter-spacing:4px; font-weight:700; margin-bottom:12px; }
+  .slide-title{ font-family:var(--font-display); font-size:clamp(32px,4.5vw,52px); color:var(--accent); margin-bottom:18px; line-height:1.15; font-weight:800; }
+  .slide-instruction{
+    font-family:var(--font-display); font-size:clamp(20px,2.4vw,26px); color:var(--ink-soft);
+    margin-bottom:28px; line-height:1.5; font-weight:500;
+    border-right:4px solid var(--gold); padding-right:16px;
+  }
+
+  /* ===== Passage ===== */
+  .passage{
+    background:var(--paper-2); border:2px solid var(--line); border-radius:22px;
+    padding:clamp(26px,3.2vw,40px) clamp(28px,3.5vw,44px);
+    font-size:clamp(20px,2.3vw,24px); line-height:2.4; margin-bottom:28px;
+    position:relative; box-shadow:var(--shadow);
+  }
+  .passage::before{
+    content:"❝"; position:absolute; top:6px; right:18px;
+    font-size:64px; color:var(--gold-soft); opacity:.45;
+    font-family:Georgia,serif; line-height:1;
+  }
+  .passage-label{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-display); font-size:14px; color:var(--gold);
+    background:rgba(200,155,74,.12); border:1px solid rgba(200,155,74,.3);
+    padding:6px 14px; border-radius:999px; margin-bottom:16px; font-weight:700; letter-spacing:2px;
+  }
+
+  /* ===== Verb marks ===== */
+  .vm{
+    display:inline-flex; align-items:center; gap:6px;
+    background:rgba(14,111,92,.08); border-bottom:2px solid var(--accent);
+    padding:1px 10px 2px; border-radius:8px;
+    font-weight:800; color:var(--accent-2); font-family:var(--font-display);
+    margin:0 1px; cursor:pointer; transition:all .25s ease;
+    position:relative;
+  }
+  .vm:not(.answered-correct):not(.answered-wrong){
+    animation: vmPulse 3s ease-in-out infinite;
+  }
+  @keyframes vmPulse{
+    0%,100%{ box-shadow:0 0 0 0 rgba(200,155,74,0); }
+    50%{ box-shadow:0 0 0 5px rgba(200,155,74,.15); }
+  }
+  .vm:hover, .vm.synced{
+    transform:translateY(-2px);
+    box-shadow:0 6px 14px -6px var(--gold) !important;
+    background:rgba(200,155,74,.15);
+    border-bottom-color:var(--gold);
+  }
+  .vm.answered-correct{
+    background:rgba(43,122,87,.14); border-bottom-color:var(--leaf); color:var(--leaf);
+    animation:none !important;
+  }
+  .vm.answered-wrong{
+    background:rgba(180,62,80,.12); border-bottom-color:var(--rose); color:var(--rose);
+    animation:none !important;
+  }
+  .vn{
+    display:inline-flex; align-items:center; justify-content:center;
+    min-width:22px; height:22px; padding:0 6px;
+    border-radius:999px; background:var(--gold); color:white;
+    font-size:12px; font-weight:800; line-height:1;
+    font-family:var(--font);
+  }
+  .vm.answered-correct .vn{ background:var(--leaf); }
+  .vm.answered-wrong .vn{ background:var(--rose); }
+
+  /* ===== Quiz section ===== */
+  .qsection{
+    background:var(--paper-3); border:2px dashed var(--gold); border-radius:22px;
+    padding:clamp(22px,3vw,32px); box-shadow:var(--shadow);
+  }
+  .qsection-header{
+    display:flex; align-items:center; flex-wrap:wrap; gap:14px;
+    margin-bottom:20px;
+  }
+  .qsection-label{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-display); font-size:15px; color:var(--paper-2);
+    background:var(--gold); padding:7px 18px; border-radius:999px;
+    font-weight:700;
+  }
+  .qsection-meta{
+    display:inline-flex; align-items:center; gap:12px; flex-wrap:wrap; margin-right:auto;
+  }
+  .qprogress{
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--paper); border:1px solid var(--line);
+    padding:7px 16px; border-radius:999px;
+  }
+  .qprogress-text{ color:var(--ink-soft); font-weight:700; font-size:14px; font-family:var(--font); }
+  .qprogress-text b{ color:var(--accent); font-size:16px; font-weight:800; }
+  .qprogress-bar{
+    width:90px; height:6px; background:rgba(14,111,92,.1);
+    border-radius:999px; overflow:hidden;
+  }
+  .qprogress-bar>span{
+    display:block; height:100%; width:0;
+    background:linear-gradient(90deg, var(--gold-soft), var(--accent));
+    border-radius:999px; transition:width .45s cubic-bezier(.2,.8,.2,1);
+  }
+  .reset-btn{
+    background:transparent; border:1.5px solid var(--gold); color:var(--gold);
+    padding:6px 14px; border-radius:999px;
+    font-family:var(--font); font-weight:700; font-size:14px;
+    cursor:pointer; transition:all .2s ease;
+  }
+  .reset-btn:hover{ background:var(--gold); color:white; }
+  .qsection h3{
+    font-family:var(--font-display); font-size:22px; color:var(--ink); margin-bottom:18px; font-weight:800;
+    width:100%;
+  }
+
+  /* ===== Quiz cards ===== */
+  .qcard{
+    background:white; border:2px solid var(--line); border-radius:14px;
+    padding:14px 18px; margin-bottom:12px;
+    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+    transition:all .3s ease;
+    position:relative;
+  }
+  .qcard.synced{ border-color:var(--gold); box-shadow:0 14px 30px -14px var(--gold); transform:translateY(-2px); }
+  .qcard.pulse{ animation:cardPulse .9s ease; }
+  @keyframes cardPulse{
+    0%{ box-shadow:0 0 0 0 rgba(200,155,74,.55); border-color:var(--gold); }
+    50%{ box-shadow:0 0 0 14px rgba(200,155,74,0); border-color:var(--gold); }
+    100%{ box-shadow:0 0 0 0 rgba(200,155,74,0); }
+  }
+  .qcard.answered-correct{ border-color:rgba(43,122,87,.4); background:rgba(43,122,87,.04); }
+  .qcard.answered-wrong{ border-color:rgba(180,62,80,.4); background:rgba(180,62,80,.04); }
+  .qcard-num{
+    background:var(--gold); color:white;
+    border-radius:50%; width:32px; height:32px;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:15px; flex-shrink:0;
+    font-family:var(--font);
+  }
+  .qcard.answered-correct .qcard-num{ background:var(--leaf); }
+  .qcard.answered-wrong .qcard-num{ background:var(--rose); }
+  .qcard-verb{
+    font-family:var(--font-display); font-size:26px; font-weight:800; color:var(--accent-2);
+    flex-shrink:0; min-width:90px;
+    transition:color .3s ease;
+  }
+  .qcard.answered-correct .qcard-verb{ color:var(--leaf); }
+  .qcard.answered-wrong .qcard-verb{ color:var(--rose); }
+  .qcard-opts{
+    display:flex; gap:8px; flex-wrap:wrap; margin-right:auto;
+  }
+  .qcard-opts button{
+    background:var(--paper); border:2px solid var(--line);
+    padding:7px 18px; border-radius:999px;
+    font-family:var(--font); font-weight:700; font-size:17px;
+    cursor:pointer; transition:all .2s ease; color:var(--ink);
+  }
+  .qcard-opts button:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .qcard-opts button.sound-opt{ color:var(--accent); }
+  .qcard-opts button.weak-opt{ color:var(--rose); }
+  .qcard-opts button.correct{ background:var(--leaf); color:white; border-color:var(--leaf); }
+  .qcard-opts button.wrong{ background:var(--rose); color:white; border-color:var(--rose); }
+  .qcard-opts button.show{ background:rgba(43,122,87,.15); color:var(--leaf); border-color:var(--leaf); }
+  .qcard-opts button.locked{ pointer-events:none; }
+
+  /* ===== Inline analyzer (wrong feedback) ===== */
+  .qexplain{
+    width:100%; margin-top:8px;
+    padding:14px 18px;
+    background:rgba(180,62,80,.05);
+    border:1.5px dashed rgba(180,62,80,.35);
+    border-radius:12px;
+    display:none; gap:14px; align-items:center; flex-wrap:wrap;
+  }
+  .qexplain.show{ display:flex; animation:fadeUp .35s ease; }
+  .qexplain-head{
+    width:100%; display:flex; align-items:center; gap:8px;
+    font-family:var(--font-display); font-size:16px; font-weight:800; color:var(--rose-2);
+  }
+  .qexplain-head .ic{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px; height:26px; border-radius:50%;
+    background:var(--rose); color:white; font-size:14px;
+  }
+  .qexplain-letters{ display:flex; gap:6px; flex-shrink:0; }
+  .qexplain-letters .el{
+    width:42px; height:42px;
+    display:inline-flex; align-items:center; justify-content:center;
+    background:rgba(43,122,87,.08); border:2px solid var(--leaf); color:var(--leaf);
+    border-radius:8px; font-family:var(--font-display); font-size:24px; font-weight:800;
+    position:relative;
+  }
+  .qexplain-letters .el.weak{
+    background:rgba(180,62,80,.1); border-color:var(--rose); color:var(--rose);
+  }
+  .qexplain-letters .el.weak::after{
+    content:"علّة"; position:absolute; bottom:-22px; left:50%; transform:translateX(-50%);
+    font-size:10px; background:var(--rose); color:white; padding:1px 7px; border-radius:5px;
+    white-space:nowrap; font-weight:700; font-family:var(--font);
+  }
+  .qexplain-note{
+    flex:1; min-width:200px;
+    font-size:15px; color:var(--ink); line-height:1.55;
+  }
+  .qexplain-note b{ color:var(--rose-2); }
+
+  /* ===== Floating "أحسنت" ===== */
+  .celebrate{
+    position:absolute; top:-12px; right:50%; transform:translateX(50%);
+    background:var(--leaf); color:white;
+    padding:5px 14px; border-radius:999px;
+    font-size:13px; font-weight:700; font-family:var(--font);
+    white-space:nowrap; pointer-events:none; z-index:5;
+    animation:celebrate 1.6s ease forwards;
+    box-shadow:0 6px 16px -6px rgba(43,122,87,.6);
+  }
+  @keyframes celebrate{
+    0%{ opacity:0; transform:translate(50%, 8px) scale(.85); }
+    20%{ opacity:1; transform:translate(50%, 0) scale(1); }
+    80%{ opacity:1; transform:translate(50%, -6px) scale(1); }
+    100%{ opacity:0; transform:translate(50%, -22px) scale(.95); }
+  }
+
+  /* ===== Sentence cards (EX4 — 2-step) ===== */
+  .scard{
+    background:white; border:2px solid var(--line); border-radius:18px;
+    padding:22px 24px; margin-bottom:14px; box-shadow:0 8px 22px -16px rgba(26,31,46,.25);
+    position:relative; transition:all .3s ease;
+  }
+  .scard.answered-correct{ border-color:rgba(43,122,87,.4); background:rgba(43,122,87,.04); }
+  .scard.answered-wrong{ border-color:rgba(180,62,80,.4); background:rgba(180,62,80,.04); }
+  .scard-text{
+    font-size:clamp(20px,2.2vw,23px); line-height:2; margin-bottom:14px; color:var(--ink);
+  }
+  .scard-step{
+    margin-top:14px; padding-top:14px;
+    border-top:1px dashed var(--line);
+  }
+  .scard-step-label{
+    display:inline-block;
+    font-size:13px; color:var(--ink-soft); letter-spacing:2px;
+    font-weight:700; margin-bottom:10px;
+  }
+  .scard-step-label b{ color:var(--gold); font-size:13px; }
+  .scard-decision{
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .big-decision{
+    flex:1; min-width:140px;
+    padding:14px 22px; border-radius:14px; cursor:pointer;
+    font-family:var(--font-display); font-weight:800; font-size:21px;
+    border:2.5px solid; transition:all .2s ease;
+  }
+  .big-decision.is-sound{
+    background:rgba(43,122,87,.06); border-color:var(--leaf); color:var(--leaf);
+  }
+  .big-decision.is-weak{
+    background:rgba(180,62,80,.06); border-color:var(--rose); color:var(--rose);
+  }
+  .big-decision:hover{ transform:translateY(-3px); box-shadow:0 12px 24px -14px rgba(0,0,0,.3); }
+  .big-decision.correct{ background:var(--leaf); color:white; border-color:var(--leaf); }
+  .big-decision.wrong{ background:var(--rose); color:white; border-color:var(--rose); }
+  .big-decision.locked{ pointer-events:none; }
+  .scard-subtypes{
+    display:none; gap:8px; flex-wrap:wrap;
+    animation:fadeUp .35s ease;
+  }
+  .scard-subtypes.show{ display:flex; }
+  .scard-subtypes button{
+    background:var(--paper); border:2px solid var(--line);
+    padding:9px 20px; border-radius:999px;
+    font-family:var(--font); font-weight:700; font-size:17px;
+    cursor:pointer; transition:all .2s ease; color:var(--ink);
+  }
+  .scard-subtypes button:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .scard-subtypes.is-sound button{ color:var(--accent); }
+  .scard-subtypes.is-weak button{ color:var(--rose); }
+  .scard-subtypes button.correct{ background:var(--leaf); color:white; border-color:var(--leaf); }
+  .scard-subtypes button.wrong{ background:var(--rose); color:white; border-color:var(--rose); }
+  .scard-subtypes button.show{ background:rgba(43,122,87,.15); color:var(--leaf); border-color:var(--leaf); }
+  .scard-subtypes button.locked{ pointer-events:none; }
+
+  /* ===== Final ===== */
+  .final-card{
+    text-align:center;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+    color:var(--paper-2); border-radius:28px; padding:clamp(36px,5vw,64px);
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .final-card::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(232,200,134,.18) 1px, transparent 0);
+    background-size:24px 24px; opacity:.5;
+  }
+  .final-card .ribbon{ font-size:70px; margin-bottom:8px; }
+  .final-card h2{ font-family:var(--font-display); font-size:34px; color:var(--gold-soft); margin-bottom:16px; font-weight:800; }
+  .final-card .big-score{ font-family:var(--font-display); font-size:clamp(60px,8vw,96px); font-weight:800; color:var(--paper-2); line-height:1; margin:8px 0; }
+  .final-card .pct{ color:var(--gold-soft); font-size:28px; font-weight:700; }
+  .final-card .msg{ font-size:19px; margin:20px 0; color:rgba(246,239,226,.95); }
+
+  /* ===== Navbar ===== */
+  .navbar{
+    position:fixed; bottom:0; right:0; left:0;
+    background:rgba(251,246,236,.94);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);
+    padding:16px 26px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; z-index:50;
+  }
+  .nav-btn{
+    background:var(--accent); color:var(--paper-2); border:none;
+    padding:12px 22px; border-radius:12px;
+    font-family:var(--font); font-weight:700; font-size:16px;
+    cursor:pointer; transition:all .25s ease;
+  }
+  .nav-btn:hover{ background:var(--accent-2); transform:translateY(-2px); }
+  .nav-btn.ghost{ background:transparent; color:var(--accent); border:2px solid var(--accent); }
+  .nav-btn.ghost:hover{ background:var(--accent); color:var(--paper-2); }
+  .nav-btn:disabled{ opacity:.35; cursor:not-allowed; transform:none; }
+  .dots{ display:flex; gap:8px; flex:1; justify-content:center; flex-wrap:wrap; }
+  .dot{ width:10px; height:10px; border-radius:50%; background:rgba(14,111,92,.2); cursor:pointer; transition:all .25s ease; }
+  .dot.active{ background:var(--accent); transform:scale(1.4); box-shadow:0 0 0 4px rgba(14,111,92,.15); }
+  .dot.visited{ background:var(--gold); }
+  .nav-score{ font-family:var(--font-display); font-size:16px; color:var(--ink-soft); font-weight:700; }
+  .nav-score b{ color:var(--accent); font-size:18px; font-weight:800; }
+
+  @media (max-width:600px){
+    body{ font-size:16px; }
+    .topbar{ height:56px; }
+    .stage{ padding-top:80px; }
+    .topbar .brand{ font-size:15px; }
+    .navbar{ padding:12px 14px; }
+    .nav-btn{ padding:10px 16px; font-size:14px; }
+    .dot{ width:8px; height:8px; }
+    .qcard{ gap:10px; padding:12px 14px; }
+    .qcard-verb{ font-size:22px; min-width:0; }
+    .qcard-opts button{ font-size:15px; padding:6px 14px; }
+    .scard-text{ font-size:19px; line-height:1.9; }
+    .scard-subtypes button{ font-size:14px; padding:7px 14px; }
+    .big-decision{ font-size:18px; padding:12px 18px; }
+    .passage{ font-size:19px; line-height:2.2; }
+    .qexplain-letters .el{ width:36px; height:36px; font-size:20px; }
+  }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="تمارينُ الفعلِ الصحيحِ والمعتلّ">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">تمارين <span>·</span> الفعل الصحيح والمعتلّ</div>
+  <div class="slide-info">شريحة <b id="cur">1</b> من <span id="tot">6</span></div>
+</div>
+<div class="progress-line"><span id="pbar"></span></div>
+
+<main class="stage">
+
+  <!-- ===== SLIDE 1: TITLE ===== -->
+  <section class="slide title-slide active" data-slide="1">
+    <svg class="title-ornament" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#C89B4A" stroke-width="1.6">
+        <circle cx="100" cy="100" r="80"/>
+        <circle cx="100" cy="100" r="58"/>
+        <circle cx="100" cy="100" r="36"/>
+        <path d="M100 20 L100 180 M20 100 L180 100"/>
+        <path d="M40 40 L160 160 M160 40 L40 160"/>
+        <circle cx="100" cy="100" r="6" fill="#C89B4A"/>
+      </g>
+    </svg>
+    <div class="title-eyebrow">تطبيق عملي</div>
+    <h1 class="title-main">
+      تمارين على<br>
+      الفعل <span class="em">الصحيح</span> و<span class="em">المعتلّ</span>
+    </h1>
+    <p class="title-sub">فقرات وجمل تطبيقية · أفعال بزياداتها وضمائرها</p>
+    <div class="title-divider"><div class="l"></div><div class="dot"></div><div class="r"></div></div>
+    <p class="title-author">إعداد: <b>أ. حيدر المعاتيق</b></p>
+    <button class="title-cta" onclick="goNext()">ابدأ التمارين</button>
+  </section>
+
+  <!-- ===== SLIDE 2: EX1 — sound vs weak ===== -->
+  <section class="slide" data-slide="2">
+    <span class="slide-num">٠٢ — التمرين الأوّل</span>
+    <h2 class="slide-title">صحيحٌ أم معتلّ؟</h2>
+    <p class="slide-instruction">اقرأ الفقرة بتمعّن، ثم حدّد لكل فعل ملوّن: هل هو صحيحٌ أم معتلّ؟ تلميح: مرّر الماوس على الفعل لرؤية سؤاله، وانقر عليه للقفز إليه.</p>
+
+    <div class="passage" id="p1">
+      <span class="passage-label">الفقرة الأولى</span><br>
+      <span class="vm" data-ex="1" data-id="1"><span class="vn">١</span>خَرَجَ</span> الطلابُ مبكراً، و<span class="vm" data-ex="1" data-id="2"><span class="vn">٢</span>سَارُوا</span> إلى المدرسةِ، وقد <span class="vm" data-ex="1" data-id="3"><span class="vn">٣</span>وَصَلُوا</span> قبل الجرسِ. <span class="vm" data-ex="1" data-id="4"><span class="vn">٤</span>جَلَسُوا</span> في فصلِهم، و<span class="vm" data-ex="1" data-id="5"><span class="vn">٥</span>أَخَذُوا</span> كتبَهم، ثم <span class="vm" data-ex="1" data-id="6"><span class="vn">٦</span>بَدَؤُوا</span> في القراءةِ. <span class="vm" data-ex="1" data-id="7"><span class="vn">٧</span>قَرَأَ</span> كلُّ طالبٍ درسَه بصوتٍ واضحٍ. وفي نهايةِ اليومِ، <span class="vm" data-ex="1" data-id="8"><span class="vn">٨</span>عَادُوا</span> إلى بيوتِهم.
+    </div>
+
+    <div class="qsection">
+      <div class="qsection-header">
+        <span class="qsection-label">حدّد النوع</span>
+        <div class="qsection-meta">
+          <div class="qprogress">
+            <span class="qprogress-text">تمّ <b id="prog-num-1">0</b> من <span>8</span></span>
+            <div class="qprogress-bar"><span id="prog-bar-1"></span></div>
+          </div>
+          <button class="reset-btn" onclick="resetExercise(1)">↻ إعادة التمرين</button>
+        </div>
+        <h3>صحيحٌ أم معتلّ؟</h3>
+      </div>
+      <div id="q1-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 3: EX2 — sound subtypes ===== -->
+  <section class="slide" data-slide="3">
+    <span class="slide-num">٠٣ — التمرين الثاني</span>
+    <h2 class="slide-title">أنواع الفعل الصحيح</h2>
+    <p class="slide-instruction">اقرأ الفقرة، ثم حدّد لكل فعل صحيح نوعَه: سالمٌ، مهموزٌ، أم مُضعَّف؟</p>
+
+    <div class="passage" id="p2">
+      <span class="passage-label">الفقرة الثانية</span><br>
+      <span class="vm" data-ex="2" data-id="1"><span class="vn">١</span>كَتَبَ</span> الطلابُ الدرسَ بانتباهٍ، و<span class="vm" data-ex="2" data-id="2"><span class="vn">٢</span>قَرَأَ</span> كلُّ واحدٍ منهم نصَّه. <span class="vm" data-ex="2" data-id="3"><span class="vn">٣</span>سَأَلَ</span> الأستاذُ سؤالاً مُهماً. <span class="vm" data-ex="2" data-id="4"><span class="vn">٤</span>مَدَّ</span> خالدٌ يدَه ليأخذَ الكتابَ، ثم <span class="vm" data-ex="2" data-id="5"><span class="vn">٥</span>رَدَّ</span> القلمَ إلى مكانه. <span class="vm" data-ex="2" data-id="6"><span class="vn">٦</span>شَدَّ</span> المعلمُ على ضرورةِ النظامِ. <span class="vm" data-ex="2" data-id="7"><span class="vn">٧</span>ضَحِكَ</span> الأطفالُ من قصةٍ مَرَحَةٍ. <span class="vm" data-ex="2" data-id="8"><span class="vn">٨</span>أَكَلَ</span> الجميعُ في الفسحةِ، ثم <span class="vm" data-ex="2" data-id="9"><span class="vn">٩</span>لَعِبُوا</span> في الساحةِ.
+    </div>
+
+    <div class="qsection">
+      <div class="qsection-header">
+        <span class="qsection-label">حدّد نوع الصحيح</span>
+        <div class="qsection-meta">
+          <div class="qprogress">
+            <span class="qprogress-text">تمّ <b id="prog-num-2">0</b> من <span>9</span></span>
+            <div class="qprogress-bar"><span id="prog-bar-2"></span></div>
+          </div>
+          <button class="reset-btn" onclick="resetExercise(2)">↻ إعادة التمرين</button>
+        </div>
+        <h3>سالمٌ، مهموزٌ، أم مُضعَّف؟</h3>
+      </div>
+      <div id="q2-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 4: EX3 — weak subtypes ===== -->
+  <section class="slide" data-slide="4">
+    <span class="slide-num">٠٤ — التمرين الثالث</span>
+    <h2 class="slide-title">أنواع الفعل المُعتلّ</h2>
+    <p class="slide-instruction">اقرأ الفقرة، ثم حدّد لكل فعل معتلّ نوعَه: مثالٌ، أجوفٌ، ناقصٌ، أم لفيف؟</p>
+
+    <div class="passage" id="p3">
+      <span class="passage-label">الفقرة الثالثة</span><br>
+      <span class="vm" data-ex="3" data-id="1"><span class="vn">١</span>وَعَدَ</span> الأبُ ابنَه بنزهةٍ ممتعةٍ. <span class="vm" data-ex="3" data-id="2"><span class="vn">٢</span>وَقَفَا</span> أمامَ البابِ، ثم <span class="vm" data-ex="3" data-id="3"><span class="vn">٣</span>سَارَا</span> في الطريقِ. <span class="vm" data-ex="3" data-id="4"><span class="vn">٤</span>قَالَ</span> الأبُ لابنه: «انظرْ إلى الطيورِ». <span class="vm" data-ex="3" data-id="5"><span class="vn">٥</span>بَاعَ</span> تاجرٌ في السوقِ فاكهةً طازجةً. <span class="vm" data-ex="3" data-id="6"><span class="vn">٦</span>وَصَلَا</span> إلى الحديقةِ. <span class="vm" data-ex="3" data-id="7"><span class="vn">٧</span>دَعَا</span> الأبُ ابنَه ليلعبَ. <span class="vm" data-ex="3" data-id="8"><span class="vn">٨</span>رَمَى</span> الكرةَ بقوةٍ، فَ<span class="vm" data-ex="3" data-id="9"><span class="vn">٩</span>مَشَى</span> يحضرُها. وفي المساءِ <span class="vm" data-ex="3" data-id="10"><span class="vn">١٠</span>رَوَى</span> الأبُ قصةً، و<span class="vm" data-ex="3" data-id="11"><span class="vn">١١</span>وَعَى</span> الابنُ كلَّ ما قالَه.
+    </div>
+
+    <div class="qsection">
+      <div class="qsection-header">
+        <span class="qsection-label">حدّد نوع المعتلّ</span>
+        <div class="qsection-meta">
+          <div class="qprogress">
+            <span class="qprogress-text">تمّ <b id="prog-num-3">0</b> من <span>11</span></span>
+            <div class="qprogress-bar"><span id="prog-bar-3"></span></div>
+          </div>
+          <button class="reset-btn" onclick="resetExercise(3)">↻ إعادة التمرين</button>
+        </div>
+        <h3>مثالٌ، أجوفٌ، ناقصٌ، أم لفيف؟</h3>
+      </div>
+      <div id="q3-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 5: EX4 — sentences (2-step) ===== -->
+  <section class="slide" data-slide="5">
+    <span class="slide-num">٠٥ — التمرين الرابع</span>
+    <h2 class="slide-title">جُمَلٌ متفرّقة</h2>
+    <p class="slide-instruction">في كل جملة فعلٌ ملوّن. أوّلاً: حدّد إن كان صحيحاً أم معتلّاً. ثم: اختر النوع التفصيلي. تأمّل في الحروف الأصلية بعد تجريد الفعل من الزيادات.</p>
+
+    <div class="qsection">
+      <div class="qsection-header">
+        <span class="qsection-label">٠٢ خطوتان لكل جملة</span>
+        <div class="qsection-meta">
+          <div class="qprogress">
+            <span class="qprogress-text">تمّ <b id="prog-num-4">0</b> من <span>10</span></span>
+            <div class="qprogress-bar"><span id="prog-bar-4"></span></div>
+          </div>
+          <button class="reset-btn" onclick="resetExercise(4)">↻ إعادة التمرين</button>
+        </div>
+      </div>
+      <div id="sentences-list"></div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 6: FINAL ===== -->
+  <section class="slide" data-slide="6">
+    <span class="slide-num">٠٦ — النتيجة</span>
+    <h2 class="slide-title">نتيجتك</h2>
+
+    <div class="final-card">
+      <div class="ribbon">🏅</div>
+      <h2>أحسنت!</h2>
+      <div class="big-score"><span id="final-score">0</span> <span style="opacity:.6;">/</span> <span id="final-total">0</span></div>
+      <div class="pct"><span id="final-pct">0</span>%</div>
+      <p class="msg" id="final-msg">أكمل التمارين لرؤية نتيجتك.</p>
+      <button class="nav-btn" style="background:var(--gold); color:var(--ink);" onclick="resetAll()">إعادة المحاولة الكاملة ↻</button>
+    </div>
+  </section>
+
+</main>
+
+<div class="navbar">
+  <button class="nav-btn ghost" id="prev-btn" onclick="goPrev()">→ السابق</button>
+  <div class="dots" id="dots"></div>
+  <div class="nav-score">النتيجة: <b id="score">0</b> / <b id="total">0</b></div>
+  <button class="nav-btn" id="next-btn" onclick="goNext()">التالي ←</button>
+</div>
+
+<script>
+/* ===== Navigation ===== */
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let current = 1;
+const visited = new Set([1]);
+document.getElementById('tot').textContent = totalSlides;
+
+const dotsWrap = document.getElementById('dots');
+for(let i=1;i<=totalSlides;i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===1?' active':'');
+  d.onclick = ()=> goTo(i);
+  dotsWrap.appendChild(d);
+}
+function goTo(n){
+  if(n<1 || n>totalSlides) return;
+  current = n;
+  visited.add(n);
+  slides.forEach(s=> s.classList.toggle('active', parseInt(s.dataset.slide)===n));
+  dotsWrap.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active', (i+1)===n);
+    d.classList.toggle('visited', visited.has(i+1) && (i+1)!==n);
+  });
+  document.getElementById('cur').textContent = n;
+  document.getElementById('pbar').style.width = ((n-1)/(totalSlides-1)*100) + '%';
+  document.getElementById('prev-btn').disabled = (n===1);
+  document.getElementById('next-btn').disabled = (n===totalSlides);
+  document.getElementById('next-btn').textContent = (n===totalSlides) ? 'انتهى' : 'التالي ←';
+  window.scrollTo({ top:0, behavior:'smooth' });
+  if(n===totalSlides) updateFinal();
+}
+function goNext(){ if(current<totalSlides) goTo(current+1); }
+function goPrev(){ if(current>1) goTo(current-1); }
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowLeft') goNext();
+  else if(e.key === 'ArrowRight') goPrev();
+});
+
+/* ===== Score ===== */
+let score=0, total=0;
+function bumpScore(c){
+  total++; if(c) score++;
+  document.getElementById('score').textContent = score;
+  document.getElementById('total').textContent = total;
+}
+function updateFinal(){
+  document.getElementById('final-score').textContent = score;
+  document.getElementById('final-total').textContent = total;
+  const pct = total ? Math.round((score/total)*100) : 0;
+  document.getElementById('final-pct').textContent = pct;
+  const msg = document.getElementById('final-msg');
+  if(total===0) msg.textContent = 'أكمل التمارين لرؤية نتيجتك.';
+  else if(pct===100) msg.textContent = 'إتقان تامّ! بارك الله فيك. 🌟';
+  else if(pct>=80) msg.textContent = 'نتيجة ممتازة! واصل التطبيق.';
+  else if(pct>=60) msg.textContent = 'نتيجة جيّدة، راجع الأقسام التي أخطأت فيها.';
+  else if(pct>=40) msg.textContent = 'لا بأس، عُدْ إلى الدرس وحاول مرّة أخرى.';
+  else msg.textContent = 'تحتاج إلى مراجعة أقوى للدرس.';
+}
+
+/* ===== Exercise data ===== */
+const ex1 = [
+  { id:1, verb:'خَرَجَ',   answer:'sound', root:['خ','ر','ج'], weak:[false,false,false], note:'الجذر (خ-ر-ج) خالٍ من حروف العلّة → فعل صحيح.' },
+  { id:2, verb:'سَارُوا',  answer:'weak',  root:['س','ي','ر'], weak:[false,true,false],  note:'الألف منقلبة عن (ي) في الوسط → فعل معتلّ أجوف.' },
+  { id:3, verb:'وَصَلُوا', answer:'weak',  root:['و','ص','ل'], weak:[true,false,false],  note:'حرف العلّة (و) في أول الفعل → فعل معتلّ مثال.' },
+  { id:4, verb:'جَلَسُوا', answer:'sound', root:['ج','ل','س'], weak:[false,false,false], note:'الجذر (ج-ل-س) خالٍ من حروف العلّة → فعل صحيح.' },
+  { id:5, verb:'أَخَذُوا', answer:'sound', root:['أ','خ','ذ'], weak:[false,false,false], note:'الجذر (أ-خ-ذ) فيه همزة وليس حرف علّة → فعل صحيح مهموز.' },
+  { id:6, verb:'بَدَؤُوا', answer:'sound', root:['ب','د','أ'], weak:[false,false,false], note:'الجذر (ب-د-أ) ينتهي بهمزة وليس حرف علّة → فعل صحيح مهموز.' },
+  { id:7, verb:'قَرَأَ',   answer:'sound', root:['ق','ر','أ'], weak:[false,false,false], note:'الجذر (ق-ر-أ) ينتهي بهمزة وليس حرف علّة → فعل صحيح مهموز.' },
+  { id:8, verb:'عَادُوا',  answer:'weak',  root:['ع','و','د'], weak:[false,true,false],  note:'الألف منقلبة عن (و) في الوسط → فعل معتلّ أجوف.' },
+];
+const ex2 = [
+  { id:1, verb:'كَتَبَ',   answer:'سالم',    root:['ك','ت','ب'], weak:[false,false,false], note:'لا همزة ولا تضعيف ولا حرف علّة → فعل صحيح سالم.' },
+  { id:2, verb:'قَرَأَ',   answer:'مهموز',   root:['ق','ر','أ'], weak:[false,false,false], note:'في الجذر همزة (في الآخر) → فعل صحيح مهموز.' },
+  { id:3, verb:'سَأَلَ',   answer:'مهموز',   root:['س','أ','ل'], weak:[false,false,false], note:'في الجذر همزة (في الوسط) → فعل صحيح مهموز.' },
+  { id:4, verb:'مَدَّ',    answer:'مُضعَّف', root:['م','د','د'], weak:[false,false,false], note:'حرفان من جنس واحد متجاوران فأُدغما → فعل صحيح مُضعَّف.' },
+  { id:5, verb:'رَدَّ',    answer:'مُضعَّف', root:['ر','د','د'], weak:[false,false,false], note:'حرفان من جنس واحد متجاوران فأُدغما → فعل صحيح مُضعَّف.' },
+  { id:6, verb:'شَدَّ',    answer:'مُضعَّف', root:['ش','د','د'], weak:[false,false,false], note:'حرفان من جنس واحد متجاوران فأُدغما → فعل صحيح مُضعَّف.' },
+  { id:7, verb:'ضَحِكَ',   answer:'سالم',    root:['ض','ح','ك'], weak:[false,false,false], note:'لا همزة ولا تضعيف ولا حرف علّة → فعل صحيح سالم.' },
+  { id:8, verb:'أَكَلَ',   answer:'مهموز',   root:['أ','ك','ل'], weak:[false,false,false], note:'في الجذر همزة (في الأوّل) → فعل صحيح مهموز.' },
+  { id:9, verb:'لَعِبُوا', answer:'سالم',    root:['ل','ع','ب'], weak:[false,false,false], note:'لا همزة ولا تضعيف ولا حرف علّة → فعل صحيح سالم.' },
+];
+const ex3 = [
+  { id:1,  verb:'وَعَدَ',  answer:'مثال', root:['و','ع','د'], weak:[true,false,false],  note:'حرف العلّة (و) في أوّل الفعل → فعل معتلّ مثال.' },
+  { id:2,  verb:'وَقَفَا', answer:'مثال', root:['و','ق','ف'], weak:[true,false,false],  note:'حرف العلّة (و) في أوّل الفعل → فعل معتلّ مثال.' },
+  { id:3,  verb:'سَارَا',  answer:'أجوف', root:['س','ي','ر'], weak:[false,true,false],  note:'الألف منقلبة عن (ي) في الوسط → فعل معتلّ أجوف.' },
+  { id:4,  verb:'قَالَ',   answer:'أجوف', root:['ق','و','ل'], weak:[false,true,false],  note:'الألف منقلبة عن (و) في الوسط → فعل معتلّ أجوف.' },
+  { id:5,  verb:'بَاعَ',   answer:'أجوف', root:['ب','ي','ع'], weak:[false,true,false],  note:'الألف منقلبة عن (ي) في الوسط → فعل معتلّ أجوف.' },
+  { id:6,  verb:'وَصَلَا', answer:'مثال', root:['و','ص','ل'], weak:[true,false,false],  note:'حرف العلّة (و) في أوّل الفعل → فعل معتلّ مثال.' },
+  { id:7,  verb:'دَعَا',   answer:'ناقص', root:['د','ع','و'], weak:[false,false,true],  note:'حرف العلّة (و) في آخر الفعل → فعل معتلّ ناقص.' },
+  { id:8,  verb:'رَمَى',   answer:'ناقص', root:['ر','م','ي'], weak:[false,false,true],  note:'حرف العلّة (ي) في آخر الفعل → فعل معتلّ ناقص.' },
+  { id:9,  verb:'مَشَى',   answer:'ناقص', root:['م','ش','ي'], weak:[false,false,true],  note:'حرف العلّة (ي) في آخر الفعل → فعل معتلّ ناقص.' },
+  { id:10, verb:'رَوَى',   answer:'لفيف', root:['ر','و','ي'], weak:[false,true,true],   note:'اجتمع حرفا علّة (و، ي) متّصلان → فعل معتلّ لفيف مقرون.' },
+  { id:11, verb:'وَعَى',   answer:'لفيف', root:['و','ع','ي'], weak:[true,false,true],   note:'اجتمع حرفا علّة (و، ي) منفصلان بحرفٍ صحيح → فعل معتلّ لفيف مفروق.' },
+];
+const ex4 = [
+  { id:1,  text:'كَتَبْتُ الدرسَ بخطٍّ جميلٍ.',  target:'كَتَبْتُ',  answer:'سالم',    cat:'sound', root:['ك','ت','ب'], weak:[false,false,false], note:'الجذر (ك-ت-ب) خالٍ من العلّة والهمزة والتضعيف → صحيح سالم.' },
+  { id:2,  text:'قُلْنا الحقَّ ولم نَخَفْ.',     target:'قُلْنا',   answer:'أجوف',   cat:'weak',  root:['ق','و','ل'], weak:[false,true,false],  note:'الفعل من جذر (ق-و-ل)، حرف العلّة في الوسط → معتلّ أجوف.' },
+  { id:3,  text:'وَعَدْتُكُمْ بهديةٍ في العيدِ.', target:'وَعَدْتُكُمْ', answer:'مثال', cat:'weak',  root:['و','ع','د'], weak:[true,false,false],  note:'الفعل من جذر (و-ع-د)، حرف العلّة في الأوّل → معتلّ مثال.' },
+  { id:4,  text:'مَدَدْتُ يدي لمساعدتِه.',       target:'مَدَدْتُ',  answer:'مُضعَّف', cat:'sound', root:['م','د','د'], weak:[false,false,false], note:'الجذر (م-د-د) فيه حرفان من جنس واحد → صحيح مُضعَّف.' },
+  { id:5,  text:'سَأَلْنَا المعلمَ عن الدرسِ.',  target:'سَأَلْنَا', answer:'مهموز',  cat:'sound', root:['س','أ','ل'], weak:[false,false,false], note:'الجذر (س-أ-ل) فيه همزة وليس حرف علّة → صحيح مهموز.' },
+  { id:6,  text:'دَعَوْتُ صديقي إلى البيتِ.',    target:'دَعَوْتُ',  answer:'ناقص',   cat:'weak',  root:['د','ع','و'], weak:[false,false,true],  note:'الفعل من جذر (د-ع-و)، حرف العلّة في الآخر → معتلّ ناقص.' },
+  { id:7,  text:'وَعَيْنَا الدرسَ جيداً.',      target:'وَعَيْنَا', answer:'لفيف',   cat:'weak',  root:['و','ع','ي'], weak:[true,false,true],   note:'الفعل من جذر (و-ع-ي)، فيه حرفا علّة منفصلان → معتلّ لفيف.' },
+  { id:8,  text:'أَكَلْتُمُ الطعامَ في وقتِه.',  target:'أَكَلْتُمُ', answer:'مهموز',  cat:'sound', root:['أ','ك','ل'], weak:[false,false,false], note:'الجذر (أ-ك-ل) فيه همزة في الأوّل → صحيح مهموز.' },
+  { id:9,  text:'سَارُوا في الصحراءِ ثلاثةَ أيامٍ.', target:'سَارُوا', answer:'أجوف', cat:'weak', root:['س','ي','ر'], weak:[false,true,false], note:'الفعل من جذر (س-ي-ر)، حرف العلّة في الوسط → معتلّ أجوف.' },
+  { id:10, text:'رَدَدْنَا التحيةَ بأحسنَ منها.', target:'رَدَدْنَا', answer:'مُضعَّف', cat:'sound', root:['ر','د','د'], weak:[false,false,false], note:'الجذر (ر-د-د) فيه حرفان من جنس واحد → صحيح مُضعَّف.' },
+];
+
+const soundSubs = ['سالم','مهموز','مُضعَّف'];
+const weakSubs  = ['مثال','أجوف','ناقص','لفيف'];
+
+const arDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+const arNum = n => String(n).split('').map(d=> arDigits[+d]||d).join('');
+
+/* ===== State ===== */
+const state = {
+  1:{ answered:new Set(), data:ex1, total:ex1.length },
+  2:{ answered:new Set(), data:ex2, total:ex2.length },
+  3:{ answered:new Set(), data:ex3, total:ex3.length },
+  4:{ answered:new Set(), data:ex4, total:ex4.length },
+};
+
+/* ===== Helpers ===== */
+function explainBlock(item, attempted){
+  const lettersHtml = item.root.map((l,i)=> `<div class="el ${item.weak[i]?'weak':''}">${l}</div>`).join('');
+  const correctTxt = item.answer === 'sound' ? 'صحيح' : item.answer === 'weak' ? 'معتلّ' : item.answer;
+  return `
+    <div class="qexplain show">
+      <div class="qexplain-head"><span class="ic">!</span> الجواب الصحيح: <b>${correctTxt}</b></div>
+      <div class="qexplain-letters">${lettersHtml}</div>
+      <div class="qexplain-note">${item.note}</div>
+    </div>
+  `;
+}
+function flashCelebrate(el){
+  const c = document.createElement('div');
+  c.className = 'celebrate';
+  c.textContent = '✓ أحسنت';
+  el.appendChild(c);
+  setTimeout(()=> c.remove(), 1700);
+}
+function updateProgress(num){
+  const s = state[num];
+  document.getElementById(`prog-num-${num}`).textContent = arNum(s.answered.size);
+  document.getElementById(`prog-bar-${num}`).style.width = ((s.answered.size / s.total) * 100) + '%';
+}
+
+/* ===== Build EX1/EX2/EX3 (passage exercises) ===== */
+function buildPassageEx(num, opts){
+  const s = state[num];
+  const wrap = document.getElementById(`q${num}-list`);
+  wrap.innerHTML = '';
+  s.data.forEach((it, idx)=>{
+    const card = document.createElement('div');
+    card.className = 'qcard';
+    card.id = `q${num}-${it.id}`;
+    card.dataset.ex = num; card.dataset.id = it.id;
+    const optsHtml = opts.map(o=>
+      `<button class="${o.cls||''}" data-val="${o.val}" onclick="answerPassage(${num}, ${it.id}, '${o.val}', this)">${o.label}</button>`
+    ).join('');
+    card.innerHTML = `
+      <div class="qcard-num">${arNum(idx+1)}</div>
+      <div class="qcard-verb">${it.verb}</div>
+      <div class="qcard-opts">${optsHtml}</div>
+    `;
+    wrap.appendChild(card);
+  });
+  updateProgress(num);
+}
+function answerPassage(num, id, choice, btn){
+  const s = state[num];
+  if(s.answered.has(id)) return;
+  s.answered.add(id);
+  const item = s.data.find(x=>x.id===id);
+  const card = document.getElementById(`q${num}-${id}`);
+  const mark = document.querySelector(`#p${num} .vm[data-id="${id}"]`);
+  const isCorrect = choice === item.answer;
+  if(isCorrect){
+    btn.classList.add('correct');
+    card.classList.add('answered-correct');
+    mark.classList.add('answered-correct');
+    flashCelebrate(card);
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('answered-wrong');
+    mark.classList.add('answered-wrong');
+    card.querySelectorAll('.qcard-opts button').forEach(b=>{
+      if(b.dataset.val === item.answer) b.classList.add('show');
+    });
+    card.insertAdjacentHTML('beforeend', explainBlock(item));
+  }
+  card.querySelectorAll('.qcard-opts button').forEach(b=> b.classList.add('locked'));
+  updateProgress(num);
+  bumpScore(isCorrect);
+}
+
+/* ===== Build EX4 (sentences with 2-step) ===== */
+function buildSentencesEx(){
+  const s = state[4];
+  const wrap = document.getElementById('sentences-list');
+  wrap.innerHTML = '';
+  s.data.forEach((it, idx)=>{
+    const card = document.createElement('div');
+    card.className = 'scard';
+    card.id = `s-${it.id}`;
+    const highlighted = it.text.replace(it.target,
+      `<span class="vm" data-ex="4" data-id="${it.id}"><span class="vn">${arNum(it.id)}</span>${it.target}</span>`);
+    card.innerHTML = `
+      <div class="scard-text">${highlighted}</div>
+      <div class="scard-step">
+        <div class="scard-step-label"><b>الخطوة ١:</b> هل الفعل صحيحٌ أم معتلّ؟</div>
+        <div class="scard-decision">
+          <button class="big-decision is-sound" onclick="decideStep1(${it.id}, 'sound', this)">📗 صحيح</button>
+          <button class="big-decision is-weak"  onclick="decideStep1(${it.id}, 'weak',  this)">📕 معتلّ</button>
+        </div>
+      </div>
+      <div class="scard-step scard-step2" style="display:none;">
+        <div class="scard-step-label"><b>الخطوة ٢:</b> ما النوع التفصيلي؟</div>
+        <div class="scard-subtypes" id="subs-${it.id}"></div>
+      </div>
+    `;
+    wrap.appendChild(card);
+  });
+  updateProgress(4);
+}
+function decideStep1(id, choice, btn){
+  const item = ex4.find(x=>x.id===id);
+  const s = state[4];
+  if(s.answered.has(id)) return;
+  const card = document.getElementById(`s-${id}`);
+  const mark = card.querySelector('.vm');
+
+  if(choice !== item.cat){
+    /* Wrong basic decision — final wrong */
+    s.answered.add(id);
+    btn.classList.add('wrong');
+    /* Reveal correct big-decision */
+    card.querySelectorAll('.big-decision').forEach(b=>{
+      if((item.cat==='sound' && b.classList.contains('is-sound')) ||
+         (item.cat==='weak'  && b.classList.contains('is-weak'))) b.classList.add('show','correct');
+      b.classList.add('locked');
+    });
+    card.classList.add('answered-wrong');
+    mark.classList.add('answered-wrong');
+    card.insertAdjacentHTML('beforeend', explainBlock(item));
+    updateProgress(4);
+    bumpScore(false);
+    return;
+  }
+
+  /* Correct broad classification — show step 2 */
+  btn.classList.add('correct');
+  card.querySelectorAll('.big-decision').forEach(b=> b.classList.add('locked'));
+  const step2 = card.querySelector('.scard-step2');
+  step2.style.display = 'block';
+  const subs = document.getElementById(`subs-${id}`);
+  const list = (item.cat === 'sound') ? soundSubs : weakSubs;
+  subs.className = 'scard-subtypes show ' + (item.cat === 'sound' ? 'is-sound' : 'is-weak');
+  subs.innerHTML = list.map(o=>
+    `<button data-val="${o}" onclick="answerStep2(${id}, '${o}', this)">${o}</button>`
+  ).join('');
+  /* Smooth scroll into view to reveal step 2 */
+  setTimeout(()=> step2.scrollIntoView({behavior:'smooth', block:'nearest'}), 100);
+}
+function answerStep2(id, choice, btn){
+  const item = ex4.find(x=>x.id===id);
+  const s = state[4];
+  if(s.answered.has(id)) return;
+  s.answered.add(id);
+  const card = document.getElementById(`s-${id}`);
+  const mark = card.querySelector('.vm');
+  const isCorrect = choice === item.answer;
+  if(isCorrect){
+    btn.classList.add('correct');
+    card.classList.add('answered-correct');
+    mark.classList.add('answered-correct');
+    flashCelebrate(card);
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('answered-wrong');
+    mark.classList.add('answered-wrong');
+    card.querySelectorAll(`#subs-${id} button`).forEach(b=>{
+      if(b.dataset.val === item.answer) b.classList.add('show');
+    });
+    card.insertAdjacentHTML('beforeend', explainBlock(item));
+  }
+  card.querySelectorAll(`#subs-${id} button`).forEach(b=> b.classList.add('locked'));
+  updateProgress(4);
+  bumpScore(isCorrect);
+}
+
+/* ===== Hover sync + click-to-jump ===== */
+function setupSync(){
+  document.querySelectorAll('.vm').forEach(v=>{
+    const ex = v.dataset.ex, id = v.dataset.id;
+    if(!ex || !id) return;
+    const targetSel = (ex === '4') ? `#s-${id}` : `#q${ex}-${id}`;
+    v.addEventListener('mouseenter', ()=>{
+      const t = document.querySelector(targetSel);
+      if(t) t.classList.add('synced');
+      v.classList.add('synced');
+    });
+    v.addEventListener('mouseleave', ()=>{
+      document.querySelectorAll('.synced').forEach(el=> el.classList.remove('synced'));
+    });
+    v.addEventListener('click', ()=>{
+      const t = document.querySelector(targetSel);
+      if(t){
+        t.scrollIntoView({behavior:'smooth', block:'center'});
+        t.classList.add('pulse');
+        setTimeout(()=> t.classList.remove('pulse'), 900);
+      }
+    });
+  });
+  /* Reverse: hover quiz card → highlight verb */
+  document.querySelectorAll('.qcard, .scard').forEach(card=>{
+    const ex = card.dataset.ex || '4';
+    const id = card.dataset.id || (card.id.startsWith('s-') ? card.id.slice(2) : null);
+    if(!id) return;
+    card.addEventListener('mouseenter', ()=>{
+      const v = document.querySelector(`.vm[data-ex="${ex}"][data-id="${id}"]`);
+      if(v){ v.classList.add('synced'); card.classList.add('synced'); }
+    });
+    card.addEventListener('mouseleave', ()=>{
+      document.querySelectorAll('.synced').forEach(el=> el.classList.remove('synced'));
+    });
+  });
+}
+
+/* ===== Per-exercise reset ===== */
+function resetExercise(num){
+  const s = state[num];
+  /* Subtract the correct answers we counted from this exercise */
+  const oldScoreInThis = countCorrect(num);
+  score -= oldScoreInThis;
+  total -= s.answered.size;
+  s.answered.clear();
+  /* Clear UI marks */
+  document.querySelectorAll(`#p${num} .vm`).forEach(m=> m.classList.remove('answered-correct','answered-wrong'));
+  /* Rebuild list */
+  if(num === 1) buildPassageEx(1, [
+    { val:'sound', label:'📗 صحيح', cls:'sound-opt' },
+    { val:'weak',  label:'📕 معتلّ', cls:'weak-opt' },
+  ]);
+  else if(num === 2) buildPassageEx(2, soundSubs.map(s=> ({val:s, label:s})));
+  else if(num === 3) buildPassageEx(3, weakSubs.map(s=> ({val:s, label:s})));
+  else if(num === 4) buildSentencesEx();
+  setupSync();
+  document.getElementById('score').textContent = score;
+  document.getElementById('total').textContent = total;
+}
+function countCorrect(num){
+  /* Reconstruct correct count: parse from DOM */
+  const sel = (num === 4) ? '.scard.answered-correct' : `#q${num}-list .qcard.answered-correct`;
+  return document.querySelectorAll(sel).length;
+}
+
+/* ===== Reset all ===== */
+function resetAll(){
+  score=0; total=0;
+  Object.values(state).forEach(s=> s.answered.clear());
+  document.getElementById('score').textContent='0';
+  document.getElementById('total').textContent='0';
+  document.querySelectorAll('.vm').forEach(m=> m.classList.remove('answered-correct','answered-wrong'));
+  buildAll();
+  updateFinal();
+  goTo(1);
+}
+
+/* ===== Init ===== */
+function buildAll(){
+  buildPassageEx(1, [
+    { val:'sound', label:'📗 صحيح', cls:'sound-opt' },
+    { val:'weak',  label:'📕 معتلّ', cls:'weak-opt' },
+  ]);
+  buildPassageEx(2, soundSubs.map(s=> ({val:s, label:s})));
+  buildPassageEx(3, weakSubs.map(s=> ({val:s, label:s})));
+  buildSentencesEx();
+  setupSync();
+}
+buildAll();
+goTo(1);
+</script>
+
+</body>
+</html>

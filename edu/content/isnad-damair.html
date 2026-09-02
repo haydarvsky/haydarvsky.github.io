@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إسناد الفعل إلى الضمائر — أ. حيدر المعاتيق</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./إسناد الفعل إلى الضمائر — أ. حيدر المعاتيق_files/css2" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B3B5F;
+    --navy-2:#102740;
+    --gold:#C8A24B;
+    --gold-soft:#E8C77A;
+    --cream:#F7F1E1;
+    --cream-2:#FBF6E8;
+    --ink:#1F1F1F;
+    --muted:#6B6357;
+    --green:#3F7D5C;
+    --red:#B84A4A;
+    --shadow:0 18px 50px rgba(16,39,64,.18);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Cairo','Amiri', system-ui, sans-serif;
+    background:
+      radial-gradient(1200px 800px at 90% 10%, rgba(200,162,75,.18), transparent 60%),
+      radial-gradient(1000px 700px at 10% 90%, rgba(27,59,95,.20), transparent 60%),
+      linear-gradient(135deg, #F2EAD3 0%, #E8DDB8 100%);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    overflow:hidden;
+  }
+  .stage{
+    width:min(1100px, 96vw);
+    height:min(720px, 92vh);
+    background:linear-gradient(180deg, var(--cream-2) 0%, #fff8e6 100%);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
+    border:1px solid rgba(27,59,95,.08);
+  }
+  .stage::before{
+    content:"";
+    position:absolute;inset:0;
+    background:
+      radial-gradient(600px 240px at 100% 0%, rgba(200,162,75,.18), transparent 60%),
+      radial-gradient(500px 280px at 0% 100%, rgba(27,59,95,.14), transparent 60%);
+    pointer-events:none;
+  }
+  /* Top bar */
+  .topbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 22px;border-bottom:1px solid rgba(27,59,95,.08);
+    backdrop-filter:saturate(140%);
+    position:relative;z-index:2;
+  }
+  .brand{
+    display:flex;align-items:center;gap:10px;color:var(--navy);font-weight:700;
+  }
+  .brand .dot{
+    width:10px;height:10px;border-radius:50%;
+    background:linear-gradient(135deg, var(--gold), var(--navy));
+    box-shadow:0 0 0 3px rgba(200,162,75,.25);
+  }
+  .progress-wrap{flex:1;margin:0 18px;height:8px;background:rgba(27,59,95,.10);border-radius:99px;overflow:hidden}
+  .progress{height:100%;width:0;background:linear-gradient(90deg, var(--gold), var(--navy));transition:width .4s ease}
+  .counter{font-weight:600;color:var(--navy);font-size:14px;min-width:60px;text-align:left;direction:ltr}
+
+  /* Slide area */
+  .slides{position:relative;height:calc(100% - 130px);}
+  .slide{
+    position:absolute;inset:0;
+    padding:30px 42px;
+    opacity:0;transform:translateX(-30px);
+    transition:opacity .45s ease, transform .45s ease;
+    pointer-events:none;
+    overflow-y:auto;
+  }
+  .slide.active{opacity:1;transform:translateX(0);pointer-events:auto;}
+  .slide h1, .slide h2, .slide h3{color:var(--navy);margin:0 0 12px;font-weight:800}
+  .slide h1{font-size:42px}
+  .slide h2{font-size:30px;display:flex;align-items:center;gap:12px}
+  .slide h2::before{
+    content:"";display:inline-block;width:10px;height:30px;border-radius:6px;
+    background:linear-gradient(180deg, var(--gold), var(--navy));
+  }
+  .slide p, .slide li{font-size:19px;line-height:1.9;color:#2A2A2A}
+  .slide .lead{font-size:21px;color:#3a3a3a}
+
+  /* Title slide */
+  .title-slide{display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:30px}
+  .title-slide .badge{
+    display:inline-block;padding:8px 18px;border-radius:99px;
+    background:rgba(27,59,95,.10);color:var(--navy);font-weight:600;letter-spacing:.5px;font-size:14px;
+    margin-bottom:18px;
+  }
+  .title-slide h1{
+    font-size:64px;line-height:1.2;margin-bottom:8px;
+    background:linear-gradient(135deg, var(--navy) 30%, var(--gold) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Amiri','Cairo',serif;
+  }
+  .title-slide .sub{font-size:22px;color:var(--muted);margin-bottom:30px}
+  .author-card{
+    margin-top:14px;padding:18px 28px;border-radius:18px;
+    background:linear-gradient(135deg, rgba(27,59,95,.08), rgba(200,162,75,.12));
+    border:1px solid rgba(200,162,75,.35);
+    display:flex;align-items:center;gap:14px;
+  }
+  .author-card .avatar{
+    width:54px;height:54px;border-radius:50%;
+    background:linear-gradient(135deg, var(--navy), var(--gold));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:22px;
+    box-shadow:0 6px 18px rgba(27,59,95,.25);
+  }
+  .author-card .meta{text-align:right}
+  .author-card .meta .label{font-size:14px;color:var(--muted)}
+  .author-card .meta .name{font-size:22px;font-weight:800;color:var(--navy)}
+  .ornament{
+    margin-top:34px;display:flex;align-items:center;gap:10px;color:var(--gold);font-size:24px;
+  }
+  .ornament .line{height:2px;width:80px;background:linear-gradient(90deg, transparent, var(--gold), transparent)}
+
+  /* Cards */
+  .grid{display:grid;gap:14px;margin-top:14px}
+  .grid.cols-2{grid-template-columns:1fr 1fr}
+  .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+  .card{
+    background:#fff;border-radius:16px;padding:18px 20px;
+    border:1px solid rgba(27,59,95,.10);
+    box-shadow:0 8px 22px rgba(27,59,95,.06);
+  }
+  .card .title{color:var(--navy);font-weight:800;font-size:18px;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+  .card .title .num{
+    width:28px;height:28px;border-radius:8px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;
+  }
+  .card.gold{background:linear-gradient(135deg, #FFF7E0, #FBEFC8);border-color:rgba(200,162,75,.4)}
+  .card.navy{background:linear-gradient(135deg, var(--navy), var(--navy-2));color:#fff;border:none}
+  .card.navy .title{color:var(--gold-soft)}
+  .card.navy p, .card.navy li{color:#EDE6CF}
+
+  .pill{
+    display:inline-block;padding:4px 12px;border-radius:99px;
+    background:rgba(27,59,95,.08);color:var(--navy);font-size:14px;font-weight:600;margin:2px
+  }
+  .pill.gold{background:rgba(200,162,75,.18);color:#7a5f15}
+  .pill.green{background:rgba(63,125,92,.15);color:var(--green)}
+  .pill.red{background:rgba(184,74,74,.15);color:var(--red)}
+
+  .example{
+    margin-top:10px;padding:12px 16px;border-right:4px solid var(--gold);
+    background:#FFF8E2;border-radius:10px;font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Amiri',serif;font-size:22px;color:#2a2a2a;
+  }
+  .example b{color:var(--navy)}
+
+  /* Reveal */
+  .reveal-btn{
+    background:var(--navy);color:#fff;border:none;border-radius:10px;
+    padding:8px 16px;font-family:inherit;font-weight:700;cursor:pointer;
+    font-size:14px;transition:all .2s;
+  }
+  .reveal-btn:hover{background:var(--navy-2);transform:translateY(-1px)}
+  .answer{display:none;margin-top:8px;padding:10px 14px;background:rgba(63,125,92,.10);border-radius:10px;color:var(--green);font-weight:700;font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Amiri',serif;font-size:20px}
+  .answer.show{display:block;animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+
+  /* Quiz */
+  .q-block{background:#fff;border-radius:16px;padding:18px 22px;border:1px solid rgba(27,59,95,.10);box-shadow:0 6px 18px rgba(27,59,95,.06);margin-bottom:14px}
+  .q-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:32px;height:32px;border-radius:10px;background:var(--gold);color:#fff;font-weight:800;margin-left:10px;
+  }
+  .q-stem{font-size:20px;font-weight:700;color:var(--navy);margin-bottom:12px;font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Amiri',serif}
+  .options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .opt{
+    background:#FAF6EA;border:2px solid rgba(27,59,95,.10);
+    border-radius:12px;padding:12px 16px;cursor:pointer;font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Amiri',serif;font-size:20px;
+    transition:all .2s;text-align:right;
+  }
+  .opt:hover{background:#fff;border-color:var(--gold)}
+  .opt.correct{background:rgba(63,125,92,.15);border-color:var(--green);color:var(--green);font-weight:700}
+  .opt.wrong{background:rgba(184,74,74,.10);border-color:var(--red);color:var(--red)}
+  .opt.disabled{cursor:not-allowed;opacity:.85}
+  .feedback{margin-top:10px;font-weight:700;display:none;font-size:16px}
+  .feedback.show{display:block}
+  .feedback.ok{color:var(--green)}
+  .feedback.no{color:var(--red)}
+
+  /* Input quiz */
+  .input-quiz{display:flex;align-items:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+  .input-quiz input{
+    flex:1;min-width:160px;padding:10px 14px;border-radius:10px;border:2px solid rgba(27,59,95,.15);
+    font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Amiri',serif;font-size:20px;direction:rtl;text-align:right;background:#fff;
+  }
+  .input-quiz input:focus{outline:none;border-color:var(--gold)}
+  .check-btn{
+    background:var(--gold);color:#fff;border:none;padding:10px 20px;border-radius:10px;
+    font-weight:800;cursor:pointer;font-family:inherit;font-size:15px;transition:all .2s;
+  }
+  .check-btn:hover{background:#a8852f;transform:translateY(-1px)}
+
+  /* Bottom nav */
+  .navbar{
+    position:absolute;bottom:0;left:0;right:0;height:68px;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 22px;border-top:1px solid rgba(27,59,95,.08);
+    background:linear-gradient(180deg, transparent, rgba(255,253,247,.9));
+    z-index:5;
+  }
+  .nav-btn{
+    background:var(--navy);color:#fff;border:none;border-radius:12px;
+    padding:10px 20px;font-family:inherit;font-weight:700;cursor:pointer;
+    display:flex;align-items:center;gap:8px;font-size:15px;
+    transition:all .2s;box-shadow:0 4px 12px rgba(27,59,95,.18);
+  }
+  .nav-btn:hover{background:var(--navy-2);transform:translateY(-1px)}
+  .nav-btn:disabled{background:#9aa6b3;cursor:not-allowed;transform:none}
+  .nav-btn.gold{background:var(--gold)}
+  .nav-btn.gold:hover{background:#a8852f}
+  .dots{display:flex;gap:6px}
+  .dot-nav{
+    width:9px;height:9px;border-radius:50%;background:rgba(27,59,95,.20);cursor:pointer;transition:all .25s;
+  }
+  .dot-nav.active{background:var(--navy);width:24px;border-radius:99px}
+
+  /* Score widget */
+  .score-card{
+    background:linear-gradient(135deg, var(--navy), var(--navy-2));color:#fff;
+    padding:30px;border-radius:20px;text-align:center;margin:0 auto;max-width:400px;
+  }
+  .score-card .num{font-size:64px;font-weight:900;color:var(--gold-soft);font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Amiri',serif}
+  .score-card .total{font-size:22px;color:#EDE6CF}
+  .restart-btn{
+    margin-top:18px;background:var(--gold);color:#fff;border:none;padding:12px 28px;border-radius:12px;
+    font-weight:800;cursor:pointer;font-family:inherit;font-size:16px;
+  }
+
+  /* Decorative arabesque corners */
+  .corner{position:absolute;width:120px;height:120px;opacity:.18;pointer-events:none}
+  .corner.tl{top:-20px;left:-20px;transform:rotate(45deg)}
+  .corner.br{bottom:-20px;right:-20px;transform:rotate(-135deg)}
+
+  /* Drag categorize widget */
+  .drop-zones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
+  .zone{
+    background:#fff;border:2px dashed rgba(27,59,95,.25);border-radius:12px;padding:12px;min-height:90px;
+  }
+  .zone .label{color:var(--navy);font-weight:800;text-align:center;margin-bottom:8px;font-size:15px}
+  .zone .items{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+  .word-bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;justify-content:center}
+  .word{
+    background:linear-gradient(135deg, var(--gold-soft), var(--gold));color:#fff;
+    padding:8px 16px;border-radius:99px;font-family:'SakkalSaad','Sakkal Majalla','Sakkal','Amiri',serif;font-size:18px;
+    cursor:grab;font-weight:700;box-shadow:0 4px 10px rgba(200,162,75,.4);
+    transition:all .2s;user-select:none;
+  }
+  .word:active{cursor:grabbing;transform:scale(.95)}
+  .zone.over{border-color:var(--gold);background:#FFF8E2}
+
+  @media (max-width:780px){
+    .slide{padding:22px}
+    .title-slide h1{font-size:42px}
+    .grid.cols-2,.grid.cols-3,.options,.drop-zones{grid-template-columns:1fr}
+  }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="إسنادُ الفعلِ إلى الضمائر — شرحٌ وتطبيق">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="dot"></div>
+      <span>دروس اللغة العربية — الصف العاشر</span>
+    </div>
+    <div class="progress-wrap"><div class="progress" id="progress" style="width: 9.09091%;"></div></div>
+    <div class="counter" id="counter">1 / 11</div>
+  </div>
+
+  <!-- Slides -->
+  <div class="slides" id="slides">
+
+    <!-- 1. Title -->
+    <section class="slide title-slide active">
+      <span class="badge">قواعد النحو · الصف العاشر</span>
+      <h1>إسناد الفعل إلى الضمائر</h1>
+      <div class="sub">درس تفاعلي — شرح، تطبيق، وتمارين</div>
+
+      <div class="author-card">
+        <div class="avatar">ح</div>
+        <div class="meta">
+          <div class="label">إعداد</div>
+          <div class="name">أ. حيدر المعاتيق</div>
+        </div>
+      </div>
+
+      <div class="ornament"><span class="line"></span>﷽<span class="line"></span></div>
+    </section>
+
+    <!-- 2. الأهداف -->
+    <section class="slide">
+      <h2>أهداف الدرس</h2>
+      <p class="lead">في نهاية هذا الدرس سيكون الطالب قادراً على:</p>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="title"><span class="num">١</span> التمييز</div>
+          <p>التمييز بين <b>ضمائر الرفع الساكنة</b> و<b>ضمائر الرفع المتحركة</b>.</p>
+        </div>
+        <div class="card">
+          <div class="title"><span class="num">٢</span> التطبيق</div>
+          <p>إسناد الفعل <b>الصحيح والمضعّف والمثال والأجوف والناقص</b> إلى الضمائر.</p>
+        </div>
+        <div class="card gold">
+          <div class="title"><span class="num">٣</span> التصويب</div>
+          <p>تصويب الأخطاء الشائعة في إسناد الأفعال إلى الضمائر.</p>
+        </div>
+        <div class="card navy">
+          <div class="title"><span class="num">٤</span> الإنتاج</div>
+          <p>توظيف الأفعال المسندة في جمل صحيحة من إنشاء الطالب.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. الضمائر -->
+    <section class="slide">
+      <h2>الضمائر التي يُسند إليها الفعل</h2>
+      <p class="lead">قبل الإسناد، نُذكّر بنوعَي ضمائر الرفع:</p>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="title">الضمائر <span class="pill">الساكنة</span></div>
+          <p>
+            <span class="pill gold">ألف الاثنين</span>
+            <span class="pill gold">واو الجماعة</span>
+            <span class="pill gold">ياء المخاطبة</span>
+          </p>
+          <div class="example">يكتُبَ<b>ا</b> · يكتُب<b>و</b>ن · تكتُب<b>ي</b>ن</div>
+        </div>
+        <div class="card">
+          <div class="title">الضمائر <span class="pill">المتحركة</span></div>
+          <p>
+            <span class="pill green">تاء الفاعل</span>
+            <span class="pill green">نون النسوة</span>
+            <span class="pill green">«نا» الدالة على الفاعلين</span>
+          </p>
+          <div class="example">كتب<b>تُ</b> · يكتُب<b>نَ</b> · كتب<b>نا</b></div>
+        </div>
+      </div>
+      <div class="card gold" style="margin-top:14px">
+        <div class="title">قاعدة عامة</div>
+        <p>التغيُّر الذي يطرأ على الفعل يعتمد على <b>نوع الفعل</b> (صحيح/مضعّف/مثال/أجوف/ناقص) و<b>نوع الضمير</b> (ساكن/متحرك).</p>
+      </div>
+    </section>
+
+    <!-- 4. الفعل الصحيح والمثال -->
+    <section class="slide">
+      <h2>① الفعل الصحيح والمثال</h2>
+      <div class="card">
+        <div class="title">القاعدة</div>
+        <p>إذا أُسند الفعل <b>الصحيح</b> أو <b>المثال</b> إلى الضمائر — لا يحدث في الفعل أيُّ تغيير.</p>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="title">الفعل الصحيح</div>
+          <div class="example">أَكْرَمَ → أكرَم<b>ا</b> · أكرم<b>وا</b> · أكرم<b>تُ</b></div>
+          <div class="example">يَجْلِسُ → يجلس<b>ان</b> · يأكل<b>ون</b> · اذهب<b>ا</b></div>
+        </div>
+        <div class="card">
+          <div class="title">الفعل المثال</div>
+          <div class="example">وَصَلَ → وَصَل<b>ا</b> · وصل<b>تُ</b></div>
+          <div class="example">يَصِفُ → يصف<b>ان</b> · يصف<b>ون</b> · يصف<b>نَ</b></div>
+        </div>
+      </div>
+      <div class="card navy" style="margin-top:14px">
+        <div class="title">تطبيق سريع</div>
+        <p>أسنِد الفعل «جَلَسَ» إلى واو الجماعة:</p>
+        <button class="reveal-btn" onclick="toggleAns(this)">إظهار الجواب</button>
+        <div class="answer">جَلَس<b>وا</b> — لم يحدث أي تغيير في الفعل.</div>
+      </div>
+    </section>
+
+    <!-- 5. الفعل المضعّف -->
+    <section class="slide">
+      <h2>② الفعل المضعَّف</h2>
+      <div class="card">
+        <div class="title">القاعدة</div>
+        <p>إذا أُسند الفعل المضعَّف إلى <b>ضمائر الرفع المتحركة</b> (تاء الفاعل، نون النسوة، نا) — <b>يُفكُّ تضعيفه</b>.</p>
+        <p>أمّا مع الضمائر الساكنة فيبقى التضعيف.</p>
+      </div>
+      <div class="grid cols-2">
+        <div class="card gold">
+          <div class="title">مع الضمائر المتحركة (يُفكّ)</div>
+          <div class="example">أحبَّ → أحبَب<b>تُ</b> · أحبَب<b>نَ</b> · أحبَب<b>نا</b></div>
+          <div class="example">مدَّ → مدَد<b>نَ</b> · مدَد<b>تُ</b></div>
+        </div>
+        <div class="card">
+          <div class="title">مع الضمائر الساكنة (يبقى)</div>
+          <div class="example">أحبَّ → أحبَّ<b>ا</b> · أحبُّ<b>وا</b></div>
+          <div class="example">يمدُّ → يمدُّ<b>ون</b> · يمدُّ<b>ان</b></div>
+        </div>
+      </div>
+      <div class="card navy" style="margin-top:14px">
+        <div class="title">تطبيق · صوّب الخطأ</div>
+        <p>«النساء يَمُدُّون يد الرحمة»</p>
+        <button class="reveal-btn" onclick="toggleAns(this)">إظهار الصواب</button>
+        <div class="answer">النساء يَمْدُد<b>نَ</b> يد الرحمة — لأن الفعل المضعَّف مع نون النسوة يُفكّ.</div>
+      </div>
+    </section>
+
+    <!-- 6. الفعل الأجوف -->
+    <section class="slide">
+      <h2>③ الفعل الأجوف</h2>
+      <div class="card">
+        <div class="title">القاعدة</div>
+        <p>الأجوف هو ما كانت <b>عينه</b> حرف علّة (ا/و/ي).</p>
+        <p>• مع <b>الضمائر الساكنة</b>: لا تغيير.</p>
+        <p>• مع <b>الضمائر المتحركة</b>: يُحذف حرف العلّة (الوسط).</p>
+      </div>
+      <div class="grid cols-2">
+        <div class="card">
+          <div class="title">مع الضمائر الساكنة</div>
+          <div class="example">قال → قال<b>ا</b> · قال<b>وا</b></div>
+          <div class="example">يصوم → يصوم<b>ان</b> · تصوم<b>ين</b></div>
+        </div>
+        <div class="card gold">
+          <div class="title">مع الضمائر المتحركة (حذف الوسط)</div>
+          <div class="example">قال → قُل<b>تُ</b> · قُل<b>نَ</b></div>
+          <div class="example">صام → صُم<b>نَ</b> · باع → بِع<b>نَ</b></div>
+        </div>
+      </div>
+      <div class="card navy" style="margin-top:14px">
+        <div class="title">تطبيق · حوّل إلى جمع المؤنث</div>
+        <p>«الطبيبة تصونُ الأمانة»</p>
+        <button class="reveal-btn" onclick="toggleAns(this)">إظهار الجواب</button>
+        <div class="answer">الطبيبات يَصُنَّ الأمانة. (حُذف وسطُ الفعل عند إسناده إلى نون النسوة)</div>
+      </div>
+    </section>
+
+    <!-- 7. الفعل الناقص -->
+    <section class="slide">
+      <h2>④ الفعل الناقص</h2>
+      <div class="card">
+        <div class="title">القاعدة</div>
+        <p>الناقص ما كانت <b>لامُه</b> حرف علّة (ا/ى/و/ي).</p>
+        <p>• مع <b>واو الجماعة وياء المخاطبة</b>: يُحذف حرف العلّة، ويُوضع <b>فتحة</b> قبلهما إن كان المحذوف ألفاً، و<b>ضمّة</b> إن كان واواً أو ياءً.</p>
+        <p>• مع <b>تاء الفاعل / ألف الاثنين / نون النسوة</b>: يبقى حرف العلّة (مع تحوّلات يسيرة).</p>
+      </div>
+      <div class="grid cols-2">
+        <div class="card gold">
+          <div class="title">حذف العلّة + حركة</div>
+          <div class="example">دعا → دعَ<b>وْا</b> · يخشى → يخشَ<b>وْن</b> · تخشَ<b>يْن</b></div>
+          <div class="example">يمضي → يمضُ<b>ون</b> · يدعو → يدعُ<b>ون</b></div>
+        </div>
+        <div class="card">
+          <div class="title">إبقاء العلّة</div>
+          <div class="example">دعَو<b>تُ</b> ربي · اقتَدَي<b>ا</b> بالمعلم</div>
+          <div class="example">الطالبات يَدعُو<b>نَ</b> ربَّهن</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. التطبيق التفاعلي - تصنيف -->
+    <section class="slide">
+      <h2>تطبيق تفاعلي · صنّف الأفعال</h2>
+      <p class="lead">اسحب كل فعل وضعه في خانته الصحيحة بحسب نوعه:</p>
+      <div class="word-bank" id="wordbank">
+        <div class="word" draggable="true" data-cat="sahih">كَتَبَ</div>
+        <div class="word" draggable="true" data-cat="muda">مَدَّ</div>
+        <div class="word" draggable="true" data-cat="ajwaf">قالَ</div>
+        <div class="word" draggable="true" data-cat="ajwaf">صامَ</div>
+        <div class="word" draggable="true" data-cat="naqis">دَعا</div>
+        <div class="word" draggable="true" data-cat="muda">أحبَّ</div>
+        <div class="word" draggable="true" data-cat="naqis">سَعى</div>
+        <div class="word" draggable="true" data-cat="sahih">جَلَسَ</div>
+      </div>
+      <div class="drop-zones">
+        <div class="zone" data-cat="sahih"><div class="label">صحيح / مضاعف؟</div><div class="items"></div></div>
+        <div class="zone" data-cat="ajwaf"><div class="label">أجوف</div><div class="items"></div></div>
+        <div class="zone" data-cat="naqis"><div class="label">ناقص</div><div class="items"></div></div>
+      </div>
+      <div class="drop-zones" style="margin-top:6px">
+        <div class="zone" data-cat="muda" style="grid-column:1 / 4"><div class="label">مضعَّف</div><div class="items"></div></div>
+      </div>
+      <div id="dragFeedback" class="feedback"></div>
+    </section>
+
+    <!-- 9. تمارين الاختيار من متعدد -->
+    <section class="slide" id="quizSlide">
+      <h2>تمارين · اختيار من متعدد</h2>
+      <p class="lead">اختر الإجابة الصحيحة. يتم تسجيل نقاطك تلقائياً.</p>
+
+      <div class="q-block" data-q="1" data-correct="1">
+        <div class="q-stem"><span class="q-num">١</span> «النساء يَمُدُّون يد الرحمة» — صوّب الخطأ:</div>
+        <div class="options">
+          <button class="opt" data-i="0">النساء يَمُدُّون</button>
+          <button class="opt" data-i="1">النساء يَمْدُدْنَ</button>
+          <button class="opt" data-i="2">النساء يَمدْن</button>
+          <button class="opt" data-i="3">النساء يَمَدَّن</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="2" data-correct="2">
+        <div class="q-stem"><span class="q-num">٢</span> «المعلمات يقومنَ بواجبهنّ» — صوّب الخطأ:</div>
+        <div class="options">
+          <button class="opt" data-i="0">يَقومْنَ</button>
+          <button class="opt" data-i="1">يَقُمَنَ</button>
+          <button class="opt" data-i="2">يَقُمْنَ</button>
+          <button class="opt" data-i="3">يَقَومْنَ</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="3" data-correct="0">
+        <div class="q-stem"><span class="q-num">٣</span> اجعل العبارة لجمع المؤنث: «البنت اهتمّت بواجبها»:</div>
+        <div class="options">
+          <button class="opt" data-i="0">البنات اهتممنَ بواجبهنّ</button>
+          <button class="opt" data-i="1">البنات اهتمَّن بواجبهنّ</button>
+          <button class="opt" data-i="2">البنات اهتمتْنَ بواجبهنّ</button>
+          <button class="opt" data-i="3">البنات اهتمن بواجبهنّ</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q-block" data-q="4" data-correct="3">
+        <div class="q-stem"><span class="q-num">٤</span> اجعل العبارة لجمع الذكور: «المسلم دعا ربّه وسعى في الخير»:</div>
+        <div class="options">
+          <button class="opt" data-i="0">المسلمون دعُوا وسعُوا</button>
+          <button class="opt" data-i="1">المسلمون دعَيا وسعَيا</button>
+          <button class="opt" data-i="2">المسلمون دعون وسعون</button>
+          <button class="opt" data-i="3">المسلمون دعَوْا ربَّهم وسعَوْا في الخير</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- 10. تمارين تحويل -->
+    <section class="slide">
+      <h2>تمارين · حوّل وأكمل</h2>
+      <p class="lead">اكتب الإجابة في المربع، ثم اضغط «تحقق».</p>
+
+      <div class="q-block">
+        <div class="q-stem"><span class="q-num">١</span> اجعل العبارة لجمع المؤنث: «الأم أعدّت الطعام» = الأمهات ______ الطعام.</div>
+        <div class="input-quiz">
+          <input type="text" data-answer="أعددن|أعددْن|أَعْدَدْنَ" placeholder="اكتب الإجابة هنا...">
+          <button class="check-btn" onclick="checkInput(this)">تحقق</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-stem"><span class="q-num">٢</span> اجعل العبارة لجمع المؤنث: «المرأة صامت رمضان» = النساء ______ رمضان.</div>
+        <div class="input-quiz">
+          <input type="text" data-answer="صمن|صُمْنَ|صمنَ" placeholder="اكتب الإجابة هنا...">
+          <button class="check-btn" onclick="checkInput(this)">تحقق</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-stem"><span class="q-num">٣</span> اجعل العبارة لجمع المؤنث: «الطالبة قصّت القصة» = الطالبات ______ القصة.</div>
+        <div class="input-quiz">
+          <input type="text" data-answer="قصصن|قصَصْنَ|قَصَصْنَ" placeholder="اكتب الإجابة هنا...">
+          <button class="check-btn" onclick="checkInput(this)">تحقق</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-stem"><span class="q-num">٤</span> اجعل العبارة لجمع الذكور: «المؤمن يخشى الله» = المؤمنون ______ الله.</div>
+        <div class="input-quiz">
+          <input type="text" data-answer="يخشون|يخشَون|يخشَوْن" placeholder="اكتب الإجابة هنا...">
+          <button class="check-btn" onclick="checkInput(this)">تحقق</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+
+      <div class="q-block">
+        <div class="q-stem"><span class="q-num">٥</span> اجعل العبارة لجمع المؤنث: «المرأة تعفو عن المذنب» = النساء ______ عن المذنب.</div>
+        <div class="input-quiz">
+          <input type="text" data-answer="يعفون|يعفونَ|يَعْفونَ" placeholder="اكتب الإجابة هنا...">
+          <button class="check-btn" onclick="checkInput(this)">تحقق</button>
+        </div>
+        <div class="feedback"></div>
+      </div>
+    </section>
+
+    <!-- 11. النتيجة -->
+    <section class="slide">
+      <h2>أحسنت! اكتملت الرحلة</h2>
+      <div class="score-card">
+        <div>نتيجتك في تمارين الاختيار</div>
+        <div class="num"><span id="scoreNum">0</span></div>
+        <div class="total">من <span id="scoreTotal">4</span></div>
+        <button class="restart-btn" onclick="resetAll()">أعد المحاولة</button>
+      </div>
+      <div class="card gold" style="margin-top:18px">
+        <div class="title">تذكير ختامي</div>
+        <p>أهم ما تعلّمناه: التغيُّر في الفعل عند الإسناد يعتمد على <b>نوع الفعل</b> (صحيح/مضعّف/مثال/أجوف/ناقص) و<b>نوع الضمير</b> (ساكن/متحرك). راجع الجدول واحفظ الأمثلة.</p>
+        <p style="margin-top:8px;color:var(--navy);font-weight:700">— أ. حيدر المعاتيق —</p>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Bottom nav -->
+  <div class="navbar">
+    <button class="nav-btn" id="prevBtn" onclick="go(-1)" disabled="">→ السابق</button>
+    <div class="dots" id="dots"><div class="dot-nav active"></div><div class="dot-nav"></div><div class="dot-nav"></div><div class="dot-nav"></div><div class="dot-nav"></div><div class="dot-nav"></div><div class="dot-nav"></div><div class="dot-nav"></div><div class="dot-nav"></div><div class="dot-nav"></div><div class="dot-nav"></div></div>
+    <button class="nav-btn gold" id="nextBtn" onclick="go(1)">التالي ←</button>
+  </div>
+</div>
+
+<script>
+  const slidesEl = document.getElementById('slides');
+  const slides = slidesEl.querySelectorAll('.slide');
+  const total = slides.length;
+  let idx = 0;
+  let score = 0;
+
+  const counter = document.getElementById('counter');
+  const progress = document.getElementById('progress');
+  const dotsWrap = document.getElementById('dots');
+
+  // Build dots
+  for(let i=0;i<total;i++){
+    const d = document.createElement('div');
+    d.className = 'dot-nav' + (i===0?' active':'');
+    d.onclick = ()=>show(i);
+    dotsWrap.appendChild(d);
+  }
+  const dots = dotsWrap.querySelectorAll('.dot-nav');
+
+  function show(n){
+    if(n<0||n>=total) return;
+    slides[idx].classList.remove('active');
+    dots[idx].classList.remove('active');
+    idx = n;
+    slides[idx].classList.add('active');
+    dots[idx].classList.add('active');
+    counter.textContent = (idx+1) + ' / ' + total;
+    progress.style.width = ((idx+1)/total*100) + '%';
+    document.getElementById('prevBtn').disabled = idx===0;
+    document.getElementById('nextBtn').disabled = idx===total-1;
+    // Scroll slide content to top
+    slides[idx].scrollTop = 0;
+  }
+
+  function go(delta){ show(idx+delta); }
+
+  // Init
+  show(0);
+
+  // Keyboard nav
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowLeft') go(1);   // RTL: left arrow = next
+    if(e.key==='ArrowRight') go(-1); // RTL: right arrow = prev
+  });
+
+  // Reveal answers
+  function toggleAns(btn){
+    const ans = btn.nextElementSibling;
+    ans.classList.toggle('show');
+    btn.textContent = ans.classList.contains('show') ? 'إخفاء الجواب' : 'إظهار الجواب';
+  }
+
+  // MCQ scoring
+  document.querySelectorAll('.q-block').forEach(block=>{
+    const correct = +block.dataset.correct;
+    if(isNaN(correct)) return;
+    block.querySelectorAll('.opt').forEach(opt=>{
+      opt.addEventListener('click',()=>{
+        if(block.classList.contains('answered')) return;
+        block.classList.add('answered');
+        const i = +opt.dataset.i;
+        const fb = block.querySelector('.feedback');
+        block.querySelectorAll('.opt').forEach(o=>o.classList.add('disabled'));
+        if(i===correct){
+          opt.classList.add('correct');
+          fb.textContent = '✓ إجابة صحيحة، أحسنت!';
+          fb.className = 'feedback show ok';
+          score++;
+          updateScore();
+        }else{
+          opt.classList.add('wrong');
+          block.querySelectorAll('.opt')[correct].classList.add('correct');
+          fb.textContent = '✗ الإجابة الصحيحة معروضة بالأخضر.';
+          fb.className = 'feedback show no';
+        }
+      });
+    });
+  });
+
+  function updateScore(){
+    const sn = document.getElementById('scoreNum');
+    if(sn) sn.textContent = score;
+  }
+
+  // Input quiz
+  function normalize(s){
+    return s.replace(/[ً-ْٰ]/g,'') // remove tashkeel
+            .replace(/[إأآا]/g,'ا')
+            .replace(/ى/g,'ي')
+            .replace(/ة/g,'ه')
+            .replace(/\s+/g,'')
+            .trim();
+  }
+  function checkInput(btn){
+    const wrap = btn.parentElement;
+    const block = wrap.parentElement;
+    const inp = wrap.querySelector('input');
+    const fb = block.querySelector('.feedback');
+    const answers = inp.dataset.answer.split('|').map(normalize);
+    const user = normalize(inp.value);
+    if(!user){
+      fb.textContent = 'الرجاء كتابة الإجابة أولاً.';
+      fb.className = 'feedback show no';
+      return;
+    }
+    if(answers.includes(user)){
+      fb.innerHTML = '✓ ممتاز! إجابة صحيحة. (' + inp.dataset.answer.split('|')[0] + ')';
+      fb.className = 'feedback show ok';
+      inp.style.borderColor = 'var(--green)';
+      inp.style.background = 'rgba(63,125,92,.08)';
+    }else{
+      fb.innerHTML = '✗ حاول مرة أخرى. الإجابة الصحيحة: <b>' + inp.dataset.answer.split('|')[0] + '</b>';
+      fb.className = 'feedback show no';
+      inp.style.borderColor = 'var(--red)';
+    }
+  }
+
+  // Drag and drop categorize
+  let dragged = null;
+  document.querySelectorAll('.word').forEach(w=>{
+    w.addEventListener('dragstart', e=>{ dragged = w; w.style.opacity='.4';});
+    w.addEventListener('dragend', e=>{ w.style.opacity='1'; checkDrag();});
+  });
+  document.querySelectorAll('.zone').forEach(z=>{
+    z.addEventListener('dragover', e=>{ e.preventDefault(); z.classList.add('over'); });
+    z.addEventListener('dragleave', e=>{ z.classList.remove('over'); });
+    z.addEventListener('drop', e=>{
+      e.preventDefault();
+      z.classList.remove('over');
+      if(dragged) z.querySelector('.items').appendChild(dragged);
+    });
+  });
+  function checkDrag(){
+    const fb = document.getElementById('dragFeedback');
+    const allWords = document.querySelectorAll('.word');
+    let placed = 0, correct = 0;
+    document.querySelectorAll('.zone').forEach(z=>{
+      const cat = z.dataset.cat;
+      z.querySelectorAll('.word').forEach(w=>{
+        placed++;
+        if(w.dataset.cat === cat){ correct++; w.style.background='linear-gradient(135deg,#5dbd86,#3F7D5C)'; }
+        else { w.style.background='linear-gradient(135deg,#e08585,#B84A4A)'; }
+      });
+    });
+    if(placed === allWords.length){
+      fb.textContent = correct === allWords.length
+        ? '✓ ممتاز! صنّفت جميع الأفعال تصنيفاً صحيحاً.'
+        : `صنّفت ${correct} من ${allWords.length} تصنيفاً صحيحاً. حاول إعادة ترتيب الخاطئ.`;
+      fb.className = 'feedback show ' + (correct===allWords.length?'ok':'no');
+    }
+  }
+
+  // Reset
+  function resetAll(){
+    score = 0;
+    updateScore();
+    document.querySelectorAll('.q-block').forEach(b=>{
+      b.classList.remove('answered');
+      b.querySelectorAll('.opt').forEach(o=>{ o.className='opt'; });
+      const fb = b.querySelector('.feedback'); if(fb){ fb.className='feedback'; fb.textContent=''; }
+      b.querySelectorAll('input').forEach(i=>{ i.value=''; i.style.borderColor=''; i.style.background='';});
+    });
+    document.querySelectorAll('.answer').forEach(a=>a.classList.remove('show'));
+    document.querySelectorAll('.reveal-btn').forEach(b=>b.textContent='إظهار الجواب');
+    show(0);
+  }
+</script>
+
+
+</body></html>

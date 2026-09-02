@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المحرّرُ المرئي — لوحةُ التحكّم</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0A3428">
+<meta name="hv-nav" content="off">
+<link rel="icon" href="https://haydarvsky.github.io/img/logo-cream.svg">
+<link rel="stylesheet" href="css/hub.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a href="./" title="مركزُ التحكّم"><img class="mark" src="https://haydarvsky.github.io/img/logo-cream.svg" alt="شعار حيدر"></a>
+    <h1>المحرّرُ المرئي</h1>
+    <span class="who" id="who"></span>
+    <span class="dirty" id="dirty" hidden>تغييراتٌ لم تُنشَر</span>
+    <a class="btn btn-ghost" href="./">
+      مركزُ التحكّم
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l6 6-6 6"/></svg>
+    </a>
+    <button class="btn btn-gold" id="save" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L19 7"/></svg>
+      حفظٌ ونشر
+    </button>
+  </div>
+</header>
+
+<div class="ed">
+  <div class="ed-bar">
+    <span class="path" id="path">—</span>
+    <input class="ttl" id="ttl" type="text" placeholder="عنوانُ الصفحة (title)" aria-label="عنوان الصفحة">
+    <button class="btn btn-line" id="undo" title="تراجع (Ctrl+Z)"><svg viewBox="0 0 24 24"><path d="M9 14l-4-4 4-4"/><path d="M5 10h9a5 5 0 0 1 0 10h-3"/></svg> تراجع</button>
+    <button class="btn btn-line" id="redo" title="إعادة (Ctrl+Y)"><svg viewBox="0 0 24 24"><path d="M15 14l4-4-4-4"/><path d="M19 10h-9a5 5 0 0 0 0 10h3"/></svg> إعادة</button>
+    <button class="btn btn-line" id="bold" title="غامق (Ctrl+B)"><b>غ</b> غامق</button>
+    <button class="btn btn-line" id="clear" title="إزالةُ التنسيق">تنظيف</button>
+    <span class="sp"></span>
+    <label class="tog"><input type="checkbox" id="scripts"> تشغيلُ سكربتاتِ الصفحة</label>
+    <button class="btn btn-line" id="reload">إعادةُ تحميلٍ من المستودع</button>
+    <a class="btn btn-line" id="live" href="#" target="_blank" rel="noopener">الصفحةُ الحيّة <svg viewBox="0 0 24 24"><path d="M14 5h5v5M19 5l-8 8M18 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></svg></a>
+  </div>
+  <div class="ed-frame">
+    <iframe id="frame" title="محتوى الصفحة"></iframe>
+    <div class="veil" id="veil">جارٍ جلبُ الصفحة…<small id="veilsub">من المستودع مباشرةً كي تُحرِّرَ أحدثَ نسخة</small></div>
+  </div>
+  <div class="ed-note">انقرْ أيَّ نصٍّ في الصفحةِ واكتبْ مكانَه. الروابطُ لا تُفتَحُ أثناءَ التحرير. <span class="kbd">Ctrl+S</span> للحفظ. الحذفُ الواسعُ يُصلَحُ بـ«تراجع» أو بإعادةِ التحميل، وكلُّ نشرٍ محفوظٌ في تاريخِ جِتهَب.</div>
+</div>
+
+<div class="status" id="status" role="status" aria-live="polite"></div>
+
+<script src="js/gh-api.js"></script>
+<script src="js/editor.js"></script>
+</body>
+</html>

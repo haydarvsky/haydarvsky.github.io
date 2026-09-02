@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>القائمة المنسدلة — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input, .tp-textarea { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; resize: vertical; }
+.tp-input:focus, .tp-textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-textarea { min-height: 80px; }
+.tp-item-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 14px; margin-bottom: 12px; }
+.tp-item-input .tp-label { font-size: 0.85rem; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.tp-item-num { background: var(--amber); color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 700; }
+.tp-remove { background: rgba(220,38,38,0.4); color: white; border: none; padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.78rem; margin-right: auto; }
+.tp-remove:hover { background: rgba(220,38,38,0.7); }
+.tp-add-btn { background: rgba(255,255,255,0.1); border: 2px dashed rgba(255,255,255,0.3); color: var(--bg-cream); padding: 12px; border-radius: 10px; cursor: pointer; font-family: 'Tajawal', sans-serif; width: 100%; font-size: 0.95rem; }
+.tp-add-btn:hover { background: rgba(255,255,255,0.18); border-color: var(--amber-soft); }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+.accordion { display: flex; flex-direction: column; gap: 10px; max-width: 800px; margin: 0 auto; }
+.accordion-item { background: var(--bg-cream); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; transition: all 0.3s; }
+.accordion-item.open { border-color: var(--amber); box-shadow: 0 4px 14px rgba(217, 119, 6, 0.15); }
+.accordion-header { width: 100%; background: none; border: none; padding: 18px 22px; text-align: right; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-size: 1.05rem; font-weight: 500; color: var(--emerald-deep); display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+.accordion-header:hover { background: rgba(217, 119, 6, 0.04); }
+.accordion-icon { width: 32px; height: 32px; background: var(--emerald-deep); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; transition: all 0.3s; flex-shrink: 0; }
+.accordion-item.open .accordion-icon { background: var(--amber); transform: rotate(45deg); }
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; }
+.accordion-item.open .accordion-content { max-height: 500px; }
+.accordion-content-inner { padding: 0 22px 22px; color: var(--ink); line-height: 1.8; border-top: 1px dashed var(--line); padding-top: 16px; margin-top: -1px; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 600px) { .tp-header { flex-direction: column; align-items: flex-start; } .preview-title { font-size: 1.5rem; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="القائمة المنسدلة">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — القائمةُ المنسدلة</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>القائمةُ المنسدلةُ مثاليَّةٌ للأسئلةِ المتسلسلة.</strong> اكتبِ السؤالَ والإجابةَ في كلِّ بطاقة. عند فتحِ الموقعِ ينقرُ الطالبُ على السؤالِ فيظهرُ الجوابُ بحركةٍ سلسة.
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="أسئلةٌ وإجابات" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="انقر على أيِّ سؤالٍ ليظهرَ جوابُه" oninput="updatePreview()">
+        </div>
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">الأسئلةُ والأجوبة</label>
+          <div id="items-container"></div>
+          <button class="tp-add-btn" onclick="addItem()">+ إضافةُ سؤالٍ جديد</button>
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادة</button>
+      </div>
+    </div>
+  </div>
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">أسئلةٌ وإجابات</h1>
+      <p class="preview-subtitle" id="preview-subtitle">انقر على أيِّ سؤالٍ ليظهرَ جوابُه</p>
+    </div>
+    <div class="accordion" id="accordion-container"></div>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+<script>
+const defaultItems = [
+  { q: 'ما هو الانقسامُ الخلويُّ؟', a: 'عمليَّةٌ تَنْقَسِمُ فيها الخليَّةُ الواحدةُ إلى خليَّتينِ متطابقتين. تحدثُ في كلِّ مكانٍ من جسمِك الآن: في جلدِك، وفي شعرِك، وفي الجروحِ التي تلتئم.' },
+  { q: 'كم نوعًا للانقسامِ الخلويِّ؟', a: 'نوعانِ رئيسيَّانِ: الانقسامُ المتساوي للنموِّ والإصلاح، والانقسامُ المنصِّفُ لإنتاجِ الخلايا التناسليَّة.' },
+  { q: 'ماذا يحدثُ إذا اختلَّ الانقسام؟', a: 'إذا زادَ بشكلٍ عشوائيٍّ نتجَ السرطان، وإذا نقصَ بطُؤ التئامُ الجروحِ. والتوازنُ هو سرُّ الحياة.' }
+];
+let items = JSON.parse(JSON.stringify(defaultItems));
+
+function renderEditor() {
+  const container = document.getElementById('items-container');
+  container.innerHTML = '';
+  items.forEach((item, idx) => {
+    const div = document.createElement('div');
+    div.className = 'tp-item-input';
+    div.innerHTML = `
+      <label class="tp-label">
+        <span class="tp-item-num">${idx + 1}</span><span>السؤال ${idx + 1}</span>
+        ${items.length > 1 ? `<button class="tp-remove" onclick="removeItem(${idx})">حذف</button>` : ''}
+      </label>
+      <input type="text" class="tp-input" placeholder="السؤال" value="${escapeAttr(item.q)}" oninput="updateItem(${idx}, 'q', this.value)" style="margin-bottom:8px;">
+      <textarea class="tp-textarea" placeholder="الإجابة" oninput="updateItem(${idx}, 'a', this.value)">${escapeHTML(item.a)}</textarea>
+    `;
+    container.appendChild(div);
+  });
+}
+function updateItem(idx, key, value) { items[idx][key] = value; updatePreview(); }
+function removeItem(idx) { items.splice(idx, 1); renderEditor(); updatePreview(); }
+function addItem() { items.push({ q: 'سؤال جديد', a: 'الإجابة هنا' }); renderEditor(); updatePreview(); }
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'أسئلةٌ وإجابات';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'أسئلة') + ' — موقع تعليمي';
+  const container = document.getElementById('accordion-container');
+  container.innerHTML = '';
+  items.forEach(item => {
+    if (!item.q && !item.a) return;
+    const div = document.createElement('div');
+    div.className = 'accordion-item';
+    div.innerHTML = `
+      <button class="accordion-header" onclick="this.parentElement.classList.toggle('open')">
+        <span>${escapeHTML(item.q)}</span><span class="accordion-icon">+</span>
+      </button>
+      <div class="accordion-content"><div class="accordion-content-inner">${escapeHTML(item.a)}</div></div>
+    `;
+    container.appendChild(div);
+  });
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'أسئلة وإجابات';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  let itemsHTML = '';
+  items.forEach(item => {
+    if (!item.q && !item.a) return;
+    itemsHTML += `<div class="accordion-item"><button class="accordion-header" onclick="this.parentElement.classList.toggle('open')"><span>${escapeHTML(item.q)}</span><span class="accordion-icon">+</span></button><div class="accordion-content"><div class="accordion-content-inner">${escapeHTML(item.a)}</div></div></div>`;
+  });
+  const sig = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+  const finalHTML = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHTML(title)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"><style>:root{--emerald-deep:#0F4C3A;--emerald:#1a6b54;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.accordion{display:flex;flex-direction:column;gap:10px;max-width:800px;margin:0 auto}.accordion-item{background:var(--bg-cream);border:1px solid var(--line);border-radius:12px;overflow:hidden;transition:all 0.3s}.accordion-item.open{border-color:var(--amber);box-shadow:0 4px 14px rgba(217,119,6,0.15)}.accordion-header{width:100%;background:none;border:none;padding:18px 22px;text-align:right;cursor:pointer;font-family:'Reem Kufi',sans-serif;font-size:1.05rem;font-weight:500;color:var(--emerald-deep);display:flex;justify-content:space-between;align-items:center;gap:14px}.accordion-header:hover{background:rgba(217,119,6,0.04)}.accordion-icon{width:32px;height:32px;background:var(--emerald-deep);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.3rem;transition:all 0.3s;flex-shrink:0}.accordion-item.open .accordion-icon{background:var(--amber);transform:rotate(45deg)}.accordion-content{max-height:0;overflow:hidden;transition:max-height 0.4s ease}.accordion-item.open .accordion-content{max-height:500px}.accordion-content-inner{padding:0 22px 22px;color:var(--ink);line-height:1.8;border-top:1px dashed var(--line);padding-top:16px;margin-top:-1px}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.preview-title{font-size:1.5rem}}</style></head><body><div class="page"><div class="preview-wrap"><div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div><div class="accordion">${itemsHTML}</div>${sig}</div></div></body></html>`;
+  downloadHTML(finalHTML, title);
+}
+function downloadHTML(html, title) {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'موقع').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s) { return String(s || '').replace(/"/g, '&quot;'); }
+function resetForm() { if (confirm('إعادةُ كلِّ القيمِ إلى الافتراضي؟')) location.reload(); }
+renderEditor();
+updatePreview();
+</script>
+</body>
+</html>

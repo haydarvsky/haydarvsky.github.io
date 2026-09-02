@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>الفعل الصحيح والفعل المعتل · إعداد أ. حيدر المعاتيق</title>
+
+<style>
+  /* ===== SakkalSaad font family ===== */
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-100.woff2') format('woff2'); font-weight:100; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-300.woff2') format('woff2'); font-weight:300; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-700.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-800.woff2') format('woff2'); font-weight:800; font-display:swap; }
+
+  :root{
+    --ink:        #1A1F2E;
+    --ink-soft:   #4A5165;
+    --paper:      #F6EFE2;
+    --paper-2:    #FBF6EC;
+    --paper-3:    #FFFFFF;
+    --accent:     #0E6F5C;
+    --accent-2:   #0A4F42;
+    --gold:       #C89B4A;
+    --gold-soft:  #E8C886;
+    --rose:       #B43E50;
+    --rose-2:     #8A2C3C;
+    --leaf:       #2B7A57;
+    --line:       #E2D8C2;
+    --shadow:     0 18px 60px -22px rgba(26,31,46,.45);
+    --font:         "SakkalSaad", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-display: "SakkalSaad", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; overflow-x:hidden;}
+  body{
+    font-family: var(--font);
+    color: var(--ink);
+    font-weight: 400;
+    background:
+      radial-gradient(1200px 600px at 90% -10%, rgba(200,155,74,.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(14,111,92,.14), transparent 60%),
+      var(--paper);
+    line-height: 1.7;
+    min-height: 100%;
+    font-size: 18px;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position: fixed; top: 0; right: 0; left: 0; height: 64px;
+    background: rgba(251,246,236,.9);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 0 26px; z-index: 50;
+  }
+  .topbar .brand{ font-family: var(--font-display); font-size: 19px; color: var(--accent); font-weight: 700; }
+  .topbar .brand span{ color: var(--gold); }
+  .topbar .slide-info{ font-size: 16px; color: var(--ink-soft); }
+  .topbar .slide-info b{ color: var(--accent); font-size: 18px; font-weight: 700; }
+  .progress-line{ position: fixed; top: 64px; right: 0; left: 0; height: 4px; background: rgba(14,111,92,.1); z-index: 50; }
+  .progress-line > span{ display:block; height: 100%; background: linear-gradient(90deg, var(--gold-soft), var(--gold), var(--accent)); width: 0; transition: width .5s cubic-bezier(.2,.8,.2,1); }
+
+  /* ===== Stage ===== */
+  .stage{ padding-top: 90px; padding-bottom: 110px; min-height: 100vh; }
+  .slide{ display: none; max-width: 1200px; margin: 0 auto; padding: clamp(24px, 3vw, 48px); }
+  .slide.active{ display: block; animation: slideIn .55s cubic-bezier(.2,.8,.2,1); }
+  @keyframes slideIn{ from{ opacity: 0; transform: translateY(20px); } to{ opacity: 1; transform: translateY(0); } }
+  .slide.active > *{ animation: fadeUp .6s cubic-bezier(.2,.8,.2,1) both; }
+  .slide.active > *:nth-child(1){ animation-delay: .05s; }
+  .slide.active > *:nth-child(2){ animation-delay: .15s; }
+  .slide.active > *:nth-child(3){ animation-delay: .28s; }
+  .slide.active > *:nth-child(4){ animation-delay: .42s; }
+  .slide.active > *:nth-child(5){ animation-delay: .55s; }
+  @keyframes fadeUp{ from{ opacity: 0; transform: translateY(14px); } to{ opacity: 1; transform: translateY(0); } }
+
+  /* ===== TITLE SLIDE ===== */
+  .title-slide{
+    min-height: calc(100vh - 90px); display:none;
+    flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 50px 24px;
+  }
+  .title-slide.active{ display: flex; }
+  .title-ornament{ width: 150px; height: 150px; opacity: .85; margin-bottom: 30px; animation: spin 32s linear infinite; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+  .title-eyebrow{
+    font-family: var(--font-display); font-size: 16px; letter-spacing: 7px; font-weight: 500;
+    color: var(--gold); border-top: 1px solid var(--gold); border-bottom: 1px solid var(--gold);
+    padding: 9px 22px; margin-bottom: 40px;
+  }
+  .title-main{
+    font-family: var(--font-display); font-size: clamp(44px, 7vw, 88px);
+    color: var(--ink); line-height: 1.1; font-weight: 800;
+    letter-spacing: -1px; max-width: 900px;
+  }
+  .title-main .em{ color: var(--accent); position: relative; }
+  .title-main .em::after{
+    content:""; position: absolute; right: 0; left: 0; bottom: -.05em;
+    height: .12em; background: linear-gradient(90deg, transparent, var(--gold), transparent); border-radius: 8px;
+  }
+  .title-divider{ width: 320px; max-width: 80%; margin: 42px auto 28px; display:flex; align-items:center; gap: 16px; }
+  .title-divider .l, .title-divider .r{ flex: 1; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+  .title-divider .dot{ width: 12px; height: 12px; background: var(--gold); transform: rotate(45deg); }
+  .title-author{ font-family: var(--font-display); font-size: clamp(20px, 2.2vw, 26px); color: var(--ink-soft); font-weight: 300; }
+  .title-author b{ color: var(--accent); font-weight: 700; }
+  .title-cta{
+    margin-top: 60px; background: var(--accent); color: var(--paper-2);
+    border: none; padding: 16px 42px; border-radius: 14px;
+    font-family: var(--font); font-size: 19px; font-weight: 700; cursor: pointer;
+    box-shadow: 0 14px 36px -14px var(--accent); transition: all .3s ease; letter-spacing: 1px;
+  }
+  .title-cta:hover{ background: var(--accent-2); transform: translateY(-3px); }
+  .title-cta::after{ content: " ←"; }
+
+  /* ===== Slide layout ===== */
+  .slide-num{ display: inline-block; font-size: 15px; color: var(--gold); letter-spacing: 4px; font-weight: 700; margin-bottom: 12px; }
+  .slide-title{ font-family: var(--font-display); font-size: clamp(32px, 4.5vw, 52px); color: var(--accent); margin-bottom: 32px; line-height: 1.15; font-weight: 800; }
+
+  /* ===== Idea ===== */
+  .idea{
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: var(--paper-2); border-radius: 26px; padding: clamp(28px, 3.5vw, 48px);
+    box-shadow: var(--shadow); position: relative; overflow: hidden; margin-bottom: 32px;
+  }
+  .idea::before{
+    content:""; position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(232,200,134,.15) 1px, transparent 0);
+    background-size: 24px 24px; opacity: .5; pointer-events: none;
+  }
+  .idea .label{
+    font-family: var(--font-display); font-size: 15px; color: var(--gold-soft); letter-spacing: 4px;
+    border: 1px solid rgba(232,200,134,.4); padding: 6px 16px; border-radius: 999px;
+    display:inline-block; margin-bottom: 20px; font-weight: 500;
+  }
+  .idea .text{ font-family: var(--font-display); font-size: clamp(22px, 3vw, 34px); line-height: 1.5; font-weight: 700; position: relative; }
+  .idea .text .hl{ color: var(--gold-soft); font-weight: 800; }
+
+  /* ===== Expand ===== */
+  .expand{
+    background: var(--paper-2); border: 1px solid var(--line); border-radius: 24px;
+    padding: clamp(28px, 3.5vw, 42px); margin-bottom: 32px; box-shadow: var(--shadow);
+  }
+  .expand .label{
+    display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-display);
+    font-size: 16px; color: var(--gold); background: rgba(200,155,74,.12); border: 1px solid rgba(200,155,74,.3);
+    padding: 7px 16px; border-radius: 999px; margin-bottom: 20px; font-weight: 700;
+  }
+  .expand h3{ font-family: var(--font-display); font-size: 24px; color: var(--accent); margin: 16px 0 12px; font-weight: 800; }
+  .expand p{ color: var(--ink); font-size: 19px; line-height: 1.75; }
+  .expand ul{ margin: 14px 0; padding-right: 24px; }
+  .expand ul li{ margin: 8px 0; font-size: 19px; line-height: 1.75; }
+
+  .pill-row{ display:flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+  .pill{
+    background: rgba(14,111,92,.08); color: var(--accent-2); border: 1.5px solid rgba(14,111,92,.2);
+    padding: 7px 18px; border-radius: 999px; font-weight: 700; font-size: 22px; font-family: var(--font-display);
+  }
+  .pill.weak{ background: rgba(180,62,80,.08); color: var(--rose); border-color: rgba(180,62,80,.22); }
+  .pill.gold{ background: rgba(200,155,74,.12); color: var(--gold); border-color: rgba(200,155,74,.3); }
+
+  /* ===== Letter showcase (slide 2) ===== */
+  .letter-show{
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin: 22px 0 8px;
+  }
+  @media (max-width: 700px){ .letter-show{ grid-template-columns: 1fr; } }
+  .let-card{
+    background: linear-gradient(180deg, white 0%, var(--paper-2) 100%);
+    border: 2px solid var(--line); border-radius: 22px; padding: 22px; text-align: center;
+    cursor: pointer; transition: all .3s ease; position: relative; overflow: hidden;
+  }
+  .let-card::before{
+    content:""; position: absolute; top: 0; right: 0; width: 6px; height: 100%;
+    background: var(--gold); transform: scaleY(0); transform-origin: top; transition: transform .35s ease;
+  }
+  .let-card:hover{ transform: translateY(-6px); box-shadow: 0 20px 40px -20px rgba(200,155,74,.4); border-color: var(--gold); }
+  .let-card:hover::before{ transform: scaleY(1); }
+  .let-big{
+    font-family: var(--font-display); font-size: 80px; font-weight: 800; color: var(--accent);
+    line-height: 1; margin-bottom: 8px; transition: color .3s ease;
+  }
+  .let-card:hover .let-big{ color: var(--gold); }
+  .let-name{ font-family: var(--font-display); font-size: 21px; font-weight: 700; color: var(--ink-soft); margin-bottom: 4px; }
+  .let-ex{ font-size: 16px; color: var(--ink-soft); border-top: 1px dashed var(--line); padding-top: 8px; margin-top: 8px; }
+
+  /* ===== FLIP CARDS ===== */
+  .flip-grid{
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px; margin-top: 22px;
+  }
+  .flip-card{ position: relative; height: 340px; cursor: pointer; }
+  .flip-inner{
+    position: relative; width: 100%; height: 100%;
+  }
+  .flip-face{
+    position: absolute; inset: 0;
+    border-radius: 24px; padding: 26px;
+    display: flex; flex-direction: column;
+    border: 2px solid var(--line);
+    box-shadow: 0 12px 30px -16px rgba(26,31,46,.25);
+    overflow: hidden;
+    transition: opacity .45s ease, transform .55s cubic-bezier(.2,.8,.2,1);
+  }
+  .flip-front{
+    background: linear-gradient(180deg, white 0%, var(--paper-2) 100%);
+    text-align: center; justify-content: center; align-items: center;
+    gap: 10px;
+    opacity: 1; transform: scale(1); z-index: 2;
+  }
+  .flip-front::before{
+    content:""; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(14,111,92,.08), transparent 70%),
+                radial-gradient(circle at 50% 100%, rgba(200,155,74,.08), transparent 70%);
+    pointer-events: none;
+  }
+  .flip-card.weak .flip-front::before{
+    background: radial-gradient(circle at 50% 0%, rgba(180,62,80,.08), transparent 70%),
+                radial-gradient(circle at 50% 100%, rgba(200,155,74,.08), transparent 70%);
+  }
+  .face-num{ font-size: 14px; letter-spacing: 4px; color: var(--gold); font-weight: 700; z-index: 1; }
+  .face-name{ font-family: var(--font-display); font-size: 42px; font-weight: 800; color: var(--accent); z-index: 1; line-height: 1; }
+  .flip-card.weak .face-name{ color: var(--rose); }
+  .face-tag{
+    display: inline-block; background: var(--accent); color: var(--paper-2);
+    padding: 6px 16px; border-radius: 999px; font-size: 15px; font-weight: 700; z-index: 1;
+  }
+  .flip-card.weak .face-tag{ background: var(--rose); }
+  .face-hint{
+    background: rgba(0,0,0,.04); border: 1px dashed var(--line);
+    padding: 6px 14px; border-radius: 999px; font-size: 13px; color: var(--ink-soft);
+    z-index: 1; display: inline-flex; align-items: center; gap: 6px;
+  }
+  .flip-back{
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    color: var(--paper-2); text-align: right; border-color: var(--accent);
+    justify-content: flex-start; gap: 14px;
+    opacity: 0; transform: scale(.94); pointer-events: none; z-index: 1;
+  }
+  .flip-card.flipped .flip-front{
+    opacity: 0; transform: scale(1.04); pointer-events: none; z-index: 1;
+  }
+  .flip-card.flipped .flip-back{
+    opacity: 1; transform: scale(1); pointer-events: auto; z-index: 2;
+  }
+  .flip-card.weak .flip-back{ background: linear-gradient(135deg, var(--rose), var(--rose-2)); border-color: var(--rose); }
+  .flip-back::before{
+    content:""; position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(232,200,134,.15) 1px, transparent 0);
+    background-size: 18px 18px; opacity: .4; pointer-events: none;
+  }
+  .back-name{
+    font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--gold-soft);
+    border-bottom: 1px solid rgba(232,200,134,.3); padding-bottom: 10px;
+    z-index: 1; position: relative;
+  }
+  .back-def{ font-size: 17px; line-height: 1.55; z-index: 1; position: relative; }
+  .back-ex{ display: flex; gap: 8px; flex-wrap: wrap; z-index: 1; position: relative; }
+  .back-ex span{
+    background: rgba(255,255,255,.18); border: 1px solid rgba(232,200,134,.35);
+    color: var(--gold-soft); padding: 4px 12px; border-radius: 999px;
+    font-family: var(--font-display); font-weight: 700; font-size: 18px;
+  }
+
+  /* ===== Verb Analyzer ===== */
+  .analyzer{
+    background: var(--paper); border: 2px solid var(--line); border-radius: 22px;
+    padding: clamp(20px, 2.5vw, 30px); margin-top: 26px;
+  }
+  .analyzer .hd{ display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .analyzer .hd .badge{ background: var(--gold); color: var(--ink); padding: 4px 12px; border-radius: 999px; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
+  .analyzer .hd h4{ font-family: var(--font-display); font-size: 22px; color: var(--accent); font-weight: 800; }
+  .analyzer .hint{ color: var(--ink-soft); margin-bottom: 16px; font-size: 17px; }
+  .ana-pool{ display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .ana-btn{
+    background: white; border: 2px solid var(--line); padding: 10px 20px; border-radius: 12px;
+    font-family: var(--font-display); font-size: 26px; font-weight: 700; color: var(--ink);
+    cursor: pointer; transition: all .25s ease;
+  }
+  .ana-btn:hover{ border-color: var(--gold); transform: translateY(-2px); box-shadow: 0 10px 22px -10px var(--gold); }
+  .ana-btn.active{ background: var(--accent); color: var(--paper-2); border-color: var(--accent); box-shadow: 0 8px 20px -10px var(--accent); }
+  .ana-display{
+    background: white; border: 2px dashed var(--line); border-radius: 18px;
+    padding: 26px 22px; min-height: 180px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+  }
+  .ana-empty{ color: var(--ink-soft); font-size: 19px; }
+  .ana-empty .ic{ font-size: 28px; margin-bottom: 6px; }
+  .ana-original{
+    font-family: var(--font-display); font-size: clamp(40px, 5vw, 60px);
+    font-weight: 800; color: var(--accent); margin-bottom: 12px;
+    animation: fadeUp .4s ease; line-height: 1;
+  }
+  .ana-original.weak-original{ color: var(--rose); }
+  .ana-arrow{ font-size: 16px; color: var(--gold); margin: 4px 0 16px; font-weight: 700; animation: fadeUp .4s ease .12s both; letter-spacing: 2px; }
+  .ana-letters{ display: flex; justify-content: center; gap: 12px; margin-bottom: 28px; }
+  .ana-letter{
+    width: 74px; height: 74px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(43,122,87,.08); border: 2.5px solid var(--leaf); color: var(--leaf);
+    border-radius: 14px; font-family: var(--font-display); font-size: 42px; font-weight: 800;
+    animation: fadeUp .4s ease both; position: relative;
+  }
+  .ana-letter.weak{ background: rgba(180,62,80,.08); border-color: var(--rose); color: var(--rose); }
+  .ana-letter.weak::after{
+    content: "علّة"; position: absolute; bottom: -26px; left: 50%; transform: translateX(-50%);
+    font-size: 12px; background: var(--rose); color: white; padding: 2px 9px; border-radius: 6px;
+    white-space: nowrap; font-weight: 700;
+  }
+  .ana-letter:nth-child(1){ animation-delay: .15s; }
+  .ana-letter:nth-child(2){ animation-delay: .30s; }
+  .ana-letter:nth-child(3){ animation-delay: .45s; }
+  .ana-letter:nth-child(4){ animation-delay: .60s; }
+  .ana-verdict{
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 10px 24px; border-radius: 999px;
+    font-family: var(--font-display); font-size: 21px; font-weight: 800;
+    animation: fadeUp .4s ease .65s both;
+  }
+  .ana-verdict.sound{ background: rgba(43,122,87,.12); color: var(--leaf); border: 2px solid var(--leaf); }
+  .ana-verdict.weak{ background: rgba(180,62,80,.12); color: var(--rose); border: 2px solid var(--rose); }
+  .ana-note{ margin-top: 14px; font-size: 17px; color: var(--ink-soft); animation: fadeUp .4s ease .75s both; }
+
+  /* ===== Practice ===== */
+  .practice{
+    background: var(--paper-3); border: 2px dashed var(--gold); border-radius: 24px;
+    padding: clamp(26px, 3.5vw, 40px); box-shadow: var(--shadow);
+  }
+  .practice .label{
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-display); font-size: 15px; color: var(--paper-2);
+    background: var(--gold); padding: 7px 18px; border-radius: 999px;
+    margin-bottom: 16px; font-weight: 700;
+  }
+  .practice h3{ font-family: var(--font-display); font-size: 24px; color: var(--ink); margin-bottom: 14px; font-weight: 800; }
+  .practice .hint{ color: var(--ink-soft); font-size: 18px; margin-bottom: 18px; }
+
+  .letter-row{
+    display:flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+    padding: 16px; background: var(--paper); border-radius: 16px;
+  }
+  .letter-chip{
+    width: 76px; height: 76px;
+    display: inline-flex; align-items:center; justify-content:center;
+    background: white; border: 2px solid var(--line); border-radius: 16px;
+    font-family: var(--font-display); font-size: 42px; font-weight: 800;
+    cursor: pointer; color: var(--ink); transition: all .25s ease; user-select: none; line-height: 1;
+  }
+  .letter-chip:hover{ transform: translateY(-4px); border-color: var(--gold); box-shadow: 0 10px 22px -10px var(--gold); }
+  .letter-chip.correct{ background: rgba(43,122,87,.1); border-color: var(--leaf); color: var(--leaf); }
+  .letter-chip.wrong  { background: rgba(180,62,80,.1); border-color: var(--rose); color: var(--rose); animation: shake .35s; }
+  .letter-chip.locked{ pointer-events: none; }
+  @keyframes shake{ 0%,100%{ transform: translateX(0); } 25%{ transform: translateX(-6px); } 75%{ transform: translateX(6px); } }
+
+  .verb-pool{
+    display:flex; flex-wrap: wrap; gap: 12px;
+    padding: 16px; background: var(--paper); border-radius: 16px; border: 1px dashed var(--line);
+  }
+  .verb-chip{
+    background: white; border: 2px solid var(--line); color: var(--ink);
+    padding: 10px 22px; border-radius: 999px;
+    font-family: var(--font-display); font-size: 26px; font-weight: 700;
+    cursor: pointer; transition: all .25s ease; user-select: none;
+  }
+  .verb-chip:hover{ transform: translateY(-3px); border-color: var(--gold); }
+  .verb-chip.correct{ border-color: var(--leaf); background: rgba(43,122,87,.1); color: var(--leaf); }
+  .verb-chip.wrong  { border-color: var(--rose); background: rgba(180,62,80,.1); color: var(--rose); animation: shake .35s; }
+  .verb-chip.locked{ pointer-events: none; }
+  .verb-chip.selected{ outline: 3px solid var(--gold); outline-offset: 4px; }
+
+  .baskets{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 16px; }
+  @media (max-width: 600px){ .baskets{ grid-template-columns: 1fr; } }
+  .basket{
+    border-radius: 16px; padding: 20px; text-align: center; border: 2.5px solid;
+    cursor: pointer; transition: all .25s ease;
+    font-family: var(--font-display); font-size: 24px; font-weight: 800;
+  }
+  .basket:hover{ transform: translateY(-3px); }
+  .basket.sound{ background: rgba(43,122,87,.06); border-color: var(--leaf); color: var(--leaf); }
+  .basket.weak { background: rgba(180,62,80,.06); border-color: var(--rose); color: var(--rose); }
+
+  .stq{ background: white; border: 2px solid var(--line); border-radius: 16px; padding: 16px 20px; margin-bottom: 12px; }
+  .stq .verb{ font-family: var(--font-display); font-size: 28px; color: var(--accent-2); margin-bottom: 10px; font-weight: 800; }
+  .stq .opts{ display:flex; gap: 10px; flex-wrap: wrap; }
+  .stq button{
+    background: var(--paper); border: 2px solid var(--line);
+    padding: 9px 20px; border-radius: 999px; cursor: pointer;
+    font-family: var(--font); font-weight: 700; font-size: 18px;
+    transition: all .2s ease; color: var(--ink);
+  }
+  .stq button:hover{ border-color: var(--gold); transform: translateY(-2px); }
+  .stq button.correct{ background: var(--leaf); color: white; border-color: var(--leaf); }
+  .stq button.wrong{ background: var(--rose); color: white; border-color: var(--rose); }
+
+  .mcq-q{ font-family: var(--font-display); font-size: 24px; margin-bottom: 14px; color: var(--ink); font-weight: 800; }
+  .mcq-options{ display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 12px; }
+  .mcq-opt{
+    background: white; border: 2px solid var(--line);
+    padding: 14px 16px; border-radius: 14px; cursor: pointer; text-align: center;
+    font-size: 19px; font-weight: 700; font-family: var(--font-display);
+    transition: all .2s ease;
+  }
+  .mcq-opt:hover{ border-color: var(--gold); transform: translateY(-2px); }
+  .mcq-opt.correct{ background: rgba(43,122,87,.1); border-color: var(--leaf); color: var(--leaf); }
+  .mcq-opt.wrong{ background: rgba(180,62,80,.1); border-color: var(--rose); color: var(--rose); }
+  .mcq-opt.locked{ pointer-events: none; }
+
+  .feedback{
+    margin-top: 12px; padding: 12px 18px; border-radius: 12px;
+    font-weight: 700; font-size: 17px; display: none;
+  }
+  .feedback.show{ display: block; animation: fadeUp .3s ease; }
+  .feedback.ok{ background: rgba(43,122,87,.12); color: var(--leaf); border: 1.5px solid rgba(43,122,87,.25); }
+  .feedback.bad{ background: rgba(180,62,80,.1); color: var(--rose); border: 1.5px solid rgba(180,62,80,.2); }
+
+  .final-card{
+    text-align: center;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color: var(--paper-2); border-radius: 28px; padding: clamp(36px, 5vw, 64px);
+    box-shadow: var(--shadow); position: relative; overflow: hidden;
+  }
+  .final-card::before{
+    content:""; position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(232,200,134,.18) 1px, transparent 0);
+    background-size: 24px 24px; opacity: .5;
+  }
+  .final-card .ribbon{ font-size: 70px; margin-bottom: 8px; }
+  .final-card h2{ font-family: var(--font-display); font-size: 34px; color: var(--gold-soft); margin-bottom: 16px; font-weight: 800; }
+  .final-card .big-score{ font-family: var(--font-display); font-size: clamp(60px, 8vw, 96px); font-weight: 800; color: var(--paper-2); line-height: 1; margin: 8px 0; }
+  .final-card .pct{ color: var(--gold-soft); font-size: 28px; font-weight: 700; }
+  .final-card .msg{ font-size: 19px; margin: 20px 0; color: rgba(246,239,226,.95); }
+
+  .navbar{
+    position: fixed; bottom: 0; right: 0; left: 0;
+    background: rgba(251,246,236,.94);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+    padding: 16px 26px;
+    display:flex; align-items:center; justify-content: space-between;
+    gap: 14px; z-index: 50;
+  }
+  .nav-btn{
+    background: var(--accent); color: var(--paper-2); border: none;
+    padding: 12px 22px; border-radius: 12px;
+    font-family: var(--font); font-weight: 700; font-size: 16px;
+    cursor: pointer; transition: all .25s ease;
+  }
+  .nav-btn:hover{ background: var(--accent-2); transform: translateY(-2px); }
+  .nav-btn.ghost{ background: transparent; color: var(--accent); border: 2px solid var(--accent); }
+  .nav-btn.ghost:hover{ background: var(--accent); color: var(--paper-2); }
+  .nav-btn:disabled{ opacity: .35; cursor: not-allowed; transform: none; }
+  .dots{ display:flex; gap: 8px; flex: 1; justify-content: center; flex-wrap: wrap; }
+  .dot{ width: 10px; height: 10px; border-radius: 50%; background: rgba(14,111,92,.2); cursor: pointer; transition: all .25s ease; }
+  .dot.active{ background: var(--accent); transform: scale(1.4); box-shadow: 0 0 0 4px rgba(14,111,92,.15); }
+  .dot.visited{ background: var(--gold); }
+  .nav-score{ font-family: var(--font-display); font-size: 16px; color: var(--ink-soft); font-weight: 700; }
+  .nav-score b{ color: var(--accent); font-size: 18px; font-weight: 800; }
+
+  .tree-row{ display:flex; align-items:center; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+  .tree-node{
+    background: var(--paper); border: 1.5px solid var(--line);
+    padding: 8px 16px; border-radius: 10px;
+    font-weight: 700; font-family: var(--font-display); font-size: 19px;
+  }
+  .tree-node.root{ background: var(--accent); color: var(--paper-2); border-color: var(--accent); font-size: 21px; }
+  .tree-node.sound{ background: rgba(14,111,92,.1); color: var(--accent); }
+  .tree-node.weak { background: rgba(180,62,80,.1); color: var(--rose); }
+  .tree-arrow{ color: var(--gold); font-weight: 900; font-size: 22px; }
+
+  @media (max-width: 600px){
+    body{ font-size: 16px; }
+    .topbar{ height: 56px; }
+    .stage{ padding-top: 80px; }
+    .topbar .brand{ font-size: 15px; }
+    .navbar{ padding: 12px 14px; }
+    .nav-btn{ padding: 10px 16px; font-size: 14px; }
+    .dot{ width: 8px; height: 8px; }
+    .flip-card{ height: 320px; }
+    .face-name{ font-size: 34px; }
+    .back-name{ font-size: 21px; }
+    .back-def{ font-size: 16px; }
+    .back-ex span{ font-size: 16px; }
+    .ana-letter{ width: 60px; height: 60px; font-size: 34px; }
+    .let-big{ font-size: 64px; }
+    .verb-chip{ font-size: 22px; }
+    .letter-chip{ width: 64px; height: 64px; font-size: 36px; }
+  }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="الفعلُ الصحيحُ والفعلُ المعتلّ">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">الفعل الصحيح <span>·</span> الفعل المعتلّ</div>
+  <div class="slide-info">شريحة <b id="cur">1</b> من <span id="tot">8</span></div>
+</div>
+<div class="progress-line"><span id="pbar"></span></div>
+
+<main class="stage">
+
+  <!-- SLIDE 1 — TITLE -->
+  <section class="slide title-slide active" data-slide="1">
+    <svg class="title-ornament" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#C89B4A" stroke-width="1.6">
+        <circle cx="100" cy="100" r="80"/>
+        <circle cx="100" cy="100" r="58"/>
+        <circle cx="100" cy="100" r="36"/>
+        <path d="M100 20 L100 180 M20 100 L180 100"/>
+        <path d="M40 40 L160 160 M160 40 L40 160"/>
+        <circle cx="100" cy="100" r="6" fill="#C89B4A"/>
+      </g>
+    </svg>
+    <div class="title-eyebrow">درس تفاعلي</div>
+    <h1 class="title-main">
+      الفعل <span class="em">الصحيح</span><br>
+      والفعل <span class="em">المُعتلّ</span>
+    </h1>
+    <div class="title-divider"><div class="l"></div><div class="dot"></div><div class="r"></div></div>
+    <p class="title-author">إعداد: <b>أ. حيدر المعاتيق</b></p>
+    <button class="title-cta" onclick="goNext()">ابدأ الدرس</button>
+  </section>
+
+  <!-- SLIDE 2 — حروف العلة -->
+  <section class="slide" data-slide="2">
+    <span class="slide-num">٠٢ — تمهيد</span>
+    <h2 class="slide-title">حروف العلّة</h2>
+
+    <div class="idea">
+      <span class="label">الفكرة</span>
+      <p class="text">في اللغة العربية ثلاثة حروف تُسمّى <span class="hl">حروف العلّة</span>: <span class="hl">ا</span> ، <span class="hl">و</span> ، <span class="hl">ي</span>.</p>
+    </div>
+
+    <div class="expand">
+      <span class="label">التوسعة والشرح</span>
+      <p>وجود أحد هذه الحروف في <strong>الحروف الأصلية</strong> للفعل أو غيابه هو الذي يحدّد إن كان الفعل <strong style="color: var(--accent);">صحيحاً</strong> أم <strong style="color: var(--rose);">معتلّاً</strong>.</p>
+
+      <div class="letter-show">
+        <div class="let-card">
+          <div class="let-big">ا</div>
+          <div class="let-name">الألف</div>
+          <div class="let-ex">قالَ — باعَ — صامَ</div>
+        </div>
+        <div class="let-card">
+          <div class="let-big">و</div>
+          <div class="let-name">الواو</div>
+          <div class="let-ex">وَعَدَ — وَصَلَ — دَعا</div>
+        </div>
+        <div class="let-card">
+          <div class="let-big">ي</div>
+          <div class="let-name">الياء</div>
+          <div class="let-ex">يَبِسَ — رَمى — سَعى</div>
+        </div>
+      </div>
+
+      <h3>ما المقصود بالحروف الأصلية؟</h3>
+      <p>هي الحروف الجذر التي يعود إليها الفعل عند تجريده من الزوائد. مثلاً: <b>كَتَبَ</b> أصلها (ك-ت-ب)، و<b>قالَ</b> أصلها (ق-و-ل) لأن الألف منقلبة عن واو.</p>
+    </div>
+
+    <div class="practice">
+      <span class="label">تدريب سريع</span>
+      <h3>اضغط على حروف العلّة من بين الحروف الآتية</h3>
+      <p class="hint">يجب أن تختار ثلاثة حروف فقط.</p>
+      <div class="letter-row" id="letters-pool"></div>
+      <div class="feedback" id="fb-letters"></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 — الفعل الصحيح -->
+  <section class="slide" data-slide="3">
+    <span class="slide-num">٠٣ — القسم الأول</span>
+    <h2 class="slide-title">الفعل الصحيح</h2>
+
+    <div class="idea">
+      <span class="label">الفكرة</span>
+      <p class="text">الفعل الصحيح هو ما خلت <span class="hl">حروفه الأصلية</span> من حروف العلّة.</p>
+    </div>
+
+    <div class="expand">
+      <span class="label">التوسعة والشرح</span>
+      <p>إذا تأمّلت في حروف الفعل الأصلية ولم تجد فيها أيّاً من حروف العلّة، فهو فعل صحيح. والعبرة بالأصل لا بالزوائد.</p>
+
+      <div class="pill-row">
+        <span class="pill">كَتَبَ</span><span class="pill">جَلَسَ</span>
+        <span class="pill">شَرِبَ</span><span class="pill">دَرَسَ</span>
+        <span class="pill">سَأَلَ</span><span class="pill">مَدَّ</span>
+      </div>
+
+      <div class="analyzer">
+        <div class="hd">
+          <span class="badge">مُحلّل تفاعلي</span>
+          <h4>اضغط على الفعل ليُحلّل أمامك</h4>
+        </div>
+        <p class="hint">شاهد كيف نفكّك الفعل إلى حروفه الأصلية ونتأكّد من خلوّها من حروف العلّة.</p>
+        <div class="ana-pool">
+          <button class="ana-btn" onclick="analyze(this, 'كَتَبَ')">كَتَبَ</button>
+          <button class="ana-btn" onclick="analyze(this, 'جَلَسَ')">جَلَسَ</button>
+          <button class="ana-btn" onclick="analyze(this, 'سَأَلَ')">سَأَلَ</button>
+          <button class="ana-btn" onclick="analyze(this, 'شَرِبَ')">شَرِبَ</button>
+        </div>
+        <div class="ana-display">
+          <div class="ana-empty"><div class="ic">👆</div>اختر فعلاً من الأعلى لرؤية تحليله</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice">
+      <span class="label">تدريب · صنّف الأفعال</span>
+      <h3>اضغط الفعل ثم اختر السلّة المناسبة</h3>
+      <p class="hint">حدّد إن كان الفعل صحيحاً أم معتلّاً.</p>
+      <div class="verb-pool" id="ex3-pool"></div>
+      <div class="baskets">
+        <div class="basket sound" onclick="placeVerb('ex3','sound')">📗 صحيح</div>
+        <div class="basket weak"  onclick="placeVerb('ex3','weak')">📕 معتلّ</div>
+      </div>
+      <div class="feedback" id="fb-ex3"></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4 — أقسام الصحيح -->
+  <section class="slide" data-slide="4">
+    <span class="slide-num">٠٤ — تفصيل</span>
+    <h2 class="slide-title">أقسام الفعل الصحيح</h2>
+
+    <div class="idea">
+      <span class="label">الفكرة</span>
+      <p class="text">ينقسم الفعل الصحيح إلى ثلاثة أقسام: <span class="hl">السالم</span>، <span class="hl">المهموز</span>، <span class="hl">المُضعَّف</span>.</p>
+    </div>
+
+    <div class="expand">
+      <span class="label">بطاقات تفاعلية · اضغط للقلب</span>
+      <p>اضغط على كل بطاقة لاكتشاف تعريفها وأمثلتها.</p>
+
+      <div class="flip-grid">
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <div class="face-num">القسم الأوّل</div>
+              <div class="face-name">السالم</div>
+              <div class="face-tag">صحيح</div>
+              <div class="face-hint">↻ اضغط للقلب</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="back-name">السالم</div>
+              <div class="back-def">ما خلت حروفه الأصلية من <b>الهمزة</b> ومن <b>التضعيف</b>.</div>
+              <div class="back-ex"><span>كَتَبَ</span><span>جَلَسَ</span><span>دَرَسَ</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <div class="face-num">القسم الثاني</div>
+              <div class="face-name">المهموز</div>
+              <div class="face-tag">صحيح</div>
+              <div class="face-hint">↻ اضغط للقلب</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="back-name">المهموز</div>
+              <div class="back-def">ما كان أحد حروفه الأصلية <b>همزة</b> (في الأوّل أو الوسط أو الآخر).</div>
+              <div class="back-ex"><span>أَكَلَ</span><span>سَأَلَ</span><span>قَرَأَ</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <div class="face-num">القسم الثالث</div>
+              <div class="face-name">المُضعَّف</div>
+              <div class="face-tag">صحيح</div>
+              <div class="face-hint">↻ اضغط للقلب</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="back-name">المُضعَّف</div>
+              <div class="back-def">ما كان فيه <b>حرفان أصليّان من جنس واحد</b> متجاوران فيُدغمان في حرف مشدّد.</div>
+              <div class="back-ex"><span>مَدَّ</span><span>شَدَّ</span><span>ردَّ</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice">
+      <span class="label">تدريب · حدّد النوع</span>
+      <h3>ما نوع كل فعل من أقسام الفعل الصحيح؟</h3>
+      <div id="ex4-quiz"></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5 — الفعل المعتل -->
+  <section class="slide" data-slide="5">
+    <span class="slide-num">٠٥ — القسم الثاني</span>
+    <h2 class="slide-title">الفعل المُعتلّ</h2>
+
+    <div class="idea">
+      <span class="label">الفكرة</span>
+      <p class="text">الفعل المُعتلّ هو ما كان أحد <span class="hl">حروفه الأصلية</span> حرف علّة (ا، و، ي) أو أكثر.</p>
+    </div>
+
+    <div class="expand">
+      <span class="label">التوسعة والشرح</span>
+      <p>إذا وجدت في حروف الفعل الأصلية حرف علّة واحداً على الأقلّ، فالفعل معتلّ. وقد يكون حرف العلّة في أوّل الفعل أو وسطه أو آخره أو في أكثر من موضع.</p>
+
+      <div class="pill-row">
+        <span class="pill weak">وَعَدَ</span><span class="pill weak">قالَ</span>
+        <span class="pill weak">دَعا</span><span class="pill weak">باعَ</span>
+        <span class="pill weak">رَمى</span><span class="pill weak">وَفى</span>
+      </div>
+
+      <div class="analyzer">
+        <div class="hd">
+          <span class="badge">مُحلّل تفاعلي</span>
+          <h4>شاهد موقع حرف العلّة في كل فعل</h4>
+        </div>
+        <p class="hint">سيظهر حرف العلّة باللون الأحمر، ولاحظ موقعه (في الأول، الوسط، الآخر).</p>
+        <div class="ana-pool">
+          <button class="ana-btn" onclick="analyze(this, 'وَعَدَ')">وَعَدَ</button>
+          <button class="ana-btn" onclick="analyze(this, 'قالَ')">قالَ</button>
+          <button class="ana-btn" onclick="analyze(this, 'دَعا')">دَعا</button>
+          <button class="ana-btn" onclick="analyze(this, 'وَعى')">وَعى</button>
+        </div>
+        <div class="ana-display">
+          <div class="ana-empty"><div class="ic">🔍</div>اختر فعلاً معتلّاً ليُحلّل أمامك</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="practice">
+      <span class="label">تدريب · صنّف الأفعال</span>
+      <h3>اضغط الفعل ثم اختر السلّة المناسبة</h3>
+      <p class="hint">صحيح أم معتلّ؟</p>
+      <div class="verb-pool" id="ex5-pool"></div>
+      <div class="baskets">
+        <div class="basket sound" onclick="placeVerb('ex5','sound')">📗 صحيح</div>
+        <div class="basket weak"  onclick="placeVerb('ex5','weak')">📕 معتلّ</div>
+      </div>
+      <div class="feedback" id="fb-ex5"></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6 — أقسام المعتل -->
+  <section class="slide" data-slide="6">
+    <span class="slide-num">٠٦ — تفصيل</span>
+    <h2 class="slide-title">أقسام الفعل المُعتلّ</h2>
+
+    <div class="idea">
+      <span class="label">الفكرة</span>
+      <p class="text">ينقسم بحسب <span class="hl">موقع حرف العلّة</span> إلى أربعة أقسام: المثال، الأجوف، الناقص، اللفيف.</p>
+    </div>
+
+    <div class="expand">
+      <span class="label">بطاقات تفاعلية · اضغط للقلب</span>
+      <p>اضغط على كل بطاقة لمعرفة تعريفها وأمثلتها.</p>
+
+      <div class="flip-grid">
+        <div class="flip-card weak" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <div class="face-num">١</div>
+              <div class="face-name">المثال</div>
+              <div class="face-tag">معتلّ</div>
+              <div class="face-hint">↻ اضغط للقلب</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="back-name">المثال</div>
+              <div class="back-def">ما كان حرف العلّة في <b>أوّله</b> (و / ي).</div>
+              <div class="back-ex"><span>وَعَدَ</span><span>يَبِسَ</span><span>وَصَلَ</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card weak" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <div class="face-num">٢</div>
+              <div class="face-name">الأجوف</div>
+              <div class="face-tag">معتلّ</div>
+              <div class="face-hint">↻ اضغط للقلب</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="back-name">الأجوف</div>
+              <div class="back-def">ما كان حرف العلّة في <b>وسطه</b> (ألف منقلبة عن و / ي).</div>
+              <div class="back-ex"><span>قالَ</span><span>باعَ</span><span>صامَ</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card weak" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <div class="face-num">٣</div>
+              <div class="face-name">الناقص</div>
+              <div class="face-tag">معتلّ</div>
+              <div class="face-hint">↻ اضغط للقلب</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="back-name">الناقص</div>
+              <div class="back-def">ما كان حرف العلّة في <b>آخره</b> (ا، و، ي).</div>
+              <div class="back-ex"><span>دَعا</span><span>رَمى</span><span>سَعى</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flip-card weak" onclick="this.classList.toggle('flipped')">
+          <div class="flip-inner">
+            <div class="flip-face flip-front">
+              <div class="face-num">٤</div>
+              <div class="face-name">اللفيف</div>
+              <div class="face-tag">معتلّ</div>
+              <div class="face-hint">↻ اضغط للقلب</div>
+            </div>
+            <div class="flip-face flip-back">
+              <div class="back-name">اللفيف</div>
+              <div class="back-def">ما اجتمع فيه <b>حرفا علّة</b> (مفروق إن انفصلا، ومقرون إن اتّصلا).</div>
+              <div class="back-ex"><span>وَعى</span><span>طَوى</span><span>وَفى</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 28px;">الشجرة الكاملة</h3>
+      <div class="tree-row"><span class="tree-node root">الفعل</span></div>
+      <div class="tree-row" style="padding-right: 14px;">
+        <span class="tree-arrow">↙</span>
+        <span class="tree-node sound">الصحيح</span>
+        <span style="margin: 0 18px;"></span>
+        <span class="tree-arrow">↘</span>
+        <span class="tree-node weak">المُعتلّ</span>
+      </div>
+      <div class="tree-row" style="padding-right: 32px;">
+        <span class="tree-arrow">←</span>
+        <span class="tree-node">سالم</span>
+        <span class="tree-node">مهموز</span>
+        <span class="tree-node">مُضعَّف</span>
+        <span style="margin: 0 14px;"></span>
+        <span class="tree-arrow">←</span>
+        <span class="tree-node">مثال</span>
+        <span class="tree-node">أجوف</span>
+        <span class="tree-node">ناقص</span>
+        <span class="tree-node">لفيف</span>
+      </div>
+    </div>
+
+    <div class="practice">
+      <span class="label">تدريب · حدّد النوع</span>
+      <h3>ما نوع كل فعل من أقسام الفعل المعتلّ؟</h3>
+      <div id="ex6-quiz"></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7 — تدريب شامل -->
+  <section class="slide" data-slide="7">
+    <span class="slide-num">٠٧ — تدريب</span>
+    <h2 class="slide-title">تدريب شامل</h2>
+
+    <div class="idea">
+      <span class="label">الفكرة</span>
+      <p class="text">اختبر فهمك الشامل عبر <span class="hl">أسئلة متنوّعة</span> تجمع كل ما تعلّمته.</p>
+    </div>
+
+    <div id="mcq-quiz"></div>
+  </section>
+
+  <!-- SLIDE 8 — النتيجة -->
+  <section class="slide" data-slide="8">
+    <span class="slide-num">٠٨ — النهاية</span>
+    <h2 class="slide-title">نتيجتك ومراجعة سريعة</h2>
+
+    <div class="final-card">
+      <div class="ribbon">🌿</div>
+      <h2>أحسنت!</h2>
+      <div class="big-score"><span id="final-score">0</span> <span style="opacity:.6;">/</span> <span id="final-total">0</span></div>
+      <div class="pct"><span id="final-pct">0</span>%</div>
+      <p class="msg" id="final-msg">أكمل التدريبات لرؤية نتيجتك النهائية.</p>
+      <button class="nav-btn" style="background: var(--gold); color: var(--ink);" onclick="resetAll()">إعادة المحاولة ↻</button>
+    </div>
+
+    <div class="expand" style="margin-top: 28px;">
+      <span class="label">مراجعة في سطرين</span>
+      <ul>
+        <li><b>الفعل الصحيح</b>: تخلو أصوله من حروف العلّة. أقسامه: سالم، مهموز، مُضعَّف.</li>
+        <li><b>الفعل المعتلّ</b>: في أصوله حرف علّة فأكثر. أقسامه: مثال، أجوف، ناقص، لفيف.</li>
+      </ul>
+    </div>
+  </section>
+
+</main>
+
+<div class="navbar">
+  <button class="nav-btn ghost" id="prev-btn" onclick="goPrev()">→ السابق</button>
+  <div class="dots" id="dots"></div>
+  <div class="nav-score">النتيجة: <b id="score">0</b> / <b id="total">0</b></div>
+  <button class="nav-btn" id="next-btn" onclick="goNext()">التالي ←</button>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let current = 1;
+const visited = new Set([1]);
+document.getElementById('tot').textContent = totalSlides;
+
+const dotsWrap = document.getElementById('dots');
+for(let i=1;i<=totalSlides;i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===1?' active':'');
+  d.onclick = ()=> goTo(i);
+  dotsWrap.appendChild(d);
+}
+
+function goTo(n){
+  if(n<1 || n>totalSlides) return;
+  current = n;
+  visited.add(n);
+  slides.forEach(s=> s.classList.toggle('active', parseInt(s.dataset.slide)===n));
+  dotsWrap.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active', (i+1)===n);
+    d.classList.toggle('visited', visited.has(i+1) && (i+1)!==n);
+  });
+  document.getElementById('cur').textContent = n;
+  document.getElementById('pbar').style.width = ((n-1)/(totalSlides-1)*100) + '%';
+  document.getElementById('prev-btn').disabled = (n===1);
+  document.getElementById('next-btn').disabled = (n===totalSlides);
+  document.getElementById('next-btn').textContent = (n===totalSlides) ? 'انتهى' : 'التالي ←';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if(n===totalSlides) updateFinal();
+}
+function goNext(){ if(current<totalSlides) goTo(current+1); }
+function goPrev(){ if(current>1) goTo(current-1); }
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowLeft') goNext();
+  else if(e.key === 'ArrowRight') goPrev();
+});
+
+let score = 0, total = 0;
+function bumpScore(correct){
+  total++;
+  if(correct) score++;
+  document.getElementById('score').textContent = score;
+  document.getElementById('total').textContent = total;
+}
+function updateFinal(){
+  document.getElementById('final-score').textContent = score;
+  document.getElementById('final-total').textContent = total;
+  const pct = total ? Math.round((score/total)*100) : 0;
+  document.getElementById('final-pct').textContent = pct;
+  const msg = document.getElementById('final-msg');
+  if(total===0) msg.textContent = 'أكمل التدريبات لرؤية نتيجتك النهائية.';
+  else if(pct===100) msg.textContent = 'إتقان تامّ! بارك الله فيك. 🌟';
+  else if(pct>=75)   msg.textContent = 'نتيجة ممتازة! واصل المراجعة لتُتقن أكثر.';
+  else if(pct>=50)   msg.textContent = 'نتيجة جيّدة، راجع البطاقات وحاول مجدّداً.';
+  else               msg.textContent = 'لا بأس، عُد إلى الشرح ثم أعد التدريب.';
+}
+
+/* Verb Analyzer data */
+const analyzerData = {
+  'كَتَبَ':  { letters: ['ك','ت','ب'], weak: [false,false,false], type: 'sound', note: 'الجذر (ك-ت-ب) خالٍ من حروف العلّة → فعل صحيح سالم.' },
+  'جَلَسَ':  { letters: ['ج','ل','س'], weak: [false,false,false], type: 'sound', note: 'الجذر (ج-ل-س) خالٍ من حروف العلّة → فعل صحيح سالم.' },
+  'سَأَلَ':  { letters: ['س','أ','ل'], weak: [false,false,false], type: 'sound', note: 'الجذر (س-أ-ل) فيه همزة وليس حرف علّة → فعل صحيح مهموز.' },
+  'شَرِبَ':  { letters: ['ش','ر','ب'], weak: [false,false,false], type: 'sound', note: 'الجذر (ش-ر-ب) خالٍ من حروف العلّة → فعل صحيح سالم.' },
+  'وَعَدَ':  { letters: ['و','ع','د'], weak: [true,false,false],  type: 'weak',  note: 'حرف العلّة (و) في أوّل الفعل → فعل معتلّ مثال.' },
+  'قالَ':   { letters: ['ق','و','ل'], weak: [false,true,false],  type: 'weak',  note: 'الألف منقلبة عن واو في الوسط → فعل معتلّ أجوف.' },
+  'دَعا':   { letters: ['د','ع','و'], weak: [false,false,true],  type: 'weak',  note: 'حرف العلّة (و) في آخر الفعل → فعل معتلّ ناقص.' },
+  'وَعى':   { letters: ['و','ع','ي'], weak: [true,false,true],   type: 'weak',  note: 'اجتمع حرفا علّة (و) و(ي) → فعل معتلّ لفيف.' },
+};
+function analyze(btn, verb){
+  const data = analyzerData[verb];
+  if(!data) return;
+  const container = btn.closest('.analyzer');
+  container.querySelectorAll('.ana-btn').forEach(b=> b.classList.remove('active'));
+  btn.classList.add('active');
+  const display = container.querySelector('.ana-display');
+  const isWeak = data.type === 'weak';
+  display.innerHTML = `
+    <div class="ana-original ${isWeak?'weak-original':''}">${verb}</div>
+    <div class="ana-arrow">↓ تحليل الجذر ↓</div>
+    <div class="ana-letters">
+      ${data.letters.map((l,i)=> `<div class="ana-letter ${data.weak[i]?'weak':''}">${l}</div>`).join('')}
+    </div>
+    <div class="ana-verdict ${data.type}">${isWeak ? '🔴 فعل معتلّ' : '🟢 فعل صحيح'}</div>
+    <div class="ana-note">${data.note}</div>
+  `;
+}
+
+/* Slide 2 */
+const lettersData = [
+  { l:'ا', isWeak:true  },{ l:'ب', isWeak:false },
+  { l:'و', isWeak:true  },{ l:'ت', isWeak:false },
+  { l:'ل', isWeak:false },{ l:'ي', isWeak:true  },
+  { l:'م', isWeak:false },{ l:'ن', isWeak:false },
+];
+function buildLetters(){
+  const pool = document.getElementById('letters-pool');
+  pool.innerHTML = '';
+  lettersData.forEach(item=>{
+    const c = document.createElement('div');
+    c.className = 'letter-chip';
+    c.textContent = item.l;
+    c.onclick = ()=> handleLetter(c, item.isWeak);
+    pool.appendChild(c);
+  });
+}
+let lettersFound = 0;
+function handleLetter(el, isWeak){
+  if(el.classList.contains('locked')) return;
+  const fb = document.getElementById('fb-letters');
+  if(isWeak){
+    el.classList.add('correct','locked');
+    lettersFound++;
+    bumpScore(true);
+    fb.className = 'feedback show ok';
+    fb.textContent = lettersFound===3 ? '✓ أحسنت! وجدت حروف العلّة الثلاثة (ا، و، ي).' : `✓ صحيح. وجدت ${lettersFound} من 3.`;
+  } else {
+    el.classList.add('wrong');
+    fb.className = 'feedback show bad';
+    fb.textContent = '✗ هذا ليس حرف علّة. حاول مجدّداً.';
+    bumpScore(false);
+    setTimeout(()=> el.classList.remove('wrong'), 500);
+  }
+}
+
+/* Slides 3 & 5 */
+const ex3Verbs = [
+  { v:'كَتَبَ', t:'sound' },{ v:'وَعَدَ', t:'weak' },
+  { v:'جَلَسَ', t:'sound' },{ v:'قالَ',   t:'weak' },
+  { v:'سَأَلَ', t:'sound' },{ v:'دَعا',   t:'weak' },
+];
+const ex5Verbs = [
+  { v:'باعَ',   t:'weak' },{ v:'دَرَسَ', t:'sound' },
+  { v:'رَمى',   t:'weak' },{ v:'مَدَّ',  t:'sound' },
+  { v:'وَفى',   t:'weak' },{ v:'شَرِبَ', t:'sound' },
+];
+const exState = { ex3:{selected:null}, ex5:{selected:null} };
+function buildPool(id, verbs){
+  const pool = document.getElementById(id+'-pool');
+  pool.innerHTML = '';
+  [...verbs].sort(()=>Math.random()-0.5).forEach(item=>{
+    const c = document.createElement('div');
+    c.className = 'verb-chip';
+    c.textContent = item.v;
+    c.dataset.type = item.t;
+    c.onclick = ()=> selectChip(id, c);
+    pool.appendChild(c);
+  });
+}
+function selectChip(id, chip){
+  if(chip.classList.contains('locked')) return;
+  document.querySelectorAll('#'+id+'-pool .verb-chip').forEach(c=> c.classList.remove('selected'));
+  chip.classList.add('selected');
+  exState[id].selected = chip;
+}
+function placeVerb(id, target){
+  const chip = exState[id].selected;
+  const fb = document.getElementById('fb-'+id);
+  if(!chip){
+    fb.className = 'feedback show bad';
+    fb.textContent = '⚠ اختر فعلاً أوّلاً ثم انقر السلّة.';
+    return;
+  }
+  const correct = chip.dataset.type === target;
+  if(correct){
+    chip.classList.add('correct','locked');
+    chip.classList.remove('selected');
+    fb.className = 'feedback show ok';
+    fb.textContent = `✓ أحسنت! "${chip.textContent}" فعل ${target==='sound'?'صحيح':'معتلّ'}.`;
+    bumpScore(true);
+  } else {
+    chip.classList.add('wrong');
+    fb.className = 'feedback show bad';
+    fb.textContent = '✗ غير صحيح. حاول مجدّداً.';
+    bumpScore(false);
+    setTimeout(()=> chip.classList.remove('wrong'), 500);
+  }
+  exState[id].selected = null;
+}
+
+/* Slides 4 & 6 */
+const ex4Questions = [
+  { v:'كَتَبَ', a:'سالم',   opts:['سالم','مهموز','مُضعَّف'] },
+  { v:'قَرَأَ', a:'مهموز',  opts:['سالم','مهموز','مُضعَّف'] },
+  { v:'شَدَّ',  a:'مُضعَّف', opts:['سالم','مهموز','مُضعَّف'] },
+  { v:'دَرَسَ', a:'سالم',   opts:['سالم','مهموز','مُضعَّف'] },
+];
+const ex6Questions = [
+  { v:'وَصَلَ', a:'مثال',  opts:['مثال','أجوف','ناقص','لفيف'] },
+  { v:'صامَ',   a:'أجوف',  opts:['مثال','أجوف','ناقص','لفيف'] },
+  { v:'سَعى',   a:'ناقص',  opts:['مثال','أجوف','ناقص','لفيف'] },
+  { v:'وَعى',   a:'لفيف',  opts:['مثال','أجوف','ناقص','لفيف'] },
+];
+const answeredSub = new Set();
+function buildSubQuiz(containerId, questions, key){
+  const wrap = document.getElementById(containerId);
+  wrap.innerHTML = '';
+  questions.forEach((q, i)=>{
+    const id = key+'-'+i;
+    const div = document.createElement('div');
+    div.className = 'stq';
+    div.innerHTML = `<div class="verb">${q.v}</div><div class="opts" id="${id}-opts"></div>`;
+    wrap.appendChild(div);
+    const opts = div.querySelector('.opts');
+    q.opts.forEach(o=>{
+      const b = document.createElement('button');
+      b.textContent = o;
+      b.onclick = ()=> answerSub(id, q.a, o, b);
+      opts.appendChild(b);
+    });
+  });
+}
+function answerSub(id, correct, choice, btn){
+  if(answeredSub.has(id)) return;
+  answeredSub.add(id);
+  if(correct === choice){
+    btn.classList.add('correct');
+    bumpScore(true);
+  } else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('#'+id+'-opts button').forEach(b=>{
+      if(b.textContent === correct) b.classList.add('correct');
+    });
+    bumpScore(false);
+  }
+  document.querySelectorAll('#'+id+'-opts button').forEach(b=> b.style.pointerEvents='none');
+}
+
+/* Slide 7 MCQ */
+const mcqs = [
+  { q:'حروف العلّة في اللغة العربية هي:', opts:['ا، و، ي', 'ا، ب، ت', 'ل، م، ن', 'و، ي، ه'], a:'ا، و، ي' },
+  { q:'الفعل "وَعَدَ" نوعه:', opts:['صحيح سالم', 'معتلّ مثال', 'معتلّ أجوف', 'معتلّ ناقص'], a:'معتلّ مثال' },
+  { q:'أيّ الأفعال الآتية فعل أجوف؟', opts:['كَتَبَ', 'باعَ', 'دَعا', 'وَقى'], a:'باعَ' },
+  { q:'الفعل المُضعَّف من قسم:', opts:['الفعل الصحيح', 'الفعل المعتلّ', 'الفعل المثال', 'الفعل اللفيف'], a:'الفعل الصحيح' },
+  { q:'الفعل الذي اجتمع فيه حرفا علّة يسمّى:', opts:['الناقص', 'الأجوف', 'اللفيف', 'المثال'], a:'اللفيف' },
+];
+const answeredMcq = new Set();
+function buildMcq(){
+  const wrap = document.getElementById('mcq-quiz');
+  wrap.innerHTML = '';
+  mcqs.forEach((m, i)=>{
+    const div = document.createElement('div');
+    div.className = 'expand';
+    div.style.marginBottom = '16px';
+    div.innerHTML = `<div class="mcq-q">${i+1}. ${m.q}</div><div class="mcq-options" id="mcq-${i}"></div>`;
+    wrap.appendChild(div);
+    const opts = div.querySelector('.mcq-options');
+    m.opts.forEach(o=>{
+      const b = document.createElement('div');
+      b.className = 'mcq-opt';
+      b.textContent = o;
+      b.onclick = ()=> answerMcq(i, o, b);
+      opts.appendChild(b);
+    });
+  });
+}
+function answerMcq(idx, choice, el){
+  if(answeredMcq.has(idx)) return;
+  answeredMcq.add(idx);
+  if(mcqs[idx].a === choice){
+    el.classList.add('correct','locked');
+    bumpScore(true);
+  } else {
+    el.classList.add('wrong','locked');
+    document.querySelectorAll('#mcq-'+idx+' .mcq-opt').forEach(o=>{
+      if(o.textContent === mcqs[idx].a) o.classList.add('correct');
+      o.classList.add('locked');
+    });
+    bumpScore(false);
+  }
+}
+
+function resetAll(){
+  score = 0; total = 0; lettersFound = 0;
+  answeredSub.clear(); answeredMcq.clear();
+  document.getElementById('score').textContent = '0';
+  document.getElementById('total').textContent = '0';
+  document.querySelectorAll('.flip-card').forEach(c=> c.classList.remove('flipped'));
+  document.querySelectorAll('.analyzer').forEach(a=>{
+    a.querySelectorAll('.ana-btn').forEach(b=> b.classList.remove('active'));
+    const d = a.querySelector('.ana-display');
+    d.innerHTML = `<div class="ana-empty"><div class="ic">👆</div>اختر فعلاً من الأعلى لرؤية تحليله</div>`;
+  });
+  buildLetters();
+  buildPool('ex3', ex3Verbs);
+  buildPool('ex5', ex5Verbs);
+  buildSubQuiz('ex4-quiz', ex4Questions, 'ex4');
+  buildSubQuiz('ex6-quiz', ex6Questions, 'ex6');
+  buildMcq();
+  updateFinal();
+  goTo(1);
+}
+
+buildLetters();
+buildPool('ex3', ex3Verbs);
+buildPool('ex5', ex5Verbs);
+buildSubQuiz('ex4-quiz', ex4Questions, 'ex4');
+buildSubQuiz('ex6-quiz', ex6Questions, 'ex6');
+buildMcq();
+goTo(1);
+</script>
+
+</body>
+</html>

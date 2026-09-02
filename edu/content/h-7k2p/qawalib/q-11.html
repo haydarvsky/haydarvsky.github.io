@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المعادلات الحية — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-instructions code { background: rgba(0,0,0,0.25); padding: 2px 8px; border-radius: 4px; font-family: monospace; color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; }
+.tp-input:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-input.formula { font-family: 'Courier New', monospace; font-size: 1.05rem; direction: ltr; text-align: left; }
+.tp-var-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 12px; padding: 14px; margin-bottom: 12px; }
+.tp-var-card .tp-label { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.85rem; }
+.tp-var-num { background: var(--amber); color: white; width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.tp-var-grid { display: grid; grid-template-columns: 70px 1fr 1fr 70px 70px 70px; gap: 6px; align-items: center; }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+
+.eq-demo { max-width: 800px; margin: 0 auto; }
+.eq-formula-box { background: var(--emerald-deep); color: var(--bg-cream); padding: 24px 28px; border-radius: 14px; margin-bottom: 24px; text-align: center; font-family: 'Courier New', monospace; font-size: 1.4rem; font-weight: 700; direction: ltr; }
+.eq-formula-box .var-val { background: rgba(217, 119, 6, 0.3); color: var(--amber-soft); padding: 4px 14px; border-radius: 8px; margin: 0 4px; transition: all 0.2s; display: inline-block; }
+.eq-formula-box .result-val { background: var(--amber); color: white; padding: 6px 18px; border-radius: 8px; margin: 0 4px; font-size: 1.5rem; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4); }
+.eq-controls { display: grid; gap: 16px; background: var(--bg-cream); border-radius: 14px; padding: 24px; border: 1px solid var(--line); }
+.eq-control { display: grid; gap: 8px; }
+.eq-control-label { display: flex; justify-content: space-between; align-items: baseline; font-family: 'Reem Kufi', sans-serif; font-weight: 500; color: var(--emerald-deep); }
+.eq-control-val { color: var(--amber); font-weight: 700; font-size: 1.1rem; font-family: 'Courier New', monospace; }
+.eq-slider { width: 100%; height: 8px; background: var(--line); border-radius: 999px; outline: none; -webkit-appearance: none; appearance: none; cursor: pointer; }
+.eq-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: var(--amber); border-radius: 50%; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 6px rgba(217, 119, 6, 0.4); }
+.eq-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+.eq-slider::-moz-range-thumb { width: 24px; height: 24px; background: var(--amber); border-radius: 50%; cursor: pointer; border: none; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 700px) { .tp-var-grid { grid-template-columns: 1fr 1fr; } .preview-title { font-size: 1.5rem; } .eq-formula-box { font-size: 1.1rem; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="المعادلات الحية">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — المعادلاتُ الحيَّة</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>قالبُ معادلاتٍ تفاعليَّة بمتغيِّرَين أو ثلاثة.</strong>
+        اكتبِ المعادلةَ بالصيغةِ الرياضيَّة، مستعملًا أسماءَ المتغيِّراتِ الإنجليزيَّةَ القصيرةَ <code>a</code>, <code>b</code>, <code>c</code> لتبسيطِ التركيب. أمثلة:<br>
+        • مساحةُ المستطيل: <code>a * b</code><br>
+        • قانونُ أوم: <code>a * b</code> (للجهد = التيار × المقاومة)<br>
+        • مساحةُ الدائرة: <code>3.14 * a * a</code>
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="مساحةُ المستطيل" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="حرِّكِ الأشرطةَ لترى أثرَ المتغيِّراتِ فوريًّا" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">اسمُ النتيجة</label>
+          <input type="text" class="tp-input" id="ctrl-result-label" value="المساحة" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">وحدةُ النتيجة (مثل: سم²، م/ث)</label>
+          <input type="text" class="tp-input" id="ctrl-result-unit" value="سم²" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">صيغةُ المعادلة (استخدم a, b, c)</label>
+          <input type="text" class="tp-input formula" id="ctrl-formula" value="a * b" oninput="updatePreview()">
+        </div>
+
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">المتغيِّرات (الرمز / الاسم / الوحدة / الأدنى / الأعلى / الافتراضي)</label>
+          <div id="vars-container"></div>
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادة</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">المعادلة</h1>
+      <p class="preview-subtitle" id="preview-subtitle"></p>
+    </div>
+    <div class="eq-demo">
+      <div class="eq-formula-box" id="formula-display"></div>
+      <div class="eq-controls" id="controls-container"></div>
+    </div>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+const defaultVars = [
+  { sym: 'a', name: 'الطول', unit: 'سم', min: 1, max: 20, val: 5 },
+  { sym: 'b', name: 'العرض', unit: 'سم', min: 1, max: 20, val: 3 }
+];
+let vars = JSON.parse(JSON.stringify(defaultVars));
+
+function renderEditor() {
+  const container = document.getElementById('vars-container');
+  container.innerHTML = '';
+  vars.forEach((v, idx) => {
+    const div = document.createElement('div');
+    div.className = 'tp-var-card';
+    div.innerHTML = `
+      <label class="tp-label">
+        <span class="tp-var-num">${idx+1}</span><span>المتغيِّر ${idx+1}</span>
+      </label>
+      <div class="tp-var-grid">
+        <input type="text" class="tp-input" placeholder="a" value="${escapeAttr(v.sym)}" oninput="updateVar(${idx}, 'sym', this.value)" style="text-align:center; font-family:'Courier New',monospace; font-weight:700; direction:ltr;">
+        <input type="text" class="tp-input" placeholder="الاسم" value="${escapeAttr(v.name)}" oninput="updateVar(${idx}, 'name', this.value)">
+        <input type="text" class="tp-input" placeholder="الوحدة" value="${escapeAttr(v.unit)}" oninput="updateVar(${idx}, 'unit', this.value)">
+        <input type="number" class="tp-input" placeholder="أدنى" value="${v.min}" oninput="updateVar(${idx}, 'min', parseFloat(this.value)||0)" style="text-align:center;">
+        <input type="number" class="tp-input" placeholder="أعلى" value="${v.max}" oninput="updateVar(${idx}, 'max', parseFloat(this.value)||0)" style="text-align:center;">
+        <input type="number" class="tp-input" placeholder="افتراضي" value="${v.val}" oninput="updateVar(${idx}, 'val', parseFloat(this.value)||0)" style="text-align:center;">
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+function updateVar(idx, key, value) { vars[idx][key] = value; updatePreview(); }
+
+function arabicNum(n) {
+  const s = (typeof n === 'number' && !Number.isInteger(n)) ? n.toFixed(2) : String(n);
+  return s.replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[+d]).replace('.', '٫');
+}
+
+function evalFormula() {
+  const formula = document.getElementById('ctrl-formula').value || 'a * b';
+  try {
+    const ctx = {};
+    vars.forEach(v => { ctx[v.sym] = v.val; });
+    const fn = new Function(...Object.keys(ctx), 'return ' + formula + ';');
+    const result = fn(...Object.values(ctx));
+    return Number.isFinite(result) ? result : 0;
+  } catch (e) { return 0; }
+}
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'معادلة';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'معادلة') + ' — موقع تعليمي';
+
+  const resultLabel = document.getElementById('ctrl-result-label').value || 'النتيجة';
+  const resultUnit = document.getElementById('ctrl-result-unit').value || '';
+  const formula = document.getElementById('ctrl-formula').value || 'a * b';
+
+  // Display formula with variable values
+  let formulaDisplay = formula;
+  vars.forEach(v => {
+    const re = new RegExp('\\b' + v.sym + '\\b', 'g');
+    formulaDisplay = formulaDisplay.replace(re, '<span class="var-val">' + arabicNum(v.val) + '</span>');
+  });
+  // Simple operator beautification
+  formulaDisplay = formulaDisplay.replace(/\*/g, '×').replace(/\//g, '÷');
+
+  const result = evalFormula();
+  document.getElementById('formula-display').innerHTML =
+    '<span style="color:var(--amber-soft);">' + escapeHTML(resultLabel) + '</span> = ' +
+    formulaDisplay + ' = <span class="result-val">' + arabicNum(result) + '</span> ' +
+    '<span style="font-size:1rem; color:var(--bg-cream); opacity:0.7;">' + escapeHTML(resultUnit) + '</span>';
+
+  // Render controls
+  const controls = document.getElementById('controls-container');
+  controls.innerHTML = '';
+  vars.forEach((v, idx) => {
+    const div = document.createElement('div');
+    div.className = 'eq-control';
+    div.innerHTML = `
+      <div class="eq-control-label">
+        <span>${escapeHTML(v.name)} <span style="font-family:'Courier New',monospace;color:var(--amber);">(${escapeHTML(v.sym)})</span></span>
+        <span class="eq-control-val">${arabicNum(v.val)} ${escapeHTML(v.unit)}</span>
+      </div>
+      <input type="range" class="eq-slider" min="${v.min}" max="${v.max}" step="any" value="${v.val}" oninput="vars[${idx}].val = parseFloat(this.value); updatePreview();">
+    `;
+    controls.appendChild(div);
+  });
+
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'معادلة';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const formula = document.getElementById('ctrl-formula').value || 'a * b';
+  const resultLabel = document.getElementById('ctrl-result-label').value || 'النتيجة';
+  const resultUnit = document.getElementById('ctrl-result-unit').value || '';
+  const varsJSON = JSON.stringify(vars);
+  const sig = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>${escapeHTML(title)}</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet"><style>:root{--emerald-deep:#0F4C3A;--amber:#D97706;--amber-soft:#F59E0B;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.eq-demo{max-width:800px;margin:0 auto}.eq-formula-box{background:var(--emerald-deep);color:var(--bg-cream);padding:24px 28px;border-radius:14px;margin-bottom:24px;text-align:center;font-family:'Courier New',monospace;font-size:1.4rem;font-weight:700;direction:ltr}.eq-formula-box .var-val{background:rgba(217,119,6,0.3);color:var(--amber-soft);padding:4px 14px;border-radius:8px;margin:0 4px;display:inline-block}.eq-formula-box .result-val{background:var(--amber);color:white;padding:6px 18px;border-radius:8px;margin:0 4px;font-size:1.5rem;box-shadow:0 4px 12px rgba(217,119,6,0.4)}.eq-controls{display:grid;gap:16px;background:var(--bg-cream);border-radius:14px;padding:24px;border:1px solid var(--line)}.eq-control{display:grid;gap:8px}.eq-control-label{display:flex;justify-content:space-between;align-items:baseline;font-family:'Reem Kufi',sans-serif;font-weight:500;color:var(--emerald-deep)}.eq-control-val{color:var(--amber);font-weight:700;font-size:1.1rem;font-family:'Courier New',monospace}.eq-slider{width:100%;height:8px;background:var(--line);border-radius:999px;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer}.eq-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:24px;height:24px;background:var(--amber);border-radius:50%;cursor:pointer;box-shadow:0 2px 6px rgba(217,119,6,0.4)}.eq-slider::-moz-range-thumb{width:24px;height:24px;background:var(--amber);border-radius:50%;cursor:pointer;border:none}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.preview-title{font-size:1.5rem}.eq-formula-box{font-size:1.1rem}}</style></head><body><div class="page"><div class="preview-wrap"><div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div><div class="eq-demo"><div class="eq-formula-box" id="formula-display"></div><div class="eq-controls" id="controls-container"></div></div>${sig}</div></div><script>
+const vars = ${varsJSON};
+const formula = ${JSON.stringify(formula)};
+const resultLabel = ${JSON.stringify(resultLabel)};
+const resultUnit = ${JSON.stringify(resultUnit)};
+function escapeHTML(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function arabicNum(n){const s=(typeof n==='number'&&!Number.isInteger(n))?n.toFixed(2):String(n);return s.replace(/\\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[+d]).replace('.','٫');}
+function evalFormula(){try{const ctx={};vars.forEach(v=>{ctx[v.sym]=v.val;});const fn=new Function(...Object.keys(ctx),'return '+formula+';');const r=fn(...Object.values(ctx));return Number.isFinite(r)?r:0;}catch(e){return 0;}}
+function update(){
+  let disp=formula;
+  vars.forEach(v=>{disp=disp.replace(new RegExp('\\\\b'+v.sym+'\\\\b','g'),'<span class="var-val">'+arabicNum(v.val)+'</span>');});
+  disp=disp.replace(/\\*/g,'×').replace(/\\//g,'÷');
+  const r=evalFormula();
+  document.getElementById('formula-display').innerHTML='<span style="color:var(--amber-soft);">'+escapeHTML(resultLabel)+'</span> = '+disp+' = <span class="result-val">'+arabicNum(r)+'</span> <span style="font-size:1rem;color:var(--bg-cream);opacity:0.7;">'+escapeHTML(resultUnit)+'</span>';
+  const c=document.getElementById('controls-container');c.innerHTML='';
+  vars.forEach((v,idx)=>{
+    const d=document.createElement('div');d.className='eq-control';
+    d.innerHTML='<div class="eq-control-label"><span>'+escapeHTML(v.name)+' <span style="font-family:\\'Courier New\\',monospace;color:var(--amber);">('+escapeHTML(v.sym)+')</span></span><span class="eq-control-val">'+arabicNum(v.val)+' '+escapeHTML(v.unit)+'</span></div><input type="range" class="eq-slider" min="'+v.min+'" max="'+v.max+'" step="any" value="'+v.val+'" oninput="vars['+idx+'].val=parseFloat(this.value);update();">';
+    c.appendChild(d);
+  });
+}
+update();
+<\/script></body></html>`;
+  downloadHTML(finalHTML, title);
+}
+
+function downloadHTML(html, title) {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'معادلة').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s) { return String(s || '').replace(/"/g, '&quot;'); }
+function resetForm() { if (confirm('إعادةُ كلِّ القيمِ إلى الافتراضي؟')) location.reload(); }
+
+renderEditor();
+updatePreview();
+</script>
+</body>
+</html>

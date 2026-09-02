@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهارات التفكير والمذاكرة - صفحة 184</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #303c9c;
+            --badge-bg: #3c2a80;
+            --dashed-border: #9299c5;
+            --text-dark: #333333;
+            --bg-color: #f8f9fa;
+            
+            /* رسمة الأسد المدمجة باستخدام SVG */
+            --lion-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 200'%3E%3Crect width='300' height='200' fill='%23faf5eb' /%3E%3Cg fill='%23e5a93d' stroke='%23b57c16' stroke-width='3' stroke-linejoin='round'%3E%3Cpath d='M 230 90 Q 260 70 270 140' fill='none' stroke='%23e5a93d' stroke-width='8'/%3E%3Ccircle cx='270' cy='140' r='8' fill='%23c46e0a' stroke='none'/%3E%3Crect x='190' y='110' width='20' height='70' rx='10' /%3E%3Crect x='220' y='110' width='20' height='70' rx='10' /%3E%3Crect x='90' y='110' width='20' height='70' rx='10' /%3E%3Crect x='120' y='110' width='20' height='70' rx='10' /%3E%3Crect x='80' y='70' width='160' height='60' rx='30' /%3E%3Cpath d='M 50 40 Q 110 20 120 70 Q 130 120 80 130 Q 20 120 30 70 Q 20 30 50 40' fill='%23d98c14' /%3E%3Ccircle cx='60' cy='85' r='25' /%3E%3Crect x='25' y='80' width='40' height='20' rx='10' /%3E%3Ccircle cx='25' cy='90' r='5' fill='%23555' stroke='none'/%3E%3Ccircle cx='55' cy='75' r='3' fill='%23333' stroke='none'/%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #2c2c2c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Cairo', sans-serif;
+            padding: 20px;
+        }
+
+        /* حاوية الصفحة بحجم A4 قياسي وثابت */
+        .book-page {
+            background-color: #ffffff;
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                linear-gradient(135deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(225deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(45deg, rgba(240,240,250,0.5) 25%, transparent 25%), 
+                linear-gradient(315deg, rgba(240,240,250,0.5) 25%, transparent 25%);
+            background-position: 10px 0, 10px 0, 0 0, 0 0;
+            background-size: 100px 100px;
+            background-repeat: repeat;
+        }
+
+        /* الترويسة العلوية */
+        .page-header {
+            position: relative;
+            height: 60px;
+            margin-bottom: 25px;
+            flex-shrink: 0;
+        }
+
+        .header-shape {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 10px 40px;
+            font-size: 22px;
+            font-weight: 800;
+            position: absolute;
+            top: 15px;
+            right: 0;
+            width: 85%;
+            clip-path: polygon(100% 0, 0 0, 5% 100%, 100% 100%);
+        }
+
+        /* المحتوى الرئيسي */
+        .content-wrapper {
+            flex: 1 1 auto;
+            padding: 0 45px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        /* شارة تمرين */
+        .exercise-badge {
+            background-color: var(--badge-bg);
+            color: white;
+            padding: 6px 35px;
+            font-size: 20px;
+            font-weight: 800;
+            align-self: flex-start;
+            margin-bottom: 15px;
+        }
+
+        /* نص التعليمات */
+        .instruction-text {
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .instruction-text sup {
+            font-size: 13px;
+        }
+
+        /* الصندوق المتقطع الكبير للتمرين */
+        .dashed-container {
+            flex: 1 1 auto;
+            border: 2px dashed var(--dashed-border);
+            width: 100%;
+            position: relative;
+            background-color: rgba(255,255,255,0.8);
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            gap: 40px;
+        }
+
+        /* زوايا الصندوق المتقطع */
+        .dashed-container::before,
+        .dashed-container::after {
+            content: '';
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            border-color: var(--dashed-border);
+            border-style: solid;
+        }
+        .dashed-container::before { top: -2px; right: -2px; border-width: 2px 2px 0 0; }
+        .dashed-container::after { bottom: -2px; left: -2px; border-width: 0 0 2px 2px; }
+
+        /* شبكة الأحجية (الأسد) */
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 140px);
+            grid-template-rows: repeat(2, 140px);
+            border: 2px solid #555;
+            background-color: #fff;
+            /* تم تحويل اتجاه الشبكة لتتدفق المربعات بشكل صحيح وتكوّن الصورة */
+            direction: ltr;
+        }
+
+        .puzzle-cell {
+            border: 1px solid #777;
+            background-image: var(--lion-svg);
+            background-size: 420px 280px; /* 140*3 x 140*2 */
+            background-repeat: no-repeat;
+        }
+
+        /* تقسيم صورة الخلفية على الخلايا */
+        .c1 { background-position: 0 0; }
+        .c2 { background-position: -140px 0; }
+        .c3 { background-position: -280px 0; }
+        .c4 { background-position: 0 -140px; }
+        .c5 { background-position: -140px -140px; }
+        
+        /* الخلية المفقودة (السادسة: التي على اليمين بالأسفل حسب تدفق الشبكة الجديد) */
+        .c6 { 
+            background-image: none; 
+            background-color: #fdfdfd;
+        }
+
+        /* قسم الخيارات في الأسفل */
+        .options-row {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .option-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .opt-box {
+            width: 110px;
+            height: 110px;
+            border: 1px solid #555;
+            background-color: #fff;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .opt-inner {
+            width: 100%;
+            height: 100%;
+            background-image: var(--lion-svg);
+            background-size: 330px 220px; /* مقاس مصغر ليتناسب مع صندوق الـ 110 بكسل */
+            background-repeat: no-repeat;
+        }
+
+        /* الخيار 3 (الصحيح): يمثل القطعة المفقودة (الجزء الخلفي السفلي للأسد) */
+        .opt-3 { background-position: -220px -110px; }
+        
+        /* الخيار 2 (خاطئ): مزاحة لعدم تطابق الخطوط */
+        .opt-2 { background-position: -205px -100px; }
+        
+        /* الخيار 1 (خاطئ): معكوسة أفقياً */
+        .opt-1 { background-position: -220px -110px; transform: scaleX(-1); }
+
+        .opt-num {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-dark);
+        }
+
+        /* الحاشية السفلية المرجعية */
+        .footnote {
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            text-align: right;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+            padding: 0 45px;
+        }
+
+        /* التذييل السفلي - لصفحة يسرى */
+        .page-footer {
+            background-color: var(--primary-blue);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+            flex-shrink: 0;
+            flex-direction: row-reverse;
+        }
+
+        .page-number {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .footer-title {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        /* إعدادات الطباعة الصارمة */
+        @media print {
+            @page { size: A4; margin: 0; }
+            body {
+                background-color: #ffffff;
+                padding: 0; margin: 0;
+                display: block;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .book-page {
+                width: 210mm; height: 297mm;
+                box-shadow: none; margin: 0;
+                page-break-after: avoid; page-break-before: avoid; page-break-inside: avoid;
+            }
+        }
+
+        /* توافقية الشاشات الصغيرة للمعاينة */
+        @media (max-width: 800px) {
+            .book-page { width: 100%; height: auto; min-height: 297mm; }
+            .content-wrapper { padding: 0 20px; }
+            .puzzle-grid { grid-template-columns: repeat(3, 100px); grid-template-rows: repeat(2, 100px); }
+            .puzzle-cell { background-size: 300px 200px; }
+            .c2 { background-position: -100px 0; }
+            .c3 { background-position: -200px 0; }
+            .c4 { background-position: 0 -100px; }
+            .c5 { background-position: -100px -100px; }
+            .options-row { gap: 15px; }
+            .opt-box { width: 80px; height: 80px; }
+            .opt-inner { background-size: 240px 160px; }
+            .opt-3 { background-position: -160px -80px; }
+            .opt-2 { background-position: -150px -75px; }
+            .opt-1 { background-position: -160px -80px; }
+            .page-footer { padding: 15px 20px; }
+        }
+    </style>
+
+<meta name="hv-nav" content="bar">
+<meta name="hv-title" content="مهاراتُ التفكيرِ والمذاكرة — ص١٨٤">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+    <div class="book-page">
+        <!-- الترويسة -->
+        <div class="page-header">
+            <div class="header-shape">
+                مهارات التفكير والمذاكرة
+            </div>
+        </div>
+
+        <!-- المحتوى الرئيسي -->
+        <div class="content-wrapper">
+            
+            <div class="exercise-badge">تمرين: الشكل الناقص</div>
+            
+            <div class="instruction-text">
+                انظر إلى الشكل التالي؛ وستجد أن هناك مربعًا ينقصه. اختر المربع الناقص من بين المربعات الثلاثة الموجودة<sup>(1)</sup>:
+            </div>
+
+            <div class="dashed-container">
+                
+                <!-- شبكة الأحجية 3×2 -->
+                <div class="puzzle-grid">
+                    <div class="puzzle-cell c1"></div>
+                    <div class="puzzle-cell c2"></div>
+                    <div class="puzzle-cell c3"></div>
+                    <div class="puzzle-cell c4"></div>
+                    <div class="puzzle-cell c5"></div>
+                    <div class="puzzle-cell c6"></div> <!-- المربع المفقود (اليمين بالأسفل بالنسبة للأسد) -->
+                </div>
+
+                <!-- الخيارات الثلاثة (تم ترتيبها من اليمين لليسار لتطابق الصورة) -->
+                <div class="options-row">
+                    <!-- الخيار 1 (خاطئ) -->
+                    <div class="option-col">
+                        <div class="opt-box">
+                            <div class="opt-inner opt-1"></div>
+                        </div>
+                        <div class="opt-num">١</div>
+                    </div>
+                    
+                    <!-- الخيار 2 (خاطئ) -->
+                    <div class="option-col">
+                        <div class="opt-box">
+                            <div class="opt-inner opt-2"></div>
+                        </div>
+                        <div class="opt-num">٢</div>
+                    </div>
+
+                    <!-- الخيار 3 (الصحيح) -->
+                    <div class="option-col">
+                        <div class="opt-box">
+                            <div class="opt-inner opt-3"></div>
+                        </div>
+                        <div class="opt-num">٣</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- الحاشية السفلية -->
+        <div class="footnote">(1) نوير، مايكل وكروازي، برنارد (2010). غدّ عضلاتك العقلية، المرجع السابق، ص 30.</div>
+
+        <!-- التذييل لصفحة يسرى -->
+        <div class="page-footer">
+            <div class="footer-title">الفصل الرابع: كيف تزيد طاقتك الاستيعابية</div>
+            <div class="page-number">184</div>
+        </div>
+    </div>
+
+</body>
+</html>

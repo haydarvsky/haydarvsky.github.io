@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>البطاقات القابلة للقلب — قالب جاهز</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --emerald-deep: #0F4C3A;
+  --emerald: #1a6b54;
+  --amber: #D97706;
+  --amber-soft: #F59E0B;
+  --bg-cream: #FAF6EF;
+  --bg-paper: #FFFFFF;
+  --ink: #1F2937;
+  --ink-soft: #6B7280;
+  --line: #E5E0D5;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg-cream);
+  color: var(--ink);
+  min-height: 100vh;
+  padding: 24px 16px;
+  line-height: 1.6;
+}
+
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ============ TEACHER CONTROL PANEL ============ */
+.teacher-panel {
+  background: linear-gradient(135deg, var(--emerald-deep), var(--emerald));
+  color: var(--bg-cream);
+  border-radius: 18px;
+  padding: 28px 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.teacher-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 6px; height: 100%;
+  background: var(--amber);
+}
+
+.tp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tp-title {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tp-title-icon {
+  font-size: 1.4rem;
+}
+
+.tp-toggle {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: var(--bg-cream);
+  padding: 8px 16px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+
+.tp-instructions {
+  background: rgba(255,255,255,0.08);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+  border-right: 3px solid var(--amber-soft);
+}
+
+.tp-instructions strong { color: var(--amber-soft); }
+
+.tp-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.tp-field {
+  display: grid;
+  gap: 6px;
+}
+
+.tp-label {
+  font-family: 'Reem Kufi', sans-serif;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--amber-soft);
+}
+
+.tp-input,
+.tp-textarea {
+  width: 100%;
+  background: rgba(255,255,255,0.95);
+  color: var(--ink);
+  border: 1px solid rgba(0,0,0,0.05);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1rem;
+  resize: vertical;
+  transition: all 0.2s;
+}
+
+.tp-input:focus,
+.tp-textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4);
+}
+
+.tp-textarea {
+  min-height: 120px;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.tp-hint {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.7);
+  font-style: italic;
+}
+
+.tp-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.tp-card-input {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.tp-card-input .tp-label {
+  font-size: 0.82rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tp-card-num {
+  background: var(--amber);
+  color: white;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.tp-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.tp-btn {
+  background: var(--amber);
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: 'Reem Kufi', sans-serif;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+
+.tp-btn-secondary {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+
+.tp-collapsed .tp-content { display: none; }
+
+/* ============ LIVE PREVIEW ============ */
+.preview-wrap {
+  background: var(--bg-paper);
+  border-radius: 18px;
+  padding: 40px 32px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+
+.preview-header {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.preview-title {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--emerald-deep);
+  margin-bottom: 8px;
+}
+
+.preview-subtitle {
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+}
+
+.flip-cards-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  perspective: 1200px;
+}
+
+.flip-card {
+  height: 240px;
+  cursor: pointer;
+  perspective: 1200px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform 0.3s;
+}
+
+.flip-card:hover .flip-card-face {
+  transform: scale(1.02);
+}
+
+.flip-card-front {
+  background: linear-gradient(145deg, var(--emerald-deep), var(--emerald));
+  color: var(--bg-cream);
+}
+
+.flip-card-back {
+  background: linear-gradient(145deg, var(--amber), #B45309);
+  color: white;
+  transform: rotateY(180deg);
+}
+
+.flip-card-emoji {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+}
+
+.flip-card-title {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.flip-card-hint {
+  font-size: 0.78rem;
+  opacity: 0.7;
+  margin-top: auto;
+  letter-spacing: 1px;
+}
+
+.flip-card-back-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+/* Signature */
+.signature {
+  text-align: center;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+  font-family: 'Reem Kufi', sans-serif;
+}
+
+.signature-name {
+  color: var(--emerald-deep);
+  font-weight: 600;
+}
+
+/* Print: hide control panel */
+@media print {
+  .teacher-panel { display: none; }
+  body { background: white; padding: 0; }
+}
+
+@media (max-width: 600px) {
+  .tp-header { flex-direction: column; align-items: flex-start; }
+  .preview-title { font-size: 1.5rem; }
+  .flip-card { height: 200px; }
+}
+
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="البطاقات القابلة للقلب">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<div class="page">
+
+  <!-- ========== TEACHER CONTROL PANEL ========== -->
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title">
+        <span class="tp-title-icon">🎛️</span>
+        <span>لوحةُ تحكُّمِ المعلِّمِ — البطاقاتُ القابلةُ للقلب</span>
+      </div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>كيف تستعملُ هذا القالب؟</strong>
+        املأِ الحقولَ في الأسفل، فيتحدَّثُ الموقعُ أمامَك تلقائيًّا.
+        لا تحتاجُ إلى فتحِ الكودِ أبدًا. حين تنتهي، اضغط
+        <strong>«حفظُ نسخةٍ نهائيَّة»</strong> لتحميلِ الموقعِ جاهزًا للاستعمال
+        مع طلَّابك.
+      </div>
+
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title"
+                 value="مصطلحاتُ الدرس"
+                 oninput="updatePreview()">
+        </div>
+
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle"
+                 value="انقر على أيِّ بطاقةٍ لتراها تنقلب"
+                 oninput="updatePreview()">
+        </div>
+
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">
+            البطاقات (٤ بطاقاتٍ — لكلِّ بطاقةٍ مصطلحٌ في الوجهِ الأماميِّ، وتعريفٌ في الخلفي)
+          </label>
+          <div class="tp-cards-grid">
+
+            <div class="tp-card-input">
+              <label class="tp-label"><span class="tp-card-num">١</span> البطاقة الأولى</label>
+              <input type="text" class="tp-input" id="card-1-emoji"
+                     placeholder="رمز تعبيري" value="🌍"
+                     oninput="updatePreview()" style="margin-bottom:6px;">
+              <input type="text" class="tp-input" id="card-1-front"
+                     placeholder="المصطلح (الوجه الأمامي)" value="الكوكبُ الأزرق"
+                     oninput="updatePreview()" style="margin-bottom:6px;">
+              <textarea class="tp-textarea" id="card-1-back"
+                        placeholder="التعريف (الوجه الخلفي)"
+                        oninput="updatePreview()" style="min-height:60px;">الأرضُ — يُغطِّي الماءُ ٧١٪ من سطحها</textarea>
+            </div>
+
+            <div class="tp-card-input">
+              <label class="tp-label"><span class="tp-card-num">٢</span> البطاقة الثانية</label>
+              <input type="text" class="tp-input" id="card-2-emoji"
+                     placeholder="رمز تعبيري" value="⚛️"
+                     oninput="updatePreview()" style="margin-bottom:6px;">
+              <input type="text" class="tp-input" id="card-2-front"
+                     placeholder="المصطلح" value="أصغرُ وحدة"
+                     oninput="updatePreview()" style="margin-bottom:6px;">
+              <textarea class="tp-textarea" id="card-2-back"
+                        placeholder="التعريف"
+                        oninput="updatePreview()" style="min-height:60px;">الذرَّةُ — اللَّبِنةُ الأساسيَّةُ لكلِّ مادَّة</textarea>
+            </div>
+
+            <div class="tp-card-input">
+              <label class="tp-label"><span class="tp-card-num">٣</span> البطاقة الثالثة</label>
+              <input type="text" class="tp-input" id="card-3-emoji"
+                     placeholder="رمز تعبيري" value="📜"
+                     oninput="updatePreview()" style="margin-bottom:6px;">
+              <input type="text" class="tp-input" id="card-3-front"
+                     placeholder="المصطلح" value="المعلَّقاتُ السبع"
+                     oninput="updatePreview()" style="margin-bottom:6px;">
+              <textarea class="tp-textarea" id="card-3-back"
+                        placeholder="التعريف"
+                        oninput="updatePreview()" style="min-height:60px;">قصائدُ جاهليَّةٌ عُلِّقت على الكعبةِ لجودتها</textarea>
+            </div>
+
+            <div class="tp-card-input">
+              <label class="tp-label"><span class="tp-card-num">٤</span> البطاقة الرابعة</label>
+              <input type="text" class="tp-input" id="card-4-emoji"
+                     placeholder="رمز تعبيري" value="🔢"
+                     oninput="updatePreview()" style="margin-bottom:6px;">
+              <input type="text" class="tp-input" id="card-4-front"
+                     placeholder="المصطلح" value="العددُ الأوَّلي"
+                     oninput="updatePreview()" style="margin-bottom:6px;">
+              <textarea class="tp-textarea" id="card-4-back"
+                        placeholder="التعريف"
+                        oninput="updatePreview()" style="min-height:60px;">عددٌ لا يقبلُ القسمةَ إلَّا على نفسِه وعلى الواحد</textarea>
+            </div>
+
+          </div>
+          <p class="tp-hint" style="margin-top:10px;">
+            💡 الرموزُ التعبيريَّةُ اختياريَّة. يمكنُك تركُها فارغةً.
+          </p>
+        </div>
+
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (يظهرُ في الأسفل)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher"
+                 placeholder="أ. فلان الفلاني"
+                 oninput="updatePreview()">
+        </div>
+      </div>
+
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">
+          💾 حفظُ نسخةٍ نهائيَّة
+        </button>
+        <button class="tp-btn tp-btn-secondary" onclick="printPreview()">
+          🖨️ طباعةٌ مباشرة
+        </button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">
+          ↻ إعادةٌ إلى المثالِ الافتراضي
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== LIVE PREVIEW ========== -->
+  <div class="preview-wrap" id="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">مصطلحاتُ الدرس</h1>
+      <p class="preview-subtitle" id="preview-subtitle">انقر على أيِّ بطاقةٍ لتراها تنقلب</p>
+    </div>
+
+    <div class="flip-cards-row" id="cards-container">
+      <!-- البطاقات تُولَّد هنا تلقائيًّا -->
+    </div>
+
+    <div class="signature" id="signature" style="display:none;">
+      من إعدادِ <span class="signature-name" id="signature-name"></span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============ LIVE UPDATE ============
+function updatePreview() {
+  // Title and subtitle
+  const title = document.getElementById('ctrl-title').value || 'مصطلحاتُ الدرس';
+  const subtitle = document.getElementById('ctrl-subtitle').value || 'انقر على أيِّ بطاقة';
+  document.getElementById('preview-title').textContent = title;
+  document.getElementById('preview-subtitle').textContent = subtitle;
+  document.title = title + ' — موقع تعليمي';
+
+  // Cards
+  const container = document.getElementById('cards-container');
+  container.innerHTML = '';
+
+  for (let i = 1; i <= 4; i++) {
+    const emoji = document.getElementById('card-' + i + '-emoji').value;
+    const front = document.getElementById('card-' + i + '-front').value;
+    const back = document.getElementById('card-' + i + '-back').value;
+
+    if (!front && !back) continue; // skip if empty
+
+    const card = document.createElement('div');
+    card.className = 'flip-card';
+    card.onclick = function() { this.classList.toggle('flipped'); };
+
+    card.innerHTML = `
+      <div class="flip-card-inner">
+        <div class="flip-card-face flip-card-front">
+          ${emoji ? `<div class="flip-card-emoji">${emoji}</div>` : ''}
+          <div class="flip-card-title">${front || '—'}</div>
+          <div class="flip-card-hint">انقر للقلب</div>
+        </div>
+        <div class="flip-card-face flip-card-back">
+          <div class="flip-card-back-text">${back || '—'}</div>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  }
+
+  // Teacher signature
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) {
+    sig.style.display = 'block';
+    document.getElementById('signature-name').textContent = teacher;
+  } else {
+    sig.style.display = 'none';
+  }
+}
+
+// ============ TOGGLE PANEL ============
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+// ============ DOWNLOAD FINAL VERSION ============
+function downloadFinal() {
+  // Build a clean HTML without the teacher panel
+  const title = document.getElementById('ctrl-title').value || 'مصطلحات الدرس';
+  const subtitle = document.getElementById('ctrl-subtitle').value || 'انقر على أيِّ بطاقة';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+
+  let cardsHTML = '';
+  for (let i = 1; i <= 4; i++) {
+    const emoji = document.getElementById('card-' + i + '-emoji').value;
+    const front = document.getElementById('card-' + i + '-front').value;
+    const back = document.getElementById('card-' + i + '-back').value;
+    if (!front && !back) continue;
+    cardsHTML += `
+      <div class="flip-card" onclick="this.classList.toggle('flipped')">
+        <div class="flip-card-inner">
+          <div class="flip-card-face flip-card-front">
+            ${emoji ? `<div class="flip-card-emoji">${emoji}</div>` : ''}
+            <div class="flip-card-title">${escapeHTML(front)}</div>
+            <div class="flip-card-hint">انقر للقلب</div>
+          </div>
+          <div class="flip-card-face flip-card-back">
+            <div class="flip-card-back-text">${escapeHTML(back)}</div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  const signatureHTML = teacher
+    ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>`
+    : '';
+
+  const finalHTML = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHTML(title)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 40px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+.flip-cards-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; perspective: 1200px; }
+.flip-card { height: 240px; cursor: pointer; perspective: 1200px; }
+.flip-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1); transform-style: preserve-3d; }
+.flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 16px; padding: 24px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 6px 18px rgba(0,0,0,0.08); transition: transform 0.3s; }
+.flip-card:hover .flip-card-face { transform: scale(1.02); }
+.flip-card-front { background: linear-gradient(145deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); }
+.flip-card-back { background: linear-gradient(145deg, var(--amber), #B45309); color: white; transform: rotateY(180deg); }
+.flip-card-emoji { font-size: 2.8rem; margin-bottom: 10px; }
+.flip-card-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.2rem; font-weight: 600; margin-bottom: 8px; }
+.flip-card-hint { font-size: 0.78rem; opacity: 0.7; margin-top: auto; letter-spacing: 1px; }
+.flip-card-back-text { font-size: 1rem; line-height: 1.6; font-weight: 500; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media (max-width: 600px) { .preview-title { font-size: 1.5rem; } .flip-card { height: 200px; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title">${escapeHTML(title)}</h1>
+      <p class="preview-subtitle">${escapeHTML(subtitle)}</p>
+    </div>
+    <div class="flip-cards-row">${cardsHTML}
+    </div>
+    ${signatureHTML}
+  </div>
+</div>
+</body>
+</html>`;
+
+  const blob = new Blob([finalHTML], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'بطاقات').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function escapeHTML(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+
+function printPreview() {
+  window.print();
+}
+
+function resetForm() {
+  if (!confirm('هل تريدُ بالفعل إعادةَ كلِّ القيمِ إلى مثالِ البداية؟')) return;
+  location.reload();
+}
+
+// ============ INIT ============
+updatePreview();
+</script>
+
+</body>
+</html>

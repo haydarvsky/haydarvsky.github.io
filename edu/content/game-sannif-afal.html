@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لعبة · صنّف الأفعال · إعداد أ. حيدر المعاتيق</title>
+
+<style>
+  /* ===== SakkalSaad ===== */
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-100.woff2') format('woff2'); font-weight:100; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-300.woff2') format('woff2'); font-weight:300; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-700.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-800.woff2') format('woff2'); font-weight:800; font-display:swap; }
+
+  :root{
+    --ink:#1A1F2E; --ink-soft:#4A5165;
+    --paper:#F6EFE2; --paper-2:#FBF6EC; --paper-3:#FFFFFF;
+    --accent:#0E6F5C; --accent-2:#0A4F42;
+    --gold:#C89B4A; --gold-soft:#E8C886;
+    --rose:#B43E50; --rose-2:#8A2C3C;
+    --leaf:#2B7A57;
+    --line:#E2D8C2;
+    --shadow:0 18px 60px -22px rgba(26,31,46,.45);
+    --font:"SakkalSaad","Segoe UI",system-ui,-apple-system,sans-serif;
+    --font-display:"SakkalSaad","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;overflow-x:hidden;}
+  body{
+    font-family:var(--font); color:var(--ink); font-weight:400;
+    background:
+      radial-gradient(1200px 600px at 90% -10%, rgba(200,155,74,.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(14,111,92,.14), transparent 60%),
+      var(--paper);
+    line-height:1.7; min-height:100%; font-size:18px;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:fixed; top:0; right:0; left:0; height:64px;
+    background:rgba(251,246,236,.9);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 26px; z-index:50;
+  }
+  .topbar .brand{ font-family:var(--font-display); font-size:19px; color:var(--accent); font-weight:700; }
+  .topbar .brand span{ color:var(--gold); }
+  .topbar .player{
+    display:none; align-items:center; gap:10px;
+    background:var(--paper); border:1px solid var(--line);
+    padding:6px 14px; border-radius:999px;
+    font-size:15px; color:var(--ink-soft);
+  }
+  .topbar .player.show{ display:inline-flex; }
+  .topbar .player b{ color:var(--accent); font-weight:800; }
+  .topbar .player .avatar{
+    width:26px; height:26px; border-radius:50%;
+    background:var(--accent); color:white;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-weight:800; font-size:13px; font-family:var(--font);
+  }
+  .progress-line{ position:fixed; top:64px; right:0; left:0; height:4px; background:rgba(14,111,92,.1); z-index:50; }
+  .progress-line>span{ display:block; height:100%; background:linear-gradient(90deg,var(--gold-soft),var(--gold),var(--accent)); width:0; transition:width .5s cubic-bezier(.2,.8,.2,1); }
+
+  /* ===== Stage ===== */
+  .stage{ padding-top:90px; padding-bottom:110px; min-height:100vh; }
+  .screen{ display:none; max-width:1200px; margin:0 auto; padding:clamp(24px,3vw,48px); }
+  .screen.active{ display:block; animation:slideIn .55s cubic-bezier(.2,.8,.2,1); }
+  @keyframes slideIn{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes pop{
+    0%{ transform:scale(.9); opacity:0; }
+    50%{ transform:scale(1.05); }
+    100%{ transform:scale(1); opacity:1; }
+  }
+
+  /* =============================== */
+  /* ===== WELCOME / NAME ENTRY ==== */
+  /* =============================== */
+  .welcome{
+    min-height:calc(100vh - 90px);
+    display:none;
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:30px 24px;
+  }
+  .welcome.active{ display:flex; }
+  .welcome-ornament{
+    width:120px; height:120px; opacity:.85; margin-bottom:24px;
+    animation:float 3.5s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{ transform:translateY(0); }
+    50%{ transform:translateY(-12px); }
+  }
+  .welcome-eyebrow{
+    font-family:var(--font-display); font-size:15px; letter-spacing:7px; font-weight:600;
+    color:var(--gold);
+    border-top:1px solid var(--gold); border-bottom:1px solid var(--gold);
+    padding:8px 22px; margin-bottom:30px;
+  }
+  .welcome-title{
+    font-family:var(--font-display); font-size:clamp(40px,7vw,76px);
+    color:var(--ink); line-height:1.1; font-weight:800;
+    letter-spacing:-1px; max-width:850px; margin-bottom:16px;
+  }
+  .welcome-title .em{ color:var(--accent); position:relative; }
+  .welcome-title .em::after{
+    content:""; position:absolute; right:0; left:0; bottom:-.05em;
+    height:.12em; background:linear-gradient(90deg,transparent,var(--gold),transparent); border-radius:8px;
+  }
+  .welcome-sub{
+    font-family:var(--font-display);
+    font-size:clamp(18px,2.2vw,24px); color:var(--ink-soft); font-weight:500;
+    margin-bottom:36px;
+  }
+
+  .name-card{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:24px;
+    padding:clamp(28px,3.5vw,44px);
+    box-shadow:var(--shadow);
+    max-width:520px; width:100%;
+    text-align:right;
+    margin-bottom:30px;
+  }
+  .name-card label{
+    display:block; font-family:var(--font-display); font-weight:700;
+    color:var(--accent); font-size:18px; margin-bottom:14px;
+  }
+  .name-card label::before{
+    content:"👤 "; font-size:20px;
+  }
+  .name-input{
+    width:100%; padding:16px 20px;
+    background:var(--paper); border:2px solid var(--line); border-radius:14px;
+    font-family:var(--font); font-size:22px; font-weight:700;
+    color:var(--ink); text-align:right;
+    transition:all .25s ease;
+  }
+  .name-input:focus{
+    outline:none; border-color:var(--gold);
+    background:white;
+    box-shadow:0 0 0 4px rgba(200,155,74,.2);
+  }
+  .name-input::placeholder{ color:var(--ink-soft); opacity:.6; font-weight:500; }
+  .name-error{
+    display:none; margin-top:10px;
+    color:var(--rose); font-size:14px; font-weight:600;
+  }
+  .name-error.show{ display:block; }
+
+  .start-btn{
+    background:var(--accent); color:var(--paper-2);
+    border:none; padding:16px 48px; border-radius:14px;
+    font-family:var(--font); font-size:20px; font-weight:700; cursor:pointer;
+    box-shadow:0 14px 36px -14px var(--accent); transition:all .3s ease; letter-spacing:1px;
+  }
+  .start-btn:hover{ background:var(--accent-2); transform:translateY(-3px); }
+  .start-btn::after{ content:" 🎮"; }
+
+  .rules-strip{
+    margin-top:30px; max-width:680px; width:100%;
+    display:grid; grid-template-columns:repeat(3,1fr); gap:14px;
+  }
+  @media (max-width:680px){ .rules-strip{ grid-template-columns:1fr; } }
+  .rule-pill{
+    background:rgba(14,111,92,.06); border:1px solid rgba(14,111,92,.2);
+    padding:14px 16px; border-radius:14px;
+    font-size:14px; color:var(--ink-soft); line-height:1.5;
+    text-align:center;
+  }
+  .rule-pill .ic{ display:block; font-size:24px; margin-bottom:6px; }
+  .rule-pill b{ color:var(--accent); font-weight:800; font-family:var(--font-display); }
+
+  /* =============================== */
+  /* ===== ROUND HEADER =========== */
+  /* =============================== */
+  .round-header{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    margin-bottom:20px;
+  }
+  .round-num{
+    background:var(--gold); color:white;
+    padding:8px 18px; border-radius:999px;
+    font-family:var(--font-display); font-weight:800; font-size:15px;
+    letter-spacing:3px;
+  }
+  .round-title{
+    font-family:var(--font-display);
+    font-size:clamp(28px,3.8vw,44px);
+    color:var(--accent); font-weight:800; line-height:1.15;
+  }
+  .round-stats{
+    margin-right:auto;
+    display:flex; gap:10px; flex-wrap:wrap;
+  }
+  .stat-chip{
+    background:var(--paper-2); border:1.5px solid var(--line);
+    padding:7px 14px; border-radius:999px;
+    font-size:14px; color:var(--ink-soft);
+    display:inline-flex; align-items:center; gap:8px; font-weight:700;
+  }
+  .stat-chip b{ color:var(--accent); font-size:16px; font-weight:800; }
+  .stat-chip.hint b{ color:var(--gold); }
+  .stat-chip.placed b{ color:var(--leaf); }
+
+  /* =============================== */
+  /* ===== PASSAGE BOX ============ */
+  /* =============================== */
+  .game-passage{
+    background:var(--paper-2); border:2px solid var(--line); border-radius:22px;
+    padding:clamp(22px,3vw,32px) clamp(24px,3.2vw,36px);
+    font-size:clamp(19px,2.2vw,22px); line-height:2.4;
+    margin-bottom:18px; box-shadow:var(--shadow);
+    position:relative;
+  }
+  .game-passage::before{
+    content:"❝"; position:absolute; top:6px; right:18px;
+    font-size:50px; color:var(--gold-soft); opacity:.4;
+    font-family:Georgia,serif; line-height:1;
+  }
+  .passage-label{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-display); font-size:13px; color:var(--gold);
+    background:rgba(200,155,74,.12); border:1px solid rgba(200,155,74,.3);
+    padding:5px 12px; border-radius:999px; margin-bottom:14px; font-weight:700; letter-spacing:2px;
+  }
+
+  /* Verb chip in passage */
+  .gv{
+    display:inline-flex; align-items:center; gap:6px;
+    background:white; border:2px solid var(--accent);
+    padding:3px 14px 4px; border-radius:10px;
+    font-weight:800; color:var(--accent-2); font-family:var(--font-display);
+    margin:2px 1px; cursor:grab; user-select:none;
+    transition:all .2s ease;
+    box-shadow:0 4px 10px -4px rgba(14,111,92,.3);
+    position:relative;
+  }
+  .gv:not(.placed):not(.dragging){
+    animation:gvPulse 3s ease-in-out infinite;
+  }
+  @keyframes gvPulse{
+    0%,100%{ box-shadow:0 4px 10px -4px rgba(14,111,92,.3); }
+    50%{ box-shadow:0 4px 18px -4px rgba(200,155,74,.6); }
+  }
+  .gv:hover{
+    transform:translateY(-2px) scale(1.04);
+    background:rgba(200,155,74,.1);
+    border-color:var(--gold);
+    box-shadow:0 8px 18px -4px var(--gold);
+  }
+  .gv:active{ cursor:grabbing; }
+  .gv.dragging{
+    opacity:.5;
+    transform:scale(.95);
+  }
+  .gv.placed{
+    opacity:.4; pointer-events:none;
+    text-decoration:line-through;
+    border-color:var(--line);
+    color:var(--ink-soft);
+    background:transparent;
+    box-shadow:none;
+    animation:none;
+  }
+  .gv .root-hint{
+    display:none;
+    margin-right:6px;
+    font-size:14px; color:var(--gold);
+    font-weight:700;
+    background:rgba(200,155,74,.15);
+    padding:1px 8px; border-radius:6px;
+    letter-spacing:1px;
+  }
+  .gv.show-hint .root-hint{ display:inline-block; animation:fadeUp .25s ease; }
+
+  /* =============================== */
+  /* ===== HINT TOOLBAR =========== */
+  /* =============================== */
+  .toolbar{
+    background:var(--paper-3); border:1.5px dashed var(--gold);
+    border-radius:14px; padding:12px 18px;
+    margin-bottom:22px;
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  }
+  .toolbar-text{
+    font-size:15px; color:var(--ink-soft); font-weight:600;
+    display:flex; align-items:center; gap:6px;
+  }
+  .toolbar-text b{ color:var(--gold); font-weight:800; }
+  .hint-btn{
+    background:var(--gold); color:white;
+    border:none; padding:8px 18px; border-radius:10px;
+    font-family:var(--font); font-weight:700; font-size:14px;
+    cursor:pointer; transition:all .2s ease;
+    display:inline-flex; align-items:center; gap:6px;
+    margin-right:auto;
+  }
+  .hint-btn:hover{ background:#B68940; transform:translateY(-2px); }
+  .hint-btn.disabled{ opacity:.4; pointer-events:none; }
+  .hint-btn .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:rgba(255,255,255,.7);
+    display:inline-block;
+  }
+  .hint-status{
+    font-size:13px; color:var(--ink-soft); font-weight:700;
+  }
+  .hint-status b{ color:var(--gold); font-size:14px; }
+
+  /* =============================== */
+  /* ===== DROP ZONES (BUCKETS) === */
+  /* =============================== */
+  .buckets-area{
+    background:white; border:2px solid var(--line); border-radius:22px;
+    padding:clamp(20px,2.5vw,28px); box-shadow:var(--shadow);
+    margin-bottom:18px;
+  }
+  .buckets-title{
+    font-family:var(--font-display); font-size:18px; font-weight:800;
+    color:var(--accent); margin-bottom:14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .buckets-title::before{
+    content:""; width:5px; height:22px; background:var(--gold);
+    border-radius:3px;
+  }
+  .buckets-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+    gap:12px;
+  }
+  .bucket{
+    background:var(--paper-2);
+    border:2.5px dashed;
+    border-radius:16px;
+    padding:14px;
+    transition:all .25s ease;
+    min-height:120px;
+    display:flex; flex-direction:column;
+  }
+  .bucket.sound-bucket{ border-color:rgba(14,111,92,.4); background:rgba(14,111,92,.04); }
+  .bucket.weak-bucket{ border-color:rgba(180,62,80,.4); background:rgba(180,62,80,.04); }
+  .bucket.drag-over{
+    transform:scale(1.02);
+    border-style:solid;
+    box-shadow:0 14px 30px -14px var(--gold);
+  }
+  .bucket.sound-bucket.drag-over{ background:rgba(14,111,92,.1); border-color:var(--leaf); }
+  .bucket.weak-bucket.drag-over{ background:rgba(180,62,80,.1); border-color:var(--rose); }
+  .bucket-head{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:10px;
+    padding-bottom:8px;
+    border-bottom:1.5px dashed;
+  }
+  .bucket.sound-bucket .bucket-head{ border-bottom-color:rgba(14,111,92,.25); }
+  .bucket.weak-bucket .bucket-head{ border-bottom-color:rgba(180,62,80,.25); }
+  .bucket-name{
+    font-family:var(--font-display); font-size:18px; font-weight:800;
+  }
+  .bucket.sound-bucket .bucket-name{ color:var(--accent); }
+  .bucket.weak-bucket .bucket-name{ color:var(--rose); }
+  .bucket-count{
+    background:white; border:1.5px solid;
+    padding:2px 10px; border-radius:999px;
+    font-size:13px; font-weight:800; font-family:var(--font);
+    min-width:30px; text-align:center;
+  }
+  .bucket.sound-bucket .bucket-count{ border-color:rgba(14,111,92,.3); color:var(--accent); }
+  .bucket.weak-bucket .bucket-count{ border-color:rgba(180,62,80,.3); color:var(--rose); }
+  .bucket-tag{
+    font-size:11px; color:var(--ink-soft);
+    text-align:center; opacity:.7;
+    margin-bottom:8px;
+    letter-spacing:1px;
+  }
+  .bucket-content{
+    display:flex; flex-wrap:wrap; gap:6px;
+    flex:1;
+    align-content:flex-start;
+  }
+  .bucket-empty{
+    width:100%; text-align:center;
+    color:var(--ink-soft); font-size:13px; opacity:.55;
+    font-weight:600;
+    padding:14px 4px;
+    align-self:center;
+  }
+  .placed-verb{
+    background:white; border:1.5px solid;
+    padding:5px 12px; border-radius:8px;
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+    animation:pop .3s ease;
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  .placed-verb.correct{ border-color:var(--leaf); color:var(--leaf); background:rgba(43,122,87,.08); }
+  .placed-verb.wrong{ border-color:var(--rose); color:var(--rose); background:rgba(180,62,80,.08); }
+  .placed-verb .pmark{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:18px; height:18px; border-radius:50%;
+    color:white; font-size:11px; font-weight:800;
+    font-family:var(--font);
+  }
+  .placed-verb.correct .pmark{ background:var(--leaf); }
+  .placed-verb.wrong .pmark{ background:var(--rose); }
+
+  /* =============================== */
+  /* ===== TOAST FEEDBACK ========= */
+  /* =============================== */
+  .toast{
+    position:fixed; top:80px; right:50%; transform:translate(50%, -20px);
+    background:white; border:2px solid;
+    padding:12px 22px; border-radius:14px;
+    font-family:var(--font-display); font-weight:800; font-size:18px;
+    box-shadow:var(--shadow);
+    z-index:60;
+    opacity:0; pointer-events:none;
+    transition:all .3s cubic-bezier(.2,.8,.2,1);
+    display:flex; align-items:center; gap:10px;
+  }
+  .toast.show{ opacity:1; transform:translate(50%, 0); }
+  .toast.ok{ border-color:var(--leaf); color:var(--leaf); background:rgba(43,122,87,.05); }
+  .toast.bad{ border-color:var(--rose); color:var(--rose); background:rgba(180,62,80,.05); }
+  .toast .ic{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:28px; height:28px; border-radius:50%;
+    color:white; font-size:14px;
+  }
+  .toast.ok .ic{ background:var(--leaf); }
+  .toast.bad .ic{ background:var(--rose); }
+  .toast .note{ font-size:14px; font-weight:600; opacity:.85; }
+
+  /* =============================== */
+  /* ===== ROUND COMPLETE MODAL === */
+  /* =============================== */
+  .round-result{
+    margin-top:24px;
+    background:linear-gradient(135deg, var(--accent), var(--accent-2));
+    color:white; border-radius:24px;
+    padding:clamp(28px,3.5vw,40px);
+    box-shadow:var(--shadow);
+    display:none;
+    position:relative; overflow:hidden;
+  }
+  .round-result.show{ display:block; animation:slideIn .5s cubic-bezier(.2,.8,.2,1); }
+  .round-result::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(232,200,134,.2) 1px, transparent 0);
+    background-size:22px 22px; opacity:.4; pointer-events:none;
+  }
+  .rr-grid{
+    display:grid; grid-template-columns:auto 1fr auto; gap:20px;
+    align-items:center; flex-wrap:wrap;
+    position:relative; z-index:1;
+  }
+  @media (max-width:700px){
+    .rr-grid{ grid-template-columns:1fr; text-align:center; gap:16px; }
+  }
+  .rr-emoji{ font-size:64px; line-height:1; }
+  .rr-text h3{
+    font-family:var(--font-display); font-size:24px;
+    color:var(--gold-soft); font-weight:800; margin-bottom:6px;
+  }
+  .rr-text p{
+    color:rgba(246,239,226,.95); font-size:17px; line-height:1.5;
+  }
+  .rr-text p b{ color:white; }
+  .rr-score{
+    font-family:var(--font-display); font-size:42px; font-weight:800;
+    color:white; line-height:1;
+    background:rgba(255,255,255,.15);
+    border:2px solid rgba(232,200,134,.4);
+    border-radius:16px;
+    padding:14px 22px;
+    text-align:center; min-width:130px;
+  }
+  .rr-score small{ display:block; font-size:14px; color:var(--gold-soft); font-weight:600; margin-top:4px; }
+  .rr-actions{
+    margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center;
+    position:relative; z-index:1;
+  }
+  .rr-btn{
+    background:var(--gold); color:var(--ink);
+    border:none; padding:13px 28px; border-radius:12px;
+    font-family:var(--font); font-weight:800; font-size:17px;
+    cursor:pointer; transition:all .25s ease;
+  }
+  .rr-btn:hover{ background:var(--gold-soft); transform:translateY(-2px); }
+  .rr-btn.ghost{
+    background:transparent; color:white;
+    border:2px solid rgba(232,200,134,.4);
+  }
+  .rr-btn.ghost:hover{ background:rgba(255,255,255,.1); }
+
+  /* =============================== */
+  /* ===== FINAL SCOREBOARD ======= */
+  /* =============================== */
+  .scoreboard{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:24px;
+    padding:clamp(28px,4vw,48px); box-shadow:var(--shadow);
+    margin-bottom:22px;
+    text-align:center;
+    position:relative; overflow:hidden;
+  }
+  .scoreboard::before{
+    content:""; position:absolute; top:-40px; right:50%; transform:translateX(50%);
+    width:140px; height:140px;
+    background:radial-gradient(circle, var(--gold-soft), transparent 70%);
+    opacity:.3;
+  }
+  .trophy-area{
+    position:relative; z-index:1;
+    margin-bottom:14px;
+  }
+  .trophy{
+    font-size:84px; line-height:1;
+    animation:trophy 2s ease-in-out infinite;
+    display:inline-block;
+  }
+  @keyframes trophy{
+    0%,100%{ transform:translateY(0) rotate(-5deg); }
+    50%{ transform:translateY(-8px) rotate(5deg); }
+  }
+  .player-banner{
+    position:relative; z-index:1;
+    background:var(--paper); border:2px solid var(--gold);
+    border-radius:16px; padding:14px 24px;
+    display:inline-block;
+    margin-bottom:18px;
+    font-family:var(--font-display); font-size:22px; font-weight:800;
+    color:var(--ink);
+  }
+  .player-banner .lbl{ color:var(--ink-soft); font-weight:500; font-size:16px; margin-left:8px; }
+  .player-banner b{ color:var(--accent); font-size:26px; }
+  .scoreboard h2{
+    font-family:var(--font-display); font-size:clamp(28px,4vw,40px);
+    color:var(--accent); font-weight:800;
+    margin-bottom:10px; position:relative; z-index:1;
+  }
+  .final-big{
+    position:relative; z-index:1;
+    font-family:var(--font-display);
+    font-size:clamp(64px,10vw,110px); font-weight:800;
+    color:var(--accent);
+    line-height:1; margin:14px 0;
+    background:linear-gradient(135deg, var(--accent), var(--gold));
+    -webkit-background-clip:text; background-clip:text;
+    -webkit-text-fill-color:transparent;
+  }
+  .final-pct{
+    position:relative; z-index:1;
+    font-size:30px; color:var(--gold); font-weight:800;
+    font-family:var(--font-display);
+    margin-bottom:14px;
+  }
+  .grade{
+    position:relative; z-index:1;
+    display:inline-block;
+    padding:8px 22px; border-radius:999px;
+    font-family:var(--font-display); font-size:18px; font-weight:800;
+    margin-bottom:18px;
+  }
+  .grade.gold{ background:var(--gold); color:white; }
+  .grade.green{ background:var(--leaf); color:white; }
+  .grade.amber{ background:#D9A641; color:white; }
+  .grade.red{ background:var(--rose); color:white; }
+  .scoreboard-msg{
+    position:relative; z-index:1;
+    color:var(--ink-soft); font-size:18px;
+    max-width:480px; margin:0 auto 22px;
+    line-height:1.6;
+  }
+
+  /* Round breakdown */
+  .breakdown{
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:16px;
+    padding:18px; margin-top:18px;
+    text-align:right;
+  }
+  .breakdown h4{
+    font-family:var(--font-display); font-size:17px; color:var(--accent);
+    font-weight:800; margin-bottom:14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .breakdown h4::before{
+    content:""; width:5px; height:18px; background:var(--gold); border-radius:3px;
+  }
+  .br-row{
+    display:grid; grid-template-columns:auto 1fr auto auto; gap:12px;
+    align-items:center;
+    padding:10px 14px;
+    background:white; border-radius:10px;
+    margin-bottom:6px; border:1px solid var(--line);
+  }
+  .br-tag{
+    background:var(--gold); color:white;
+    padding:3px 10px; border-radius:8px;
+    font-size:13px; font-weight:800;
+    font-family:var(--font);
+  }
+  .br-name{ font-weight:700; color:var(--ink); font-size:15px; }
+  .br-bar{
+    width:80px; height:8px; background:rgba(14,111,92,.1);
+    border-radius:999px; overflow:hidden;
+  }
+  .br-bar>span{
+    display:block; height:100%;
+    background:linear-gradient(90deg, var(--gold-soft), var(--accent));
+    border-radius:999px;
+  }
+  .br-score{
+    font-family:var(--font-display); font-weight:800;
+    color:var(--accent); font-size:16px;
+    min-width:50px; text-align:left;
+  }
+
+  .final-actions{
+    display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+    margin-top:14px;
+  }
+  .final-action-btn{
+    background:var(--accent); color:white;
+    border:none; padding:13px 28px; border-radius:12px;
+    font-family:var(--font); font-weight:800; font-size:16px;
+    cursor:pointer; transition:all .2s ease;
+  }
+  .final-action-btn:hover{ background:var(--accent-2); transform:translateY(-2px); }
+  .final-action-btn.gold{ background:var(--gold); }
+  .final-action-btn.gold:hover{ background:#B68940; }
+  .final-action-btn.ghost{ background:transparent; color:var(--accent); border:2px solid var(--accent); }
+  .final-action-btn.ghost:hover{ background:var(--accent); color:white; }
+
+  /* Mobile */
+  @media (max-width:600px){
+    body{ font-size:16px; }
+    .topbar{ height:56px; padding:0 16px; }
+    .topbar .brand{ font-size:14px; }
+    .topbar .player{ font-size:13px; padding:5px 10px; }
+    .stage{ padding-top:80px; }
+    .game-passage{ font-size:18px; line-height:2.2; }
+    .gv{ font-size:16px; padding:2px 10px 3px; }
+    .placed-verb{ font-size:15px; padding:4px 10px; }
+    .bucket{ min-height:90px; padding:10px; }
+    .buckets-grid{ grid-template-columns:1fr 1fr; }
+    .bucket-name{ font-size:15px; }
+  }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="صنِّفِ الأفعال">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">لعبة <span>·</span> صنّف الأفعال</div>
+  <div class="player" id="player-strip">
+    <div class="avatar" id="player-avatar">؟</div>
+    اللاعب: <b id="player-name-show">—</b>
+  </div>
+</div>
+<div class="progress-line"><span id="pbar"></span></div>
+
+<main class="stage">
+
+  <!-- =================== WELCOME =================== -->
+  <section class="screen welcome active" id="screen-welcome">
+    <svg class="welcome-ornament" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#C89B4A" stroke-width="1.6">
+        <circle cx="100" cy="100" r="80"></circle>
+        <circle cx="100" cy="100" r="58"></circle>
+        <circle cx="100" cy="100" r="36"></circle>
+        <path d="M100 20 L100 180 M20 100 L180 100"></path>
+        <path d="M40 40 L160 160 M160 40 L40 160"></path>
+        <circle cx="100" cy="100" r="6" fill="#C89B4A"></circle>
+      </g>
+    </svg>
+
+    <div class="welcome-eyebrow">لعبة تعليمية</div>
+    <h1 class="welcome-title">صنّف <span class="em">الأفعال</span></h1>
+    <p class="welcome-sub">٣ فقرات · ٧ أنواع · مهارة إرجاع الفعل إلى أصله</p>
+
+    <div class="name-card">
+      <label for="player-input">اكتب اسمك لتظهر نتيجتك بآخر اللعبة</label>
+      <input type="text" id="player-input" class="name-input" placeholder="مثال: محمد علي" maxlength="30">
+      <div class="name-error" id="name-error">من فضلك اكتب اسمك أوّلاً.</div>
+    </div>
+
+    <button class="start-btn" onclick="startGame()">ابدأ اللعبة</button>
+
+    <div class="rules-strip">
+      <div class="rule-pill">
+        <span class="ic">🖱️</span>
+        <b>اسحب الفعل</b><br>أو انقر فعلين متتاليين (الفعل ثم السلّة)
+      </div>
+      <div class="rule-pill">
+        <span class="ic">💡</span>
+        <b>اطلب المساعدة</b><br>إذا ضغطت زرّ المساعدة وانقرت على الفعل، يظهر جذره
+      </div>
+      <div class="rule-pill">
+        <span class="ic">🏆</span>
+        <b>اجمع النقاط</b><br>كلّ تصنيف صحيح = نقطة، استخدام مساعدة = نصف نقطة
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== ROUND SCREEN (shared) =================== -->
+  <section class="screen" id="screen-round">
+
+    <div class="round-header">
+      <span class="round-num" id="round-num-tag">الفقرة ١ من ٣</span>
+      <h2 class="round-title" id="round-title">صنّف الأفعال إلى أنواعها</h2>
+      <div class="round-stats">
+        <div class="stat-chip placed">صنّفت <b id="stat-placed">0</b> / <b id="stat-total">0</b></div>
+        <div class="stat-chip">نقاطك في الجولة <b id="stat-points">0</b></div>
+        <div class="stat-chip hint">المساعدات <b id="stat-hints">3</b></div>
+      </div>
+    </div>
+
+    <div class="game-passage" id="passage-box">
+      <span class="passage-label" id="passage-label">الفقرة</span>
+      <div id="passage-content"></div>
+    </div>
+
+    <div class="toolbar">
+      <span class="toolbar-text">💡 ضغطت في حيرة؟ اضغط <b>زرّ المساعدة</b> ثم اضغط الفعل لرؤية جذره.</span>
+      <span class="hint-status">المتبقّي: <b id="hint-remaining">3</b></span>
+      <button class="hint-btn" id="hint-btn" onclick="toggleHintMode()">
+        <span class="dot"></span>
+        مساعدة
+      </button>
+    </div>
+
+    <div class="buckets-area">
+      <div class="buckets-title">السلّات السبع</div>
+      <div class="buckets-grid" id="buckets-grid"></div>
+    </div>
+
+    <div class="round-result" id="round-result">
+      <div class="rr-grid">
+        <div class="rr-emoji" id="rr-emoji">🎉</div>
+        <div class="rr-text">
+          <h3 id="rr-title">أحسنت!</h3>
+          <p id="rr-message">انتهيت من الفقرة الأولى.</p>
+        </div>
+        <div class="rr-score">
+          <span id="rr-points">0</span>
+          <small>نقطة</small>
+        </div>
+      </div>
+      <div class="rr-actions">
+        <button class="rr-btn ghost" onclick="restartRound()">↻ أعد الفقرة</button>
+        <button class="rr-btn" id="rr-next-btn" onclick="nextRound()">الفقرة التالية ←</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =================== FINAL SCOREBOARD =================== -->
+  <section class="screen" id="screen-final">
+
+    <div class="scoreboard">
+      <div class="trophy-area">
+        <div class="trophy" id="final-trophy">🏆</div>
+      </div>
+
+      <div class="player-banner">
+        <span class="lbl">اللاعب:</span><b id="final-player">—</b>
+      </div>
+
+      <h2>انتهت اللعبة!</h2>
+
+      <div class="final-big"><span id="final-score">0</span> / <span id="final-total">0</span></div>
+      <div class="final-pct"><span id="final-pct">0</span>%</div>
+      <div class="grade" id="final-grade">—</div>
+      <p class="scoreboard-msg" id="final-msg">أنهيت الفقرات الثلاث.</p>
+
+      <div class="breakdown">
+        <h4>تفصيل النتائج</h4>
+        <div id="breakdown-list"></div>
+      </div>
+    </div>
+
+    <div class="final-actions">
+      <button class="final-action-btn gold" onclick="resetAll()">🎮 العب مرّة أخرى</button>
+      <button class="final-action-btn ghost" onclick="goWelcome()">👤 لاعب جديد</button>
+    </div>
+  </section>
+
+</main>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">
+  <div class="ic" id="toast-ic">✓</div>
+  <div>
+    <div id="toast-text">رائع!</div>
+    <div class="note" id="toast-note"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================ */
+/* ===== GAME DATA ============================================ */
+/* ============================================================ */
+
+/* All categories */
+const CATEGORIES = [
+  { key:'salim',    cat:'sound', name:'الصحيح السالم',    short:'سالم',    tag:'لا همزة ولا تضعيف' },
+  { key:'mahmuz',   cat:'sound', name:'الصحيح المهموز',   short:'مهموز',   tag:'فيه همزة' },
+  { key:'mudaaaf',  cat:'sound', name:'الصحيح المُضعَّف', short:'مُضعَّف', tag:'حرفان من جنس واحد' },
+  { key:'mithaal',  cat:'weak',  name:'المعتلّ المثال',   short:'مثال',    tag:'العلّة في الأوّل' },
+  { key:'ajwaf',    cat:'weak',  name:'المعتلّ الأجوف',   short:'أجوف',    tag:'العلّة في الوسط' },
+  { key:'naaqis',   cat:'weak',  name:'المعتلّ الناقص',   short:'ناقص',    tag:'العلّة في الآخر' },
+  { key:'lafeef',   cat:'weak',  name:'المعتلّ اللفيف',   short:'لفيف',    tag:'حرفا علّة' },
+];
+
+/* Three rounds with passages and verbs */
+const ROUNDS = [
+  {
+    label:'الفقرة الأولى · يوم في المدرسة',
+    title:'الفقرة الأولى',
+    /* HTML structure of the passage; verbs replaced via data */
+    template:`
+      ﴿1﴾ الطلابُ مبكراً، و﴿2﴾ إلى المدرسةِ. ﴿3﴾ صفَّهم بهدوءٍ، ثم ﴿4﴾ كتبَهم. ﴿5﴾ المعلّمُ سؤالاً، فأجابَ كلُّ طالبٍ بصوتٍ واضحٍ. وفي الفسحةِ ﴿6﴾ الفطورَ، ثم ﴿7﴾ أصحابَه في الساحةِ. وعند الجرسِ ﴿8﴾ الجميعُ ﴿9﴾ القرآنَ بنغمةٍ جميلةٍ. وفي نهايةِ اليومِ، ﴿10﴾ إلى البيوتِ.
+    `,
+    verbs:[
+      { id:1,  surface:'خَرَجَ',     root:'خ-ر-ج', cat:'salim' },
+      { id:2,  surface:'سَارُوا',    root:'س-ي-ر', cat:'ajwaf' },
+      { id:3,  surface:'دَخَلُوا',   root:'د-خ-ل', cat:'salim' },
+      { id:4,  surface:'أَخَذُوا',   root:'أ-خ-ذ', cat:'mahmuz' },
+      { id:5,  surface:'سَأَلَ',     root:'س-أ-ل', cat:'mahmuz' },
+      { id:6,  surface:'أَكَلُوا',   root:'أ-ك-ل', cat:'mahmuz' },
+      { id:7,  surface:'لَعِبَ',     root:'ل-ع-ب', cat:'salim' },
+      { id:8,  surface:'مَدَّ',      root:'م-د-د', cat:'mudaaaf' },
+      { id:9,  surface:'تَلا',       root:'ت-ل-و', cat:'naaqis' },
+      { id:10, surface:'عَادُوا',    root:'ع-و-د', cat:'ajwaf' },
+    ],
+  },
+  {
+    label:'الفقرة الثانية · رحلة العائلة',
+    title:'الفقرة الثانية',
+    template:`
+      ﴿1﴾ الأبُ بنزهةٍ ممتعةٍ. ﴿2﴾ مبكراً وأعدّوا الزادَ. ﴿3﴾ الأمُّ الفطورَ بعنايةٍ. ﴿4﴾ السيارةَ، و﴿5﴾ في الطريقِ نحو الحديقةِ. ﴿6﴾ الأطفالُ من جمالِ الورودِ. ﴿7﴾ الأبُ صورةً تذكاريةً. وفي المساءِ ﴿8﴾ الأبُ قصةً قصيرةً، و﴿9﴾ الأمُّ كأسَ شايٍ ساخنٍ. ﴿10﴾ الجميعُ مسرورين، و﴿11﴾ كلُّ شيءٍ على ما يُرام.
+    `,
+    verbs:[
+      { id:1,  surface:'وَعَدَ',     root:'و-ع-د', cat:'mithaal' },
+      { id:2,  surface:'اسْتَيْقَظُوا', root:'ي-ق-ظ', cat:'mithaal' },
+      { id:3,  surface:'أَعَدَّتْ',    root:'ع-د-د', cat:'mudaaaf' },
+      { id:4,  surface:'رَكِبُوا',    root:'ر-ك-ب', cat:'salim' },
+      { id:5,  surface:'سَارُوا',    root:'س-ي-ر', cat:'ajwaf' },
+      { id:6,  surface:'تَعَجَّبَ',   root:'ع-ج-ب', cat:'salim' },
+      { id:7,  surface:'الْتَقَطَ',    root:'ل-ق-ط', cat:'salim' },
+      { id:8,  surface:'رَوى',       root:'ر-و-ي', cat:'lafeef' },
+      { id:9,  surface:'شَدَّتْ',     root:'ش-د-د', cat:'mudaaaf' },
+      { id:10, surface:'عَادُوا',    root:'ع-و-د', cat:'ajwaf' },
+      { id:11, surface:'كانَ',      root:'ك-و-ن', cat:'ajwaf' },
+    ],
+  },
+  {
+    label:'الفقرة الثالثة · المكتبة المدرسية',
+    title:'الفقرة الثالثة',
+    template:`
+      ﴿1﴾ الطلابُ المكتبةَ، و﴿2﴾ بصمتٍ بين الرفوفِ. ﴿3﴾ كلُّ طالبٍ كتاباً يُناسبه. ﴿4﴾ الفتياتُ على المقاعدِ، و﴿5﴾ ﴿6﴾ يكتبنَ ملاحظاتٍ. ﴿7﴾ المعلّمُ القصةَ بعدَ الدرسِ. ﴿8﴾ التلاميذُ الإجاباتِ بدقّةٍ. ﴿9﴾ الجرسُ، فَ﴿10﴾ كلُّ طالبٍ كتابَه إلى مكانه، ثم ﴿11﴾ مسرورين.
+    `,
+    verbs:[
+      { id:1,  surface:'دَخَلَ',      root:'د-خ-ل', cat:'salim' },
+      { id:2,  surface:'مَشَوْا',     root:'م-ش-ي', cat:'naaqis' },
+      { id:3,  surface:'قَرَأَ',      root:'ق-ر-أ', cat:'mahmuz' },
+      { id:4,  surface:'جَلَسْنَ',    root:'ج-ل-س', cat:'salim' },
+      { id:5,  surface:'بَدَأْنَ',    root:'ب-د-أ', cat:'mahmuz' },
+      { id:6,  surface:'وَعَيْنَ',    root:'و-ع-ي', cat:'lafeef' },
+      { id:7,  surface:'حَكَى',       root:'ح-ك-ي', cat:'naaqis' },
+      { id:8,  surface:'وَجَدَ',      root:'و-ج-د', cat:'mithaal' },
+      { id:9,  surface:'دَقَّ',       root:'د-ق-ق', cat:'mudaaaf' },
+      { id:10, surface:'رَدَّ',       root:'ر-د-د', cat:'mudaaaf' },
+      { id:11, surface:'عادُوا',      root:'ع-و-د', cat:'ajwaf' },
+    ],
+  },
+];
+
+/* ============================================================ */
+/* ===== STATE ================================================ */
+/* ============================================================ */
+const state = {
+  player: '',
+  currentRound: 0, /* 0..2 */
+  hintModeOn: false,
+  hintsRemaining: 3,
+  hintsUsedThisRound: new Set(), /* verb ids */
+  placed: new Map(), /* verbId -> { correct: bool, usedHint: bool, cat: 'key' } */
+  selectedVerb: null,
+  rounds: [
+    { points:0, max:0, correct:0, total:0 },
+    { points:0, max:0, correct:0, total:0 },
+    { points:0, max:0, correct:0, total:0 },
+  ],
+};
+
+const arDigits = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+const arNum = n => String(n).split('').map(d=> arDigits[+d]||d).join('');
+
+/* ============================================================ */
+/* ===== SCREEN MANAGEMENT ==================================== */
+/* ============================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=> s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function updateProgress(){
+  /* Welcome=0, Round1=33, Round2=66, Final=100 */
+  let pct = 0;
+  if(document.getElementById('screen-final').classList.contains('active')) pct = 100;
+  else if(document.getElementById('screen-round').classList.contains('active')){
+    pct = 5 + (state.currentRound) * 30 + (state.placed.size / (ROUNDS[state.currentRound]?.verbs.length || 1)) * 25;
+  }
+  document.getElementById('pbar').style.width = Math.min(pct, 100) + '%';
+}
+
+/* ============================================================ */
+/* ===== START GAME =========================================== */
+/* ============================================================ */
+function startGame(){
+  const input = document.getElementById('player-input');
+  const name = input.value.trim();
+  const err = document.getElementById('name-error');
+  if(name.length < 2){
+    err.classList.add('show');
+    input.focus();
+    return;
+  }
+  err.classList.remove('show');
+  state.player = name;
+  /* Show player strip in topbar */
+  const strip = document.getElementById('player-strip');
+  strip.classList.add('show');
+  document.getElementById('player-name-show').textContent = name;
+  document.getElementById('player-avatar').textContent = name.charAt(0);
+  /* Reset state */
+  state.currentRound = 0;
+  state.rounds.forEach(r => { r.points=0; r.max=0; r.correct=0; r.total=0; });
+  buildRound(0);
+  showScreen('screen-round');
+  updateProgress();
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  const input = document.getElementById('player-input');
+  if(input){
+    input.addEventListener('keypress', e=>{ if(e.key==='Enter') startGame(); });
+  }
+});
+
+/* ============================================================ */
+/* ===== BUILD ROUND ========================================== */
+/* ============================================================ */
+function buildRound(idx){
+  const round = ROUNDS[idx];
+  state.placed.clear();
+  state.hintsUsedThisRound.clear();
+  state.hintsRemaining = 3;
+  state.selectedVerb = null;
+  state.hintModeOn = false;
+  document.getElementById('hint-btn').classList.remove('disabled');
+
+  /* Header */
+  document.getElementById('round-num-tag').textContent = `الفقرة ${arNum(idx+1)} من ${arNum(ROUNDS.length)}`;
+  document.getElementById('round-title').textContent = round.label;
+  document.getElementById('passage-label').textContent = round.title;
+
+  /* Build passage with verbs */
+  const verbsById = {};
+  round.verbs.forEach(v=> verbsById[v.id] = v);
+  const html = round.template.replace(/﴿(\d+)﴾/g, (m, id)=>{
+    const v = verbsById[+id];
+    if(!v) return '';
+    return `<span class="gv" data-id="${v.id}" draggable="true" onclick="onVerbClick(this)">
+      <span class="root-hint">${v.root}</span>${v.surface}
+    </span>`;
+  });
+  document.getElementById('passage-content').innerHTML = html;
+
+  /* Setup drag events on each verb */
+  document.querySelectorAll('.gv').forEach(el=>{
+    el.addEventListener('dragstart', onDragStart);
+    el.addEventListener('dragend', onDragEnd);
+  });
+
+  /* Build buckets */
+  const grid = document.getElementById('buckets-grid');
+  grid.innerHTML = '';
+  CATEGORIES.forEach(c=>{
+    const cls = c.cat === 'sound' ? 'sound-bucket' : 'weak-bucket';
+    const div = document.createElement('div');
+    div.className = `bucket ${cls}`;
+    div.dataset.key = c.key;
+    div.innerHTML = `
+      <div class="bucket-head">
+        <span class="bucket-name">${c.name}</span>
+        <span class="bucket-count" id="count-${c.key}">٠</span>
+      </div>
+      <div class="bucket-tag">${c.tag}</div>
+      <div class="bucket-content" id="bucket-${c.key}">
+        <div class="bucket-empty">اسحب الأفعال هنا</div>
+      </div>
+    `;
+    div.addEventListener('dragover', onDragOver);
+    div.addEventListener('dragleave', onDragLeave);
+    div.addEventListener('drop', onDrop);
+    div.addEventListener('click', ()=> onBucketClick(c.key));
+    grid.appendChild(div);
+  });
+
+  /* Hide round result */
+  document.getElementById('round-result').classList.remove('show');
+
+  /* Update stats */
+  state.rounds[idx].max = round.verbs.length;
+  state.rounds[idx].total = round.verbs.length;
+  state.rounds[idx].points = 0;
+  state.rounds[idx].correct = 0;
+  refreshStats();
+}
+
+/* ============================================================ */
+/* ===== STATS & HINTS ======================================== */
+/* ============================================================ */
+function refreshStats(){
+  const r = state.rounds[state.currentRound];
+  document.getElementById('stat-placed').textContent = arNum(state.placed.size);
+  document.getElementById('stat-total').textContent = arNum(r.total);
+  document.getElementById('stat-points').textContent = r.points.toString().replace('.', '٫').split('').map(c=> arDigits[+c] !== undefined ? arDigits[+c] : c).join('');
+  document.getElementById('stat-hints').textContent = arNum(state.hintsRemaining);
+  document.getElementById('hint-remaining').textContent = arNum(state.hintsRemaining);
+  if(state.hintsRemaining === 0){
+    document.getElementById('hint-btn').classList.add('disabled');
+    state.hintModeOn = false;
+    document.getElementById('hint-btn').classList.remove('active');
+  }
+}
+
+function toggleHintMode(){
+  if(state.hintsRemaining === 0) return;
+  state.hintModeOn = !state.hintModeOn;
+  const btn = document.getElementById('hint-btn');
+  if(state.hintModeOn){
+    btn.style.background = 'var(--accent)';
+    btn.innerHTML = '<span class="dot"></span>اضغط على فعل';
+  } else {
+    btn.style.background = '';
+    btn.innerHTML = '<span class="dot"></span>مساعدة';
+  }
+}
+
+/* ============================================================ */
+/* ===== VERB INTERACTIONS ==================================== */
+/* ============================================================ */
+function onVerbClick(el){
+  const id = +el.dataset.id;
+  if(el.classList.contains('placed')) return;
+
+  /* Hint mode → reveal root */
+  if(state.hintModeOn && !state.hintsUsedThisRound.has(id)){
+    state.hintsUsedThisRound.add(id);
+    state.hintsRemaining--;
+    el.classList.add('show-hint');
+    /* Turn off hint mode */
+    state.hintModeOn = false;
+    document.getElementById('hint-btn').style.background = '';
+    document.getElementById('hint-btn').innerHTML = '<span class="dot"></span>مساعدة';
+    refreshStats();
+    showToast('ok', '💡 جذر الفعل ظهر', 'استخدم الجذر لتعرف نوع الفعل بسهولة');
+    return;
+  }
+  if(state.hintModeOn && state.hintsUsedThisRound.has(id)){
+    state.hintModeOn = false;
+    document.getElementById('hint-btn').style.background = '';
+    document.getElementById('hint-btn').innerHTML = '<span class="dot"></span>مساعدة';
+    showToast('bad', 'الجذر ظاهرٌ بالفعل', 'اختر فعلاً آخر');
+    return;
+  }
+
+  /* Tap-to-select mode (mobile-friendly) */
+  if(state.selectedVerb === el){
+    el.style.outline = '';
+    state.selectedVerb = null;
+    return;
+  }
+  if(state.selectedVerb){
+    state.selectedVerb.style.outline = '';
+  }
+  state.selectedVerb = el;
+  el.style.outline = '3px solid var(--gold)';
+  el.style.outlineOffset = '3px';
+  showToast('ok', '✓ تم اختيار الفعل', 'الآن انقر على السلّة المناسبة');
+}
+
+function onBucketClick(key){
+  if(!state.selectedVerb) return;
+  placeVerb(state.selectedVerb, key);
+  state.selectedVerb.style.outline = '';
+  state.selectedVerb = null;
+}
+
+/* ============================================================ */
+/* ===== DRAG & DROP ========================================== */
+/* ============================================================ */
+let dragVerb = null;
+function onDragStart(e){
+  if(this.classList.contains('placed')) { e.preventDefault(); return; }
+  dragVerb = this;
+  this.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', this.dataset.id);
+}
+function onDragEnd(e){
+  this.classList.remove('dragging');
+  document.querySelectorAll('.bucket').forEach(b=> b.classList.remove('drag-over'));
+  dragVerb = null;
+}
+function onDragOver(e){
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  this.classList.add('drag-over');
+}
+function onDragLeave(e){
+  this.classList.remove('drag-over');
+}
+function onDrop(e){
+  e.preventDefault();
+  this.classList.remove('drag-over');
+  if(!dragVerb) return;
+  placeVerb(dragVerb, this.dataset.key);
+}
+
+/* ============================================================ */
+/* ===== PLACE VERB =========================================== */
+/* ============================================================ */
+function placeVerb(verbEl, bucketKey){
+  const id = +verbEl.dataset.id;
+  if(state.placed.has(id)) return;
+  const round = ROUNDS[state.currentRound];
+  const verb = round.verbs.find(v=> v.id === id);
+  if(!verb) return;
+
+  const isCorrect = verb.cat === bucketKey;
+  const usedHint = state.hintsUsedThisRound.has(id);
+  state.placed.set(id, { correct:isCorrect, usedHint, cat:bucketKey });
+
+  /* Mark verb as placed */
+  verbEl.classList.add('placed');
+  verbEl.classList.remove('show-hint');
+
+  /* Append to bucket */
+  const bucket = document.getElementById(`bucket-${bucketKey}`);
+  const empty = bucket.querySelector('.bucket-empty');
+  if(empty) empty.remove();
+  const placedEl = document.createElement('span');
+  placedEl.className = `placed-verb ${isCorrect?'correct':'wrong'}`;
+  placedEl.innerHTML = `
+    <span class="pmark">${isCorrect?'✓':'✗'}</span>
+    ${verb.surface}
+  `;
+  bucket.appendChild(placedEl);
+
+  /* Update count */
+  const countEl = document.getElementById(`count-${bucketKey}`);
+  countEl.textContent = arNum(bucket.children.length);
+
+  /* Award points */
+  const r = state.rounds[state.currentRound];
+  if(isCorrect){
+    r.correct++;
+    r.points += usedHint ? 0.5 : 1;
+    const correctCat = CATEGORIES.find(c=> c.key === verb.cat);
+    showToast('ok', `أحسنت! ${verb.surface}`, `صحيح، إنه ${correctCat.short}`);
+  } else {
+    const correctCat = CATEGORIES.find(c=> c.key === verb.cat);
+    showToast('bad', `ليس صحيحاً`, `${verb.surface} (${verb.root}) → ${correctCat.short}`);
+  }
+
+  refreshStats();
+  updateProgress();
+
+  /* Check if round complete */
+  if(state.placed.size === round.verbs.length){
+    setTimeout(showRoundResult, 800);
+  }
+}
+
+/* ============================================================ */
+/* ===== TOAST ================================================ */
+/* ============================================================ */
+let toastTimer = null;
+function showToast(type, text, note){
+  const t = document.getElementById('toast');
+  const ic = document.getElementById('toast-ic');
+  t.classList.remove('ok','bad');
+  t.classList.add(type);
+  ic.textContent = type === 'ok' ? '✓' : '✗';
+  document.getElementById('toast-text').textContent = text;
+  document.getElementById('toast-note').textContent = note || '';
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> t.classList.remove('show'), 2200);
+}
+
+/* ============================================================ */
+/* ===== ROUND RESULT ========================================= */
+/* ============================================================ */
+function showRoundResult(){
+  const r = state.rounds[state.currentRound];
+  const pct = Math.round((r.points / r.max) * 100);
+  const isLast = state.currentRound === ROUNDS.length - 1;
+
+  document.getElementById('rr-points').textContent = formatPoints(r.points);
+
+  let emoji, title, msg;
+  if(pct >= 90){ emoji='🌟'; title='ممتاز يا '+state.player+'!'; msg=`أنهيتَ الفقرة بـ ${arNum(r.correct)} إجاباتٍ صحيحةٍ من أصل ${arNum(r.total)}.`; }
+  else if(pct >= 70){ emoji='👏'; title='أحسنت!'; msg=`نتيجة جيّدة جداً، ${arNum(r.correct)} من ${arNum(r.total)} صحيحة.`; }
+  else if(pct >= 50){ emoji='💪'; title='لا بأس'; msg=`${arNum(r.correct)} من ${arNum(r.total)}. واصل، ستتحسّن في الفقرة القادمة.`; }
+  else{ emoji='📚'; title='تحتاج إلى تركيز أكبر'; msg=`${arNum(r.correct)} فقط من ${arNum(r.total)}. عُد للدرس وجرّب الفقرة من جديد.`; }
+
+  document.getElementById('rr-emoji').textContent = emoji;
+  document.getElementById('rr-title').textContent = title;
+  document.getElementById('rr-message').textContent = msg;
+
+  const nextBtn = document.getElementById('rr-next-btn');
+  nextBtn.textContent = isLast ? 'النتيجة النهائية ←' : 'الفقرة التالية ←';
+
+  document.getElementById('round-result').classList.add('show');
+  setTimeout(()=> document.getElementById('round-result').scrollIntoView({behavior:'smooth', block:'center'}), 200);
+}
+
+function formatPoints(n){
+  /* Show as integer if whole, else as half (e.g., 5٫5) */
+  if(Math.floor(n) === n) return arNum(n);
+  const intPart = Math.floor(n);
+  return arNum(intPart) + '٫٥';
+}
+
+function restartRound(){
+  buildRound(state.currentRound);
+  updateProgress();
+}
+
+function nextRound(){
+  if(state.currentRound < ROUNDS.length - 1){
+    state.currentRound++;
+    buildRound(state.currentRound);
+    updateProgress();
+  } else {
+    showFinal();
+  }
+}
+
+/* ============================================================ */
+/* ===== FINAL SCOREBOARD ===================================== */
+/* ============================================================ */
+function showFinal(){
+  const totalPoints = state.rounds.reduce((sum,r)=> sum + r.points, 0);
+  const totalMax = state.rounds.reduce((sum,r)=> sum + r.max, 0);
+  const pct = Math.round((totalPoints / totalMax) * 100);
+
+  document.getElementById('final-player').textContent = state.player;
+  document.getElementById('final-score').textContent = formatPoints(totalPoints);
+  document.getElementById('final-total').textContent = arNum(totalMax);
+  document.getElementById('final-pct').textContent = arNum(pct);
+
+  /* Grade */
+  const grade = document.getElementById('final-grade');
+  const trophy = document.getElementById('final-trophy');
+  let gradeText, gradeClass, msg, trophyIcon;
+  if(pct >= 90){ gradeText='ذهبي · ممتاز'; gradeClass='gold'; trophyIcon='🏆'; msg=`بطلٌ يا ${state.player}! أتقنت تصنيف الأفعال بمستوى رائع.`; }
+  else if(pct >= 75){ gradeText='أخضر · جيّد جداً'; gradeClass='green'; trophyIcon='🌟'; msg=`أداءٌ ممتاز يا ${state.player}، استمرّ على هذا المستوى.`; }
+  else if(pct >= 50){ gradeText='كهرماني · جيّد'; gradeClass='amber'; trophyIcon='💪'; msg=`نتيجة جيّدة يا ${state.player}، راجع الأقسام التي صعُبت عليك.`; }
+  else{ gradeText='يحتاج مراجعة'; gradeClass='red'; trophyIcon='📚'; msg=`عُد للدرس يا ${state.player} ثم حاول مرّة أخرى. ستتحسّن!`; }
+  grade.textContent = gradeText;
+  grade.className = 'grade ' + gradeClass;
+  trophy.textContent = trophyIcon;
+  document.getElementById('final-msg').textContent = msg;
+
+  /* Breakdown */
+  const list = document.getElementById('breakdown-list');
+  list.innerHTML = '';
+  state.rounds.forEach((r, i)=>{
+    const rPct = Math.round((r.points / r.max) * 100);
+    const div = document.createElement('div');
+    div.className = 'br-row';
+    div.innerHTML = `
+      <span class="br-tag">${arNum(i+1)}</span>
+      <span class="br-name">${ROUNDS[i].title}</span>
+      <div class="br-bar"><span style="width:${rPct}%;"></span></div>
+      <span class="br-score">${formatPoints(r.points)}/${arNum(r.max)}</span>
+    `;
+    list.appendChild(div);
+  });
+
+  showScreen('screen-final');
+  updateProgress();
+}
+
+/* ============================================================ */
+/* ===== RESET / NEW PLAYER =================================== */
+/* ============================================================ */
+function resetAll(){
+  state.currentRound = 0;
+  state.rounds.forEach(r => { r.points=0; r.max=0; r.correct=0; r.total=0; });
+  buildRound(0);
+  showScreen('screen-round');
+  updateProgress();
+}
+
+function goWelcome(){
+  state.player = '';
+  document.getElementById('player-input').value = '';
+  document.getElementById('player-strip').classList.remove('show');
+  state.currentRound = 0;
+  state.rounds.forEach(r => { r.points=0; r.max=0; r.correct=0; r.total=0; });
+  showScreen('screen-welcome');
+  document.getElementById('pbar').style.width = '0%';
+  setTimeout(()=> document.getElementById('player-input').focus(), 300);
+}
+</script>
+
+
+
+</body></html>

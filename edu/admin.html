@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحةُ تحكّم المكتبةِ التعليمية</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0A3428">
+<meta name="hv-title" content="لوحةُ التحكّم">
+<link rel="icon" href="img/logo-cream.svg">
+<link rel="stylesheet" href="css/admin.css">
+<style>
+  .tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .tab{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--green);border-radius:100px;padding:6px 16px;font-size:16px;transition:background var(--t-mid) var(--e-out),color var(--t-mid) var(--e-out)}
+  .tab[aria-selected="true"]{background:var(--green);color:var(--cream);border-color:var(--green)}
+  .secrow{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:start;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+  .secrow .grip{cursor:grab;color:rgba(42,26,15,.35);text-align:center;padding-top:10px}
+  .secrow input,.secrow textarea{width:100%;min-height:40px;padding:6px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;color:var(--ink)}
+  .secrow textarea{min-height:56px;resize:vertical;margin-top:6px;font-size:15.5px}
+  .secrow .sid{font-size:13.5px;color:rgba(42,26,15,.45);direction:ltr;text-align:right}
+  .secrow .lockt{display:inline-flex;align-items:center;gap:6px;font-size:15px;margin-top:6px;cursor:pointer}
+  .secrow.drag{opacity:.4}.secrow.over{border-color:var(--amber);border-style:dashed}
+  .lockbadge{font-size:13.5px;color:#B4513E;border:1px solid rgba(180,81,62,.35);border-radius:100px;padding:0 8px;margin-inline-start:6px}
+  .kindbadge{font-size:13.5px;color:var(--green);background:rgba(15,76,58,.08);border-radius:100px;padding:0 8px}
+  .row .tx i .kindbadge{margin-inline-end:4px}
+  .keybox{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .keybox input{flex:1;min-width:180px;min-height:44px;padding:9px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;direction:ltr}
+  .keybox input:focus{outline:none;border-color:var(--amber);box-shadow:0 0 0 3px rgba(194,120,10,.13)}
+  .form input[type=url]{width:100%;min-height:44px;padding:9px 14px;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:12px;outline:none;direction:ltr;text-align:left}
+  .form input[type=url]:focus{border-color:var(--amber);box-shadow:0 0 0 3px rgba(194,120,10,.13)}
+  .form input#id{direction:ltr;text-align:left}
+  .filter{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+  .filter select{min-height:40px;padding:6px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit}
+</style>
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img class="mark" src="img/logo-cream.svg" alt="شعار حيدر">
+    <h1>لوحةُ تحكّم المكتبةِ التعليمية <span id="mock" class="mockbadge" hidden>وضعُ تجربة</span></h1>
+    <span class="who" id="who"></span>
+    <span class="dirty" id="dirty" hidden>تغييراتٌ لم تُنشَر</span>
+    <a class="btn btn-ghost" href="index.html" target="_blank" rel="noopener">
+      عرضُ المكتبة
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6l6 6-6 6"/></svg>
+    </a>
+    <button class="btn btn-gold" id="save" disabled>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L19 7"/></svg>
+      حفظٌ ونشر
+    </button>
+  </div>
+</header>
+
+<section class="gate" id="gate" hidden>
+  <h2>رمزُ الوصول إلى جِتهَب</h2>
+  <p>تحتاجُ اللوحةُ رمزاً يسمحُ بالكتابةِ في مستودع <code>haydarvsky/haydarvsky.github.io</code>. إن كنتَ أدخلتَه في <a href="https://haydarvsky.github.io/admin/">مركزِ التحكّم</a> فهو يعملُ هنا تلقائياً.</p>
+  <ol>
+    <li>افتحْ <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">إنشاءَ رمزٍ دقيق</a>.</li>
+    <li><b>Repository access</b> → <code>Only select repositories</code> → <code>haydarvsky.github.io</code>.</li>
+    <li><b>Permissions → Repository</b> → <code>Contents</code> = <code>Read and write</code>.</li>
+  </ol>
+  <div class="addcat">
+    <input type="password" id="token" placeholder="ghp_… أو github_pat_…" autocomplete="off" spellcheck="false">
+    <button class="btn btn-gold" id="tokenSave">اتّصال</button>
+    <button class="btn btn-line" id="tryMock">تجربةٌ بلا نشر</button>
+  </div>
+</section>
+
+<main class="wrap grid" id="app" hidden>
+
+  <!-- العمود الأول: القوائم -->
+  <div>
+    <section class="panel" style="margin-bottom:22px">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" aria-selected="true" data-tab="items">الموادّ</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="secs">الأقسام</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="lock">مفتاحُ الحقيبة</button>
+      </div>
+
+      <div id="tab-items">
+        <h2>الموادّ <span id="nItems" class="sm"></span></h2>
+        <p class="hint">اسحبْ للترتيب داخلَ القسم. النجمةُ تجعلُ المادّةَ «ابدأْ من هنا» أعلى المكتبة.</p>
+        <div class="filter">
+          <select id="fsec"><option value="">كلُّ الأقسام</option></select>
+          <button class="btn btn-line" id="newBtn" style="margin-inline-start:auto">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            مادّةٌ جديدة
+          </button>
+        </div>
+        <div class="rows" id="rows"></div>
+      </div>
+
+      <div id="tab-secs" hidden>
+        <h2>الأقسام</h2>
+        <p class="hint">القسمُ المقفلُ يظهرُ داخلَ الحقيبةِ التدريبية فقط. لا يُحذَفُ قسمٌ فيه موادّ.</p>
+        <div id="secs"></div>
+        <div class="addcat" style="margin-top:10px">
+          <input type="text" id="newSec" placeholder="عنوانُ قسمٍ جديد…">
+          <button class="btn btn-line" id="addSec">أضِفْ</button>
+        </div>
+      </div>
+
+      <div id="tab-lock" hidden>
+        <h2>مفتاحُ الحقيبةِ التدريبية</h2>
+        <p class="hint">يُحفَظُ المفتاحُ مشفَّراً (SHA-256) في ملفِّ البيانات، فلا يظهرُ نصُّه لأحد. غيِّرْه لكلِّ دفعةٍ إن شئت.</p>
+        <div class="keybox">
+          <input type="text" id="newKey" placeholder="المفتاحُ الجديد (أرقامٌ أو كلمة)" autocomplete="off">
+          <button class="btn btn-line" id="setKey">اعتمدِ المفتاح</button>
+        </div>
+        <p class="hint" style="margin-top:12px">تلميحٌ يظهرُ تحت حقلِ الدخول:</p>
+        <div class="keybox"><input type="text" id="hint" placeholder="إن لم يكن معك المفتاح، اطلبْه من المدرِّب."></div>
+        <p class="hint" style="margin-top:12px">رابطٌ يفتحُ الحقيبةَ مباشرةً بالمفتاح: <code>haqiba.html?k=المفتاح</code> — يُرسَلُ للمشاركين فقط.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- العمود الثاني: المحرّر -->
+  <section class="panel">
+    <h2 id="edTitle">مادّةٌ جديدة</h2>
+    <p class="hint">ملفُّ HTML يُرفَعُ إلى <code>content/</code> ويُضافُ إليه شريطُ التنقّلِ تلقائياً؛ أو ضعْ رابطاً خارجياً بدلَه.</p>
+    <div class="form">
+      <div class="f full"><label for="title">العنوان</label><input type="text" id="title"></div>
+      <div class="f"><label for="section">القسم</label><select id="section"></select></div>
+      <div class="f"><label for="kind">النوع</label><select id="kind"></select></div>
+      <div class="f"><label for="grade">الصفّ / المستوى <span class="sm">(اختياري)</span></label><input type="text" id="grade" placeholder="الصفُّ العاشر"></div>
+      <div class="f"><label for="meta">سطرٌ قصير <span class="sm">(٨ شرائح، ٤ مستويات…)</span></label><input type="text" id="meta"></div>
+      <div class="f full"><label for="desc">الوصف</label><textarea id="desc"></textarea></div>
+      <div class="f full"><label for="tags">وسوم <span class="sm">مفصولةً بفاصلة</span></label><input type="text" id="tags"></div>
+
+      <div class="drop" id="drop">
+        <b>ملفُّ المادّة (HTML)</b>
+        أفلِتْه هنا أو انقرْ للاختيار
+        <div class="fname" id="fname" hidden></div>
+        <input type="file" id="file" accept=".html,.htm" hidden>
+      </div>
+      <div class="f full"><label for="url">أو رابطٌ خارجي <span class="sm">(يُستعمَلُ إن لم يكن ملفّ)</span></label><input type="url" id="url" placeholder="https://…"></div>
+      <div class="f"><label for="screen">رابطُ شاشةِ العرض <span class="sm">(للأدواتِ الحيّة)</span></label><input type="url" id="screen" placeholder="https://…"></div>
+      <div class="f"><label for="cta">نصُّ زرِّ الفتح <span class="sm">(اختياري)</span></label><input type="text" id="cta" placeholder="افتحِ الدرس"></div>
+      <div class="f"><label for="id">المعرّف <span class="sm">(يُشتقُّ من اسمِ الملفّ)</span></label><input type="text" id="id"></div>
+      <div class="f"><label>الغلاف <span class="sm">(اختياري)</span></label>
+        <div class="cov">
+          <img class="thumb" id="covThumb" alt="" style="visibility:hidden">
+          <button type="button" class="btn btn-line" id="covBtn">اخترْ صورة</button>
+          <button type="button" class="btn btn-red" id="covClear" hidden>أزلْ</button>
+          <input type="file" id="cov" accept="image/*" hidden>
+        </div>
+      </div>
+      <div class="checks">
+        <label><input type="checkbox" id="featured"> ابدأْ من هنا (مميّزة)</label>
+        <label><input type="checkbox" id="hidden"> مخفيّة</label>
+      </div>
+      <div class="rowbtns">
+        <button class="btn btn-gold" id="apply">أثبِتِ التعديل</button>
+        <button class="btn btn-line" id="cancel">إلغاء</button>
+        <a class="btn btn-line" id="editText" href="#" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4l10-10-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>
+          تحريرُ نصِّ الصفحة
+        </a>
+        <button class="btn btn-red" id="del" hidden>احذفْ</button>
+      </div>
+    </div>
+    <div class="prev">
+      <h3>معاينةُ البطاقة</h3>
+      <div class="pcard" id="pcard"></div>
+    </div>
+  </section>
+</main>
+
+<div class="status" id="status" role="status" aria-live="polite"></div>
+
+<script src="js/gh-api.js"></script>
+<script src="js/imgtools.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

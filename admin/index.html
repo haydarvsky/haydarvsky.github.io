@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>لوحةُ التحكّم — حيدر المعاتيق</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0A3428">
+<link rel="icon" href="https://haydarvsky.github.io/img/logo-cream.svg">
+<link rel="stylesheet" href="css/hub.css">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <img class="mark" src="https://haydarvsky.github.io/img/logo-cream.svg" alt="شعار حيدر">
+    <h1>مركزُ التحكّم</h1>
+    <span class="who" id="who"></span>
+    <button class="btn btn-ghost" id="forget" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/></svg>
+      خروج
+    </button>
+  </div>
+</header>
+
+<section class="gate" id="gate" hidden>
+  <h2>رمزُ الوصول الواحد</h2>
+  <p>رمزٌ واحدٌ يفتحُ كلَّ لوحاتِ التحكّم: المقالات، والكتب، والهويات، والمرئيات، والمكتبة التعليمية، والمحرّر المرئي. يُحفَظُ في متصفّحِك وحده ولا يُرسَلُ إلا إلى جِتهَب.</p>
+  <ol>
+    <li>افتحْ <a href="https://github.com/settings/tokens/new?scopes=repo&description=haydarvsky-site" target="_blank" rel="noopener">إنشاءَ رمزٍ كلاسيكيّ</a> بصلاحية <code>repo</code>، أو رمزاً دقيقاً بصلاحية <code>Contents: Read and write</code> على مستودعاتِ الموقعِ كلِّها.</li>
+    <li>ألصقِ الرمزَ هنا واضغطْ «اتّصال».</li>
+  </ol>
+  <div class="addcat">
+    <input type="password" id="token" placeholder="ghp_…" autocomplete="off" spellcheck="false">
+    <button class="btn btn-gold" id="tokenSave">اتّصال</button>
+  </div>
+</section>
+
+<main class="wrap" id="app" hidden>
+  <div class="hub" id="hub"></div>
+
+  <section class="panel" style="margin-bottom:60px">
+    <h2>المحرّرُ المرئي لأيِّ صفحة</h2>
+    <p class="hint">اخترِ المستودعَ ثمّ الصفحة؛ تُفتَحُ كما يراها الزائرُ وتُعدِّلُ نصوصَها في مكانِها ثمّ تُنشَر بضغطةٍ واحدة.</p>
+    <div class="pick">
+      <select id="repo"></select>
+      <input type="search" id="fq" placeholder="ابحثْ عن ملفّ…">
+      <span class="tip" id="fcount"></span>
+    </div>
+    <div class="files" id="files"></div>
+  </section>
+</main>
+
+<div class="status" id="status" role="status" aria-live="polite"></div>
+
+<script src="js/gh-api.js"></script>
+<script src="js/hub.js"></script>
+</body>
+</html>

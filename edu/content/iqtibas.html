@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الاقتباس — أ. حيدر المعاتيق</title>
+<style>
+/* ── FONTS ── */
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-100.woff2') format('woff2'); font-weight:100; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-300.woff2') format('woff2'); font-weight:300; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-400.woff2') format('woff2'); font-weight:400; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-500.woff2') format('woff2'); font-weight:500; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-700.woff2') format('woff2'); font-weight:700; }
+@font-face { font-family:'SakkalSaad'; src:url('../fonts/sakkal-800.woff2') format('woff2'); font-weight:800; }
+
+/* ── TOKENS ── */
+:root {
+  --gold:         #C9A84C;
+  --gold-lt:      #E8C97A;
+  --gold-dk:      #8A6820;
+  --green-bg:     #060D08;
+  --green-card:   rgba(255,255,255,0.038);
+  --green-border: rgba(201,168,76,0.18);
+  --cream:        #F4EFE4;
+  --dim:          rgba(244,239,228,0.55);
+
+  /* Iqtibas palette */
+  --iq-quran:  #F0C060;   /* من القرآن   */
+  --iq-hadith: #6DDCB8;   /* من الحديث   */
+}
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+
+html,body{
+  width:100%;height:100%;overflow:hidden;
+  font-family:'SakkalSaad',sans-serif;
+  background:var(--green-bg);
+  color:var(--cream);
+}
+
+/* ════ CINEMATIC BARS ════ */
+#cine-top,#cine-bot{
+  position:fixed;left:0;right:0;z-index:999;
+  background:#000;height:36px;
+  transition:height .5s ease;pointer-events:none;
+}
+#cine-top{top:0;}#cine-bot{bottom:0;}
+body.playing #cine-top,body.playing #cine-bot{height:0;}
+
+/* ════ PROGRESS ════ */
+#progress{
+  position:fixed;top:36px;left:0;height:2px;z-index:998;
+  background:linear-gradient(90deg,var(--gold-dk),var(--gold),var(--gold-lt));
+  box-shadow:0 0 10px var(--gold);
+  transition:width .7s cubic-bezier(.4,0,.2,1), top .5s ease;
+  pointer-events:none;
+}
+body.playing #progress{top:0;}
+
+/* ════ STAGE ════ */
+#stage{position:fixed;inset:0;overflow:hidden;}
+
+.slide{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:60px 5vw 70px;overflow:hidden;
+  opacity:0;transform:scale(1.06);
+  filter:blur(10px) brightness(.7);
+  transition:
+    opacity .75s cubic-bezier(.4,0,.2,1),
+    transform .75s cubic-bezier(.4,0,.2,1),
+    filter .75s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;will-change:transform,opacity,filter;
+}
+.slide.active{opacity:1;transform:scale(1);filter:blur(0) brightness(1);pointer-events:auto;}
+.slide.exit{opacity:0;transform:scale(.94);filter:blur(10px) brightness(.6);}
+
+.slide::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.025;mix-blend-mode:screen;
+}
+
+.s1{background:radial-gradient(ellipse 120% 120% at 50% 50%,#112a1a 0%,#070e09 70%);}
+.s2{background:radial-gradient(ellipse 140% 100% at 75% 55%,#0d2417 0%,#060c08 65%);}
+.s3{background:radial-gradient(ellipse 130% 120% at 25% 45%,#0e2518 0%,#050c07 70%);}
+.s4{background:radial-gradient(ellipse 110% 120% at 55% 50%,#0b1e12 0%,#050c07 65%);}
+
+/* ════ SHARED ════ */
+.inner{position:relative;z-index:2;width:100%;max-width:920px;}
+.slide-h2{
+  font-size:clamp(32px,4.8vw,56px);font-weight:800;
+  color:var(--gold);text-align:center;line-height:1.1;
+}
+.gold-rule{
+  width:70px;height:2px;margin:12px auto 16px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+}
+.scrollable{
+  overflow-y:auto;max-height:calc(100vh - 130px);padding-left:4px;
+  scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.25) transparent;
+}
+.scrollable::-webkit-scrollbar{width:3px;}
+.scrollable::-webkit-scrollbar-thumb{background:rgba(201,168,76,.25);border-radius:2px;}
+
+.card{
+  background:var(--green-card);
+  border:1px solid var(--green-border);
+  border-radius:12px;padding:18px 26px;margin-bottom:12px;
+}
+.note{
+  background:rgba(201,168,76,.07);
+  border-right:3px solid var(--gold);
+  border-radius:8px;padding:14px 20px;
+  font-size:clamp(16px,1.9vw,22px);font-weight:500;
+  color:var(--gold-lt);margin-bottom:12px;line-height:1.9;
+}
+.section-label{
+  font-size:clamp(17px,2vw,24px);font-weight:700;
+  color:var(--gold);margin:14px 0 7px;
+  display:flex;align-items:center;gap:8px;
+}
+
+/* ════ SLIDE 1 ════ */
+.s1 .orbit{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;border:1px solid rgba(201,168,76,.08);
+  animation:breathe 5s ease-in-out infinite;
+}
+.o1{width:320px;height:320px;}
+.o2{width:510px;height:510px;animation-delay:.4s;}
+.o3{width:720px;height:720px;animation-delay:.8s;}
+@keyframes breathe{
+  0%,100%{opacity:.2;transform:translate(-50%,-50%) scale(1);}
+  50%{opacity:.55;transform:translate(-50%,-50%) scale(1.025);}
+}
+.s1 .eyebrow{
+  font-size:clamp(13px,1.7vw,18px);font-weight:300;
+  color:rgba(201,168,76,.6);letter-spacing:5px;
+  margin-bottom:18px;text-align:center;
+}
+.s1 .big-title{
+  font-size:clamp(80px,13vw,150px);font-weight:800;
+  color:var(--gold);text-align:center;line-height:.95;
+  text-shadow:0 0 100px rgba(201,168,76,.2),0 0 40px rgba(201,168,76,.12);
+}
+.s1 .by-line{
+  font-size:clamp(18px,2.2vw,26px);font-weight:300;
+  color:var(--dim);margin-top:20px;text-align:center;letter-spacing:2px;
+}
+
+/* ════ SLIDE 2 — DEFINITION ════ */
+.def-text{
+  font-size:clamp(18px,2.3vw,27px);font-weight:400;
+  line-height:2.1;color:var(--cream);
+}
+.types-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;
+}
+.type-card{
+  background:var(--green-card);
+  border:1px solid var(--green-border);
+  border-radius:10px;padding:14px 18px;
+  text-align:center;
+}
+.type-card .tc-icon{font-size:28px;margin-bottom:6px;}
+.type-card .tc-title{
+  font-size:clamp(16px,2vw,22px);font-weight:700;
+  color:var(--gold);margin-bottom:4px;
+}
+.type-card .tc-desc{
+  font-size:clamp(13px,1.5vw,17px);font-weight:300;
+  color:var(--dim);line-height:1.7;
+}
+
+.rulings-row{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;
+}
+.ruling{
+  border-radius:9px;padding:10px 10px;text-align:center;
+}
+.ruling .r-title{font-size:clamp(14px,1.7vw,20px);font-weight:700;margin-bottom:3px;}
+.ruling .r-desc{font-size:clamp(11px,1.2vw,14px);font-weight:300;color:var(--dim);line-height:1.5;}
+.r-accepted{background:rgba(61,186,88,.12);border:1px solid rgba(61,186,88,.3);}
+.r-accepted .r-title{color:#82F0A8;}
+.r-allowed{background:rgba(201,168,76,.09);border:1px solid rgba(201,168,76,.25);}
+.r-allowed .r-title{color:var(--gold-lt);}
+.r-disliked{background:rgba(220,165,50,.09);border:1px solid rgba(220,165,50,.22);}
+.r-disliked .r-title{color:#E0B060;}
+.r-forbidden{background:rgba(220,50,50,.1);border:1px solid rgba(220,50,50,.25);}
+.r-forbidden .r-title{color:#F0A0A0;}
+
+.ex-para-label{
+  font-size:clamp(15px,1.8vw,21px);font-weight:700;
+  color:var(--gold);margin:4px 0 8px;
+}
+.ex-para{
+  font-size:clamp(17px,2.1vw,24px);font-weight:400;
+  line-height:2.4;text-align:justify;color:var(--cream);
+}
+.iq{ font-weight:700; }
+.iq-q{ color:var(--iq-quran);  }
+.iq-h{ color:var(--iq-hadith); }
+
+.legend{display:flex;gap:10px 24px;flex-wrap:wrap;margin-top:10px;justify-content:center;}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:clamp(13px,1.6vw,18px);color:var(--dim);}
+.leg-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0;}
+
+/* ════ SLIDE 3 — EXAMPLES ════ */
+.quran-txt{
+  font-size:clamp(20px,2.6vw,31px);font-weight:500;
+  color:var(--iq-quran);line-height:2.1;margin-bottom:6px;
+}
+.hadith-txt{
+  font-size:clamp(19px,2.4vw,29px);font-weight:500;
+  color:var(--iq-hadith);line-height:2.1;margin-bottom:6px;
+}
+.ex-txt{
+  font-size:clamp(18px,2.2vw,26px);font-weight:400;
+  color:var(--cream);line-height:2;margin-bottom:6px;
+}
+.ex-note{
+  font-size:clamp(14px,1.6vw,18px);font-weight:300;
+  color:var(--dim);padding-top:7px;
+  border-top:1px solid rgba(201,168,76,.1);
+}
+
+/* ════ SLIDE 4 — EXERCISES ════ */
+.ex-block{
+  background:var(--green-card);
+  border:1px solid var(--green-border);
+  border-radius:12px;padding:18px 22px;margin-bottom:14px;
+}
+.ex-block-title{
+  font-size:clamp(18px,2.1vw,25px);font-weight:700;
+  color:var(--gold);padding-bottom:10px;
+  border-bottom:1px solid rgba(201,168,76,.15);margin-bottom:14px;
+}
+.q-item{margin-bottom:16px;}
+.q-txt{
+  font-size:clamp(17px,2vw,23px);font-weight:500;
+  color:var(--cream);line-height:1.85;margin-bottom:9px;
+}
+.opts{display:flex;flex-direction:column;gap:7px;}
+.opt{
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(201,168,76,.18);
+  border-radius:8px;padding:11px 18px;text-align:right;
+  cursor:pointer;color:var(--cream);
+  font-family:'SakkalSaad',sans-serif;
+  font-size:clamp(15px,1.8vw,21px);font-weight:400;
+  transition:background .25s,border-color .25s,transform .2s;
+  display:flex;align-items:center;gap:10px;
+  position:relative;overflow:hidden;
+}
+.opt::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,.06),transparent);
+  transform:translateX(120%);transition:transform .4s ease;
+}
+.opt:hover:not([disabled])::before{transform:translateX(-120%);}
+.opt:hover:not([disabled]){
+  background:rgba(201,168,76,.09);
+  border-color:rgba(201,168,76,.45);transform:translateX(-3px);
+}
+.opt.correct{background:rgba(46,160,67,.18);border-color:#3dba58;color:#a0f0b0;}
+.opt.wrong  {background:rgba(220,50,50,.15); border-color:#d03030;color:#f0a0a0;}
+.opt.reveal {background:rgba(46,160,67,.08); border-color:rgba(61,186,88,.3);color:rgba(160,240,176,.7);}
+.opt .ico{font-size:17px;flex-shrink:0;min-width:20px;}
+
+/* ════ NAV ════ */
+#nav{
+  position:fixed;bottom:48px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:18px;z-index:997;
+  background:rgba(6,13,8,.65);backdrop-filter:blur(14px);
+  border:1px solid rgba(201,168,76,.15);border-radius:50px;
+  padding:10px 22px;transition:bottom .5s ease;
+}
+body.playing #nav{bottom:12px;}
+.nav-btn{
+  background:none;border:1px solid rgba(201,168,76,.4);color:var(--gold);
+  width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s;user-select:none;
+}
+.nav-btn:hover{background:var(--gold);color:var(--green-bg);}
+.nav-btn:disabled{opacity:.25;cursor:default;}
+.dots{display:flex;gap:7px;align-items:center;}
+.dot{width:7px;height:7px;border-radius:50%;background:rgba(201,168,76,.25);cursor:pointer;transition:all .3s;}
+.dot.on{background:var(--gold);transform:scale(1.5);}
+#slide-num{font-size:13px;font-weight:300;color:rgba(201,168,76,.5);letter-spacing:1px;min-width:36px;text-align:center;}
+#hud{position:fixed;top:44px;right:24px;z-index:997;font-size:11px;font-weight:300;color:rgba(201,168,76,.35);letter-spacing:1px;transition:top .5s ease;}
+body.playing #hud{top:8px;}
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="الاقتباس">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body class="playing">
+
+<div id="cine-top"></div>
+<div id="cine-bot"></div>
+<div id="progress" style="width:25%"></div>
+<div id="hud">← → للتنقل</div>
+
+<div id="stage">
+
+<!-- ══════════════ SLIDE 1 — TITLE ══════════════ -->
+<section class="slide s1 active" data-i="0">
+  <div class="orbit o1"></div>
+  <div class="orbit o2"></div>
+  <div class="orbit o3"></div>
+  <div style="text-align:center;position:relative;z-index:2;">
+    <div class="s1 eyebrow">دروس البلاغة</div>
+    <div class="s1 big-title">الاقتباس</div>
+    <div class="gold-rule" style="width:120px;margin:16px auto;"></div>
+    <div class="s1 by-line">إعداد: أ. حيدر المعاتيق</div>
+  </div>
+</section>
+
+<!-- ══════════════ SLIDE 2 — DEFINITION ══════════════ -->
+<section class="slide s2" data-i="1">
+  <div class="inner scrollable">
+    <div class="slide-h2">ما هو الاقتباس؟</div>
+    <div class="gold-rule"></div>
+
+    <div class="card">
+      <div class="def-text">
+        الاقتباسُ في اللغة مأخوذٌ من قَبَسِ النار؛ وهو أخذُ شُعلةٍ منها. وفي الاصطلاح البلاغي:
+        <br>
+        <strong style="color:var(--gold)">هو أن يُضمِّن الأديبُ كلامَه — نثراً كان أم شعراً — شيئاً من القرآن الكريم أو الحديث النبوي الشريف، دون أن يُشير إلى أنه منهما.</strong>
+      </div>
+    </div>
+
+    <!-- Types -->
+    <div class="types-grid">
+      <div class="type-card">
+        <div class="tc-icon">📖</div>
+        <div class="tc-title">اقتباس من القرآن</div>
+        <div class="tc-desc">تضمين الكلام آيةً أو جزءاً منها في سياق أدبي</div>
+      </div>
+      <div class="type-card">
+        <div class="tc-icon">🌙</div>
+        <div class="tc-title">اقتباس من الحديث</div>
+        <div class="tc-desc">توظيف حديثٍ نبوي شريف أو جزء منه في الكلام</div>
+      </div>
+    </div>
+
+    <!-- Rulings -->
+    <div class="note">⚖️ <strong>أحكام الاقتباس عند البلاغيين:</strong></div>
+    <div class="rulings-row">
+      <div class="ruling r-accepted">
+        <div class="r-title">مقبول</div>
+        <div class="r-desc">في المواعظ والزهد والعلوم</div>
+      </div>
+      <div class="ruling r-allowed">
+        <div class="r-title">مباح</div>
+        <div class="r-desc">في سائر الأغراض الجادة</div>
+      </div>
+      <div class="ruling r-disliked">
+        <div class="r-title">مكروه</div>
+        <div class="r-desc">في المكاتبات الرسمية الديوانية</div>
+      </div>
+      <div class="ruling r-forbidden">
+        <div class="r-title">محرّم</div>
+        <div class="r-desc">في الهزل والمجون والفحش</div>
+      </div>
+    </div>
+
+    <!-- Example paragraph -->
+    <div class="ex-para-label">📝 مثال: خطاب أدبي موجَّه للشباب — الاقتباسات مُلوَّنة</div>
+    <div class="card ex-para">
+      أيُّها الشبابُ، أنتُم أملُ الأمةِ وعِمادُ المستقبلِ، فعليكم بطلبِ العِلمِ واغتنامِ سنواتِ العمرِ قبلَ فواتِها، فـ"<span class="iq iq-h">طَلَبُ العِلمِ فريضةٌ على كلِّ مسلمٍ</span>"، ولا تيأسوا إن أغلقَت في وجوهِكم الأبوابُ وتكالبَت عليكم الصعابُ، فـ<span class="iq iq-q">﴿إِنَّ مَعَ الْعُسْرِ يُسْراً﴾</span>، وتذكَّروا أنَّ الصبرَ سلاحُ المؤمنِ وطريقُه إلى النصرِ فـ<span class="iq iq-q">﴿إِنَّ اللَّهَ مَعَ الصَّابِرِينَ﴾</span>. وكونوا لإخوانِكم سنداً ودعماً ولا تنظُروا إلى أنفسِكم بعيونِ الفرديةِ، فـ"<span class="iq iq-h">المؤمنُ للمؤمنِ كالبُنيانِ يشُدُّ بعضُه بعضاً</span>"، وليكُن هَمُّ أحدِكم أن ينفعَ من حولَه فـ"<span class="iq iq-h">خيرُ الناسِ أنفعُهم للناسِ</span>". واعلَموا أنَّ الشرفَ الحقيقيَّ ليس بالنسبِ ولا بالمالِ ولا بالمظاهرِ، بل بما ينطوي عليه القلبُ من تقوى وصلاحٍ فـ<span class="iq iq-q">﴿إِنَّ أَكْرَمَكُمْ عِندَ اللَّهِ أَتْقَاكُمْ﴾</span>. فاجعَلوا كلَّ عملٍ تعملونَه خالصاً لوجهِ اللهِ، فـ"<span class="iq iq-h">إنَّما الأعمالُ بالنِّيَّاتِ</span>"، وسيرى اللهُ عملَكم ورسولُه والمؤمنون.
+    </div>
+
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:var(--iq-quran)"></div>اقتباس من القرآن الكريم</div>
+      <div class="leg-item"><div class="leg-dot" style="background:var(--iq-hadith)"></div>اقتباس من الحديث النبوي</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SLIDE 3 — EXAMPLES ══════════════ -->
+<section class="slide s3" data-i="2">
+  <div class="inner scrollable">
+    <div class="slide-h2">الأمثلة</div>
+    <div class="gold-rule"></div>
+
+    <!-- Quran in poetry — Ibn al-Rumi verified -->
+    <div class="section-label"><span style="font-size:20px">①</span> اقتباس من القرآن الكريم في الشعر</div>
+    <div class="card">
+      <div class="ex-txt">قال الشاعر <strong style="color:var(--gold-lt)">ابن الرومي</strong> هاجياً رجلاً بخيلاً:</div>
+      <div class="ex-txt" style="font-style:italic;">
+        "لَئِن أَخطَأتُ في مَدحِكَ — ما أَخطَأتُ في مَنعي
+        <br>لَقَد أَنزَلتُ حاجاتي — <span class="iq-q">بِوَادٍ غَيرِ ذي زَرعِ</span>"
+      </div>
+      <div class="ex-note">
+        اقتبسَ ابنُ الرومي من قوله تعالى في سورة إبراهيم (٣٧): ﴿رَبَّنَا إِنِّي أَسْكَنتُ مِن ذُرِّيَّتِي بِوَادٍ غَيْرِ ذِي زَرْعٍ عِندَ بَيْتِكَ الْمُحَرَّمِ﴾، وهي دعاء سيدنا إبراهيم عليه السلام. وقد نقلَ الشاعرُ هذه العبارةَ من سياقِها القرآنيِّ الأصليِّ إلى معنىً مجازيٍّ للدلالةِ على أنَّ هذا الرجلَ لا خيرَ فيه ولا عطاء، فجاء الاقتباسُ بليغاً موفَّقاً.
+      </div>
+    </div>
+
+    <!-- Quran in prose — verified -->
+    <div class="section-label"><span style="font-size:20px">②</span> اقتباس من القرآن الكريم في النثر</div>
+    <div class="card">
+      <div class="ex-txt">قال أحد الخطباء في خطبة الجمعة:</div>
+      <div class="ex-txt" style="color:var(--cream);">"أيُّها المسلمون، احذَروا التفاخُرَ بالأنسابِ والأموالِ، فليسَ الكرَمُ بالنسَبِ ولا الشرفُ بالثروةِ، إنَّما الميزانُ عندَ اللهِ ميزانٌ واحدٌ: <span class="iq-q">﴿إِنَّ أَكْرَمَكُمْ عِندَ اللَّهِ أَتْقَاكُمْ﴾</span>، فأصلِحوا قلوبَكم تَفُزْ بالكرامةِ الحقيقيَّة."</div>
+      <div class="ex-note">الآية من سورة الحجرات (١٣). اندمَجَت في سياقِ الخطبةِ اندماجاً طبيعياً حتى كأنَّها جزءٌ أصيلٌ من كلامِ الخطيبِ، وهذا هو سرُّ جمالِ الاقتباسِ.</div>
+    </div>
+
+    <!-- Hadith in prose — verified from Alukah -->
+    <div class="section-label"><span style="font-size:20px">③</span> اقتباس من الحديث النبوي في النثر</div>
+    <div class="card">
+      <div class="ex-txt">قال أحد الأدباء ناصحاً:</div>
+      <div class="ex-txt">"إن أردتَ أن يُحبَّكَ الناسُ فلا تكُن قاسياً في معاملتِهم، بل "<span class="iq-h">خالِقِ الناسَ بخُلُقٍ حَسَنٍ</span>"، فإنَّ المعاملةَ الحسنةَ تكسِبُ القلوبَ وتصنعُ الأصدقاءَ وتحلُّ العُقَد."</div>
+      <div class="ex-note">اقتُبِسَ من الحديثِ النبويِّ: "اتَّقِ اللهَ حيثُما كنتَ، وخالِقِ الناسَ بخُلُقٍ حَسَنٍ" — رواه الترمذي وأحمد. وقد وظَّفَ الأديبُ جزءاً من الحديثِ بأسلوبٍ طبيعيٍّ يقوِّي نصيحتَه.</div>
+    </div>
+
+    <!-- Hadith in poetry — verified -->
+    <div class="section-label"><span style="font-size:20px">④</span> اقتباس من الحديث النبوي في الشعر</div>
+    <div class="card">
+      <div class="ex-txt">قال الشاعر مُوظِّفاً حديثَ النيَّة:</div>
+      <div class="ex-txt" style="font-style:italic;">
+        "<span class="iq-h">إنَّما الأعمالُ بالنِّيَّاتِ</span> فاحذَرْ — أن يَرى الرَّحمنُ قَصداً غيرَ طاهِرِ"
+      </div>
+      <div class="ex-note">
+        اقتبسَ الشاعرُ صدرَ الحديثِ النبويِّ المتَّفَق عليه: "إنَّما الأعمالُ بالنِّيَّاتِ، وإنَّما لكلِّ امرئٍ ما نوى" — وهو أوَّلُ حديثٍ في صحيح البخاري. وقد أدمجَه في مطلعِ بيتِه إدماجاً سلساً ثمَّ بنى عليه المعنى في عجُزِه، مُحقِّقاً بذلك وظيفةَ الاقتباسِ في تقويةِ الحجَّةِ وإضفاءِ الأثر.
+      </div>
+    </div>
+
+    <div class="note" style="font-size:clamp(14px,1.6vw,19px);">
+      🔑 <strong>الفرق الجوهري:</strong> الاقتباس يكون <u>من القرآن أو الحديث فقط</u>. أما أخذُ الكلام من شعر الشعراء أو نثر الأدباء فيُسمَّى <strong>التضمين</strong> لا الاقتباس.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ SLIDE 4 — EXERCISES ══════════════ -->
+<section class="slide s4" data-i="3">
+  <div class="inner scrollable">
+    <div class="slide-h2">التدريبات</div>
+    <div class="gold-rule"></div>
+
+    <!-- Ex 1: صواب وخطأ -->
+    <div class="ex-block">
+      <div class="ex-block-title">✅ التدريب الأول: صواب أم خطأ؟</div>
+
+      <div class="q-item">
+        <div class="q-txt">١. الاقتباس هو أن يُضمِّن الأديبُ كلامَه شيئاً من القرآن أو الحديث دون التصريح بأنه منهما.</div>
+        <div class="opts">
+          <button class="opt" data-c="1"><span class="ico"></span>✅ صواب</button>
+          <button class="opt" data-c="0"><span class="ico"></span>❌ خطأ</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٢. يُشترط لنجاح الاقتباس أن يسبقه الأديب بعبارة "قال الله تعالى" أو "قال رسول الله".</div>
+        <div class="opts">
+          <button class="opt" data-c="0"><span class="ico"></span>✅ صواب</button>
+          <button class="opt" data-c="1"><span class="ico"></span>❌ خطأ — بل يُشترط عدم التصريح بالمصدر</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٣. يجوز للشاعر أن يُحدث تغييراً يسيراً في الكلمة المقتبسة لضرورة استقامة الوزن أو القافية.</div>
+        <div class="opts">
+          <button class="opt" data-c="1"><span class="ico"></span>✅ صواب</button>
+          <button class="opt" data-c="0"><span class="ico"></span>❌ خطأ</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٤. يقتصر فنُّ الاقتباس على الشعر فقط، ولا يجوز استخدامه في النثر أو الخطابة.</div>
+        <div class="opts">
+          <button class="opt" data-c="0"><span class="ico"></span>✅ صواب</button>
+          <button class="opt" data-c="1"><span class="ico"></span>❌ خطأ — يقع في الشعر والنثر والخطابة معاً</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٥. من أسرار جمال الاقتباس أنه يُكسب المعنى قوةً وجلالاً، ويُظهر براعة الأديب في توظيف النصوص.</div>
+        <div class="opts">
+          <button class="opt" data-c="1"><span class="ico"></span>✅ صواب</button>
+          <button class="opt" data-c="0"><span class="ico"></span>❌ خطأ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ex 2: اختيار من متعدد -->
+    <div class="ex-block">
+      <div class="ex-block-title">📝 التدريب الثاني: اختيار من متعدد</div>
+
+      <div class="q-item">
+        <div class="q-txt">١. الغرضُ البلاغيُّ الأساسيُّ من استخدام الاقتباس في النص الأدبي هو:</div>
+        <div class="opts">
+          <button class="opt" data-c="0"><span class="ico"></span>إطالة النص وتكثير كلماته</button>
+          <button class="opt" data-c="1"><span class="ico"></span>تقوية المعنى وإكسابه جلالاً وقدرةً على الإقناع</button>
+          <button class="opt" data-c="0"><span class="ico"></span>إظهار قدرة الشاعر على حفظ الشعر الجاهلي</button>
+          <button class="opt" data-c="0"><span class="ico"></span>تحويل النص النثري إلى نص شعري</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٢. قال الشاعر: "رَحَلوا فلستُ مُسائِلاً عن دارِهم — أنا باخِعٌ نَفسي على آثارِهم" — موضعُ الاقتباس في هذا البيت:</div>
+        <div class="opts">
+          <button class="opt" data-c="0"><span class="ico"></span>رَحَلوا فلستُ مُسائِلاً</button>
+          <button class="opt" data-c="0"><span class="ico"></span>عن دارِهم</button>
+          <button class="opt" data-c="1"><span class="ico"></span>أنا باخِعٌ نَفسي على آثارِهم — من قوله تعالى: ﴿فَلَعَلَّكَ بَاخِعٌ نَّفْسَكَ﴾</button>
+          <button class="opt" data-c="0"><span class="ico"></span>لا يوجد اقتباس في هذا البيت</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٣. قال الشاعر: "وإذا ما شِئتَ عَيشاً بَينَهُم — خالِقِ النّاسَ بِخُلقٍ حَسَنِ" — نوعُ النص المقتبَس:</div>
+        <div class="opts">
+          <button class="opt" data-c="0"><span class="ico"></span>آية من القرآن الكريم</button>
+          <button class="opt" data-c="1"><span class="ico"></span>حديث نبوي شريف — من قوله ﷺ: "وخالِقِ الناسَ بخُلُقٍ حَسَنٍ"</button>
+          <button class="opt" data-c="0"><span class="ico"></span>حكمة عربية قديمة</button>
+          <button class="opt" data-c="0"><span class="ico"></span>بيت من الشعر الأموي</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٤. أيُّ العبارات التالية تُعدُّ مثالاً صحيحاً على الاقتباس البلاغي؟</div>
+        <div class="opts">
+          <button class="opt" data-c="0"><span class="ico"></span>قال الله تعالى: ﴿فَصَبْرٌ جَمِيلٌ﴾ عند المحن</button>
+          <button class="opt" data-c="1"><span class="ico"></span>"إن كنتَ تهجُرني بلا سببٍ — فصَبرٌ جميلٌ واللهُ المستعان" — لأنه لم يُصرِّح بالمصدر</button>
+          <button class="opt" data-c="0"><span class="ico"></span>أوصانا النبي ﷺ بالصبر</button>
+          <button class="opt" data-c="0"><span class="ico"></span>الصبر مفتاح الفرج كما يقول المثل</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٥. إذا ضمَّن الكاتبُ آيةً قرآنيةً في نصِّه وصرَّح بوضوح بأنها من القرآن الكريم، فإنَّ هذا في البلاغة:</div>
+        <div class="opts">
+          <button class="opt" data-c="0"><span class="ico"></span>يُعدُّ اقتباساً تاماً</button>
+          <button class="opt" data-c="1"><span class="ico"></span>لا يُعدُّ اقتباساً اصطلاحياً؛ لفقدانه شرطَ عدم التصريح بالمصدر</button>
+          <button class="opt" data-c="0"><span class="ico"></span>يُعدُّ اقتباساً من الدرجة الثانية</button>
+          <button class="opt" data-c="0"><span class="ico"></span>يُسمَّى سجعاً</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ex 3: تحديد المصدر -->
+    <div class="ex-block">
+      <div class="ex-block-title">🔍 التدريب الثالث: حدِّد مصدر الاقتباس</div>
+
+      <div class="q-item">
+        <div class="q-txt">١. "لا تحتقِرْ صغيرَ الأعمالِ، فـ'خيرُ الناسِ أنفعُهم للناسِ'، والنفعُ درجاتٌ لا تُحصى."</div>
+        <div class="opts">
+          <button class="opt" data-c="0"><span class="ico"></span>آية من القرآن الكريم</button>
+          <button class="opt" data-c="1"><span class="ico"></span>حديث نبوي شريف</button>
+          <button class="opt" data-c="0"><span class="ico"></span>مَثَل عربي مشهور</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٢. "أيُّها المسلمون، احذَروا الظلمَ، فـ﴿إِنَّ أَكْرَمَكُمْ عِندَ اللَّهِ أَتْقَاكُمْ﴾، والتقوى هي الميزانُ الحقيقي."</div>
+        <div class="opts">
+          <button class="opt" data-c="1"><span class="ico"></span>آية من القرآن الكريم (سورة الحجرات: ١٣)</button>
+          <button class="opt" data-c="0"><span class="ico"></span>حديث نبوي شريف</button>
+          <button class="opt" data-c="0"><span class="ico"></span>قول مأثور عن الصحابة</button>
+        </div>
+      </div>
+
+      <div class="q-item">
+        <div class="q-txt">٣. قال ابن الرومي هاجياً بخيلاً: "لقد أنزلتُ حاجاتي بوادٍ غيرِ ذي زرعِ" — مصدر الاقتباس:</div>
+        <div class="opts">
+          <button class="opt" data-c="1"><span class="ico"></span>آية من القرآن الكريم — دعاء سيدنا إبراهيم في سورة إبراهيم (٣٧)</button>
+          <button class="opt" data-c="0"><span class="ico"></span>حديث نبوي شريف</button>
+          <button class="opt" data-c="0"><span class="ico"></span>مَثَل جاهلي عن البخل</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- /stage -->
+
+<!-- NAV -->
+<nav id="nav">
+  <button class="nav-btn" id="btn-prev" disabled="">▶</button>
+  <div class="dots" id="dots">
+    <div class="dot on" data-g="0"></div>
+    <div class="dot" data-g="1"></div>
+    <div class="dot" data-g="2"></div>
+    <div class="dot" data-g="3"></div>
+  </div>
+  <span id="slide-num">١ / ٤</span>
+  <button class="nav-btn" id="btn-next">◀</button>
+</nav>
+
+<script>
+const slides  = Array.from(document.querySelectorAll('.slide'));
+const dots    = Array.from(document.querySelectorAll('.dot'));
+const nums    = ['١','٢','٣','٤'];
+let cur = 0, animating = false;
+
+const progressBar = document.getElementById('progress');
+const slideNum    = document.getElementById('slide-num');
+const btnPrev     = document.getElementById('btn-prev');
+const btnNext     = document.getElementById('btn-next');
+
+setTimeout(()=>document.body.classList.add('playing'), 900);
+
+function goTo(n){
+  if(n===cur||animating||n<0||n>=slides.length) return;
+  animating=true;
+  slides[cur].classList.remove('active');
+  slides[cur].classList.add('exit');
+  const prev=cur; cur=n;
+  slides[cur].classList.add('active');
+  dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
+  slideNum.textContent=nums[cur]+' / ٤';
+  progressBar.style.width=((cur+1)/slides.length*100)+'%';
+  btnPrev.disabled=(cur===0);
+  btnNext.disabled=(cur===slides.length-1);
+  setTimeout(()=>{ slides[prev].classList.remove('exit'); animating=false; },780);
+}
+
+btnNext.addEventListener('click',()=>goTo(cur+1));
+btnPrev.addEventListener('click',()=>goTo(cur-1));
+dots.forEach(d=>d.addEventListener('click',()=>goTo(+d.dataset.g)));
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowDown') goTo(cur+1);
+  if(e.key==='ArrowRight'||e.key==='ArrowUp')  goTo(cur-1);
+});
+let tx=0;
+document.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{
+  const d=tx-e.changedTouches[0].clientX;
+  if(Math.abs(d)>48) goTo(d>0?cur+1:cur-1);
+},{passive:true});
+
+/* quiz */
+document.querySelectorAll('.opts').forEach(group=>{
+  group.querySelectorAll('.opt').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      if(group.dataset.done) return;
+      group.dataset.done='1';
+      const correct=+btn.dataset.c===1;
+      group.querySelectorAll('.opt').forEach(b=>{
+        b.disabled=true;
+        const isC=+b.dataset.c===1;
+        if(b===btn){ b.classList.add(correct?'correct':'wrong'); b.querySelector('.ico').textContent=correct?'✓':'✗'; }
+        else if(isC&&!correct){ b.classList.add('reveal'); b.querySelector('.ico').textContent='✓'; }
+      });
+    });
+  });
+});
+</script>
+
+
+</body></html>

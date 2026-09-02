@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لعبة السجع التعليمية</title>
+  <style>
+@font-face {
+  font-family: 'Sakkal Saad';
+  src: url('../fonts/sakkal-100.woff2') format('woff2'), local('SakkalSaad-Thin'), local('Sakkal Saad Thin');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Sakkal Saad';
+  src: url('../fonts/sakkal-300.woff2') format('woff2'), local('SakkalSaad-Light'), local('Sakkal Saad Light');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Sakkal Saad';
+  src: url('../fonts/sakkal-400.woff2') format('woff2'), local('SakkalSaad-Regular'), local('Sakkal Saad Regular'), local('SakkalSaad');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Sakkal Saad';
+  src: url('../fonts/sakkal-500.woff2') format('woff2'), local('SakkalSaad-Medium'), local('Sakkal Saad Medium');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Sakkal Saad';
+  src: url('../fonts/sakkal-700.woff2') format('woff2'), local('SakkalSaad-Bold'), local('Sakkal Saad Bold');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Sakkal Saad';
+  src: url('../fonts/sakkal-800.woff2') format('woff2'), local('SakkalSaad-Extrabold'), local('Sakkal Saad ExtraBold'), local('Sakkal Saad Extra Bold');
+  font-weight: 800;
+  font-style: normal;
+}
+  </style>
+  <style>
+:root {
+  --navy-deep: #071525;
+  --navy-dark: #0c1f38;
+  --navy-mid: #163050;
+  --navy-light: #1e3a6a;
+  --gold: #d4a520;
+  --gold-bright: #f0c040;
+  --gold-glow: rgba(240,192,64,0.25);
+  --copper: #c07830;
+  --success: #27b076;
+  --error: #e83c58;
+  --info: #4a90d9;
+  --text-main: #f5e8cc;
+  --text-sub: #b8a880;
+  --text-dim: #6070a0;
+  --card: rgba(22,48,80,0.65);
+  --border: rgba(212,165,32,0.22);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  font-family:'Sakkal Saad',sans-serif;
+  background:var(--navy-deep);
+  color:var(--text-main);
+  min-height:100vh;
+  overflow-x:hidden;
+  direction:rtl;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 15%, rgba(212,165,32,0.07) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 60% at 85% 85%, rgba(14,34,70,0.9) 0%,transparent 70%);
+  pointer-events:none;z-index:0;
+}
+body::after{
+  content:'';
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40Z' fill='none' stroke='%23d4a520' stroke-opacity='0.03' stroke-width='1'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;
+}
+
+/* ======= SCREENS ======= */
+.screen{display:none;position:relative;z-index:1;min-height:100vh;padding:24px 16px;}
+.screen.active{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+#gameScreen.active{justify-content:flex-start;padding-top:20px;}
+
+/* ======= WELCOME ======= */
+.welcome-wrap{text-align:center;max-width:580px;width:100%;animation:fade-up .6s ease;}
+@keyframes fade-up{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+
+.logo-ring{
+width:110px;height:110px;
+background:linear-gradient(135deg,var(--gold),var(--gold-bright));
+border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+font-size:54px;margin:0 auto 28px;
+box-shadow:0 0 0 12px rgba(212,165,32,0.08),0 0 60px rgba(240,192,64,0.3);
+animation:logo-pulse 3s ease-in-out infinite;
+}
+@keyframes logo-pulse{
+0%,100%{box-shadow:0 0 0 12px rgba(212,165,32,0.08),0 0 60px rgba(240,192,64,0.3);}
+50%{box-shadow:0 0 0 20px rgba(212,165,32,0.04),0 0 90px rgba(240,192,64,0.5);}
+}
+
+.game-title{
+font-family:'Sakkal Saad',serif;font-size:40px;font-weight:700;
+background:linear-gradient(135deg,var(--gold-bright),var(--copper),var(--gold));
+-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+line-height:1.1;margin-bottom:8px;
+}
+@media(max-width:600px){.game-title{font-size:36px;}}
+.game-tagline{font-size:15px;color:var(--text-sub);margin-bottom:36px;letter-spacing:2px;}
+
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);}
+.diamond{color:var(--gold);font-size:12px;}
+
+.input-label{display:block;font-size:14px;color:var(--gold);margin-bottom:10px;text-align:right;}
+.name-input{
+width:100%;padding:15px 22px;
+background:rgba(30,58,106,0.5);
+border:2px solid var(--border);border-radius:14px;
+color:var(--text-main);font-family:'Sakkal Saad',sans-serif;font-size:16px;
+text-align:center;outline:none;transition:all .3s;direction:rtl;
+}
+@media(max-width:600px){.name-input{font-size:16px;padding:14px 18px;}}
+.name-input:focus{border-color:var(--gold);box-shadow:0 0 20px var(--gold-glow);}
+.name-input::placeholder{color:var(--text-dim);}
+
+.stats-grid{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:28px 0 36px;}
+.stat-chip{
+padding:9px 18px;
+background:rgba(212,165,32,0.08);
+border:1px solid var(--border);border-radius:24px;
+font-size:13px;color:var(--text-sub);
+}
+
+/* ======= BUTTONS ======= */
+.btn-gold{
+padding:15px 50px;
+background:linear-gradient(135deg,var(--copper),var(--gold-bright));
+border:none;border-radius:50px;
+color:var(--navy-deep);font-family:'Sakkal Saad',sans-serif;
+font-size:18px;font-weight:700;cursor:pointer;
+transition:all .3s;
+box-shadow:0 8px 28px rgba(212,165,32,0.4);
+}
+.btn-gold:hover{transform:translateY(-3px);box-shadow:0 14px 38px rgba(212,165,32,0.6);}
+.btn-gold:active{transform:translateY(0);}
+.btn-outline{
+padding:12px 32px;background:transparent;
+border:2px solid var(--gold);border-radius:50px;
+color:var(--gold);font-family:'Sakkal Saad',sans-serif;
+font-size:15px;font-weight:600;cursor:pointer;transition:all .3s;
+}
+.btn-outline:hover{background:var(--gold-glow);color:var(--gold-bright);}
+
+/* ======= LEVEL INTRO ======= */
+.lvl-intro-wrap{text-align:center;max-width:680px;animation:fade-up .5s ease;}
+.lvl-badge{
+display:inline-flex;align-items:center;gap:8px;
+padding:8px 26px;
+background:linear-gradient(135deg,var(--copper),var(--gold));
+border-radius:50px;font-size:13px;font-weight:700;
+color:var(--navy-deep);margin-bottom:28px;letter-spacing:2px;
+}
+.lvl-icon{font-size:56px;margin-bottom:18px;display:block;}
+.lvl-title{font-family:'Sakkal Saad',serif;font-size:34px;color:var(--gold-bright);margin-bottom:20px;}
+@media(max-width:600px){.lvl-title{font-size:28px;}}
+.lvl-desc{
+font-size:15px;color:var(--text-sub);line-height:1.9;
+background:var(--card);border:1px solid var(--border);
+border-radius:18px;padding:24px 28px;margin-bottom:28px;
+}
+@media(max-width:600px){.lvl-desc{font-size:14px;padding:18px 20px;}}
+.rules-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:36px;}
+.rule-tag{
+padding:8px 16px;
+background:rgba(212,165,32,0.08);
+border:1px solid var(--border);border-radius:20px;
+font-size:13px;color:var(--text-sub);
+}
+
+/* ======= GAME HEADER ======= */
+.game-wrap{width:100%;max-width:820px;}
+
+.lvl-progress{display:flex;gap:6px;margin-bottom:18px;}
+.lp-seg{flex:1;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;transition:background .4s;}
+.lp-seg.done{background:var(--gold);}
+.lp-seg.active{background:linear-gradient(90deg,var(--copper),var(--gold-bright));}
+
+.g-header{
+display:flex;align-items:center;justify-content:space-between;
+background:rgba(22,48,80,0.5);
+border:1px solid var(--border);border-radius:16px;
+padding:14px 20px;margin-bottom:16px;
+}
+.score-box{display:flex;align-items:center;gap:7px;font-size:20px;font-weight:700;color:var(--gold-bright);}
+.q-counter{text-align:center;}
+.q-label{font-size:13px;color:var(--text-dim);}
+.q-dots{display:flex;gap:7px;justify-content:center;margin-top:6px;}
+.dot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all .3s;}
+.dot.active{background:var(--gold-bright);box-shadow:0 0 8px var(--gold-glow);}
+.dot.done{background:var(--success);}
+.dot.wrong{background:var(--error);}
+
+.timer-row{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:700;}
+.t-num{color:var(--gold-bright);min-width:38px;text-align:center;transition:color .3s;}
+.t-num.warn{color:#f09a00;animation:blink .5s ease-in-out infinite;}
+.t-num.danger{color:var(--error);animation:blink .3s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.5;}}
+
+.timer-bar{width:100%;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;margin-bottom:22px;overflow:hidden;}
+.t-fill{height:100%;border-radius:3px;transition:width 1s linear,background .5s;}
+.t-fill.normal{background:linear-gradient(90deg,var(--gold),var(--gold-bright));}
+.t-fill.warn{background:linear-gradient(90deg,#d08000,#f0b030);}
+.t-fill.danger{background:linear-gradient(90deg,#b02030,#e83c58);}
+
+/* ======= QUESTION CARD ======= */
+.q-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:22px;padding:32px;
+margin-bottom:18px;
+backdrop-filter:blur(12px);
+animation:q-slide .35s ease;
+}
+@keyframes q-slide{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.q-text{
+font-family:'Sakkal Saad',serif;font-size:17px;
+color:var(--text-sub);margin-bottom:24px;padding-bottom:20px;
+border-bottom:1px solid var(--border);line-height:1.9;
+}
+@media(max-width:600px){.q-text{font-size:16px;}}
+.hint-txt{font-size:13px;color:var(--text-dim);text-align:center;margin-top:12px;font-style:italic;}
+
+/* ======= LEVEL 1 OPTIONS ======= */
+.opts-list{display:flex;flex-direction:column;gap:11px;}
+.opt-btn{
+padding:18px 24px;
+background:rgba(28,54,100,0.45);
+border:2px solid rgba(212,165,32,0.12);border-radius:14px;
+color:var(--text-main);font-family:'Sakkal Saad',serif;font-size:17px;
+text-align:right;cursor:pointer;transition:all .22s;line-height:1.8;
+}
+@media(max-width:600px){.opt-btn{font-size:16px;padding:16px 18px;}}
+.opt-btn:hover:not(.locked){border-color:var(--gold);background:rgba(212,165,32,0.1);transform:translateX(-5px);}
+.opt-btn.correct{border-color:var(--success)!important;background:rgba(39,176,118,0.15)!important;color:var(--success)!important;}
+.opt-btn.wrong{border-color:var(--error)!important;background:rgba(232,60,88,0.15)!important;color:var(--error)!important;}
+.opt-btn.locked{cursor:not-allowed;pointer-events:none;}
+
+/* ======= LEVEL 2 DRAG ======= */
+.sentence-area{
+font-family:'Sakkal Saad',serif;font-size:22px;
+text-align:center;line-height:2.2;
+margin-bottom:28px;direction:rtl;
+}
+@media(max-width:600px){.sentence-area{font-size:20px;line-height:1.8;}}
+.blank-slot{
+display:inline-flex;align-items:center;justify-content:center;
+min-width:110px;height:44px;
+border:2px dashed var(--gold);border-radius:10px;
+padding:4px 14px;
+background:rgba(212,165,32,0.08);
+vertical-align:middle;margin:0 8px;
+color:var(--gold);font-size:19px;
+cursor:pointer;transition:all .25s;
+}
+.blank-slot.dragover{border-color:var(--gold-bright);background:rgba(240,192,64,0.18);box-shadow:0 0 16px var(--gold-glow);}
+.blank-slot.filled{border-style:solid;border-color:var(--gold-bright);color:var(--gold-bright);background:rgba(240,192,64,0.12);font-weight:700;}
+.blank-slot.ok{border-color:var(--success);color:var(--success);background:rgba(39,176,118,0.12);}
+.blank-slot.bad{border-color:var(--error);color:var(--error);background:rgba(232,60,88,0.12);}
+
+.words-bank{display:flex;flex-wrap:wrap;gap:11px;justify-content:center;margin-bottom:22px;}
+.w-chip{
+padding:10px 22px;
+background:rgba(22,48,80,0.8);
+border:2px solid var(--border);border-radius:30px;
+color:var(--text-main);font-family:'Sakkal Saad',serif;font-size:16px;
+cursor:grab;user-select:none;transition:all .22s;
+}
+@media(max-width:600px){.w-chip{font-size:15px;padding:9px 18px;}}
+.w-chip:hover:not(.used){border-color:var(--gold);background:rgba(212,165,32,0.12);transform:scale(1.05);}
+.w-chip.dragging{opacity:.45;transform:scale(.93);}
+.w-chip.selected{border-color:var(--gold-bright);background:rgba(240,192,64,0.15);color:var(--gold-bright);}
+.w-chip.used{opacity:.3;cursor:not-allowed;pointer-events:none;}
+.w-chip.correct-chip{border-color:var(--success);color:var(--success);background:rgba(39,176,118,0.12);}
+
+.submit-row{text-align:center;margin-top:18px;}
+
+/* ======= LEVEL 3 CLICK ======= */
+.para-display{
+font-family:'Sakkal Saad',serif;font-size:18px;
+line-height:2.4;text-align:center;direction:rtl;
+}
+@media(max-width:600px){.para-display{font-size:18px;line-height:2.2;}}
+.c-word{
+display:inline-block;padding:3px 8px;border-radius:7px;
+cursor:pointer;transition:all .2s;margin:2px;border:1px solid transparent;
+}
+.c-word:hover{background:rgba(212,165,32,0.12);color:var(--gold-bright);}
+.c-word.sel{background:rgba(240,192,64,0.2);color:var(--gold-bright);border-color:var(--gold);}
+.c-word.ok-w{background:rgba(39,176,118,0.18);color:var(--success);border-color:var(--success);}
+.c-word.bad-w{background:rgba(232,60,88,0.18);color:var(--error);border-color:var(--error);}
+.c-word.missed-w{background:rgba(240,149,0,0.18);color:#f09a00;border-color:#f09a00;}
+.n-word{display:inline-block;padding:3px 8px;margin:2px;}
+
+.sajtype-tag{
+display:inline-block;padding:5px 18px;
+background:rgba(212,165,32,0.1);border:1px solid var(--gold);
+border-radius:18px;font-size:13px;color:var(--gold);margin-bottom:20px;
+}
+
+/* ======= LEVEL 4 FLASH ======= */
+.flash-wrap{text-align:center;}
+.phase-txt{font-size:17px;color:var(--text-sub);margin-bottom:10px;}
+.main-word{
+font-family:'Sakkal Saad',serif;font-size:56px;font-weight:700;
+color:var(--gold-bright);
+text-shadow:0 0 40px rgba(240,192,64,0.5);
+animation:pop-in .4s ease;margin:20px 0;
+}
+@media(max-width:600px){.main-word{font-size:48px;}}
+@keyframes pop-in{from{transform:scale(.4);opacity:0;}to{transform:scale(1);opacity:1;}}
+.flash-cd{font-size:52px;font-weight:900;color:var(--gold);margin:10px 0;}
+.flash-opts{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px;}
+.f-opt{
+padding:26px;
+background:rgba(22,48,80,0.65);
+border:2px solid var(--border);border-radius:18px;
+color:var(--text-main);font-family:'Sakkal Saad',serif;font-size:24px;
+cursor:pointer;transition:all .28s;animation:pop-in .3s ease;
+}
+@media(max-width:600px){.f-opt{font-size:18px;padding:18px;line-height:1.5;}}
+.f-opt:hover:not(.locked){border-color:var(--gold);background:rgba(212,165,32,0.12);transform:scale(1.04);}
+.f-opt.correct{border-color:var(--success);background:rgba(39,176,118,0.18);color:var(--success);}
+.f-opt.wrong{border-color:var(--error);background:rgba(232,60,88,0.18);color:var(--error);}
+.f-opt.locked{pointer-events:none;}
+
+/* ======= FEEDBACK / POPUPS ======= */
+.fb-overlay{
+position:fixed;top:50%;left:50%;
+transform:translate(-50%,-50%);
+padding:18px 40px;border-radius:18px;
+font-size:22px;font-weight:700;z-index:200;
+pointer-events:none;
+animation:fb-in .35s ease, fb-out .4s 1.3s ease forwards;
+}
+.fb-ok{background:rgba(39,176,118,.95);color:#fff;box-shadow:0 0 40px rgba(39,176,118,.5);}
+.fb-bad{background:rgba(232,60,88,.95);color:#fff;box-shadow:0 0 40px rgba(232,60,88,.5);}
+.fb-bonus{background:rgba(240,192,64,.97);color:var(--navy-deep);box-shadow:0 0 40px var(--gold-glow);}
+.fb-info{background:rgba(74,144,217,.95);color:#fff;box-shadow:0 0 40px rgba(74,144,217,.5);}
+@keyframes fb-in{0%{transform:translate(-50%,-50%) scale(.4);opacity:0;}60%{transform:translate(-50%,-50%) scale(1.1);}100%{transform:translate(-50%,-50%) scale(1);opacity:1;}}
+@keyframes fb-out{from{opacity:1;}to{opacity:0;}}
+
+.pts-pop{
+position:fixed;pointer-events:none;
+font-size:30px;font-weight:900;z-index:300;
+animation:float-up 1.4s ease-out forwards;
+}
+@keyframes float-up{0%{opacity:1;transform:translateY(0);}100%{opacity:0;transform:translateY(-90px);}}
+
+/* ======= LEVEL COMPLETE ======= */
+.lvl-done-wrap{text-align:center;max-width:520px;animation:fade-up .5s ease;}
+.big-emoji{font-size:88px;margin-bottom:16px;animation:pop-in .5s ease;}
+.stars-row{font-size:44px;margin-bottom:12px;}
+.done-title{font-family:'Sakkal Saad',serif;font-size:34px;color:var(--gold-bright);margin-bottom:8px;}
+@media(max-width:600px){.done-title{font-size:28px;}}
+.done-score{font-size:48px;font-weight:900;color:var(--success);margin:10px 0;}
+@media(max-width:600px){.done-score{font-size:36px;}}
+.bonus-list{margin:18px 0;}
+.bonus-item{
+display:flex;justify-content:space-between;align-items:center;
+padding:11px 20px;
+background:rgba(212,165,32,0.08);border:1px solid var(--border);
+border-radius:12px;margin-bottom:8px;
+font-size:14px;
+}
+@media(max-width:600px){.bonus-item{font-size:13px;padding:10px 16px;}}
+.bonus-pts{color:var(--gold-bright);font-weight:700;}
+.total-score-row{font-size:26px;color:var(--gold-bright);font-weight:700;margin:18px 0;}
+
+/* ======= RESULTS ======= */
+.results-wrap{text-align:center;max-width:700px;width:100%;animation:fade-up .6s ease;}
+.res-name{font-family:'Sakkal Saad',serif;font-size:36px;color:var(--gold-bright);margin-bottom:26px;}
+@media(max-width:600px){.res-name{font-size:26px;}}
+.score-ring{
+width:188px;height:188px;border-radius:50%;
+display:flex;align-items:center;justify-content:center;
+margin:0 auto 28px;position:relative;
+}
+.score-ring::before{content:'';position:absolute;inset:13px;border-radius:50%;background:var(--navy-deep);}
+.ring-txt{position:relative;z-index:1;font-size:40px;font-weight:900;color:var(--gold-bright);}
+.encourage{
+font-family:'Sakkal Saad',serif;font-size:22px;
+color:var(--text-sub);margin-bottom:28px;line-height:1.9;
+}
+.res-card{
+background:var(--card);border:1px solid var(--border);
+border-radius:22px;padding:28px;margin-bottom:28px;
+}
+.res-row{
+display:flex;justify-content:space-between;align-items:center;
+padding:13px 0;border-bottom:1px solid var(--border);font-size:15px;
+}
+@media(max-width:600px){.res-row{font-size:13px;padding:11px 0;}}
+.res-row:last-child{border-bottom:none;}
+.res-label{color:var(--text-sub);}
+.res-val{font-weight:700;color:var(--gold-bright);}
+.btn-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+
+/* ======= CONFETTI ======= */
+.conf{
+position:fixed;border-radius:2px;pointer-events:none;z-index:999;
+animation:conf-fall linear forwards;
+}
+@keyframes conf-fall{
+0%{transform:translateY(-20px) rotate(0deg);opacity:1;}
+100%{transform:translateY(105vh) rotate(800deg);opacity:0;}
+}
+
+@media(max-width:600px){
+.game-title{font-size:40px;}
+.main-word{font-size:58px;}
+.flash-opts{grid-template-columns:1fr 1fr;}
+.f-opt{font-size:22px;padding:18px;}
+.q-card{padding:20px;}
+.sentence-area{font-size:20px;}
+}
+</style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="./لعبة السجع التعليمية_files/3.4.17" type="text/javascript"></script>
+  <script src="./لعبة السجع التعليمية_files/lucide.min.js" type="text/javascript"></script>
+  <script src="file:///_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="file:///_sdk/element_sdk.js" type="text/javascript"></script>
+ <style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}</style>
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="لعبةُ السجع">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+ <body><!-- ===== WELCOME ===== -->
+  <div id="welcomeScreen" class="screen active">
+   <div class="welcome-wrap">
+    <div class="logo-ring">
+     📜
+    </div>
+    <h1 class="game-title">لعبة السجع</h1>
+    <p class="game-tagline">رحلةٌ في فنون البلاغة والنثر العربي</p>
+    <div class="divider">
+     <span class="diamond">◆</span>
+    </div><label class="input-label">✦ أدخل اسمك الكريم للانطلاق</label> <input type="text" id="playerName" class="name-input" placeholder="اسمك هنا..." maxlength="30" autocomplete="off">
+    <div class="stats-grid">
+     <div class="stat-chip">
+      🏆 4 مستويات من السجع
+     </div>
+     <div class="stat-chip">
+      ❓ 5 أسئلة لكل مستوى
+     </div>
+     <div class="stat-chip">
+      ⚡ بونص السرعة
+     </div>
+     <div class="stat-chip">
+      ⭐ بونص الإتقان
+     </div>
+    </div><button class="btn-gold" onclick="startGame()">ابدأ الرحلة ✦</button>
+   </div>
+  </div><!-- ===== LEVEL INTRO ===== -->
+  <div id="levelIntroScreen" class="screen">
+   <div class="lvl-intro-wrap" id="levelIntroContent"></div>
+  </div><!-- ===== GAME ===== -->
+  <div id="gameScreen" class="screen">
+   <div class="game-wrap">
+    <div class="lvl-progress">
+     <div class="lp-seg" id="lp1"></div>
+     <div class="lp-seg" id="lp2"></div>
+     <div class="lp-seg" id="lp3"></div>
+     <div class="lp-seg" id="lp4"></div>
+    </div>
+    <div class="g-header">
+     <div class="score-box">
+      🌟 <span id="scoreDisp">0</span>
+     </div>
+     <div class="q-counter">
+      <div class="q-label" id="qNumTxt">
+       السؤال 1 من 5
+      </div>
+      <div class="q-dots" id="qDots"></div>
+     </div>
+     <div class="timer-row">
+      ⏱ 
+      <div class="t-num" id="tNum">
+       35
+      </div>
+     </div>
+    </div>
+    <div class="timer-bar">
+     <div class="t-fill normal" id="tFill" style="width:100%"></div>
+    </div>
+    <div id="questionArea"></div>
+   </div>
+  </div><!-- ===== LEVEL COMPLETE ===== -->
+  <div id="levelCompleteScreen" class="screen">
+   <div class="lvl-done-wrap" id="levelCompleteContent"></div>
+  </div><!-- ===== RESULTS ===== -->
+  <div id="resultsScreen" class="screen">
+   <div class="results-wrap" id="resultsContent"></div>
+  </div>
+  <script>
+// =================== DATA ===================
+const DATA = {
+  1:{
+    title:"اختر السجع",icon:"🔍",time:35,
+    desc:"اختر من بين الجملتين الثلاث الجملةَ التي تحتوي على <strong>السجع</strong> — وهو تطابق فواصل الكلمات في نهايات الجمل في النثر.",
+    qs:[
+      {q:"أيّ الجمل التالية فيها سجع؟",
+       opts:["الحمد لله على الإحسان، والشكر له على الامتنان","السماء صافية والشمس مشرقة جداً","الطريق طويل والرحلة متعبة"],
+       correct:0, exp:"سجع: تطابق الفاصلتين (النون) في كلمتي 'الإحسان' و'الامتنان'"},
+      {q:"أيّ الجمل التالية فيها سجع؟",
+       opts:["الصبر جميل والعمل شاق","القلب يعشق والعقل يفكر دائماً","الحر إذا وعد وفى، وإذا أعان كفى"],
+       correct:2, exp:"سجع: تطابق الفاصلتين (الألف المقصورة) في كلمتي 'وفى' و'كفى'"},
+      {q:"أيّ الجمل التالية فيها سجع؟",
+       opts:["البحر عميق والرمل كثير","صلى الله عليك يا نبي الرحمة","الصوم حرمان مشروع، وتأديب بالجوع"],
+       correct:2, exp:"سجع: تطابق الفاصلتين (العين) في كلمتي 'مشروع' و'الجوع'"},
+      {q:"أيّ الجمل التالية فيها سجع؟",
+       opts:["اللهم أعط منفقا خلفا، وأعط ممسكا تلفا","الوقت من ذهب والحياة قصيرة","من اجتهد في دراسته نجح بتفوق"],
+       correct:0, exp:"سجع: تطابق الفاصلتين (الفاء والألف) في كلمتي 'خلفا' و'تلفا'"},
+      {q:"أيّ الجمل التالية فيها سجع؟",
+       opts:["القراءة تفيد العقل وتوسع المدارك","المطر ينزل والحقل يخضر","الإنسان بآدابه، لا بزيه وثيابه"],
+       correct:2, exp:"سجع: تطابق الفاصلتين (الهاء) في كلمتي 'بآدابه' و'ثيابه'"},
+    ]
+  },
+  2:{
+    title:"أكمل الجملة بالسجع",icon:"✋",time:40,
+    desc:"جملةٌ ناقصةٌ فيها سجع — <strong>اسحب</strong> الكلمةَ الصحيحة من البنك أو <strong>انقر</strong> عليها ثم ضعها في المكان المناسب لإكمال السجع.",
+    qs:[
+      {before:"من جَدّ وَجَد، ومن زَرَع ",blank:"",after:"",
+       correct:"حَصَد",
+       opts:["حَصَد","أكل","نجح","ارتقى","تقدم"],
+       hint:"كلمة 'حصد' تحقق السجع مع 'وجد' (حرف الدال)"},
+      {before:"سر النجاح في العمل، وليس في طول ",blank:"",after:"",
+       correct:"الأمل",
+       opts:["الأمل","الانتظار","السهر","التفكير","الوقت"],
+       hint:"كلمة 'الأمل' تحقق السجع مع 'العمل' (حرف اللام)"},
+      {before:"الحقد صدأ القلوب، واللجاج (العناد) سبب ",blank:"",after:"",
+       correct:"الحروب",
+       opts:["الحروب","المشاكل","الفشل","الدمار","الخلاف"],
+       hint:"كلمة 'الحروب' توافق 'القلوب' في الفاصلة (حرف الباء)"},
+      {before:"إن بعد الكدر صفواً، وبعد المطر ",blank:"",after:"",
+       correct:"صحواً",
+       opts:["صحواً","خيراً","زرعاً","برداً","ربيعاً"],
+       hint:"كلمة 'صحواً' تسجع مع 'صفواً' (حرف الواو والألف)"},
+      {before:"كن على حذر من الكريم إذا أهنته، ومن اللئيم إذا ",blank:"",after:"",
+       correct:"أكرمته",
+       opts:["أكرمته","خذله","آذاه","احتقره","تركه"],
+       hint:"كلمة 'أكرمته' تتطابق في الفاصلة مع 'أهنته' (التاء والهاء)"},
+    ]
+  },
+  3:{
+    title:"حدِّد فواصل السجع",icon:"🖱️",time:45,
+    desc:"اقرأ الجمل ثم <strong>انقر</strong> على كلمات الفواصل التي تحقق السجع — أي الكلمات المتطابقة في نهايات الجمل.",
+    qs:[
+      {q:"حدِّد الكلمات المتسجعة",
+       sajtype:"السجع: تطابق الفواصل في نهايات الجمل",
+       para:[
+         {w:"من",c:true,saj:false,id:"a0"},{w:"خطبة",c:true,saj:false,id:"a0b"},{w:"قُس",c:true,saj:false,id:"a0c"},{w:"بن",c:true,saj:false,id:"a0d"},{w:"ساعدة:",c:true,saj:false,id:"a0e"},
+         {w:"مَن",c:true,saj:false,id:"a00"},{w:"عاشَ",c:true,saj:false,id:"a00b"},{w:"مات",c:true,saj:true,id:"a1"},
+         {w:"،",c:false},{w:"ومَن",c:true,saj:false,id:"a00c"},{w:"ماتَ",c:true,saj:false,id:"a00d"},{w:"فات",c:true,saj:true,id:"a2"},
+         {w:"،",c:false},{w:"وكُلُّ",c:true,saj:false,id:"a00e"},{w:"ما",c:true,saj:false,id:"a00f"},{w:"هُوَ",c:true,saj:false,id:"a00g"},{w:"آتٍ",c:true,saj:false,id:"a00h"},{w:"آت",c:true,saj:true,id:"a3"},
+       ],
+       sajWords:["a1","a2","a3"],total:3},
+      {q:"حدِّد الكلمات المتسجعة",
+       sajtype:"السجع: جملٌ متسجعة بالقاف",
+       para:[
+         {w:"إنَّ",c:false},{w:"الخُطوبَ",c:false},{w:"طَوارِق",c:true,saj:true,id:"b1"},
+         {w:"،",c:false},{w:"والهُمومَ",c:false},{w:"بَوارِق",c:true,saj:true,id:"b2"},
+         {w:"،",c:false},{w:"والأيامَ",c:false},{w:"سَوابِق",c:true,saj:true,id:"b3"},
+       ],
+       sajWords:["b1","b2","b3"],total:3},
+      {q:"حدِّد كل الكلمات المتسجعة",
+       sajtype:"السجع: الفواصل بحرف اللام",
+       para:[
+         {w:"فلانٌ",c:false},{w:"يَطْبَعُ",c:false},{w:"الأسجاعَ",c:false},{w:"بظاهِرِ",c:false},{w:"جَواهِرِه",c:true,saj:true,id:"c1"},
+         {w:"،",c:false},{w:"ويَقْرَعُ",c:false},{w:"الأسماعَ",c:false},{w:"بِزواجِرِ",c:false},{w:"زَواجِرِه",c:true,saj:true,id:"c2"},
+       ],
+       sajWords:["c1","c2"],total:2},
+      {q:"حدِّد الكلمات المتسجعة في الجملتين",
+       sajtype:"السجع: فواصل متطابقة",
+       para:[
+         {w:"الحُرُّ",c:false},{w:"إذا",c:false},{w:"وَعَدَ",c:false},{w:"وَفَى",c:true,saj:true,id:"d1"},
+         {w:"،",c:false},{w:"وإذا",c:false},{w:"أَعانَ",c:false},{w:"كَفَى",c:true,saj:true,id:"d2"},
+         {w:"،",c:false},{w:"وإذا",c:false},{w:"قَدَرَ",c:false},{w:"عَفَا",c:true,saj:true,id:"d3"},
+       ],
+       sajWords:["d1","d2","d3"],total:3},
+      {q:"حدِّد الفواصل المتسجعة",
+       sajtype:"السجع: تطابق النهايات بالنون",
+       para:[
+         {w:"الحَمْدُ",c:false},{w:"لِلَّهِ",c:false},{w:"الَّذِي",c:false},{w:"خَلَقَ",c:false},{w:"فَسَوَّى",c:true,saj:true,id:"e1"},
+         {w:"،",c:false},{w:"وَالَّذِي",c:false},{w:"قَدَّرَ",c:false},{w:"فَهَدَى",c:true,saj:true,id:"e2"},
+         {w:"،",c:false},{w:"وَالَّذِي",c:false},{w:"أَمَاتَ",c:false},{w:"وَأَحْيَا",c:true,saj:true,id:"e3"},
+       ],
+       sajWords:["e1","e2","e3"],total:3},
+    ]
+  },
+  4:{
+    title:"الذاكرة الخاطفة",icon:"⚡",time:10,
+    desc:"ستظهر <strong>جملةٌ متسجعةٌ كاملةٌ</strong> لـ5 ثوانٍ، احفظ الفواصل المتسجعة جيداً! ثم اختر من 4 خيارات الجملة المتسجعة بشكل صحيح!",
+    qs:[
+      {main:"فلانٌ يَطْبَعُ الأسجاعَ بظاهِرِ جَواهِرِه، ويَقْرَعُ الأسماعَ بِزواجِرِ زَواجِرِه",opts:["صحيح: سجع متطابق","خطأ: غير مسجع","خطأ: فواصل مختلفة","خطأ: الثاني مختلف"],correct:0,exp:"صحيح: الجملة مسجعة لتطابق الفواصل (جواهره - زواجره) في حرفي الراء والهاء"},
+      {main:"العُقولُ مَواهِب، والعُلومُ مَكاسِب، والجهلُ آفةٌ مهلكة",opts:["صحيح: سجع متطابق","خطأ: غير مسجع لأن الفاصلة الأخيرة مختلفة","خطأ: الكل متطابق","خطأ: فواصل صحيحة"],correct:1,exp:"خطأ: الجملة الأخيرة 'والجهل آفة مهلكة' كسرت السجع الذي بُني على الباء"},
+      {main:"إنَّ الخُطوبَ طَوارِق، والهُمومَ بَوارِق، والأيامَ سَوابِق",opts:["خطأ: غير مسجع","صحيح: سجع متطابق","خطأ: فواصل مختلفة","خطأ: الثاني فقط صحيح"],correct:1,exp:"صحيح: الجملة مسجعة ببراعة لتطابق الفواصل (طوارق - بوارق - سوابق) في حرف القاف"},
+      {main:"ناظرته فإذا هو بحرٌ لا يُساجَل، وقَطْرٌ لا يُماجَل، ورجلٌ ذو هيبةٍ ومكانة",opts:["صحيح: سجع متطابق","خطأ: غير مسجع لأن الفاصلة الأخيرة مختلفة","خطأ: الكل صحيح","خطأ: فواصل متطابقة تماماً"],correct:1,exp:"خطأ: الفاصلة الأخيرة (مكانة) تختلف عن الفواصل السابقة (يساجل، يماجل) التي تنتهي باللام"},
+      {main:"طُبِعَت الخلائقُ على ضَعفِ اليَقين، وغَلَبَةِ الهوى على الدِّين",opts:["خطأ: فواصل مختلفة","صحيح: سجع متطابق","خطأ: غير مسجع","خطأ: الأول فقط صحيح"],correct:1,exp:"صحيح: السجع هنا دقيق ومتطابق في الفواصل (اليقين - الدين) بانتهاء كليهما بحرف النون"},
+    ]
+  }
+};
+
+// =================== STATE ===================
+let G = {
+  name:"", level:1, q:0, score:0,
+  timer:null, timeLeft:0, maxTime:0,
+  lCorrect:{1:0,2:0,3:0,4:0},
+  lAllOk:{1:true,2:true,3:true,4:true},
+  lAllFast:{1:true,2:true,3:true,4:true},
+  l3sel:new Set(), l3data:null,
+  l2selected:new Set(),
+};
+
+// =================== SCREEN ===================
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// =================== WELCOME ===================
+function startGame(){
+  const n=document.getElementById('playerName').value.trim();
+  if(!n){
+    const inp=document.getElementById('playerName');
+    inp.style.borderColor='var(--error)';
+    inp.placeholder='من فضلك أدخل اسمك أولاً!';
+    return;
+  }
+  G.name=n; G.level=1; G.score=0;
+  G.lCorrect={1:0,2:0,3:0,4:0};
+  G.lAllOk={1:true,2:true,3:true,4:true};
+  G.lAllFast={1:true,2:true,3:true,4:true};
+  showLevelIntro(1);
+}
+
+// =================== LEVEL INTRO ===================
+function showLevelIntro(lv){
+  const d=DATA[lv];
+  document.getElementById('levelIntroContent').innerHTML=`
+    <div class="lvl-badge">✦ المستوى ${lv} من 4 ✦</div>
+    <span class="lvl-icon">${d.icon}</span>
+    <h2 class="lvl-title">المستوى ${lv}: ${d.title}</h2>
+    <div class="lvl-desc">${d.desc}</div>
+    <div class="rules-grid">
+      <div class="rule-tag">⏱ ${d.time} ثانية لكل سؤال</div>
+      <div class="rule-tag">✅ +10 إجابة صحيحة</div>
+      <div class="rule-tag">❌ -5 إجابة خاطئة</div>
+      <div class="rule-tag">⚡ +5 قبل نصف الوقت</div>
+      <div class="rule-tag">🌟 +20 الكل صحيح</div>
+      <div class="rule-tag">🏆 +30 الكل صح بسرعة</div>
+    </div>
+    <button class="btn-gold" onclick="startLevel(${lv})">ابدأ المستوى ✦</button>
+  `;
+  show('levelIntroScreen');
+}
+
+// =================== START LEVEL ===================
+function startLevel(lv){
+  G.level=lv; G.q=0;
+  G.lCorrect[lv]=0;
+  G.lAllOk[lv]=true;
+  G.lAllFast[lv]=true;
+  updateLvlProgress();
+  initDots();
+  updateScore();
+  show('gameScreen');
+  loadQ();
+}
+
+function updateLvlProgress(){
+  for(let i=1;i<=4;i++){
+    const el=document.getElementById(`lp${i}`);
+    el.className='lp-seg';
+    if(i<G.level) el.classList.add('done');
+    else if(i===G.level) el.classList.add('active');
+  }
+}
+
+function initDots(){
+  const c=document.getElementById('qDots');
+  c.innerHTML='';
+  for(let i=0;i<5;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' active':'');
+    d.id=`dot${i}`;
+    c.appendChild(d);
+  }
+}
+
+function setDot(i,cls){
+  const d=document.getElementById(`dot${i}`);
+  if(d){d.className='dot '+cls;}
+}
+
+function updateScore(){
+  document.getElementById('scoreDisp').textContent=G.score;
+}
+
+// =================== TIMER ===================
+function startTimer(sec, onEnd){
+  clearInterval(G.timer);
+  G.timeLeft=sec; G.maxTime=sec;
+  renderTimer();
+  G.timer=setInterval(()=>{
+    G.timeLeft--;
+    renderTimer();
+    if(G.timeLeft<=0){clearInterval(G.timer);onEnd();}
+  },1000);
+}
+
+function renderTimer(){
+  const num=document.getElementById('tNum');
+  const fill=document.getElementById('tFill');
+  num.textContent=G.timeLeft;
+  const pct=(G.timeLeft/G.maxTime)*100;
+  fill.style.width=pct+'%';
+  num.className='t-num';
+  fill.className='t-fill';
+  if(G.timeLeft<=G.maxTime*0.3){num.classList.add('danger');fill.classList.add('danger');}
+  else if(G.timeLeft<=G.maxTime*0.5){num.classList.add('warn');fill.classList.add('warn');}
+  else{fill.classList.add('normal');}
+}
+
+function stopTimer(){clearInterval(G.timer);}
+
+// =================== LOAD QUESTION ===================
+function loadQ(){
+  const lv=G.level, qi=G.q;
+  const data=DATA[lv].qs[qi];
+  document.getElementById('qNumTxt').textContent=`السؤال ${qi+1} من 5`;
+  setDot(qi,'active');
+  const area=document.getElementById('questionArea');
+  area.innerHTML='';
+  if(lv===1) renderL1(data,area);
+  else if(lv===2) renderL2(data,area);
+  else if(lv===3) renderL3(data,area);
+  else if(lv===4) renderL4(data,area);
+}
+
+// =================== LEVEL 1 ===================
+function renderL1(data,area){
+  area.innerHTML=`
+    <div class="q-card">
+      <div class="q-text">${data.q}</div>
+      <div class="opts-list">
+        ${data.opts.map((o,i)=>`
+          <button class="opt-btn" id="opt${i}" onclick="ansL1(${i})">${o}</button>
+        `).join('')}
+      </div>
+    </div>
+    <p class="hint-txt">انقر على الجملة التي تحتوي على السجع</p>
+  `;
+  startTimer(DATA[1].time,()=>ansL1(-1));
+}
+
+function ansL1(chosen){
+  const data=DATA[1].qs[G.q];
+  stopTimer();
+  const fast=G.timeLeft>=G.maxTime/2;
+  document.querySelectorAll('.opt-btn').forEach(b=>b.classList.add('locked'));
+  document.getElementById(`opt${data.correct}`).classList.add('correct');
+  if(chosen>=0 && chosen!==data.correct) document.getElementById(`opt${chosen}`).classList.add('wrong');
+  const ok=(chosen===data.correct);
+  doAnswer(ok,fast,data.exp);
+}
+
+// =================== LEVEL 2 ===================
+function renderL2(data,area){
+  G.l2selected=new Set();
+  const sh=[...data.opts].sort(()=>Math.random()-.5);
+  area.innerHTML=`
+    <div class="q-card">
+      <div class="q-text">اختر الكلمة الصحيحة لإكمال السجع:</div>
+      <div class="sentence-area">
+        ${data.before}
+        <span class="blank-slot" id="blankSlot" style="border:2px solid var(--gold);color:var(--text-dim);">؟</span>
+        ${data.after}
+      </div>
+      <p style="text-align:center;color:var(--text-dim);font-size:14px;margin-bottom:16px">💡 ${data.hint}</p>
+      <div class="words-bank" id="wordsBank">
+        ${sh.map((w,i)=>`
+          <button class="w-chip" id="chip_${i}" onclick="selectL2Word(${i},'${escQ(w)}','${w===data.correct?'correct':'wrong'}')">${w}</button>
+        `).join('')}
+      </div>
+      <div class="submit-row" style="margin-top:20px">
+        <button class="btn-gold" id="submitL2Btn" onclick="submitL2()" style="font-size:16px;padding:13px 36px">تأكيد الاختيار ✓</button>
+      </div>
+    </div>
+  `;
+  startTimer(DATA[2].time,()=>submitL2(true));
+}
+
+function escQ(s){return s.replace(/'/g,"\\'");}
+
+function selectL2Word(idx,word,type){
+  const btn=document.getElementById('chip_'+idx);
+  const slot=document.getElementById('blankSlot');
+  if(btn.classList.contains('locked')) return;
+  
+  if(G.l2selected.has(idx)){
+    G.l2selected.delete(idx);
+    btn.classList.remove('selected');
+    slot.textContent='؟';
+    slot.className='blank-slot';
+  } else {
+    G.l2selected.clear();
+    document.querySelectorAll('.w-chip').forEach(c=>c.classList.remove('selected'));
+    G.l2selected.add(idx);
+    btn.classList.add('selected');
+    slot.textContent=word;
+    slot.className='blank-slot filled';
+    slot.dataset.type=type;
+  }
+}
+
+function submitL2(timeout=false){
+  stopTimer();
+  const data=DATA[2].qs[G.q];
+  if(G.l2selected.size===0&&!timeout){
+    showFB('اختر كلمة أولاً!','fb-info');
+    startTimer(G.timeLeft,()=>submitL2(true));
+    return;
+  }
+  
+  document.querySelectorAll('.w-chip').forEach((c,i)=>c.classList.add('locked'));
+  document.getElementById('submitL2Btn').disabled=true;
+  
+  const slot=document.getElementById('blankSlot');
+  const selectedIdx=Array.from(G.l2selected)[0];
+  const selectedWord=data.opts.find(w=>w===slot.textContent);
+  const ok=(selectedWord===data.correct);
+  const fast=G.timeLeft>=G.maxTime/2;
+  
+  if(ok){
+    slot.className='blank-slot filled ok';
+    showFB('✓ صحيح! +10','fb-ok');
+  } else {
+    slot.className='blank-slot filled bad';
+    slot.innerHTML=`${selectedWord||'—'}<br><span style="font-size:12px">← الصحيح: ${data.correct}</span>`;
+    showFB('✗ خطأ! -5','fb-bad');
+  }
+  
+  doAnswer(ok,fast,`الكلمة الصحيحة: ${data.correct}`);
+}
+
+// =================== LEVEL 3 ===================
+function renderL3(data,area){
+  G.l3sel=new Set(); G.l3data=data;
+  const html=data.para.map(item=>{
+    // كل كلمة قابلة للنقر - حتى لو كانت علامة ترقيم
+    if(item.c){
+      // كلمة صحيحة أو خاطئة قابلة للاختيار
+      return `<span class="c-word" id="cw_${item.id}" onclick="selectL3Word('${item.id}',this)" data-israja="${item.saj}">${item.w}</span>`;
+    } else {
+      // كلمة عادية غير قابلة للاختيار
+      return `<span class="n-word">${item.w}</span>`;
+    }
+  }).join(' ');
+  area.innerHTML=`
+    <div class="q-card">
+      <div class="q-text">${data.q}</div>
+      <div class="sajtype-tag">🔖 ${data.sajtype}</div>
+      <div class="para-display" style="margin:18px 0">${html}</div>
+      <p class="hint-txt">💡 انقر على أي كلمة لاختيارها — الصحيحة تصير ✓ والخاطئة تصير ✗</p>
+      <div class="submit-row" style="margin-top:18px">
+        <button class="btn-gold" id="submitL3Btn" onclick="finishL3()" style="font-size:16px;padding:13px 36px">انتهيت! ✓</button>
+      </div>
+    </div>
+  `;
+  startTimer(DATA[3].time,()=>finishL3(true));
+}
+
+function selectL3Word(id,el){
+  if(G.l3sel.has(id)){
+    // إلغاء الاختيار
+    G.l3sel.delete(id);
+    el.classList.remove('sel');
+  } else {
+    // اختيار جديد - بدون تلوين
+    G.l3sel.add(id);
+    el.classList.add('sel');
+  }
+}
+
+function finishL3(timeout=false){
+  stopTimer();
+  const data=G.l3data;
+  const sel=G.l3sel;
+  let correct=0,wrong=0,missed=0;
+  
+  data.para.forEach(item=>{
+    if(!item.c) return;
+    const el=document.getElementById('cw_'+item.id);
+    if(!el) return;
+    el.style.pointerEvents='none';
+    el.classList.remove('sel');
+    
+    const wasSelected=sel.has(item.id);
+    
+    if(item.saj){
+      if(wasSelected){
+        el.classList.add('ok-w');
+        correct++;
+      } else {
+        el.classList.add('missed-w');
+        missed++;
+      }
+    } else {
+      if(wasSelected){
+        el.classList.add('bad-w');
+        wrong++;
+      }
+    }
+  });
+  
+  const allCorrect=(correct===data.total&&wrong===0&&missed===0);
+  const ok=(missed===0&&wrong===0);
+  const fast=G.timeLeft>=G.maxTime/2;
+  
+  let pts=0;
+  if(ok) pts=10;
+  else{
+    pts=Math.max(0, 10-wrong*3-missed*3);
+  }
+  
+  const btn=document.getElementById('submitL3Btn');
+  if(btn) btn.disabled=true;
+  
+  const correctWords=data.para.filter(p=>p.saj).map(p=>p.w).join('، ');
+  
+  doAnswerL3(ok,allCorrect,fast,correct,wrong,missed,pts,`كلمات الرجز: ${correctWords}`);
+}
+
+function doAnswerL3(ok,perfect,fast,correct,wrong,missed,basePts,exp){
+  const lv=G.level, qi=G.q;
+  let pts=basePts;
+  let msg='';
+  
+  if(perfect){
+    msg='✓ ممتاز! جميع الكلمات صحيحة! +10';
+    if(fast){pts=10+5;msg='✓ ممتاز! +15 ⚡';}
+    G.lCorrect[lv]++;
+    G.score+=pts;
+    setDot(qi,'done');
+    showFB(msg,'fb-ok');
+    showPts(`+${pts}`,`var(--success)`);
+  } else if(ok){
+    msg='✓ صحيح! +10';
+    if(fast){pts=15;msg='✓ صحيح! +15 ⚡';}
+    G.lCorrect[lv]++;
+    G.score+=pts;
+    setDot(qi,'done');
+    showFB(msg,'fb-ok');
+    showPts(`+${pts}`,'var(--success)');
+  } else {
+    const deduction=wrong*3+missed*3;
+    msg=`✗ خطأ! اختيارات خاطئة: ${wrong} | كلمات فائتة: ${missed} | النقاط: ${pts}`;
+    G.lAllOk[lv]=false; G.lAllFast[lv]=false;
+    setDot(qi,'wrong');
+    showFB(`✗ خطأ! -${deduction}`,'fb-bad');
+    showPts(`-${deduction}`,'var(--error)');
+    G.score=Math.max(0, G.score-deduction);
+  }
+  
+  if(!fast) G.lAllFast[lv]=false;
+  updateScore();
+
+  setTimeout(()=>{
+    G.q++;
+    if(G.q>=5) levelDone();
+    else{setDot(G.q,'active');loadQ();}
+  },1900);
+}
+
+// =================== LEVEL 4 ===================
+function renderL4(data,area){
+  area.innerHTML=`
+    <div class="q-card">
+      <div class="flash-wrap">
+        <div class="phase-txt">احفظ هذا البيت جيداً:</div>
+        <div class="main-word" id="mainWord" style="font-size:28px;line-height:1.8">${data.main}</div>
+        <div class="flash-cd" id="flashCD">5</div>
+        <p class="hint-txt">ستظهر 4 خيارات بعد قليل — اختر التقسيم الصحيح!</p>
+      </div>
+    </div>
+  `;
+  document.getElementById('tFill').style.width='100%';
+  document.getElementById('tNum').textContent='⏳';
+  clearInterval(G.timer);
+
+  let cnt=5;
+  const iv=setInterval(()=>{
+    cnt--;
+    const cd=document.getElementById('flashCD');
+    if(cd) cd.textContent=cnt;
+    if(cnt<=0){clearInterval(iv);showL4Options(data,area);}
+  },1000);
+}
+
+function showL4Options(data,area){
+  area.innerHTML=`
+    <div class="q-card">
+      <div class="flash-wrap">
+        <div class="phase-txt">أي التقسيمات صحيحة؟</div>
+        <div class="flash-opts">
+          ${data.opts.map((o,i)=>`
+            <button class="f-opt" id="fopt${i}" onclick="ansL4(${i})">${o}</button>
+          `).join('')}
+        </div>
+        <div style="font-size:13px;color:var(--text-dim);margin-top:14px">⏱ <span id="l4sec">10</span> ثانية</div>
+      </div>
+    </div>
+  `;
+  startTimer(DATA[4].time,()=>ansL4(-1));
+  const orig=setInterval(()=>{
+    const el=document.getElementById('l4sec');
+    if(el) el.textContent=G.timeLeft;
+    else clearInterval(orig);
+  },500);
+}
+
+function ansL4(chosen){
+  stopTimer();
+  const data=DATA[4].qs[G.q];
+  const ok=(chosen===data.correct);
+  const fast=G.timeLeft>=G.maxTime/2;
+  document.querySelectorAll('.f-opt').forEach((b,i)=>{
+    b.classList.add('locked');
+    if(i===data.correct) b.classList.add('correct');
+    else if(i===chosen) b.classList.add('wrong');
+  });
+  doAnswer(ok,fast,data.exp);
+}
+
+// =================== ANSWER HANDLER ===================
+function doAnswer(ok,fast,exp){
+  const lv=G.level, qi=G.q;
+  let pts=0;
+  if(ok){
+    pts=10;
+    if(fast){pts+=5;showFB('✓ صحيح! +15 ⚡','fb-ok');showPts('+15','var(--success)');}
+    else{showFB('✓ صحيح! +10','fb-ok');showPts('+10','var(--success)');}
+    G.lCorrect[lv]++;
+    G.score+=pts;
+    setDot(qi,'done');
+  } else {
+    G.score=Math.max(0,G.score-5);
+    G.lAllOk[lv]=false; G.lAllFast[lv]=false;
+    setDot(qi,'wrong');
+    showFB('✗ خطأ! -5','fb-bad');
+    showPts('-5','var(--error)');
+  }
+  if(!fast) G.lAllFast[lv]=false;
+  updateScore();
+
+  setTimeout(()=>{
+    G.q++;
+    if(G.q>=5) levelDone();
+    else{setDot(G.q,'active');loadQ();}
+  },1900);
+}
+
+// =================== LEVEL DONE ===================
+function levelDone(){
+  const lv=G.level;
+  const cor=G.lCorrect[lv];
+  const allOk=G.lAllOk[lv];
+  const allFast=G.lAllFast[lv];
+  let bonuses=[];
+  if(allOk){
+    G.score+=20;
+    bonuses.push({msg:'🌟 أجبت على جميع الأسئلة صحيحة!',pts:'+20'});
+    if(allFast){
+      G.score+=30;
+      bonuses.push({msg:'🏆 الكل صحيح وبنصف الوقت!',pts:'+30'});
+    }
+  }
+  updateScore();
+  const stars=cor===5?'⭐⭐⭐':cor>=3?'⭐⭐':'⭐';
+  const emoji=cor===5?'🏆':cor>=3?'🎯':'💪';
+  document.getElementById('levelCompleteContent').innerHTML=`
+    <div class="big-emoji">${emoji}</div>
+    <div class="stars-row">${stars}</div>
+    <h2 class="done-title">انتهى المستوى ${lv}!</h2>
+    <div class="done-score">${cor} / 5</div>
+    <p style="color:var(--text-sub);margin-bottom:16px">إجابات صحيحة</p>
+    ${bonuses.length?`<div class="bonus-list">${bonuses.map(b=>`
+      <div class="bonus-item"><span>${b.msg}</span><span class="bonus-pts">${b.pts}</span></div>
+    `).join('')}</div>`:''}
+    <div class="total-score-row">مجموع النقاط: ${G.score}</div>
+    ${lv<4?`<button class="btn-gold" onclick="showLevelIntro(${lv+1})">المستوى التالي ←</button>`
+          :`<button class="btn-gold" onclick="showResults()">عرض النتائج النهائية 🏆</button>`}
+  `;
+  if(cor===5) confetti();
+  show('levelCompleteScreen');
+}
+
+// =================== RESULTS ===================
+function showResults(){
+  const total=Object.values(G.lCorrect).reduce((a,b)=>a+b,0);
+  const pct=Math.round((total/20)*100);
+  const deg=(pct/100)*360;
+  let enc='';
+  if(pct>=90) enc='رائعٌ! أنت متقنٌ للرجز العربي بامتياز — أهلاً بك في زمرة البلاغيين! 🌟';
+  else if(pct>=75) enc='ممتاز! مستواك في الرجز متميزٌ جداً، استمر في هذا التألق!';
+  else if(pct>=60) enc='جيدٌ جداً! أنت في الطريق الصحيح، تمرَّن أكثر لتبلغ الإتقان!';
+  else if(pct>=40) enc='جيدٌ! الرجز فنٌّ جميل يستحق مزيداً من الدراسة والتأمل.';
+  else enc='لا تيأس! كل محاولة تضيف إلى رصيدك المعرفي، حاول مجدداً!';
+
+  document.getElementById('resultsContent').innerHTML=`
+    <div class="stars-row" style="font-size:52px">${pct>=90?'🏆':pct>=70?'🎯':'💪'}</div>
+    <h2 class="res-name">أحسنت يا ${G.name}!</h2>
+    <div class="score-ring" id="scoreRing">
+      <div class="ring-txt">${pct}%</div>
+    </div>
+    <p class="encourage">${enc}</p>
+    <div class="res-card">
+      <div class="res-row"><span class="res-label">📊 إجمالي النقاط</span><span class="res-val">${G.score}</span></div>
+      <div class="res-row"><span class="res-label">✅ الإجابات الصحيحة</span><span class="res-val">${total} / 20</span></div>
+      <div class="res-row"><span class="res-label">📈 النسبة المئوية</span><span class="res-val">${pct}%</span></div>
+      <div class="res-row"><span class="res-label">🔍 المستوى الأول — الاختيار</span><span class="res-val">${G.lCorrect[1]} / 5</span></div>
+      <div class="res-row"><span class="res-label">✋ المستوى الثاني — السحب</span><span class="res-val">${G.lCorrect[2]} / 5</span></div>
+      <div class="res-row"><span class="res-label">🖱️ المستوى الثالث — التحديد</span><span class="res-val">${G.lCorrect[3]} / 5</span></div>
+      <div class="res-row"><span class="res-label">⚡ المستوى الرابع — الذاكرة</span><span class="res-val">${G.lCorrect[4]} / 5</span></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn-gold" onclick="restart()">العب مجدداً 🔄</button>
+      <button class="btn-outline" onclick="location.reload()">الرئيسية 🏠</button>
+    </div>
+  `;
+  const ring=document.getElementById('scoreRing');
+  if(ring) ring.style.background=`conic-gradient(var(--gold-bright) ${deg}deg, rgba(255,255,255,0.06) 0)`;
+  confetti();
+  show('resultsScreen');
+}
+
+function restart(){
+  G={name:G.name,level:1,q:0,score:0,
+    timer:null,timeLeft:0,maxTime:0,
+    lCorrect:{1:0,2:0,3:0,4:0},
+    lAllOk:{1:true,2:true,3:true,4:true},
+    lAllFast:{1:true,2:true,3:true,4:true},
+    l2selected:new Set(),
+    l3sel:new Set(),l3data:null};
+  showLevelIntro(1);
+}
+
+// =================== UI HELPERS ===================
+function showFB(msg,cls){
+  document.querySelectorAll('.fb-overlay').forEach(e=>e.remove());
+  const el=document.createElement('div');
+  el.className=`fb-overlay ${cls}`;
+  el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1800);
+}
+
+function showPts(txt,color){
+  const el=document.createElement('div');
+  el.className='pts-pop';
+  el.textContent=txt;
+  el.style.color=color;
+  el.style.left=(20+Math.random()*60)+'%';
+  el.style.top='38%';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(),1500);
+}
+
+function confetti(){
+  const cols=['#f0c040','#d4a520','#27b076','#e83c58','#4a90d9','#c07830','#ffffff'];
+  for(let i=0;i<70;i++){
+    const el=document.createElement('div');
+    el.className='conf';
+    el.style.left=Math.random()*100+'vw';
+    el.style.top='-10px';
+    el.style.backgroundColor=cols[Math.floor(Math.random()*cols.length)];
+    el.style.width=(4+Math.random()*10)+'px';
+    el.style.height=(4+Math.random()*10)+'px';
+    el.style.animationDuration=(1.5+Math.random()*2)+'s';
+    el.style.animationDelay=(Math.random()*.8)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),3500);
+  }
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.addEventListener('dragend',()=>{
+    document.querySelectorAll('.w-chip').forEach(c=>c.classList.remove('dragging'));
+  });
+});
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ef2f64d12557cdc',t:'MTc3NjY3NTY2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height="1" width="1" style="position: absolute; top: 0px; left: 0px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; visibility: hidden;" src="./لعبة السجع التعليمية_files/saved_resource.html"></iframe>
+</body></html>

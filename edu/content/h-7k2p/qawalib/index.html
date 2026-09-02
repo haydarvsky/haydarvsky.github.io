@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>كتالوجُ القوالب التفاعلية — المعلِّم الذكي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --emerald-deep: #0F4C3A;
+  --emerald: #1a6b54;
+  --amber: #D97706;
+  --amber-soft: #F59E0B;
+  --bg-cream: #FAF6EF;
+  --bg-paper: #FFFFFF;
+  --ink: #1F2937;
+  --ink-soft: #6B7280;
+  --line: #E5E0D5;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg-cream);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, var(--emerald-deep), var(--emerald));
+  color: var(--bg-cream);
+  padding: 80px 20px 100px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, rgba(217, 119, 6, 0.25), transparent);
+  border-radius: 50%;
+  transform: translate(40%, -40%);
+}
+.hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0;
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(217, 119, 6, 0.15), transparent);
+  border-radius: 50%;
+  transform: translate(-30%, 30%);
+}
+.hero-content {
+  max-width: 900px; margin: 0 auto;
+  text-align: center;
+  position: relative; z-index: 1;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(217, 119, 6, 0.2);
+  color: var(--amber-soft);
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 0.9rem;
+  margin-bottom: 20px;
+  border: 1px solid rgba(217, 119, 6, 0.4);
+}
+.hero h1 {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 18px;
+  line-height: 1.3;
+}
+.hero-tagline {
+  font-family: 'Amiri', serif;
+  font-size: 1.4rem;
+  color: var(--amber-soft);
+  margin-bottom: 24px;
+  font-style: italic;
+}
+.hero-desc {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  max-width: 700px;
+  margin: 0 auto 32px;
+  line-height: 1.9;
+}
+.hero-stats {
+  display: inline-flex; gap: 40px;
+  background: rgba(255,255,255,0.08);
+  padding: 16px 32px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.15);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hero-stat-num {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--amber-soft);
+  line-height: 1;
+}
+.hero-stat-label {
+  font-size: 0.85rem; opacity: 0.8; margin-top: 4px;
+}
+
+/* Sections */
+.container { max-width: 1200px; margin: -50px auto 0; padding: 0 20px 80px; position: relative; z-index: 2; }
+
+.section { margin-bottom: 60px; }
+.section:first-child { margin-top: 0; }
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--line);
+}
+.section-num {
+  background: var(--amber);
+  color: white;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Reem Kufi', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.section-title {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 1.6rem;
+  color: var(--emerald-deep);
+  font-weight: 600;
+}
+.section-tag {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin-right: auto;
+}
+
+/* Grid */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--bg-paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 6px; height: 0;
+  background: var(--amber);
+  transition: height 0.3s;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 32px rgba(15, 76, 58, 0.12);
+  border-color: var(--amber);
+}
+.card:hover::before { height: 100%; }
+
+.card-icon {
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, var(--emerald-deep), var(--emerald));
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  color: var(--amber-soft);
+}
+.card-num {
+  position: absolute;
+  top: 18px; left: 18px;
+  font-family: 'Reem Kufi', sans-serif;
+  font-weight: 700;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  background: var(--bg-cream);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+.card-title {
+  font-family: 'Reem Kufi', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--emerald-deep);
+}
+.card-desc {
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.7;
+  flex: 1;
+}
+.card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--amber);
+  font-family: 'Reem Kufi', sans-serif;
+  font-weight: 500;
+  font-size: 0.92rem;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  margin-top: 4px;
+}
+.card-cta::after {
+  content: '←';
+  transition: transform 0.2s;
+}
+.card:hover .card-cta::after { transform: translateX(-4px); }
+
+/* Footer */
+.foot {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--emerald-deep);
+  color: var(--bg-cream);
+}
+.foot-msg {
+  font-family: 'Amiri', serif;
+  font-size: 1.2rem;
+  color: var(--amber-soft);
+  margin-bottom: 8px;
+  font-style: italic;
+}
+.foot-sub { font-size: 0.9rem; opacity: 0.7; }
+
+@media (max-width: 700px) {
+  .hero { padding: 50px 20px 80px; }
+  .hero h1 { font-size: 2rem; }
+  .hero-tagline { font-size: 1.1rem; }
+  .hero-stats { gap: 24px; padding: 14px 22px; }
+  .hero-stat-num { font-size: 1.5rem; }
+  .section-title { font-size: 1.3rem; }
+  .section-header { flex-wrap: wrap; }
+}
+</style>
+
+<meta name="hv-nav" content="bar">
+<meta name="hv-title" content="كتالوجُ القوالبِ التفاعلية">
+<meta name="hv-parent" content="/edu/haqiba.html">
+<meta name="hv-parent-title" content="الحقيبةُ التدريبية">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-content">
+    <span class="hero-badge">حقيبةُ المعلِّمِ الذكي</span>
+    <h1>كتالوجُ القوالبِ التفاعليَّة</h1>
+    <p class="hero-tagline">اِملأ، فيتحدَّثُ الموقع. احفظ، فيكونُ جاهزًا لطلَّابك.</p>
+    <p class="hero-desc">
+      اثنا عشرَ قالبًا جاهزًا تُحوِّلُ كلَّ معلِّمٍ إلى صانعِ مواقعَ تعليميَّة.
+      لا يحتاجُ الواحدُ منها سوى فتحِ الملف، تعبئةِ الحقول، ثُمَّ الضغطِ على
+      «حفظُ نسخةٍ نهائيَّة». لا برمجةَ، ولا اشتراكاتٍ، ولا تعقيد.
+    </p>
+    <div class="hero-stats">
+      <div>
+        <div class="hero-stat-num">١٢</div>
+        <div class="hero-stat-label">قالبًا تفاعليًّا</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">٤</div>
+        <div class="hero-stat-label">مجموعاتٍ تعليميَّة</div>
+      </div>
+      <div>
+        <div class="hero-stat-num">٠</div>
+        <div class="hero-stat-label">سطرَ كودٍ مطلوب</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- المجموعة 1: تقديم المفاهيم -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">١</div>
+      <h2 class="section-title">تقديمُ المفاهيم</h2>
+      <span class="section-tag">عرضُ المعلوماتِ بطريقةٍ مشوِّقة</span>
+    </div>
+    <div class="cards-grid">
+
+      <a href="q-01.html" class="card">
+        <span class="card-num">٠١</span>
+        <div class="card-icon">🃏</div>
+        <h3 class="card-title">البطاقاتُ القابلةُ للقلب</h3>
+        <p class="card-desc">بطاقاتٌ تَنقلبُ عند النقر لِتَكشفَ التعريف. مثاليَّةٌ للمصطلحاتِ والمفرداتِ والقواعد.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+      <a href="q-02.html" class="card">
+        <span class="card-num">٠٢</span>
+        <div class="card-icon">📋</div>
+        <h3 class="card-title">القائمةُ المنسدلة</h3>
+        <p class="card-desc">أسئلةٌ تَنفتحُ بالنقرِ لِتُظهرَ إجاباتِها. مناسبةٌ للأسئلةِ الشائعةِ والشروحاتِ المتسلسلة.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+      <a href="q-03.html" class="card">
+        <span class="card-num">٠٣</span>
+        <div class="card-icon">📑</div>
+        <h3 class="card-title">التبويبات</h3>
+        <p class="card-desc">عرضُ معلوماتٍ متوازيةٍ في مساحةٍ واحدة. ممتازةٌ لمقارنةِ شيئَين أو ثلاثة.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+      <a href="q-04.html" class="card">
+        <span class="card-num">٠٤</span>
+        <div class="card-icon">💡</div>
+        <h3 class="card-title">التلميحاتُ السياقيَّة</h3>
+        <p class="card-desc">شرحٌ يَظهرُ عند مرورِ المؤشِّرِ على الكلمة. لشرحِ المفرداتِ الصعبةِ داخلَ النصوص.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- المجموعة 2: التطبيق العملي -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">٢</div>
+      <h2 class="section-title">التطبيقُ العملي</h2>
+      <span class="section-tag">تَفاعلٌ يدويٌّ مباشر</span>
+    </div>
+    <div class="cards-grid">
+
+      <a href="q-05.html" class="card">
+        <span class="card-num">٠٥</span>
+        <div class="card-icon">🖱️</div>
+        <h3 class="card-title">السحبُ والإفلات</h3>
+        <p class="card-desc">يَسحبُ الطالبُ العناصرَ ويُلقيها في مكانها الصحيح. للتصنيفِ والترتيبِ والتجميع.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+      <a href="q-06.html" class="card">
+        <span class="card-num">٠٦</span>
+        <div class="card-icon">🔗</div>
+        <h3 class="card-title">التوصيلُ والمطابقة</h3>
+        <p class="card-desc">رَبطُ كلِّ عنصرٍ بنظيرِه. مثاليٌّ للمتقابلاتِ والمرادفاتِ والترجمات.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+      <a href="q-07.html" class="card">
+        <span class="card-num">٠٧</span>
+        <div class="card-icon">✏️</div>
+        <h3 class="card-title">ملءُ الفراغات</h3>
+        <p class="card-desc">يَملأُ الطالبُ الفراغاتِ في النصِّ. للقواعدِ والإملاءِ والمفاهيمِ المتسلسلة.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- المجموعة 3: التقييم والتحفيز -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">٣</div>
+      <h2 class="section-title">التقييمُ والتحفيز</h2>
+      <span class="section-tag">قياسٌ ذكيٌّ ومكافآتُ جذَّابة</span>
+    </div>
+    <div class="cards-grid">
+
+      <a href="q-08.html" class="card">
+        <span class="card-num">٠٨</span>
+        <div class="card-icon">✅</div>
+        <h3 class="card-title">الاختبارُ التفاعلي</h3>
+        <p class="card-desc">أسئلةُ اختياراتٍ متعدِّدةٍ مع شرحٍ لكلِّ إجابة، شريطِ تقدُّم، ونتيجةٍ نهائيَّة.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+      <a href="q-10.html" class="card">
+        <span class="card-num">١٠</span>
+        <div class="card-icon">🏆</div>
+        <h3 class="card-title">الشاراتُ والإنجازات</h3>
+        <p class="card-desc">نظامُ نقاطٍ وشاراتٍ لتحفيزِ الطالب. مع مؤثِّرِ احتفالٍ عند فتحِ كلِّ شارة.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- المجموعة 4: الاستكشاف العميق -->
+  <section class="section">
+    <div class="section-header">
+      <div class="section-num">٤</div>
+      <h2 class="section-title">الاستكشافُ العميق</h2>
+      <span class="section-tag">تَجاربُ تُحوِّلُ المفهومَ إلى مَلموس</span>
+    </div>
+    <div class="cards-grid">
+
+      <a href="q-09.html" class="card">
+        <span class="card-num">٠٩</span>
+        <div class="card-icon">📅</div>
+        <h3 class="card-title">الخطُّ الزمني</h3>
+        <p class="card-desc">عَرضُ الأحداثِ التاريخيَّةِ بترتيبِها. للسيرةِ النبويَّة والحضاراتِ والاكتشافات.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+      <a href="q-11.html" class="card">
+        <span class="card-num">١١</span>
+        <div class="card-icon">🧮</div>
+        <h3 class="card-title">المعادلاتُ الحيَّة</h3>
+        <p class="card-desc">يُحرِّكُ الطالبُ شريطَ متغيِّر، فيرى أثرَه على النتيجة. للعلومِ والرياضيَّات.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+      <a href="q-12.html" class="card">
+        <span class="card-num">١٢</span>
+        <div class="card-icon">🔬</div>
+        <h3 class="card-title">المخطَّطاتُ التفاعليَّة</h3>
+        <p class="card-desc">مخطَّطاتٌ علميَّةٌ (نبتة، خليَّة، دائرة...) بنقاطٍ تفاعليَّةٍ تَكشفُ تفاصيلَ كلِّ جزء.</p>
+        <span class="card-cta">افتح القالب</span>
+      </a>
+
+    </div>
+  </section>
+
+</div>
+
+<footer class="foot">
+  <div class="foot-msg">«إذا أُعطِيَ المعلِّمُ أداةً، صَنَعَ بها أجيالًا.»</div>
+  <div class="foot-sub">حقيبةُ ورشةِ المعلِّمِ الذكي · ١٢ قالبًا تفاعليًّا</div>
+</footer>
+
+</body>
+</html>

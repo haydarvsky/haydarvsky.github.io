@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التوصيل والمطابقة — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; --green-success:#16a34a; --red-error:#dc2626; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input, .tp-textarea { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; resize: vertical; }
+.tp-input:focus, .tp-textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-textarea { min-height: 100px; }
+.tp-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tp-pair { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
+.tp-pair .tp-label { font-size: 0.82rem; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.tp-pair-num { background: var(--amber); color: white; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+.match-game { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 700px; margin: 0 auto; }
+.match-col { display: grid; gap: 10px; }
+.match-col-title { font-family: 'Reem Kufi', sans-serif; color: var(--amber); font-weight: 600; text-align: center; padding: 8px; border-bottom: 2px solid var(--amber); margin-bottom: 8px; }
+.match-item { background: var(--bg-cream); padding: 14px 18px; border-radius: 10px; cursor: pointer; transition: all 0.2s; border: 2px solid var(--line); font-family: 'Reem Kufi', sans-serif; text-align: center; user-select: none; }
+.match-item:hover { border-color: var(--emerald); transform: translateX(-3px); }
+.match-item.selected { border-color: var(--amber); background: rgba(217,119,6,0.1); }
+.match-item.matched { background: var(--green-success); color: white; cursor: default; border-color: var(--green-success); pointer-events: none; }
+.match-item.error { animation: shake 0.4s; border-color: var(--red-error); }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+.match-feedback { text-align: center; padding: 16px; margin-top: 20px; border-radius: 12px; background: var(--bg-cream); font-family: 'Reem Kufi', sans-serif; }
+.match-feedback.success { background: rgba(22,163,74,0.1); color: var(--green-success); font-weight: 600; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 600px) { .tp-row { grid-template-columns: 1fr; } .preview-title { font-size: 1.5rem; } .match-game { grid-template-columns: 1fr; gap: 16px; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="التوصيل والمطابقة">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — التوصيلُ والمطابقة</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>كيف تستعمل هذا القالب؟</strong>
+        مثاليٌّ لربطِ المتقابلات: المفرداتِ بترجمتِها، الكتَّابِ بكُتُبهم، الأنبياءِ بأقوامهم. اكتب كلَّ زوجٍ من الأزواج في حقلِه. سيُرتِّبُ الموقعُ تلقائيًّا الترتيبَ عشوائيًّا في كلِّ مرَّة.
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="العواصمُ ودولُها" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="انقر على عنصرٍ من اليمين، ثُمَّ على ما يقابلُه من اليسار" oninput="updatePreview()">
+        </div>
+        <div class="tp-row">
+          <div class="tp-field">
+            <label class="tp-label">عنوانُ العمودِ الأيمن</label>
+            <input type="text" class="tp-input" id="col-1-title" value="العاصمة" oninput="updatePreview()">
+          </div>
+          <div class="tp-field">
+            <label class="tp-label">عنوانُ العمودِ الأيسر</label>
+            <input type="text" class="tp-input" id="col-2-title" value="الدولة" oninput="updatePreview()">
+          </div>
+        </div>
+
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">الأزواج (٤ أزواجٍ كحدٍّ أقصى)</label>
+
+          <div class="tp-pair">
+            <label class="tp-label"><span class="tp-pair-num">١</span> الزوجُ الأوَّل</label>
+            <div class="tp-row">
+              <input type="text" class="tp-input" id="pair-1-left" placeholder="اليمين" value="الكويت" oninput="updatePreview()">
+              <input type="text" class="tp-input" id="pair-1-right" placeholder="اليسار" value="دولة الكويت" oninput="updatePreview()">
+            </div>
+          </div>
+
+          <div class="tp-pair">
+            <label class="tp-label"><span class="tp-pair-num">٢</span> الزوجُ الثاني</label>
+            <div class="tp-row">
+              <input type="text" class="tp-input" id="pair-2-left" value="القاهرة" oninput="updatePreview()">
+              <input type="text" class="tp-input" id="pair-2-right" value="جمهوريَّة مصرَ العربيَّة" oninput="updatePreview()">
+            </div>
+          </div>
+
+          <div class="tp-pair">
+            <label class="tp-label"><span class="tp-pair-num">٣</span> الزوجُ الثالث</label>
+            <div class="tp-row">
+              <input type="text" class="tp-input" id="pair-3-left" value="الرياض" oninput="updatePreview()">
+              <input type="text" class="tp-input" id="pair-3-right" value="المملكة العربيَّة السعوديَّة" oninput="updatePreview()">
+            </div>
+          </div>
+
+          <div class="tp-pair">
+            <label class="tp-label"><span class="tp-pair-num">٤</span> الزوجُ الرابع <span style="font-weight:400; opacity:0.6;">(اختياري)</span></label>
+            <div class="tp-row">
+              <input type="text" class="tp-input" id="pair-4-left" value="الدوحة" oninput="updatePreview()">
+              <input type="text" class="tp-input" id="pair-4-right" value="دولة قطر" oninput="updatePreview()">
+            </div>
+          </div>
+        </div>
+
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادةُ التعيين</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">العواصمُ ودولُها</h1>
+      <p class="preview-subtitle" id="preview-subtitle">انقر على عنصرٍ من اليمين، ثُمَّ على ما يقابلُه</p>
+    </div>
+    <div class="match-game">
+      <div class="match-col" id="col-left">
+        <div class="match-col-title" id="col-left-title">العاصمة</div>
+      </div>
+      <div class="match-col" id="col-right">
+        <div class="match-col-title" id="col-right-title">الدولة</div>
+      </div>
+    </div>
+    <div class="match-feedback" id="match-feedback">🎯 وصِّل العناصرَ المتقابلة</div>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function getPairs() {
+  const pairs = [];
+  for (let i = 1; i <= 4; i++) {
+    const l = document.getElementById('pair-' + i + '-left').value.trim();
+    const r = document.getElementById('pair-' + i + '-right').value.trim();
+    if (l && r) pairs.push({ id: i, left: l, right: r });
+  }
+  return pairs;
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let selectedLeft = null, selectedRight = null, totalMatched = 0, totalPairs = 0;
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'مطابقة';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'مطابقة') + ' — موقع تعليمي';
+
+  document.getElementById('col-left-title').textContent = document.getElementById('col-1-title').value || 'العمود الأيمن';
+  document.getElementById('col-right-title').textContent = document.getElementById('col-2-title').value || 'العمود الأيسر';
+
+  const pairs = getPairs();
+  totalPairs = pairs.length; totalMatched = 0;
+  selectedLeft = null; selectedRight = null;
+
+  const colL = document.getElementById('col-left');
+  const colR = document.getElementById('col-right');
+  // remove existing items
+  colL.querySelectorAll('.match-item').forEach(e => e.remove());
+  colR.querySelectorAll('.match-item').forEach(e => e.remove());
+
+  const leftShuffled = shuffle(pairs);
+  const rightShuffled = shuffle(pairs);
+
+  leftShuffled.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'match-item';
+    el.dataset.id = p.id;
+    el.dataset.side = 'left';
+    el.textContent = p.left;
+    el.onclick = () => selectMatch(el);
+    colL.appendChild(el);
+  });
+
+  rightShuffled.forEach(p => {
+    const el = document.createElement('div');
+    el.className = 'match-item';
+    el.dataset.id = p.id;
+    el.dataset.side = 'right';
+    el.textContent = p.right;
+    el.onclick = () => selectMatch(el);
+    colR.appendChild(el);
+  });
+
+  document.getElementById('match-feedback').textContent = '🎯 وصِّل العناصرَ المتقابلة';
+  document.getElementById('match-feedback').className = 'match-feedback';
+
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+function selectMatch(el) {
+  if (el.classList.contains('matched')) return;
+  if (el.dataset.side === 'left') {
+    if (selectedLeft) selectedLeft.classList.remove('selected');
+    selectedLeft = el; el.classList.add('selected');
+  } else {
+    if (selectedRight) selectedRight.classList.remove('selected');
+    selectedRight = el; el.classList.add('selected');
+  }
+  if (selectedLeft && selectedRight) {
+    if (selectedLeft.dataset.id === selectedRight.dataset.id) {
+      selectedLeft.classList.add('matched'); selectedLeft.classList.remove('selected');
+      selectedRight.classList.add('matched'); selectedRight.classList.remove('selected');
+      totalMatched++;
+      if (totalMatched === totalPairs) {
+        const fb = document.getElementById('match-feedback');
+        fb.textContent = 'أَحسنتَ! وصَّلتَ الجميعَ بإتقان 🎉';
+        fb.classList.add('success');
+      }
+    } else {
+      const left = selectedLeft, right = selectedRight;
+      left.classList.add('error'); right.classList.add('error');
+      setTimeout(() => {
+        left.classList.remove('error', 'selected');
+        right.classList.remove('error', 'selected');
+      }, 500);
+    }
+    selectedLeft = null; selectedRight = null;
+  }
+}
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'مطابقة';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const colLTitle = document.getElementById('col-1-title').value || 'العمود الأيمن';
+  const colRTitle = document.getElementById('col-2-title').value || 'العمود الأيسر';
+  const pairs = getPairs();
+
+  const pairsJSON = JSON.stringify(pairs);
+  const sigHTML = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHTML(title)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>:root{--emerald-deep:#0F4C3A;--emerald:#1a6b54;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5;--green-success:#16a34a;--red-error:#dc2626}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.match-game{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:700px;margin:0 auto}.match-col{display:grid;gap:10px}.match-col-title{font-family:'Reem Kufi',sans-serif;color:var(--amber);font-weight:600;text-align:center;padding:8px;border-bottom:2px solid var(--amber);margin-bottom:8px}.match-item{background:var(--bg-cream);padding:14px 18px;border-radius:10px;cursor:pointer;transition:all 0.2s;border:2px solid var(--line);font-family:'Reem Kufi',sans-serif;text-align:center;user-select:none}.match-item:hover{border-color:var(--emerald);transform:translateX(-3px)}.match-item.selected{border-color:var(--amber);background:rgba(217,119,6,0.1)}.match-item.matched{background:var(--green-success);color:white;cursor:default;border-color:var(--green-success);pointer-events:none}.match-item.error{animation:shake 0.4s;border-color:var(--red-error)}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}.match-feedback{text-align:center;padding:16px;margin-top:20px;border-radius:12px;background:var(--bg-cream);font-family:'Reem Kufi',sans-serif}.match-feedback.success{background:rgba(22,163,74,0.1);color:var(--green-success);font-weight:600}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.preview-title{font-size:1.5rem}.match-game{grid-template-columns:1fr;gap:16px}}</style></head>
+<body><div class="page"><div class="preview-wrap">
+<div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div>
+<div class="match-game"><div class="match-col" id="cl"><div class="match-col-title">${escapeHTML(colLTitle)}</div></div><div class="match-col" id="cr"><div class="match-col-title">${escapeHTML(colRTitle)}</div></div></div>
+<div class="match-feedback" id="fb">🎯 وصِّل العناصرَ المتقابلة</div>
+${sigHTML}
+</div></div>
+<script>
+const pairs = ${pairsJSON};
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let selL=null,selR=null,matched=0;const total=pairs.length;
+const cl=document.getElementById('cl'),cr=document.getElementById('cr');
+shuffle(pairs).forEach(p=>{const e=document.createElement('div');e.className='match-item';e.dataset.id=p.id;e.dataset.side='left';e.textContent=p.left;e.onclick=()=>sel(e);cl.appendChild(e);});
+shuffle(pairs).forEach(p=>{const e=document.createElement('div');e.className='match-item';e.dataset.id=p.id;e.dataset.side='right';e.textContent=p.right;e.onclick=()=>sel(e);cr.appendChild(e);});
+function sel(el){if(el.classList.contains('matched'))return;if(el.dataset.side==='left'){if(selL)selL.classList.remove('selected');selL=el;el.classList.add('selected');}else{if(selR)selR.classList.remove('selected');selR=el;el.classList.add('selected');}if(selL&&selR){if(selL.dataset.id===selR.dataset.id){selL.classList.add('matched');selL.classList.remove('selected');selR.classList.add('matched');selR.classList.remove('selected');matched++;if(matched===total){const f=document.getElementById('fb');f.textContent='أَحسنتَ! وصَّلتَ الجميعَ بإتقان 🎉';f.classList.add('success');}}else{const l=selL,r=selR;l.classList.add('error');r.classList.add('error');setTimeout(()=>{l.classList.remove('error','selected');r.classList.remove('error','selected');},500);}selL=null;selR=null;}}
+<\/script>
+</body></html>`;
+
+  const blob = new Blob([finalHTML], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'توصيل').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function resetForm() { if (confirm('هل تريدُ إعادةَ القيمِ إلى مثالِ البداية؟')) location.reload(); }
+
+updatePreview();
+</script>
+</body></html>

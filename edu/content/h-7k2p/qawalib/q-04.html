@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التلميحات الذكية — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-family: 'Tajawal', sans-serif; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input, .tp-textarea { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; resize: vertical; }
+.tp-input:focus, .tp-textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-textarea { min-height: 120px; }
+.tp-item-input { background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.15); border-radius: 10px; padding: 12px; margin-bottom: 12px; }
+.tp-item-input .tp-label { font-size: 0.82rem; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.tp-item-num { background: var(--amber); color: white; width: 22px; height: 22px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+.tp-hint { font-size: 0.85rem; color: rgba(255,255,255,0.75); font-style: italic; margin-top: 6px; }
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+.tooltip-text { max-width: 800px; margin: 0 auto; font-size: 1.15rem; line-height: 2; color: var(--ink); padding: 24px; background: var(--bg-cream); border-radius: 12px; border-right: 4px solid var(--amber); }
+.tooltip-word { color: var(--amber); font-weight: 600; cursor: help; border-bottom: 2px dotted var(--amber); position: relative; transition: all 0.2s; padding: 0 2px; }
+.tooltip-word:hover { color: var(--emerald-deep); background: rgba(217, 119, 6, 0.08); border-radius: 4px; }
+.tooltip-word::before { content: attr(data-tip); position: absolute; bottom: calc(100% + 8px); right: 50%; transform: translateX(50%); background: var(--emerald-deep); color: var(--bg-cream); padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; font-weight: 400; white-space: normal; min-width: 200px; max-width: 320px; opacity: 0; pointer-events: none; transition: opacity 0.3s; box-shadow: 0 8px 20px rgba(0,0,0,0.18); line-height: 1.5; z-index: 10; }
+.tooltip-word::after { content: ''; position: absolute; bottom: calc(100% + 2px); right: 50%; transform: translateX(50%); border: 6px solid transparent; border-top-color: var(--emerald-deep); opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.tooltip-word:hover::before, .tooltip-word:hover::after { opacity: 1; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 600px) { .tp-header { flex-direction: column; align-items: flex-start; } .preview-title { font-size: 1.5rem; } .tooltip-text { font-size: 1rem; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="التلميحات الذكية">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — التلميحاتُ الذكيَّة</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>كيف تستعمل هذا القالب؟</strong>
+        مثاليٌّ للنصوصِ العلميَّةِ الكثيفةِ بالمصطلحات. اكتب فقرتَك الكاملةَ، وضع كلَّ مصطلحٍ صعبٍ بين قوسَيْنِ معقوفَيْنِ <strong>[هكذا]</strong>، ثم سَجِّل تعريفَه في الحقولِ التالية. عند مرورِ الطالبِ بالمؤشِّر فوقَ الكلمةِ يظهرُ تعريفُها.
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="درسٌ في البناءِ الضوئيِّ" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="مرِّر فوقَ الكلماتِ الملوَّنةِ لتعرفَ معناها" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">النصُّ الكاملُ (ضع المصطلحاتِ الصعبةَ بين قوسَيْنِ معقوفَيْنِ [هكذا])</label>
+          <textarea class="tp-textarea" id="ctrl-text" oninput="updatePreview()" style="min-height: 160px;">تحدثُ عمليَّةُ [البناءِ الضوئيِّ] في الأوراقِ، إذ يلتقطُ النباتُ [ثاني أكسيدِ الكربون] من الجوِّ، ويستعينُ بـ [الكلوروفيل] لتحويلِه إلى [الجلوكوز]، ويُطلِقُ ناتجًا جانبيًّا هو [الأكسجين].</textarea>
+          <p class="tp-hint">💡 كل ما يأتي بين [قوسين معقوفين] في النصِّ سيكونُ تلميحًا قابلًا للنقر.</p>
+        </div>
+
+        <div>
+          <label class="tp-label" style="display:block; margin-bottom:10px;">تعريفاتُ المصطلحات (لكلِّ مصطلحٍ تعريفٌ مختصر)</label>
+
+          <div class="tp-item-input">
+            <label class="tp-label"><span class="tp-item-num">١</span> المصطلحُ الأوَّل وتعريفُه</label>
+            <input type="text" class="tp-input" id="term-1-word" placeholder="المصطلح" value="البناءِ الضوئيِّ" oninput="updatePreview()" style="margin-bottom:6px;">
+            <input type="text" class="tp-input" id="term-1-tip" placeholder="التعريف" value="عمليَّةُ تحويلِ ضوءِ الشمسِ إلى غذاء" oninput="updatePreview()">
+          </div>
+
+          <div class="tp-item-input">
+            <label class="tp-label"><span class="tp-item-num">٢</span> المصطلحُ الثاني</label>
+            <input type="text" class="tp-input" id="term-2-word" placeholder="المصطلح" value="ثاني أكسيدِ الكربون" oninput="updatePreview()" style="margin-bottom:6px;">
+            <input type="text" class="tp-input" id="term-2-tip" placeholder="التعريف" value="غازٌ يُخرجُه الإنسانُ في الزفير" oninput="updatePreview()">
+          </div>
+
+          <div class="tp-item-input">
+            <label class="tp-label"><span class="tp-item-num">٣</span> المصطلحُ الثالث</label>
+            <input type="text" class="tp-input" id="term-3-word" placeholder="المصطلح" value="الكلوروفيل" oninput="updatePreview()" style="margin-bottom:6px;">
+            <input type="text" class="tp-input" id="term-3-tip" placeholder="التعريف" value="صبغةٌ خضراءُ داخلَ الأوراقِ تَمتصُّ الضوء" oninput="updatePreview()">
+          </div>
+
+          <div class="tp-item-input">
+            <label class="tp-label"><span class="tp-item-num">٤</span> المصطلحُ الرابع</label>
+            <input type="text" class="tp-input" id="term-4-word" placeholder="المصطلح" value="الجلوكوز" oninput="updatePreview()" style="margin-bottom:6px;">
+            <input type="text" class="tp-input" id="term-4-tip" placeholder="التعريف" value="سُكَّرٌ أُحاديٌّ يغذِّي النبات" oninput="updatePreview()">
+          </div>
+
+          <div class="tp-item-input">
+            <label class="tp-label"><span class="tp-item-num">٥</span> المصطلحُ الخامس <span style="font-weight:400; opacity:0.6;">(اختياري)</span></label>
+            <input type="text" class="tp-input" id="term-5-word" placeholder="المصطلح" value="الأكسجين" oninput="updatePreview()" style="margin-bottom:6px;">
+            <input type="text" class="tp-input" id="term-5-tip" placeholder="التعريف" value="الغازُ الذي نَتَنَفَّسُه ويُبقِينا أَحياء" oninput="updatePreview()">
+          </div>
+        </div>
+
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادةُ التعيين</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">درسٌ في البناءِ الضوئيِّ</h1>
+      <p class="preview-subtitle" id="preview-subtitle">مرِّر فوقَ الكلماتِ الملوَّنةِ لتعرفَ معناها</p>
+    </div>
+    <p class="tooltip-text" id="tooltip-text"></p>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+function buildTermsMap() {
+  const map = {};
+  for (let i = 1; i <= 5; i++) {
+    const w = document.getElementById('term-' + i + '-word').value.trim();
+    const t = document.getElementById('term-' + i + '-tip').value.trim();
+    if (w) map[w] = t;
+  }
+  return map;
+}
+
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function processText(text, terms) {
+  let result = escapeHTML(text);
+  result = result.replace(/\[([^\]]+)\]/g, (match, word) => {
+    const tip = terms[word] || '';
+    return `<span class="tooltip-word" data-tip="${escapeHTML(tip)}">${escapeHTML(word)}</span>`;
+  });
+  return result;
+}
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'درس';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'درس') + ' — موقع تعليمي';
+
+  const text = document.getElementById('ctrl-text').value;
+  const terms = buildTermsMap();
+  document.getElementById('tooltip-text').innerHTML = processText(text, terms);
+
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'درس';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const text = document.getElementById('ctrl-text').value;
+  const terms = buildTermsMap();
+  const processedText = processText(text, terms);
+
+  const sigHTML = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHTML(title)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>:root{--emerald-deep:#0F4C3A;--emerald:#1a6b54;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.tooltip-text{max-width:800px;margin:0 auto;font-size:1.15rem;line-height:2;color:var(--ink);padding:24px;background:var(--bg-cream);border-radius:12px;border-right:4px solid var(--amber)}.tooltip-word{color:var(--amber);font-weight:600;cursor:help;border-bottom:2px dotted var(--amber);position:relative;transition:all 0.2s;padding:0 2px}.tooltip-word:hover{color:var(--emerald-deep);background:rgba(217,119,6,0.08);border-radius:4px}.tooltip-word::before{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);right:50%;transform:translateX(50%);background:var(--emerald-deep);color:var(--bg-cream);padding:10px 14px;border-radius:8px;font-size:0.9rem;font-weight:400;min-width:200px;max-width:320px;opacity:0;pointer-events:none;transition:opacity 0.3s;box-shadow:0 8px 20px rgba(0,0,0,0.18);line-height:1.5;z-index:10}.tooltip-word::after{content:'';position:absolute;bottom:calc(100% + 2px);right:50%;transform:translateX(50%);border:6px solid transparent;border-top-color:var(--emerald-deep);opacity:0;transition:opacity 0.3s;pointer-events:none}.tooltip-word:hover::before,.tooltip-word:hover::after{opacity:1}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.preview-title{font-size:1.5rem}.tooltip-text{font-size:1rem}}</style></head>
+<body><div class="page"><div class="preview-wrap">
+<div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div>
+<p class="tooltip-text">${processedText}</p>${sigHTML}
+</div></div></body></html>`;
+
+  const blob = new Blob([finalHTML], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'تلميحات').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function resetForm() { if (confirm('هل تريدُ إعادةَ القيمِ إلى مثالِ البداية؟')) location.reload(); }
+
+updatePreview();
+</script>
+</body></html>

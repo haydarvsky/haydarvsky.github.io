@@ -1,0 +1,1850 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إسناد الأفعال إلى الضمائر · إعداد أ. حيدر المعاتيق</title>
+
+<style>
+  /* ===== SakkalSaad ===== */
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-100.woff2') format('woff2'); font-weight:100; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-300.woff2') format('woff2'); font-weight:300; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-400.woff2') format('woff2'); font-weight:400; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-500.woff2') format('woff2'); font-weight:500; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-700.woff2') format('woff2'); font-weight:700; font-display:swap; }
+  @font-face{ font-family:"SakkalSaad"; src:url('../fonts/sakkal-800.woff2') format('woff2'); font-weight:800; font-display:swap; }
+
+  :root{
+    --ink:#1A1F2E; --ink-soft:#4A5165;
+    --paper:#F6EFE2; --paper-2:#FBF6EC; --paper-3:#FFFFFF;
+    --accent:#0E6F5C; --accent-2:#0A4F42;
+    --gold:#C89B4A; --gold-soft:#E8C886;
+    --rose:#B43E50; --rose-2:#8A2C3C;
+    --leaf:#2B7A57;
+    --line:#E2D8C2;
+    --shadow:0 18px 60px -22px rgba(26,31,46,.45);
+    --font:"SakkalSaad","Segoe UI",system-ui,-apple-system,sans-serif;
+    --font-display:"SakkalSaad","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;overflow-x:hidden;}
+  body{
+    font-family:var(--font); color:var(--ink); font-weight:400;
+    background:
+      radial-gradient(1200px 600px at 90% -10%, rgba(200,155,74,.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 110%, rgba(14,111,92,.14), transparent 60%),
+      var(--paper);
+    line-height:1.7; min-height:100%; font-size:18px;
+  }
+
+  /* ===== Top bar ===== */
+  .topbar{
+    position:fixed; top:0; right:0; left:0; height:64px;
+    background:rgba(251,246,236,.9);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-between;
+    padding:0 26px; z-index:50;
+  }
+  .topbar .brand{ font-family:var(--font-display); font-size:19px; color:var(--accent); font-weight:700; }
+  .topbar .brand span{ color:var(--gold); }
+  .topbar .slide-info{ font-size:16px; color:var(--ink-soft); }
+  .topbar .slide-info b{ color:var(--accent); font-size:18px; font-weight:700; }
+  .progress-line{ position:fixed; top:64px; right:0; left:0; height:4px; background:rgba(14,111,92,.1); z-index:50; }
+  .progress-line>span{ display:block; height:100%; background:linear-gradient(90deg,var(--gold-soft),var(--gold),var(--accent)); width:0; transition:width .5s cubic-bezier(.2,.8,.2,1); }
+
+  /* ===== Stage ===== */
+  .stage{ padding-top:90px; padding-bottom:110px; min-height:100vh; }
+  .slide{ display:none; max-width:1200px; margin:0 auto; padding:clamp(24px,3vw,48px); }
+  .slide.active{ display:block; animation:slideIn .55s cubic-bezier(.2,.8,.2,1); }
+  @keyframes slideIn{ from{ opacity:0; transform:translateY(20px); } to{ opacity:1; transform:translateY(0); } }
+  .slide.active>*{ animation:fadeUp .6s cubic-bezier(.2,.8,.2,1) both; }
+  .slide.active>*:nth-child(1){ animation-delay:.05s; }
+  .slide.active>*:nth-child(2){ animation-delay:.15s; }
+  .slide.active>*:nth-child(3){ animation-delay:.28s; }
+  .slide.active>*:nth-child(4){ animation-delay:.42s; }
+  .slide.active>*:nth-child(5){ animation-delay:.55s; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:translateY(0); } }
+
+  /* ===== Title ===== */
+  .title-slide{
+    min-height:calc(100vh - 90px); display:none;
+    flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; padding:50px 24px;
+  }
+  .title-slide.active{ display:flex; }
+  .title-ornament{ width:140px; height:140px; opacity:.85; margin-bottom:28px; animation:spin 32s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .title-eyebrow{
+    font-family:var(--font-display); font-size:16px; letter-spacing:7px; font-weight:500;
+    color:var(--gold); border-top:1px solid var(--gold); border-bottom:1px solid var(--gold);
+    padding:9px 22px; margin-bottom:36px;
+  }
+  .title-main{
+    font-family:var(--font-display); font-size:clamp(44px,7vw,88px);
+    color:var(--ink); line-height:1.1; font-weight:800;
+    letter-spacing:-1px; max-width:900px;
+  }
+  .title-main .em{ color:var(--accent); position:relative; }
+  .title-main .em::after{
+    content:""; position:absolute; right:0; left:0; bottom:-.05em;
+    height:.12em; background:linear-gradient(90deg,transparent,var(--gold),transparent); border-radius:8px;
+  }
+  .title-sub{
+    margin-top:22px; font-family:var(--font-display);
+    font-size:clamp(20px,2.4vw,28px); color:var(--ink-soft); font-weight:500;
+  }
+  .title-divider{ width:320px; max-width:80%; margin:42px auto 28px; display:flex; align-items:center; gap:16px; }
+  .title-divider .l, .title-divider .r{ flex:1; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
+  .title-divider .dot{ width:12px; height:12px; background:var(--gold); transform:rotate(45deg); }
+  .title-author{ font-family:var(--font-display); font-size:clamp(20px,2.2vw,26px); color:var(--ink-soft); font-weight:300; }
+  .title-author b{ color:var(--accent); font-weight:700; }
+  .title-cta{
+    margin-top:50px; background:var(--accent); color:var(--paper-2);
+    border:none; padding:16px 42px; border-radius:14px;
+    font-family:var(--font); font-size:19px; font-weight:700; cursor:pointer;
+    box-shadow:0 14px 36px -14px var(--accent); transition:all .3s ease; letter-spacing:1px;
+  }
+  .title-cta:hover{ background:var(--accent-2); transform:translateY(-3px); }
+  .title-cta::after{ content:" ←"; }
+
+  /* ===== Slide layout ===== */
+  .slide-num{ display:inline-block; font-size:15px; color:var(--gold); letter-spacing:4px; font-weight:700; margin-bottom:12px; }
+  .slide-title{ font-family:var(--font-display); font-size:clamp(32px,4.5vw,52px); color:var(--accent); margin-bottom:18px; line-height:1.15; font-weight:800; }
+  .slide-instruction{
+    font-family:var(--font-display); font-size:clamp(20px,2.4vw,26px); color:var(--ink-soft);
+    margin-bottom:28px; line-height:1.5; font-weight:500;
+    border-right:4px solid var(--gold); padding-right:16px;
+  }
+
+  /* ===== Idea / Expand / Practice ===== */
+  .idea{
+    background:linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+    color:var(--paper-2); border-radius:26px;
+    padding:clamp(28px,3.5vw,48px);
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+    margin-bottom:32px;
+  }
+  .idea::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(232,200,134,.15) 1px, transparent 0);
+    background-size:24px 24px; opacity:.5; pointer-events:none;
+  }
+  .idea .label{
+    font-family:var(--font-display); font-size:15px; color:var(--gold-soft); letter-spacing:4px;
+    border:1px solid rgba(232,200,134,.4); padding:6px 16px; border-radius:999px;
+    display:inline-block; margin-bottom:20px; font-weight:500;
+  }
+  .idea .text{
+    font-family:var(--font-display); font-size:clamp(22px,3vw,34px);
+    line-height:1.5; font-weight:700; position:relative;
+  }
+  .idea .text .hl{ color:var(--gold-soft); font-weight:800; }
+
+  .expand{
+    background:var(--paper-2); border:1px solid var(--line); border-radius:24px;
+    padding:clamp(28px,3.5vw,42px); margin-bottom:32px; box-shadow:var(--shadow);
+  }
+  .expand .label{
+    display:inline-flex; align-items:center; gap:8px; font-family:var(--font-display);
+    font-size:16px; color:var(--gold); background:rgba(200,155,74,.12);
+    border:1px solid rgba(200,155,74,.3);
+    padding:7px 16px; border-radius:999px; margin-bottom:20px; font-weight:700;
+  }
+  .expand h3{ font-family:var(--font-display); font-size:24px; color:var(--accent); margin:16px 0 12px; font-weight:800; }
+  .expand p{ color:var(--ink); font-size:19px; line-height:1.75; }
+
+  .practice{
+    background:var(--paper-3); border:2px dashed var(--gold); border-radius:24px;
+    padding:clamp(26px,3.5vw,40px); box-shadow:var(--shadow);
+  }
+  .practice .label{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-display); font-size:15px; color:var(--paper-2);
+    background:var(--gold); padding:7px 18px; border-radius:999px;
+    margin-bottom:16px; font-weight:700;
+  }
+  .practice h3{ font-family:var(--font-display); font-size:22px; color:var(--ink); margin-bottom:14px; font-weight:800; }
+  .practice .hint{ color:var(--ink-soft); font-size:17px; margin-bottom:18px; }
+
+  /* ============================================ */
+  /* ===== ISNAD INTRO (slide 2) ================ */
+  /* ============================================ */
+  .equation{
+    display:flex; justify-content:center; align-items:center; flex-wrap:wrap;
+    gap:14px; padding:30px 14px;
+    background:var(--paper-3); border-radius:18px; border:1.5px solid var(--line);
+    margin:18px 0;
+  }
+  .eq-block{
+    background:white; border:2.5px solid var(--accent);
+    border-radius:14px; padding:14px 22px;
+    font-family:var(--font-display); font-size:clamp(28px,4vw,40px);
+    font-weight:800; color:var(--accent-2);
+    line-height:1; min-width:90px; text-align:center;
+    position:relative;
+  }
+  .eq-block.pronoun{ border-color:var(--gold); color:var(--gold); }
+  .eq-block.result{ border-color:var(--leaf); color:var(--leaf); background:rgba(43,122,87,.06); }
+  .eq-block .lbl{
+    position:absolute; top:-12px; right:50%; transform:translateX(50%);
+    background:var(--paper-2); color:var(--ink-soft);
+    padding:2px 10px; border-radius:6px;
+    font-size:11px; font-weight:700; letter-spacing:1px;
+    border:1px solid var(--line);
+    white-space:nowrap;
+    font-family:var(--font);
+  }
+  .eq-op{
+    font-family:var(--font-display); font-size:36px; color:var(--gold);
+    font-weight:800;
+  }
+
+  /* ============================================ */
+  /* ===== PRONOUN GROUPS (slide 3) ============= */
+  /* ============================================ */
+  .pron-groups{
+    display:grid; grid-template-columns:1fr 1fr; gap:22px; margin-bottom:24px;
+  }
+  @media (max-width:760px){ .pron-groups{ grid-template-columns:1fr; } }
+  .pron-group{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:22px;
+    padding:24px; box-shadow:var(--shadow);
+    border-top:6px solid;
+  }
+  .pron-group.silent{ border-top-color:var(--accent); }
+  .pron-group.moving{ border-top-color:var(--rose); }
+  .pron-group h3{
+    font-family:var(--font-display); font-size:22px; font-weight:800;
+    margin-bottom:6px;
+  }
+  .pron-group.silent h3{ color:var(--accent); }
+  .pron-group.moving h3{ color:var(--rose); }
+  .pron-group .meta{
+    font-size:14px; color:var(--ink-soft);
+    margin-bottom:18px;
+    padding-bottom:14px;
+    border-bottom:1px dashed var(--line);
+  }
+  .pron-list{
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .pron-card{
+    display:flex; align-items:center; gap:14px;
+    background:var(--paper-2); border:1.5px solid var(--line);
+    border-radius:14px; padding:12px 16px;
+    transition:all .25s ease; cursor:default;
+  }
+  .pron-card:hover{ transform:translateY(-2px); border-color:var(--gold); box-shadow:0 10px 22px -10px var(--gold); }
+  .pron-symbol{
+    width:52px; height:52px;
+    display:flex; align-items:center; justify-content:center;
+    background:white; border:2.5px solid;
+    border-radius:12px;
+    font-family:var(--font-display); font-size:32px; font-weight:800; line-height:1;
+    flex-shrink:0;
+  }
+  .silent .pron-symbol{ border-color:var(--accent); color:var(--accent); }
+  .moving .pron-symbol{ border-color:var(--rose); color:var(--rose); }
+  .pron-info{ flex:1; min-width:0; }
+  .pron-name{ font-family:var(--font-display); font-size:18px; font-weight:800; color:var(--ink); }
+  .pron-ex{ font-size:14px; color:var(--ink-soft); margin-top:2px; }
+  .pron-ex b{ color:var(--gold); font-family:var(--font-display); font-size:16px; font-weight:700; }
+
+  /* ============================================ */
+  /* ===== BIG FLIP CARDS (transformation) ====== */
+  /* ============================================ */
+  .tcard-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));
+    gap:16px;
+    margin:14px 0 22px;
+  }
+  .tcard{
+    position:relative;
+    height:240px;
+    cursor:pointer;
+  }
+  .tcard-face{
+    position:absolute; inset:0;
+    border-radius:20px;
+    padding:20px 18px;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    border:2px solid var(--line);
+    box-shadow:0 12px 26px -14px rgba(26,31,46,.25);
+    transition:opacity .42s ease, transform .55s cubic-bezier(.2,.8,.2,1);
+    text-align:center;
+    overflow:hidden;
+  }
+  .tcard-front{
+    background:linear-gradient(180deg, white 0%, var(--paper-2) 100%);
+    gap:16px;
+    opacity:1; transform:scale(1); z-index:2;
+  }
+  .tcard-front::before{
+    content:""; position:absolute; inset:0;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(14,111,92,.08), transparent 70%),
+      radial-gradient(circle at 50% 100%, rgba(200,155,74,.08), transparent 70%);
+    pointer-events:none;
+  }
+  .tcard-eyebrow{
+    font-family:var(--font-display);
+    font-size:12px; letter-spacing:4px;
+    color:var(--gold); font-weight:700;
+    position:relative; z-index:1;
+  }
+  .tcard-equation{
+    display:flex; align-items:center; gap:10px;
+    position:relative; z-index:1;
+    flex-wrap:wrap; justify-content:center;
+  }
+  .tcard-verb{
+    font-family:var(--font-display);
+    font-size:clamp(30px, 4vw, 40px);
+    font-weight:800;
+    color:var(--accent-2);
+    line-height:1;
+    background:white;
+    border:2px solid var(--accent);
+    border-radius:10px;
+    padding:5px 14px;
+  }
+  .tcard-plus{
+    font-family:var(--font-display);
+    font-size:26px;
+    font-weight:800;
+    color:var(--gold);
+  }
+  .tcard-pron{
+    font-family:var(--font-display);
+    font-size:clamp(26px, 3.5vw, 32px);
+    font-weight:800;
+    color:var(--gold);
+    background:rgba(200,155,74,.12);
+    border:2px solid var(--gold);
+    border-radius:10px;
+    padding:5px 14px;
+    line-height:1;
+    min-width:48px;
+  }
+  .tcard-hint{
+    margin-top:6px;
+    background:rgba(0,0,0,.04);
+    border:1px dashed var(--line);
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:12px;
+    color:var(--ink-soft);
+    font-weight:600;
+    position:relative; z-index:1;
+    display:inline-flex; align-items:center; gap:5px;
+  }
+  /* BACK */
+  .tcard-back{
+    background:linear-gradient(135deg, var(--leaf), #1F5C40);
+    color:white; border-color:var(--leaf);
+    gap:12px;
+    opacity:0; transform:scale(.94); pointer-events:none; z-index:1;
+  }
+  .tcard-back.changed{
+    background:linear-gradient(135deg, var(--rose), var(--rose-2));
+    border-color:var(--rose);
+  }
+  .tcard-back::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,.15) 1px, transparent 0);
+    background-size:18px 18px; opacity:.4; pointer-events:none;
+  }
+  .tcard-stamp{
+    background:rgba(255,255,255,.2);
+    border:1px solid rgba(255,255,255,.4);
+    padding:5px 14px;
+    border-radius:999px;
+    font-size:13px; font-weight:800;
+    font-family:var(--font);
+    position:relative; z-index:1;
+    color:white;
+  }
+  .tcard-result{
+    font-family:var(--font-display);
+    font-size:clamp(34px, 5vw, 48px);
+    font-weight:800;
+    line-height:1.05;
+    color:white;
+    position:relative; z-index:1;
+  }
+  .tcard-result .cl{
+    background:rgba(255,255,255,.28);
+    padding:0 8px;
+    border-radius:6px;
+    border:1.5px solid rgba(255,255,255,.55);
+    display:inline-block;
+  }
+  .tcard-note{
+    font-family:var(--font-display);
+    font-size:16px;
+    font-weight:700;
+    background:rgba(255,255,255,.22);
+    border:1px solid rgba(255,255,255,.4);
+    padding:5px 16px;
+    border-radius:10px;
+    color:var(--gold-soft);
+    position:relative; z-index:1;
+  }
+  .tcard.flipped .tcard-front{
+    opacity:0; transform:scale(1.04); pointer-events:none; z-index:1;
+  }
+  .tcard.flipped .tcard-back{
+    opacity:1; transform:scale(1); pointer-events:auto; z-index:2;
+  }
+  .tcard-section-label{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-display); font-size:14px;
+    color:var(--gold); background:rgba(200,155,74,.12);
+    border:1px solid rgba(200,155,74,.3);
+    padding:6px 14px; border-radius:999px;
+    margin:14px 0 4px; font-weight:700;
+  }
+  .stamp.no-change{ background:rgba(43,122,87,.12); color:var(--leaf); border:1.5px solid var(--leaf); }
+  .stamp.change{ background:rgba(180,62,80,.12); color:var(--rose); border:1.5px solid var(--rose); }
+  .stamp .ic{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:18px; height:18px; border-radius:50%;
+    color:white; font-size:11px;
+  }
+  .stamp.no-change .ic{ background:var(--leaf); }
+  .stamp.change .ic{ background:var(--rose); }
+
+  /* Big rule banner */
+  .rule-banner{
+    background:linear-gradient(135deg, var(--gold) 0%, #B68940 100%);
+    color:white; border-radius:20px;
+    padding:clamp(20px,2.5vw,28px) clamp(24px,3vw,32px);
+    margin-bottom:24px;
+    position:relative; overflow:hidden;
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+  }
+  .rule-banner::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,.15) 1px, transparent 0);
+    background-size:18px 18px; opacity:.5; pointer-events:none;
+  }
+  .rule-banner .num{
+    width:60px; height:60px; flex-shrink:0;
+    background:rgba(255,255,255,.2); border:2px solid rgba(255,255,255,.4);
+    border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:28px; font-weight:800;
+    position:relative; z-index:1;
+  }
+  .rule-banner .text{
+    flex:1; min-width:0;
+    font-family:var(--font-display); font-size:clamp(20px,2.5vw,26px); font-weight:800;
+    line-height:1.4; position:relative; z-index:1;
+  }
+  .rule-banner .text small{ display:block; font-size:14px; opacity:.85; font-weight:500; margin-top:2px; }
+
+  /* ============================================ */
+  /* ===== ISNAD BUILDER (interactive widget) ==== */
+  /* ============================================ */
+  .builder{
+    background:var(--paper-3); border:2px solid var(--line); border-radius:24px;
+    padding:clamp(22px,3vw,32px); box-shadow:var(--shadow);
+    margin-bottom:24px;
+  }
+  .builder-header{
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    margin-bottom:16px;
+  }
+  .builder-badge{
+    background:var(--gold); color:var(--ink);
+    padding:5px 14px; border-radius:999px;
+    font-size:13px; font-weight:800; letter-spacing:2px;
+  }
+  .builder-header h3{
+    font-family:var(--font-display); font-size:22px; color:var(--accent);
+    font-weight:800;
+  }
+  .builder-instruction{
+    color:var(--ink-soft); font-size:16px; margin-bottom:18px;
+  }
+  .builder-reset{
+    margin-right:auto;
+    background:transparent; border:1.5px solid var(--rose); color:var(--rose);
+    padding:7px 16px; border-radius:999px;
+    font-family:var(--font); font-weight:700; font-size:14px;
+    cursor:pointer; transition:all .2s ease;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .builder-reset:hover{ background:var(--rose); color:white; }
+  .builder-reset:disabled{
+    opacity:.35; cursor:not-allowed;
+    border-color:var(--line); color:var(--ink-soft);
+  }
+  .builder-reset:disabled:hover{ background:transparent; color:var(--ink-soft); }
+  .builder-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px;
+  }
+  @media (max-width:700px){ .builder-grid{ grid-template-columns:1fr; } }
+  .builder-pane{
+    background:var(--paper-2); border:1.5px solid var(--line); border-radius:14px;
+    padding:14px;
+  }
+  .builder-pane-title{
+    font-family:var(--font-display); font-size:14px; font-weight:800;
+    color:var(--gold); letter-spacing:2px; margin-bottom:10px;
+  }
+  .pick-grid{ display:flex; flex-wrap:wrap; gap:8px; }
+  .pick-btn{
+    background:white; border:2px solid var(--line); padding:8px 14px;
+    border-radius:10px;
+    font-family:var(--font-display); font-weight:700; font-size:18px;
+    cursor:pointer; transition:all .2s ease; color:var(--ink);
+  }
+  .pick-btn:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .pick-btn.active{
+    background:var(--accent); color:white; border-color:var(--accent);
+    box-shadow:0 10px 22px -10px var(--accent);
+  }
+  .pick-btn.pron-active{
+    background:var(--gold); color:white; border-color:var(--gold);
+  }
+  .pick-btn small{ display:block; font-size:11px; opacity:.75; font-weight:600; margin-top:1px; letter-spacing:1px; }
+
+  /* Builder result */
+  .builder-result{
+    background:var(--paper-2); border:2.5px dashed var(--gold);
+    border-radius:18px; padding:22px;
+    text-align:center;
+    min-height:160px;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+  }
+  .br-empty{ color:var(--ink-soft); font-size:17px; }
+  .br-empty .ic{ font-size:28px; margin-bottom:8px; opacity:.6; }
+  .br-equation{
+    display:flex; align-items:center; justify-content:center; gap:14px; flex-wrap:wrap;
+    margin-bottom:18px;
+    animation:fadeUp .35s ease;
+  }
+  .br-result-block{
+    font-family:var(--font-display); font-size:clamp(34px,5vw,52px);
+    font-weight:800;
+    padding:6px 22px; border-radius:14px;
+    line-height:1; border:3px solid;
+  }
+  .br-result-block.input{ color:var(--accent-2); background:white; border-color:var(--accent); }
+  .br-result-block.input-pron{ color:var(--gold); background:rgba(200,155,74,.06); border-color:var(--gold); }
+  .br-result-block.output{ color:var(--leaf); background:rgba(43,122,87,.08); border-color:var(--leaf); }
+  .br-result-block.output.changed{ color:var(--rose); background:rgba(180,62,80,.06); border-color:var(--rose); }
+  .br-arrow{ color:var(--gold); font-size:30px; font-weight:800; }
+  .br-explanation{
+    background:white; border:1.5px solid var(--line); border-radius:14px;
+    padding:14px 18px; margin-top:6px;
+    text-align:right;
+    animation:fadeUp .35s ease .15s both;
+    max-width:600px; width:100%;
+  }
+  .br-rule-tag{
+    display:inline-block; padding:3px 12px; border-radius:999px;
+    font-size:13px; font-weight:800; letter-spacing:1px;
+    margin-bottom:8px;
+  }
+  .br-rule-tag.green{ background:rgba(43,122,87,.12); color:var(--leaf); border:1px solid var(--leaf); }
+  .br-rule-tag.rose{ background:rgba(180,62,80,.12); color:var(--rose); border:1px solid var(--rose); }
+  .br-explanation p{
+    font-size:16px; line-height:1.65; color:var(--ink);
+  }
+  .br-explanation p b{ color:var(--accent); }
+
+  /* ============================================ */
+  /* ===== MCQ ================================== */
+  /* ============================================ */
+  .mcq-q{
+    font-family:var(--font-display); font-size:21px; font-weight:800;
+    margin-bottom:14px; color:var(--ink); line-height:1.5;
+  }
+  .mcq-q .verb-cue{
+    background:rgba(14,111,92,.08); color:var(--accent-2);
+    padding:2px 12px; border-radius:8px;
+    border:1.5px solid rgba(14,111,92,.3);
+    margin:0 4px;
+    font-size:24px;
+  }
+  .mcq-q .pron-cue{
+    background:rgba(200,155,74,.1); color:var(--gold);
+    padding:2px 12px; border-radius:8px;
+    border:1.5px solid var(--gold);
+    margin:0 4px;
+    font-size:22px;
+  }
+  .mcq-options{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+    gap:10px;
+  }
+  .mcq-opt{
+    background:white; border:2px solid var(--line);
+    padding:14px 18px; border-radius:12px;
+    cursor:pointer; text-align:center;
+    font-family:var(--font-display); font-size:20px; font-weight:800;
+    color:var(--ink-soft);
+    transition:all .2s ease;
+  }
+  .mcq-opt:hover{ border-color:var(--gold); transform:translateY(-2px); color:var(--ink); }
+  .mcq-opt.correct{ background:var(--leaf); color:white; border-color:var(--leaf); }
+  .mcq-opt.wrong{ background:var(--rose); color:white; border-color:var(--rose); }
+  .mcq-opt.show{ background:rgba(43,122,87,.15); color:var(--leaf); border-color:var(--leaf); }
+  .mcq-opt.locked{ pointer-events:none; }
+  .mcq-explain{
+    margin-top:12px; padding:12px 16px;
+    background:rgba(180,62,80,.05); border:1.5px dashed rgba(180,62,80,.35);
+    border-radius:12px; display:none;
+    font-size:15px; color:var(--ink); line-height:1.55;
+  }
+  .mcq-explain.show{ display:block; animation:fadeUp .3s ease; }
+  .mcq-explain b{ color:var(--rose-2); }
+
+  .mcq-card{
+    background:white; border:2px solid var(--line); border-radius:16px;
+    padding:18px 22px; margin-bottom:14px;
+    transition:all .3s ease;
+  }
+  .mcq-card.answered-correct{ border-color:rgba(43,122,87,.45); background:rgba(43,122,87,.04); }
+  .mcq-card.answered-wrong{ border-color:rgba(180,62,80,.45); background:rgba(180,62,80,.04); }
+
+  /* Final */
+  .final-card{
+    text-align:center;
+    background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+    color:var(--paper-2); border-radius:28px; padding:clamp(36px,5vw,64px);
+    box-shadow:var(--shadow); position:relative; overflow:hidden;
+  }
+  .final-card::before{
+    content:""; position:absolute; inset:0;
+    background-image:radial-gradient(circle at 1px 1px, rgba(232,200,134,.18) 1px, transparent 0);
+    background-size:24px 24px; opacity:.5;
+  }
+  .final-card .ribbon{ font-size:70px; margin-bottom:8px; }
+  .final-card h2{ font-family:var(--font-display); font-size:34px; color:var(--gold-soft); margin-bottom:16px; font-weight:800; }
+  .final-card .big-score{ font-family:var(--font-display); font-size:clamp(60px,8vw,96px); font-weight:800; color:var(--paper-2); line-height:1; margin:8px 0; }
+  .final-card .pct{ color:var(--gold-soft); font-size:28px; font-weight:700; }
+  .final-card .msg{ font-size:19px; margin:20px 0; color:rgba(246,239,226,.95); }
+
+  /* Navbar */
+  .navbar{
+    position:fixed; bottom:0; right:0; left:0;
+    background:rgba(251,246,236,.94);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);
+    padding:16px 26px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:14px; z-index:50;
+  }
+  .nav-btn{
+    background:var(--accent); color:var(--paper-2); border:none;
+    padding:12px 22px; border-radius:12px;
+    font-family:var(--font); font-weight:700; font-size:16px;
+    cursor:pointer; transition:all .25s ease;
+  }
+  .nav-btn:hover{ background:var(--accent-2); transform:translateY(-2px); }
+  .nav-btn.ghost{ background:transparent; color:var(--accent); border:2px solid var(--accent); }
+  .nav-btn.ghost:hover{ background:var(--accent); color:var(--paper-2); }
+  .nav-btn:disabled{ opacity:.35; cursor:not-allowed; transform:none; }
+  .dots{ display:flex; gap:8px; flex:1; justify-content:center; flex-wrap:wrap; }
+  .dot{ width:10px; height:10px; border-radius:50%; background:rgba(14,111,92,.2); cursor:pointer; transition:all .25s ease; }
+  .dot.active{ background:var(--accent); transform:scale(1.4); box-shadow:0 0 0 4px rgba(14,111,92,.15); }
+  .dot.visited{ background:var(--gold); }
+  .nav-score{ font-family:var(--font-display); font-size:16px; color:var(--ink-soft); font-weight:700; }
+  .nav-score b{ color:var(--accent); font-size:18px; font-weight:800; }
+
+  @media (max-width:600px){
+    body{ font-size:16px; }
+    .topbar{ height:56px; }
+    .stage{ padding-top:80px; }
+    .topbar .brand{ font-size:14px; }
+    .navbar{ padding:12px 14px; }
+    .nav-btn{ padding:10px 16px; font-size:14px; }
+    .dot{ width:8px; height:8px; }
+    .pron-symbol{ width:42px; height:42px; font-size:24px; }
+    .tr-verb, .tr-result{ font-size:20px; }
+    .br-result-block{ font-size:32px; padding:5px 16px; }
+  }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="إسنادُ الأفعالِ إلى الضمائر">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">إسناد الأفعال <span>·</span> إلى الضمائر</div>
+  <div class="slide-info">شريحة <b id="cur">1</b> من <span id="tot">11</span></div>
+</div>
+<div class="progress-line"><span id="pbar" style="width: 0%;"></span></div>
+
+<main class="stage">
+
+  <!-- ===== SLIDE 1: TITLE ===== -->
+  <section class="slide title-slide active" data-slide="1">
+    <svg class="title-ornament" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g fill="none" stroke="#C89B4A" stroke-width="1.6">
+        <circle cx="100" cy="100" r="80"></circle>
+        <circle cx="100" cy="100" r="58"></circle>
+        <circle cx="100" cy="100" r="36"></circle>
+        <path d="M100 20 L100 180 M20 100 L180 100"></path>
+        <path d="M40 40 L160 160 M160 40 L40 160"></path>
+        <circle cx="100" cy="100" r="6" fill="#C89B4A"></circle>
+      </g>
+    </svg>
+    <div class="title-eyebrow">درس تفاعلي</div>
+    <h1 class="title-main">
+      إسنادُ <span class="em">الأفعال</span><br>
+      إلى <span class="em">الضمائر</span>
+    </h1>
+    <p class="title-sub">خطوة خطوة · من أبسط معلومة إلى الإتقان</p>
+    <div class="title-divider"><div class="l"></div><div class="dot"></div><div class="r"></div></div>
+    <p class="title-author">إعداد: <b>أ. حيدر المعاتيق</b></p>
+    <button class="title-cta" onclick="goNext()">ابدأ الدرس</button>
+  </section>
+
+  <!-- ===== SLIDE 2: ما الإسناد؟ ===== -->
+  <section class="slide" data-slide="2">
+    <span class="slide-num">٠٢ — تعريف</span>
+    <h2 class="slide-title">ما هو الإسنادُ؟</h2>
+
+    <div class="idea">
+      <span class="label">الفكرة</span>
+      <p class="text">الإسنادُ: أن نَنسُبَ الفعلَ إلى <span class="hl">ضميرٍ</span> يَدُلّ على فاعلِه (مفرد، مثنى، جمع، مذكر، مؤنث).</p>
+    </div>
+
+    <div class="expand">
+      <span class="label">التوسعة والشرح</span>
+      <p>الفعل لا يقف وحده، بل يُسنَد إلى من قام به. عندما نقول «<b>كَتَبَ</b>» وحده، فهو يدلّ على غائبٍ مفرد. لكن إذا أردنا أن نخبر عن جماعةٍ من الذكور، نُسند الفعل إلى ضمير <b>«و» (واو الجماعة)</b>:</p>
+
+      <div class="equation">
+        <div class="eq-block">
+          <span class="lbl">الفعل</span>
+          كَتَبَ
+        </div>
+        <span class="eq-op">+</span>
+        <div class="eq-block pronoun">
+          <span class="lbl">الضمير</span>
+          و
+        </div>
+        <span class="eq-op">=</span>
+        <div class="eq-block result">
+          <span class="lbl">النتيجة</span>
+          كَتَبُوا
+        </div>
+      </div>
+
+      <p>مع بعض الأفعال يحدث <strong>تغييرٌ</strong> عند الإسناد، ومع بعضها <strong>لا يحدث شيء</strong>. سنتعلّم القواعد خطوة خطوة.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 3: الضمائر ===== -->
+  <section class="slide" data-slide="3">
+    <span class="slide-num">٠٣ — الأساس</span>
+    <h2 class="slide-title">الضمائر التي يُسند إليها الفعل</h2>
+    <p class="slide-instruction">الضمائر التي تتّصل بالفعل تنقسم إلى مجموعتين بحسب طبيعة الحركة. تذكّر هذا التقسيم لأنّه مفتاحُ كل القواعد القادمة.</p>
+
+    <div class="pron-groups">
+      <div class="pron-group silent">
+        <h3>📗 ضمائر الرفع الساكنة</h3>
+        <p class="meta">تأتي ساكنة (لا حركة عليها)، ولا تُحرِّك ما قبلها</p>
+        <div class="pron-list">
+          <div class="pron-card">
+            <div class="pron-symbol">ا</div>
+            <div class="pron-info">
+              <div class="pron-name">ألف الاثنين</div>
+              <div class="pron-ex">تدلّ على المثنى: <b>كَتَبَا</b> · <b>يَكْتُبَانِ</b></div>
+            </div>
+          </div>
+          <div class="pron-card">
+            <div class="pron-symbol">و</div>
+            <div class="pron-info">
+              <div class="pron-name">واو الجماعة</div>
+              <div class="pron-ex">تدلّ على جمع الذكور: <b>كَتَبُوا</b> · <b>يَكْتُبُونَ</b></div>
+            </div>
+          </div>
+          <div class="pron-card">
+            <div class="pron-symbol">ي</div>
+            <div class="pron-info">
+              <div class="pron-name">ياء المخاطبة</div>
+              <div class="pron-ex">تخاطب الأنثى: <b>اكْتُبِي</b> · <b>تَكْتُبِينَ</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pron-group moving">
+        <h3>📕 ضمائر الرفع المتحركة</h3>
+        <p class="meta">عليها حركةٌ ظاهرة، وقد تُحدث تغييراً في الفعل</p>
+        <div class="pron-list">
+          <div class="pron-card">
+            <div class="pron-symbol">تُ</div>
+            <div class="pron-info">
+              <div class="pron-name">تاء الفاعل</div>
+              <div class="pron-ex">للمتكلم/المخاطب: <b>كَتَبْتُ</b> · <b>كَتَبْتَ</b> · <b>كَتَبْتِ</b></div>
+            </div>
+          </div>
+          <div class="pron-card">
+            <div class="pron-symbol">نَ</div>
+            <div class="pron-info">
+              <div class="pron-name">نون النسوة</div>
+              <div class="pron-ex">تدلّ على جمع الإناث: <b>كَتَبْنَ</b> · <b>يَكْتُبْنَ</b></div>
+            </div>
+          </div>
+          <div class="pron-card">
+            <div class="pron-symbol">نا</div>
+            <div class="pron-info">
+              <div class="pron-name">«نا» الفاعلين</div>
+              <div class="pron-ex">للمتكلمين: <b>كَتَبْنَا</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rule-banner">
+      <div class="num">💡</div>
+      <div class="text">
+        احفظ المجموعتين جيداً
+        <small>الساكنة (ا · و · ي) والمتحركة (تُ · نَ · نا) — الفرق بينهما هو سرّ الإسناد كلّه</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 4: القاعدة 1 — السالم ===== -->
+  <section class="slide" data-slide="4">
+    <span class="slide-num">٠٤ — القاعدة الأولى</span>
+    <h2 class="slide-title">الفعل الصحيح السالم</h2>
+
+    <div class="rule-banner">
+      <div class="num">١</div>
+      <div class="text">
+        لا يحدثُ تغيير
+        <small>عند إسناد الفعل الصحيح السالم إلى أيّ ضمير، يبقى الفعل كما هو ويُضاف الضمير</small>
+      </div>
+    </div>
+
+    <div class="expand">
+      <span class="label">أمثلة بكل الضمائر</span>
+      <h3>الفعل: <span style="color:var(--accent-2);">كَتَبَ</span></h3>
+
+      <div class="tcard-grid">
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">كَتَبَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">ا</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">كَتَبَا</div>
+            <div class="tcard-note">يُلصَق الضمير مباشرة</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">كَتَبَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">كَتَبُوا</div>
+            <div class="tcard-note">ضمّة قبل الواو فقط</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">كَتَبَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">تُ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">كَتَبْتُ</div>
+            <div class="tcard-note">سكون قبل الضمير</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">كَتَبَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">نَ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">كَتَبْنَ</div>
+            <div class="tcard-note">سكون قبل الضمير</div>
+          </div>
+        </div>
+      </div>
+
+      <p>تطبيق القاعدة على المضارع والأمر بنفس البساطة: <b>يَجْلِسَانِ</b> · <b>يَأْكُلُونَ</b> · <b>اذْهَبَا</b> · <b>اسْأَلِي</b>.</p>
+    </div>
+
+    <div class="practice">
+      <span class="label">تدريب</span>
+      <h3>ما الصواب عند إسناد <span style="color:var(--accent-2); font-family:var(--font-display); font-size:24px;">دَرَسَ</span> إلى نون النسوة <span style="color:var(--gold); font-family:var(--font-display); font-size:22px;">نَ</span>؟</h3>
+      <div class="mcq-card" id="q4">
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="answerMcq(&#39;q4&#39;,&#39;دَرَسْنَ&#39;,this)">دَرَسْنَ</div>
+          <div class="mcq-opt" onclick="answerMcq(&#39;q4&#39;,&#39;دَرْسَنَ&#39;,this)">دَرْسَنَ</div>
+          <div class="mcq-opt" onclick="answerMcq(&#39;q4&#39;,&#39;دَرَسَنَ&#39;,this)">دَرَسَنَ</div>
+        </div>
+        <div class="mcq-explain" data-correct="دَرَسْنَ">السالم لا يتغيّر. نُسكِّن آخر الفعل ثم نُلصِق الضمير: <b>دَرَسَ</b> + <b>نَ</b> = <b>دَرَسْنَ</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 5: القاعدة 2 — المضعف ===== -->
+  <section class="slide" data-slide="5">
+    <span class="slide-num">٠٥ — القاعدة الثانية</span>
+    <h2 class="slide-title">الفعل الصحيح المُضعَّف</h2>
+
+    <div class="rule-banner">
+      <div class="num">٢</div>
+      <div class="text">
+        يُفَكُّ تضعيفُه مع الضمائر المتحركة
+        <small>إذا أُسند المضعَّف إلى تاء الفاعل أو نون النسوة أو «نا» — يُفَكُّ التضعيف ويظهر الحرفان</small>
+      </div>
+    </div>
+
+    <div class="expand">
+      <span class="label">المقارنة بين الحالتين</span>
+      <h3>الفعل: <span style="color:var(--accent-2);">أَحَبَّ</span> (أصله أَحْبَبَ)</h3>
+
+      <div class="tcard-grid">
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير ساكن</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">أَحَبَّ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">ا</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">أَحَبَّا</div>
+            <div class="tcard-note">التضعيف باقٍ</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير ساكن</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">أَحَبَّ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">أَحَبُّوا</div>
+            <div class="tcard-note">التضعيف باقٍ</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">أَحَبَّ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">تُ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result">أَحْبَ<span class="cl">بْ</span>تُ</div>
+            <div class="tcard-note">فُكَّ التضعيف</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">أَحَبَّ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">نَ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result">أَحْبَ<span class="cl">بْ</span>نَ</div>
+            <div class="tcard-note">فُكَّ التضعيف</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">أَحَبَّ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">نا</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result">أَحْبَ<span class="cl">بْ</span>نَا</div>
+            <div class="tcard-note">فُكَّ التضعيف</div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:10px;"><b>السبب:</b> الضمائر المتحركة تحتاج إلى أن يكون آخر الفعل ساكناً، فلا يجتمع التضعيف معها، فيُفَكّ.</p>
+    </div>
+
+    <div class="practice">
+      <span class="label">تدريب</span>
+      <h3>صَوِّب: «الأمُّ <span style="color:var(--rose);">أعدَّت</span> الطعامَ» — اجعلها لجمع المؤنث</h3>
+      <div class="mcq-card" id="q5">
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="answerMcq(&#39;q5&#39;,&#39;الأمهات أعَدَّن الطعامَ&#39;,this)">الأمهات أعَدَّن</div>
+          <div class="mcq-opt" onclick="answerMcq(&#39;q5&#39;,&#39;الأمهات أعدَدْن الطعامَ&#39;,this)">الأمهات أعْدَدْنَ</div>
+          <div class="mcq-opt" onclick="answerMcq(&#39;q5&#39;,&#39;الأمهات أعدّت الطعامَ&#39;,this)">الأمهات أعَدَّتْ</div>
+        </div>
+        <div class="mcq-explain" data-correct="الأمهات أعدَدْن الطعامَ">«أعدَّ» مضعَّف. مع نون النسوة (متحركة) يُفَكّ التضعيف: <b>أَعَدَّ</b> ⟵ <b>أَعْدَدْنَ</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 6: القاعدة 3 — المثال ===== -->
+  <section class="slide" data-slide="6">
+    <span class="slide-num">٠٦ — القاعدة الثالثة</span>
+    <h2 class="slide-title">الفعل المُعتلّ المِثال</h2>
+
+    <div class="rule-banner">
+      <div class="num">٣</div>
+      <div class="text">
+        لا يحدثُ تغيير
+        <small>المثال — وهو ما كان حرف العلّة في أوّله — يُعامَل كالفعل السالم تماماً</small>
+      </div>
+    </div>
+
+    <div class="expand">
+      <span class="label">أمثلة موجزة</span>
+      <h3>الفعل: <span style="color:var(--accent-2);">وَصَلَ</span></h3>
+
+      <div class="tcard-grid">
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ماضٍ + ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">وَصَلَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">ا</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">وَصَلَا</div>
+            <div class="tcard-note">يبقى كما هو</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">مضارع + ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">يَصِفُ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">يَصِفُونَ</div>
+            <div class="tcard-note">يبقى كما هو</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ماضٍ + متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">وَصَلَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">تُ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">وَصَلْتُ</div>
+            <div class="tcard-note">يبقى كما هو</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">مضارع + متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">يَصِفُ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">نَ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">يَصِفْنَ</div>
+            <div class="tcard-note">يبقى كما هو</div>
+          </div>
+        </div>
+      </div>
+      <p><b>السبب:</b> حرف العلّة في الأوّل، وهو بعيدٌ عن مكان اتّصال الضمير، فلا يتأثّر.</p>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 7: القاعدة 4 — الأجوف ===== -->
+  <section class="slide" data-slide="7">
+    <span class="slide-num">٠٧ — القاعدة الرابعة</span>
+    <h2 class="slide-title">الفعل المُعتلّ الأجوف</h2>
+
+    <div class="rule-banner">
+      <div class="num">٤</div>
+      <div class="text">
+        يُحذف وسطه مع المتحركة فقط
+        <small>الأجوف وسطه حرف علّة. مع الساكنة يبقى، ومع المتحركة يُحذف</small>
+      </div>
+    </div>
+
+    <div class="expand">
+      <span class="label">المقارنة بين الحالتين</span>
+      <h3>الفعل: <span style="color:var(--accent-2);">قالَ</span> (أصله قَوَلَ)</h3>
+
+      <div class="tcard-grid">
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير ساكن</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">قالَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">ا</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">قالَا</div>
+            <div class="tcard-note">يبقى الوسط</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير ساكن</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">قالَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ لا تغيير</span>
+            <div class="tcard-result">قالُوا</div>
+            <div class="tcard-note">يبقى الوسط</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">قالَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">تُ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result"><span class="cl">قُ</span>لْتُ</div>
+            <div class="tcard-note">حُذِف الوسط · ضمّة قبله</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">يَصُومُ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">نَ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result"><span class="cl">يَصُمْ</span>نَ</div>
+            <div class="tcard-note">حُذِف الوسط</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">إسناد إلى ضمير متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">باعَ</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">نا</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result"><span class="cl">بِ</span>عْنَا</div>
+            <div class="tcard-note">حُذِف الوسط · كسرة قبله</div>
+          </div>
+        </div>
+      </div>
+      <p><b>القاعدة:</b> الأجوف + ساكنة = لا تغيير، الأجوف + متحركة = حذف حرف العلّة من الوسط.</p>
+    </div>
+
+    <div class="practice">
+      <span class="label">تدريب</span>
+      <h3>صَوِّب الخطأ: «المعلّمات <span style="color:var(--rose);">يقومْنَ</span> بواجبهنّ»</h3>
+      <div class="mcq-card" id="q7">
+        <div class="mcq-options">
+          <div class="mcq-opt" onclick="answerMcq(&#39;q7&#39;,&#39;يَقُمْنَ&#39;,this)">يَقُمْنَ</div>
+          <div class="mcq-opt" onclick="answerMcq(&#39;q7&#39;,&#39;يَقُومُونَ&#39;,this)">يَقُومُونَ</div>
+          <div class="mcq-opt" onclick="answerMcq(&#39;q7&#39;,&#39;يَقَوْمْنَ&#39;,this)">يَقَوْمْنَ</div>
+        </div>
+        <div class="mcq-explain" data-correct="يَقُمْنَ">«يَقُومُ» أجوف، أُسند إلى نون النسوة (متحركة) فيُحذَف وسطُه: <b>يَقُومُ</b> ⟵ <b>يَقُمْنَ</b>.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 8: القاعدة 5 — الناقص ===== -->
+  <section class="slide" data-slide="8">
+    <span class="slide-num">٠٨ — القاعدة الخامسة</span>
+    <h2 class="slide-title">الفعل المُعتلّ الناقص</h2>
+
+    <div class="rule-banner">
+      <div class="num">٥</div>
+      <div class="text">
+        يُحذف آخره مع واو الجماعة وياء المخاطبة
+        <small>الناقص آخره حرف علّة. مع «و» و «ي» يُحذف، وتُضبط الحركة قبله بحسب المحذوف</small>
+      </div>
+    </div>
+
+    <div class="expand">
+      <span class="label">المحذوف ألف مقصورة (ى) → فتحة قبله</span>
+
+      <div class="tcard-grid">
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ناقص ـى + ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">دَعَا</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result">دَعَ<span class="cl">ـَوْ</span>ا</div>
+            <div class="tcard-note">فتحة + واو</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ناقص ـى + ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">جَرَى</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result">جَرَ<span class="cl">ـَوْ</span>ا</div>
+            <div class="tcard-note">فتحة + واو</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ناقص ـى + ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">يَسْعَى</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result">يَسْعَ<span class="cl">ـَوْ</span>نَ</div>
+            <div class="tcard-note">فتحة + واو</div>
+          </div>
+        </div>
+      </div>
+
+      <span class="tcard-section-label">المحذوف واو أو ياء → ضمّة قبل واو الجماعة</span>
+
+      <div class="tcard-grid">
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ناقص ـو + ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">يَدْعُو</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result">يَدْعُ<span class="cl">ـُو</span>نَ</div>
+            <div class="tcard-note">ضمّة + واو</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ناقص ـي + ضمير</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">يَمْضِي</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">و</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back changed">
+            <span class="tcard-stamp">⚠ تغيير</span>
+            <div class="tcard-result">يَمْضُ<span class="cl">ـُو</span>نَ</div>
+            <div class="tcard-note">ضمّة + واو</div>
+          </div>
+        </div>
+      </div>
+
+      <span class="tcard-section-label">مع تاء الفاعل · ألف الإثنين · نون النسوة → يبقى الحرف</span>
+
+      <div class="tcard-grid">
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ناقص + متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">دَعَا</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">تُ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ يبقى</span>
+            <div class="tcard-result">دَعَوْتُ</div>
+            <div class="tcard-note">الحرف باقٍ</div>
+          </div>
+        </div>
+
+        <div class="tcard" onclick="this.classList.toggle(&#39;flipped&#39;)">
+          <div class="tcard-face tcard-front">
+            <span class="tcard-eyebrow">ناقص + متحرك</span>
+            <div class="tcard-equation">
+              <span class="tcard-verb">يَدْعُو</span>
+              <span class="tcard-plus">+</span>
+              <span class="tcard-pron">نَ</span>
+            </div>
+            <span class="tcard-hint">↻ اضغط للقلب</span>
+          </div>
+          <div class="tcard-face tcard-back">
+            <span class="tcard-stamp">✓ يبقى</span>
+            <div class="tcard-result">يَدْعُونَ</div>
+            <div class="tcard-note">الحرف باقٍ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 9: مُسنِد الأفعال ===== -->
+  <section class="slide" data-slide="9">
+    <span class="slide-num">٠٩ — أداة تفاعلية</span>
+    <h2 class="slide-title">مُسنِدُ الأفعال</h2>
+    <p class="slide-instruction">جرّب بنفسك! اختر فعلاً وضميراً، فترى النتيجة مع شرحٍ لِمَ حدث ما حدث. هذه الأداة تجمع كلّ القواعد التي تعلّمناها.</p>
+
+    <div class="builder">
+      <div class="builder-header">
+        <span class="builder-badge">🛠️ جرِّب بنفسك</span>
+        <h3>اختر فعلاً + ضميراً</h3>
+        <button class="builder-reset" id="builder-reset-btn" onclick="resetBuilder()" disabled="">
+          ↻ إعادة الاختيار
+        </button>
+      </div>
+      <p class="builder-instruction">اختر فعلاً من الأعلى وضميراً من الأسفل، وستظهر النتيجة في الصندوق التالي مع شرح القاعدة. اضغط على الاختيار مرّة أخرى لإلغائه.</p>
+
+      <div class="builder-grid">
+        <div class="builder-pane">
+          <div class="builder-pane-title">الفعل</div>
+          <div class="pick-grid" id="verb-picks">
+            <button class="pick-btn" onclick="pickVerb(this,&#39;kataba&#39;)">كَتَبَ<small>سالم</small></button>
+            <button class="pick-btn" onclick="pickVerb(this,&#39;madda&#39;)">مَدَّ<small>مُضعَّف</small></button>
+            <button class="pick-btn" onclick="pickVerb(this,&#39;wasala&#39;)">وَصَلَ<small>مثال</small></button>
+            <button class="pick-btn" onclick="pickVerb(this,&#39;qala&#39;)">قَالَ<small>أجوف</small></button>
+            <button class="pick-btn" onclick="pickVerb(this,&#39;baa&#39;)">بَاعَ<small>أجوف</small></button>
+            <button class="pick-btn" onclick="pickVerb(this,&#39;daaa&#39;)">دَعَا<small>ناقص ـى</small></button>
+            <button class="pick-btn" onclick="pickVerb(this,&#39;yamdi&#39;)">يَمْضِي<small>ناقص ـي</small></button>
+            <button class="pick-btn" onclick="pickVerb(this,&#39;yadu&#39;)">يَدْعُو<small>ناقص ـو</small></button>
+          </div>
+        </div>
+        <div class="builder-pane">
+          <div class="builder-pane-title">الضمير</div>
+          <div class="pick-grid" id="pron-picks">
+            <button class="pick-btn" onclick="pickPron(this,&#39;alif&#39;)">ا<small>الإثنين · ساكن</small></button>
+            <button class="pick-btn" onclick="pickPron(this,&#39;waw&#39;)">و<small>الجماعة · ساكن</small></button>
+            <button class="pick-btn" onclick="pickPron(this,&#39;taa&#39;)">تُ<small>الفاعل · متحرك</small></button>
+            <button class="pick-btn" onclick="pickPron(this,&#39;noon&#39;)">نَ<small>النسوة · متحرك</small></button>
+            <button class="pick-btn" onclick="pickPron(this,&#39;naa&#39;)">نا<small>الفاعلين · متحرك</small></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="builder-result" id="builder-result">
+        <div class="br-empty">
+          <div class="ic">🛠️</div>
+          اختر فعلاً وضميراً لرؤية النتيجة وشرحها
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 10: تدريب شامل ===== -->
+  <section class="slide" data-slide="10">
+    <span class="slide-num">١٠ — تدريب شامل</span>
+    <h2 class="slide-title">اختبر فهمك</h2>
+    <p class="slide-instruction">٥ أسئلة تجمع كلّ القواعد. عند الخطأ يظهر التفسير ليرسخ الفهم.</p>
+
+    <div class="practice">
+      <span class="label">٥ أسئلة متنوعة</span>
+      <div id="final-quiz"><div class="mcq-card" id="fq-1">
+      <div class="mcq-q">1. الفعل <span class="verb-cue">أَكَلَ</span> + <span class="pron-cue">و</span> =</div>
+      <div class="mcq-options"><div class="mcq-opt" onclick="answerFinal(&#39;fq-1&#39;,&#39;أَكَلُوا&#39;,this)">أَكَلُوا</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-1&#39;,&#39;أَكُولُوا&#39;,this)">أَكُولُوا</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-1&#39;,&#39;أَكْلُوا&#39;,this)">أَكْلُوا</div></div>
+      <div class="mcq-explain" data-correct="أَكَلُوا" data-note="«أَكَلَ» سالم، لا يتغيّر مع أيّ ضمير. مع واو الجماعة فقط نضمّ ما قبلها."></div>
+    </div><div class="mcq-card" id="fq-2">
+      <div class="mcq-q">2. الفعل <span class="verb-cue">شَدَّ</span> + <span class="pron-cue">تُ</span> =</div>
+      <div class="mcq-options"><div class="mcq-opt" onclick="answerFinal(&#39;fq-2&#39;,&#39;شَدَدْتُ&#39;,this)">شَدَدْتُ</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-2&#39;,&#39;شَدَّتُ&#39;,this)">شَدَّتُ</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-2&#39;,&#39;شَدْتُ&#39;,this)">شَدْتُ</div></div>
+      <div class="mcq-explain" data-correct="شَدَدْتُ" data-note="«شَدَّ» مُضعَّف. مع تاء الفاعل (متحركة) يُفَكّ التضعيف فيظهر الحرفان: &lt;b&gt;شَدَدْتُ&lt;/b&gt;."></div>
+    </div><div class="mcq-card" id="fq-3">
+      <div class="mcq-q">3. الفعل <span class="verb-cue">صَامَ</span> + <span class="pron-cue">نَ</span> =</div>
+      <div class="mcq-options"><div class="mcq-opt" onclick="answerFinal(&#39;fq-3&#39;,&#39;صُمْنَ&#39;,this)">صُمْنَ</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-3&#39;,&#39;صَامَنَ&#39;,this)">صَامَنَ</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-3&#39;,&#39;صَوَمْنَ&#39;,this)">صَوَمْنَ</div></div>
+      <div class="mcq-explain" data-correct="صُمْنَ" data-note="«صَامَ» أجوف، أصله صَوَمَ. مع نون النسوة (متحركة) يُحذَف وسطُه ونضع ضمّة قبل الميم لأن الأصل واو."></div>
+    </div><div class="mcq-card" id="fq-4">
+      <div class="mcq-q">4. الفعل <span class="verb-cue">دَعَا</span> + <span class="pron-cue">و</span> =</div>
+      <div class="mcq-options"><div class="mcq-opt" onclick="answerFinal(&#39;fq-4&#39;,&#39;دَعَوْا&#39;,this)">دَعَوْا</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-4&#39;,&#39;دَعَوُا&#39;,this)">دَعَوُا</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-4&#39;,&#39;دَعُوا&#39;,this)">دَعُوا</div></div>
+      <div class="mcq-explain" data-correct="دَعَوْا" data-note="«دَعَا» ناقص آخره ألف. مع واو الجماعة: حُذِفت الألف وفُتح ما قبل الواو لأن المحذوف ألف مقصورة."></div>
+    </div><div class="mcq-card" id="fq-5">
+      <div class="mcq-q">5. الفعل <span class="verb-cue">يَمْشِي</span> + <span class="pron-cue">و</span> =</div>
+      <div class="mcq-options"><div class="mcq-opt" onclick="answerFinal(&#39;fq-5&#39;,&#39;يَمْشُونَ&#39;,this)">يَمْشُونَ</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-5&#39;,&#39;يَمْشِيُونَ&#39;,this)">يَمْشِيُونَ</div><div class="mcq-opt" onclick="answerFinal(&#39;fq-5&#39;,&#39;يَمْشَوْنَ&#39;,this)">يَمْشَوْنَ</div></div>
+      <div class="mcq-explain" data-correct="يَمْشُونَ" data-note="«يَمْشِي» ناقص آخره ياء. مع واو الجماعة: تُحذَف الياء وتُوضَع ضمّة قبل الواو لأن المحذوف ياء."></div>
+    </div></div>
+    </div>
+  </section>
+
+  <!-- ===== SLIDE 11: النتيجة ===== -->
+  <section class="slide" data-slide="11">
+    <span class="slide-num">١١ — النهاية</span>
+    <h2 class="slide-title">نتيجتك ومراجعة سريعة</h2>
+
+    <div class="final-card">
+      <div class="ribbon">🌿</div>
+      <h2>أحسنت!</h2>
+      <div class="big-score"><span id="final-score">0</span> <span style="opacity:.6;">/</span> <span id="final-total">0</span></div>
+      <div class="pct"><span id="final-pct">0</span>%</div>
+      <p class="msg" id="final-msg">أكمل التدريبات لرؤية نتيجتك النهائية.</p>
+      <button class="nav-btn" style="background:var(--gold); color:var(--ink);" onclick="resetAll()">إعادة المحاولة ↻</button>
+    </div>
+
+    <div class="expand" style="margin-top:24px;">
+      <span class="label">القواعد الخمس في سطورٍ</span>
+      <p>① <b>السالم</b>: لا تغيير.<br>
+      ② <b>المُضعَّف</b>: يُفَكّ مع المتحركة (تُ · نَ · نا).<br>
+      ③ <b>المثال</b>: لا تغيير.<br>
+      ④ <b>الأجوف</b>: يُحذف وسطه مع المتحركة فقط.<br>
+      ⑤ <b>الناقص</b>: يُحذف آخره مع واو الجماعة وياء المخاطبة، مع ضبط الحركة قبله.</p>
+    </div>
+  </section>
+
+</main>
+
+<div class="navbar">
+  <button class="nav-btn ghost" id="prev-btn" onclick="goPrev()" disabled="">→ السابق</button>
+  <div class="dots" id="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  <div class="nav-score">النتيجة: <b id="score">0</b> / <b id="total">0</b></div>
+  <button class="nav-btn" id="next-btn" onclick="goNext()">التالي ←</button>
+</div>
+
+<script>
+/* ===== Navigation ===== */
+const slides = document.querySelectorAll('.slide');
+const totalSlides = slides.length;
+let current = 1;
+const visited = new Set([1]);
+document.getElementById('tot').textContent = totalSlides;
+
+const dotsWrap = document.getElementById('dots');
+for(let i=1;i<=totalSlides;i++){
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===1?' active':'');
+  d.onclick = ()=> goTo(i);
+  dotsWrap.appendChild(d);
+}
+function goTo(n){
+  if(n<1 || n>totalSlides) return;
+  current = n; visited.add(n);
+  slides.forEach(s=> s.classList.toggle('active', parseInt(s.dataset.slide)===n));
+  dotsWrap.querySelectorAll('.dot').forEach((d,i)=>{
+    d.classList.toggle('active', (i+1)===n);
+    d.classList.toggle('visited', visited.has(i+1) && (i+1)!==n);
+  });
+  document.getElementById('cur').textContent = n;
+  document.getElementById('pbar').style.width = ((n-1)/(totalSlides-1)*100) + '%';
+  document.getElementById('prev-btn').disabled = (n===1);
+  document.getElementById('next-btn').disabled = (n===totalSlides);
+  document.getElementById('next-btn').textContent = (n===totalSlides) ? 'انتهى' : 'التالي ←';
+  window.scrollTo({ top:0, behavior:'smooth' });
+  if(n===totalSlides) updateFinal();
+}
+function goNext(){ if(current<totalSlides) goTo(current+1); }
+function goPrev(){ if(current>1) goTo(current-1); }
+document.addEventListener('keydown', e=>{
+  if(e.key === 'ArrowLeft') goNext();
+  else if(e.key === 'ArrowRight') goPrev();
+});
+
+/* ===== Score ===== */
+let score=0, total=0;
+function bumpScore(c){
+  total++; if(c) score++;
+  document.getElementById('score').textContent = score;
+  document.getElementById('total').textContent = total;
+}
+function updateFinal(){
+  document.getElementById('final-score').textContent = score;
+  document.getElementById('final-total').textContent = total;
+  const pct = total ? Math.round((score/total)*100) : 0;
+  document.getElementById('final-pct').textContent = pct;
+  const msg = document.getElementById('final-msg');
+  if(total===0) msg.textContent = 'أكمل التدريبات لرؤية نتيجتك.';
+  else if(pct===100) msg.textContent = 'إتقان تامّ! بارك الله فيك. 🌟';
+  else if(pct>=75) msg.textContent = 'نتيجة ممتازة! القواعد راسخة في ذهنك.';
+  else if(pct>=50) msg.textContent = 'نتيجة جيّدة، راجع البطاقات وحاول مجدّداً.';
+  else msg.textContent = 'لا بأس، عُد إلى الشرح ثم أعد التدريب.';
+}
+
+/* ===== Generic MCQ (slides 4, 5, 7) ===== */
+const mcqAnswered = new Set();
+function answerMcq(qid, choice, btn){
+  if(mcqAnswered.has(qid)) return;
+  mcqAnswered.add(qid);
+  const card = document.getElementById(qid);
+  const explain = card.querySelector('.mcq-explain');
+  const correct = explain.dataset.correct;
+  const isCorrect = choice === correct;
+  if(isCorrect){
+    btn.classList.add('correct');
+    card.classList.add('answered-correct');
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('answered-wrong');
+    card.querySelectorAll('.mcq-opt').forEach(o=>{
+      if(o.textContent.trim() === correct) o.classList.add('show');
+    });
+    explain.classList.add('show');
+  }
+  card.querySelectorAll('.mcq-opt').forEach(o=> o.classList.add('locked'));
+  bumpScore(isCorrect);
+}
+
+/* ===== ISNAD BUILDER ===== */
+const verbs = {
+  kataba: { surface:'كَتَبَ',   type:'salim',  meta:'فعل صحيح سالم' },
+  madda:  { surface:'مَدَّ',    type:'mudaf',  meta:'فعل صحيح مُضعَّف، أصله مَدَدَ' },
+  wasala: { surface:'وَصَلَ',   type:'mithal', meta:'فعل معتلّ مثال' },
+  qala:   { surface:'قَالَ',    type:'ajwaf',  meta:'فعل أجوف، أصله قَوَلَ', root:'و' },
+  baa:    { surface:'بَاعَ',    type:'ajwaf',  meta:'فعل أجوف، أصله بَيَعَ', root:'ي' },
+  daaa:   { surface:'دَعَا',    type:'naqis',  meta:'فعل ناقص آخره ألف منقلبة عن واو', tail:'a' },
+  yamdi:  { surface:'يَمْضِي',  type:'naqis',  meta:'فعل مضارع ناقص آخره ياء', tail:'i' },
+  yadu:   { surface:'يَدْعُو',  type:'naqis',  meta:'فعل مضارع ناقص آخره واو', tail:'u' },
+};
+const prons = {
+  alif: { display:'ا', name:'ألف الإثنين', kind:'silent' },
+  waw:  { display:'و', name:'واو الجماعة',  kind:'silent' },
+  taa:  { display:'تُ', name:'تاء الفاعل',  kind:'moving' },
+  noon: { display:'نَ', name:'نون النسوة',  kind:'moving' },
+  naa:  { display:'نا', name:'«نا» الفاعلين', kind:'moving' },
+};
+
+const isnadTable = {
+  /* salim — never changes */
+  kataba_alif: { result:'كَتَبَا',    rule:'no-change', explain:'<b>السالم</b> لا يتغيّر مع أيّ ضمير. أُضيفت ألف الإثنين فقط.' },
+  kataba_waw:  { result:'كَتَبُوا',   rule:'no-change', explain:'<b>السالم</b> لا يتغيّر. أُضيفت واو الجماعة فقط مع ضمّة قبلها.' },
+  kataba_taa:  { result:'كَتَبْتُ',   rule:'no-change', explain:'<b>السالم</b> لا يتغيّر. سُكِّن آخر الفعل ثم أُلصِقت تاء الفاعل.' },
+  kataba_noon: { result:'كَتَبْنَ',   rule:'no-change', explain:'<b>السالم</b> لا يتغيّر. سُكِّن آخر الفعل ثم أُلصِقت نون النسوة.' },
+  kataba_naa:  { result:'كَتَبْنَا',  rule:'no-change', explain:'<b>السالم</b> لا يتغيّر. سُكِّن آخر الفعل ثم أُلصِقت «نا».' },
+
+  /* madda — مُضعَّف */
+  madda_alif: { result:'مَدَّا',     rule:'no-change', explain:'<b>المُضعَّف</b> مع الضمائر <b>الساكنة</b> لا يتغيّر. التضعيف باقٍ.' },
+  madda_waw:  { result:'مَدُّوا',    rule:'no-change', explain:'<b>المُضعَّف</b> مع الساكنة لا يتغيّر. التضعيف باقٍ.' },
+  madda_taa:  { result:'مَدَدْتُ',   rule:'change', explain:'<b>المُضعَّف</b> مع <b>المتحركة</b> يُفَكّ تضعيفُه. ظهر الحرفان (د + د).' },
+  madda_noon: { result:'مَدَدْنَ',   rule:'change', explain:'<b>المُضعَّف</b> مع <b>المتحركة</b> يُفَكّ تضعيفُه.' },
+  madda_naa:  { result:'مَدَدْنَا',  rule:'change', explain:'<b>المُضعَّف</b> مع <b>المتحركة</b> يُفَكّ تضعيفُه.' },
+
+  /* wasala — مثال */
+  wasala_alif: { result:'وَصَلَا',    rule:'no-change', explain:'<b>المثال</b> لا يتغيّر؛ حرف العلّة في الأوّل بعيدٌ عن الضمير.' },
+  wasala_waw:  { result:'وَصَلُوا',   rule:'no-change', explain:'<b>المثال</b> لا يتغيّر مع أيّ ضمير.' },
+  wasala_taa:  { result:'وَصَلْتُ',   rule:'no-change', explain:'<b>المثال</b> لا يتغيّر؛ يُعامَل كالسالم تماماً.' },
+  wasala_noon: { result:'وَصَلْنَ',   rule:'no-change', explain:'<b>المثال</b> لا يتغيّر مع نون النسوة.' },
+  wasala_naa:  { result:'وَصَلْنَا',  rule:'no-change', explain:'<b>المثال</b> لا يتغيّر مع «نا».' },
+
+  /* qala — أجوف (أصله الواو) */
+  qala_alif: { result:'قَالَا',    rule:'no-change', explain:'<b>الأجوف</b> مع الضمائر <b>الساكنة</b> يبقى وسطُه. الألف لا تتأثر.' },
+  qala_waw:  { result:'قَالُوا',   rule:'no-change', explain:'<b>الأجوف</b> مع الساكنة يبقى وسطُه.' },
+  qala_taa:  { result:'قُلْتُ',    rule:'change', explain:'<b>الأجوف</b> مع <b>المتحركة</b> يُحذَف وسطُه. وُضِعت ضمّة قبل اللام لأن الأصل واو.' },
+  qala_noon: { result:'قُلْنَ',    rule:'change', explain:'<b>الأجوف</b> مع المتحركة يُحذَف وسطُه. ضمّة قبل اللام لأن الأصل واو.' },
+  qala_naa:  { result:'قُلْنَا',   rule:'change', explain:'<b>الأجوف</b> مع المتحركة يُحذَف وسطُه.' },
+
+  /* baa — أجوف (أصله الياء) */
+  baa_alif: { result:'بَاعَا',    rule:'no-change', explain:'<b>الأجوف</b> مع الساكنة يبقى وسطُه.' },
+  baa_waw:  { result:'بَاعُوا',   rule:'no-change', explain:'<b>الأجوف</b> مع الساكنة يبقى وسطُه.' },
+  baa_taa:  { result:'بِعْتُ',    rule:'change', explain:'<b>الأجوف</b> مع <b>المتحركة</b> يُحذَف وسطُه. وُضِعت كسرة قبل العين لأن الأصل ياء.' },
+  baa_noon: { result:'بِعْنَ',    rule:'change', explain:'<b>الأجوف</b> مع المتحركة يُحذَف وسطُه. كسرة قبل العين لأن الأصل ياء.' },
+  baa_naa:  { result:'بِعْنَا',   rule:'change', explain:'<b>الأجوف</b> مع المتحركة يُحذَف وسطُه.' },
+
+  /* daaa — ناقص ينتهي بألف مقصورة */
+  daaa_alif: { result:'دَعَوَا',    rule:'change', explain:'<b>الناقص</b> + ألف الإثنين: تُرَدّ الألف إلى أصلها (و) وتفتح ما قبلها.' },
+  daaa_waw:  { result:'دَعَوْا',    rule:'change', explain:'<b>الناقص</b> + واو الجماعة: حُذِفت الألف ووُضِعت <b>فتحة</b> قبل واو الجماعة.' },
+  daaa_taa:  { result:'دَعَوْتُ',   rule:'no-change', explain:'<b>الناقص</b> + تاء الفاعل: لا حذف، تُرَدّ الألف إلى أصلها (و).' },
+  daaa_noon: { result:'دَعَوْنَ',   rule:'no-change', explain:'<b>الناقص</b> + نون النسوة: لا حذف، تُرَدّ الألف إلى أصلها (و).' },
+  daaa_naa:  { result:'دَعَوْنَا',  rule:'no-change', explain:'<b>الناقص</b> + «نا»: لا حذف، تُرَدّ الألف إلى أصلها (و).' },
+
+  /* yamdi — مضارع ناقص ينتهي بياء */
+  yamdi_alif: { result:'يَمْضِيَانِ', rule:'no-change', explain:'<b>الناقص</b> + ألف الإثنين: لا حذف.' },
+  yamdi_waw:  { result:'يَمْضُونَ',   rule:'change', explain:'<b>الناقص</b> + واو الجماعة: حُذِفت الياء ووُضِعت <b>ضمّة</b> قبل واو الجماعة (لأن المحذوف ياء).' },
+  yamdi_taa:  { result:'مَضَيْتُ',    rule:'no-change', explain:'مع تاء الفاعل لا حذف. (نلاحظ أن الفعل تحوّل إلى الماضي لاتّصاله بالتاء)' },
+  yamdi_noon: { result:'يَمْضِينَ',   rule:'no-change', explain:'<b>الناقص</b> + نون النسوة: لا حذف، تبقى الياء.' },
+  yamdi_naa:  { result:'مَضَيْنَا',   rule:'no-change', explain:'مع «نا» لا حذف. (الفعل تحوّل إلى الماضي لاتّصاله بضمير المتكلمين)' },
+
+  /* yadu — مضارع ناقص ينتهي بواو */
+  yadu_alif: { result:'يَدْعُوَانِ', rule:'no-change', explain:'<b>الناقص</b> + ألف الإثنين: لا حذف.' },
+  yadu_waw:  { result:'يَدْعُونَ',   rule:'change', explain:'<b>الناقص</b> + واو الجماعة: حُذِفت الواو ووُضِعت <b>ضمّة</b> قبل واو الجماعة.' },
+  yadu_taa:  { result:'دَعَوْتُ',    rule:'no-change', explain:'مع تاء الفاعل لا حذف. (الفعل تحوّل إلى الماضي)' },
+  yadu_noon: { result:'يَدْعُونَ',   rule:'no-change', explain:'<b>الناقص</b> + نون النسوة: لا حذف، تبقى الواو.' },
+  yadu_naa:  { result:'دَعَوْنَا',   rule:'no-change', explain:'مع «نا» لا حذف. (الفعل تحوّل إلى الماضي)' },
+};
+
+let pickedVerb = null, pickedPron = null;
+function pickVerb(btn, key){
+  /* Toggle: if already active, deselect it */
+  if(pickedVerb === key){
+    btn.classList.remove('active');
+    pickedVerb = null;
+  } else {
+    document.querySelectorAll('#verb-picks .pick-btn').forEach(b=> b.classList.remove('active'));
+    btn.classList.add('active');
+    pickedVerb = key;
+  }
+  updateBuilderResetState();
+  renderBuilder();
+}
+function pickPron(btn, key){
+  /* Toggle: if already active, deselect it */
+  if(pickedPron === key){
+    btn.classList.remove('pron-active');
+    pickedPron = null;
+  } else {
+    document.querySelectorAll('#pron-picks .pick-btn').forEach(b=> b.classList.remove('pron-active'));
+    btn.classList.add('pron-active');
+    pickedPron = key;
+  }
+  updateBuilderResetState();
+  renderBuilder();
+}
+function resetBuilder(){
+  pickedVerb = null;
+  pickedPron = null;
+  document.querySelectorAll('#verb-picks .pick-btn').forEach(b=> b.classList.remove('active'));
+  document.querySelectorAll('#pron-picks .pick-btn').forEach(b=> b.classList.remove('pron-active'));
+  document.getElementById('builder-result').innerHTML = '<div class="br-empty"><div class="ic">🛠️</div>اختر فعلاً وضميراً لرؤية النتيجة وشرحها</div>';
+  updateBuilderResetState();
+}
+function updateBuilderResetState(){
+  const btn = document.getElementById('builder-reset-btn');
+  if(btn) btn.disabled = !(pickedVerb || pickedPron);
+}
+function renderBuilder(){
+  const out = document.getElementById('builder-result');
+  if(!pickedVerb && !pickedPron){
+    out.innerHTML = '<div class="br-empty"><div class="ic">🛠️</div>اختر فعلاً وضميراً لرؤية النتيجة وشرحها</div>';
+    return;
+  }
+  if(!pickedVerb || !pickedPron){
+    out.innerHTML = `<div class="br-empty"><div class="ic">⏳</div>${pickedVerb ? 'اختر ضميراً الآن' : 'اختر فعلاً الآن'}</div>`;
+    return;
+  }
+  const v = verbs[pickedVerb];
+  const p = prons[pickedPron];
+  const key = `${pickedVerb}_${pickedPron}`;
+  const data = isnadTable[key];
+  if(!data) return;
+  const isChange = data.rule === 'change';
+  out.innerHTML = `
+    <div class="br-equation">
+      <div class="br-result-block input">${v.surface}</div>
+      <span class="br-arrow">+</span>
+      <div class="br-result-block input-pron">${p.display}</div>
+      <span class="br-arrow">←</span>
+      <div class="br-result-block output ${isChange?'changed':''}">${data.result}</div>
+    </div>
+    <div class="br-explanation">
+      <span class="br-rule-tag ${isChange?'rose':'green'}">${isChange?'⚠ يحدث تغيير':'✓ لا تغيير'}</span>
+      <p>${data.explain}</p>
+      <p style="font-size:14px; color:var(--ink-soft); margin-top:8px;"><b style="color:var(--gold);">معلومة عن الفعل:</b> ${v.meta}. <b style="color:var(--gold);">معلومة عن الضمير:</b> ${p.name} (${p.kind==='silent'?'ساكن':'متحرك'}).</p>
+    </div>
+  `;
+}
+
+/* ===== FINAL QUIZ (slide 10) ===== */
+const finalQuiz = [
+  {
+    q:'الفعل <span class="verb-cue">أَكَلَ</span> + <span class="pron-cue">و</span> =',
+    opts:['أَكَلُوا','أَكُولُوا','أَكْلُوا'],
+    a:'أَكَلُوا',
+    note:'«أَكَلَ» سالم، لا يتغيّر مع أيّ ضمير. مع واو الجماعة فقط نضمّ ما قبلها.'
+  },
+  {
+    q:'الفعل <span class="verb-cue">شَدَّ</span> + <span class="pron-cue">تُ</span> =',
+    opts:['شَدَدْتُ','شَدَّتُ','شَدْتُ'],
+    a:'شَدَدْتُ',
+    note:'«شَدَّ» مُضعَّف. مع تاء الفاعل (متحركة) يُفَكّ التضعيف فيظهر الحرفان: <b>شَدَدْتُ</b>.'
+  },
+  {
+    q:'الفعل <span class="verb-cue">صَامَ</span> + <span class="pron-cue">نَ</span> =',
+    opts:['صُمْنَ','صَامَنَ','صَوَمْنَ'],
+    a:'صُمْنَ',
+    note:'«صَامَ» أجوف، أصله صَوَمَ. مع نون النسوة (متحركة) يُحذَف وسطُه ونضع ضمّة قبل الميم لأن الأصل واو.'
+  },
+  {
+    q:'الفعل <span class="verb-cue">دَعَا</span> + <span class="pron-cue">و</span> =',
+    opts:['دَعَوْا','دَعَوُا','دَعُوا'],
+    a:'دَعَوْا',
+    note:'«دَعَا» ناقص آخره ألف. مع واو الجماعة: حُذِفت الألف وفُتح ما قبل الواو لأن المحذوف ألف مقصورة.'
+  },
+  {
+    q:'الفعل <span class="verb-cue">يَمْشِي</span> + <span class="pron-cue">و</span> =',
+    opts:['يَمْشُونَ','يَمْشِيُونَ','يَمْشَوْنَ'],
+    a:'يَمْشُونَ',
+    note:'«يَمْشِي» ناقص آخره ياء. مع واو الجماعة: تُحذَف الياء وتُوضَع ضمّة قبل الواو لأن المحذوف ياء.'
+  },
+];
+const finalAnswered = new Set();
+function buildFinalQuiz(){
+  const wrap = document.getElementById('final-quiz');
+  wrap.innerHTML = '';
+  finalQuiz.forEach((item, i)=>{
+    const id = 'fq-'+(i+1);
+    const card = document.createElement('div');
+    card.className = 'mcq-card';
+    card.id = id;
+    const opts = item.opts.map(o=>
+      `<div class="mcq-opt" onclick="answerFinal('${id}','${o}',this)">${o}</div>`
+    ).join('');
+    card.innerHTML = `
+      <div class="mcq-q">${i+1}. ${item.q}</div>
+      <div class="mcq-options">${opts}</div>
+      <div class="mcq-explain" data-correct="${item.a}" data-note="${item.note}"></div>
+    `;
+    wrap.appendChild(card);
+  });
+}
+function answerFinal(qid, choice, btn){
+  if(finalAnswered.has(qid)) return;
+  finalAnswered.add(qid);
+  const card = document.getElementById(qid);
+  const explain = card.querySelector('.mcq-explain');
+  const correct = explain.dataset.correct;
+  const note = explain.dataset.note;
+  const isCorrect = choice === correct;
+  if(isCorrect){
+    btn.classList.add('correct');
+    card.classList.add('answered-correct');
+  } else {
+    btn.classList.add('wrong');
+    card.classList.add('answered-wrong');
+    card.querySelectorAll('.mcq-opt').forEach(o=>{
+      if(o.textContent.trim() === correct) o.classList.add('show');
+    });
+    explain.innerHTML = note;
+    explain.classList.add('show');
+  }
+  card.querySelectorAll('.mcq-opt').forEach(o=> o.classList.add('locked'));
+  bumpScore(isCorrect);
+}
+
+/* ===== Reset ===== */
+function resetAll(){
+  score=0; total=0;
+  mcqAnswered.clear(); finalAnswered.clear();
+  document.getElementById('score').textContent='0';
+  document.getElementById('total').textContent='0';
+  document.querySelectorAll('.mcq-card').forEach(c=>{
+    c.classList.remove('answered-correct','answered-wrong');
+    c.querySelectorAll('.mcq-opt').forEach(o=> o.classList.remove('correct','wrong','show','locked'));
+    const ex = c.querySelector('.mcq-explain'); if(ex) ex.classList.remove('show');
+  });
+  pickedVerb = pickedPron = null;
+  document.querySelectorAll('.pick-btn').forEach(b=> b.classList.remove('active','pron-active'));
+  document.getElementById('builder-result').innerHTML = '<div class="br-empty"><div class="ic">🛠️</div>اختر فعلاً وضميراً لرؤية النتيجة وشرحها</div>';
+  updateBuilderResetState();
+  buildFinalQuiz();
+  updateFinal();
+  goTo(1);
+}
+
+/* Init */
+buildFinalQuiz();
+goTo(1);
+</script>
+
+
+
+</body></html>

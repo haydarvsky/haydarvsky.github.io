@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ملء الفراغات — قالب جاهز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root { --emerald-deep:#0F4C3A; --emerald:#1a6b54; --amber:#D97706; --amber-soft:#F59E0B; --bg-cream:#FAF6EF; --bg-paper:#FFFFFF; --ink:#1F2937; --ink-soft:#6B7280; --line:#E5E0D5; --green-success:#16a34a; --red-error:#dc2626; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Tajawal', sans-serif; background: var(--bg-cream); color: var(--ink); min-height: 100vh; padding: 24px 16px; line-height: 1.6; }
+.page { max-width: 1100px; margin: 0 auto; }
+.teacher-panel { background: linear-gradient(135deg, var(--emerald-deep), var(--emerald)); color: var(--bg-cream); border-radius: 18px; padding: 28px 32px; margin-bottom: 32px; box-shadow: 0 12px 32px rgba(15, 76, 58, 0.18); position: relative; overflow: hidden; }
+.teacher-panel::before { content: ''; position: absolute; top: 0; right: 0; width: 6px; height: 100%; background: var(--amber); }
+.tp-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; flex-wrap: wrap; gap: 12px; }
+.tp-title { font-family: 'Reem Kufi', sans-serif; font-size: 1.25rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+.tp-toggle { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); color: var(--bg-cream); padding: 8px 16px; border-radius: 999px; cursor: pointer; font-size: 0.9rem; }
+.tp-toggle:hover { background: rgba(255,255,255,0.2); }
+.tp-instructions { background: rgba(255,255,255,0.08); border-radius: 10px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; border-right: 3px solid var(--amber-soft); }
+.tp-instructions strong { color: var(--amber-soft); }
+.tp-grid { display: grid; gap: 16px; }
+.tp-field { display: grid; gap: 6px; }
+.tp-label { font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.9rem; color: var(--amber-soft); }
+.tp-input, .tp-textarea { width: 100%; background: rgba(255,255,255,0.95); color: var(--ink); border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; padding: 12px 14px; font-family: 'Tajawal', sans-serif; font-size: 1rem; resize: vertical; }
+.tp-input:focus, .tp-textarea:focus { outline: none; box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.4); }
+.tp-textarea { min-height: 130px; }
+.tp-actions { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap; }
+.tp-btn { background: var(--amber); color: white; border: none; padding: 12px 22px; border-radius: 10px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; font-size: 0.95rem; }
+.tp-btn:hover { background: #B45309; transform: translateY(-2px); }
+.tp-btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.25); }
+.tp-btn-secondary:hover { background: rgba(255,255,255,0.18); }
+.tp-collapsed .tp-content { display: none; }
+.tp-hint { font-size: 0.85rem; color: rgba(255,255,255,0.75); font-style: italic; margin-top: 6px; }
+.preview-wrap { background: var(--bg-paper); border-radius: 18px; padding: 40px 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.04); }
+.preview-header { text-align: center; margin-bottom: 36px; }
+.preview-title { font-family: 'Reem Kufi', sans-serif; font-size: 2rem; font-weight: 700; color: var(--emerald-deep); margin-bottom: 8px; }
+.preview-subtitle { color: var(--ink-soft); font-size: 1.05rem; }
+.fill-text { max-width: 800px; margin: 0 auto; font-size: 1.2rem; line-height: 2.4; padding: 28px; background: var(--bg-cream); border-radius: 12px; border-right: 4px solid var(--amber); }
+.fill-blank { display: inline-block; min-width: 80px; padding: 4px 12px; margin: 0 4px; background: white; border: 2px dashed var(--amber); border-radius: 8px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 600; color: var(--amber); transition: all 0.2s; text-align: center; }
+.fill-blank:hover { background: rgba(217,119,6,0.08); }
+.fill-blank.filled { border-style: solid; background: var(--amber); color: white; }
+.fill-blank.correct { background: var(--green-success); border-color: var(--green-success); color: white; }
+.fill-blank.wrong { background: var(--red-error); border-color: var(--red-error); color: white; animation: shake 0.4s; }
+@keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
+.fill-bank { max-width: 800px; margin: 24px auto 0; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 16px; background: rgba(15,76,58,0.05); border-radius: 12px; }
+.fill-word { background: var(--emerald-deep); color: var(--bg-cream); padding: 10px 18px; border: none; border-radius: 999px; cursor: pointer; font-family: 'Reem Kufi', sans-serif; font-weight: 500; transition: all 0.2s; }
+.fill-word:hover { background: var(--emerald); transform: translateY(-2px); }
+.fill-word.selected { background: var(--amber); transform: scale(1.05); box-shadow: 0 4px 12px rgba(217,119,6,0.3); }
+.fill-word.used { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+.fill-feedback { text-align: center; margin-top: 20px; padding: 16px; border-radius: 12px; background: var(--bg-cream); font-family: 'Reem Kufi', sans-serif; }
+.fill-feedback.success { background: rgba(22,163,74,0.1); color: var(--green-success); font-weight: 600; }
+.signature { text-align: center; margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 0.85rem; font-family: 'Reem Kufi', sans-serif; }
+.signature-name { color: var(--emerald-deep); font-weight: 600; }
+@media print { .teacher-panel { display: none; } body { background: white; padding: 0; } }
+@media (max-width: 600px) { .preview-title { font-size: 1.5rem; } .fill-text { font-size: 1rem; padding: 20px; } }
+</style>
+
+<meta name="hv-nav" content="mini">
+<meta name="hv-title" content="ملء الفراغات">
+<meta name="hv-parent" content="/edu/content/h-7k2p/qawalib/index.html">
+<meta name="hv-parent-title" content="كتالوجُ القوالب">
+<meta name="robots" content="noindex,nofollow">
+<script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+</head>
+<body>
+<div class="page">
+  <div class="teacher-panel" id="teacher-panel">
+    <div class="tp-header">
+      <div class="tp-title"><span>🎛️</span><span>لوحةُ تحكُّمِ المعلِّمِ — ملءُ الفراغات</span></div>
+      <button class="tp-toggle" onclick="toggleTeacherPanel()">إخفاءُ اللوحة</button>
+    </div>
+    <div class="tp-content">
+      <div class="tp-instructions">
+        <strong>كيف تستعمل هذا القالب؟</strong>
+        اكتب الفقرةَ كاملةً، وضع الكلماتِ التي تريدُ حذفَها بين قوسَين معقوفَين <strong>[هكذا]</strong>. سيُنشئُ الموقعُ تلقائيًّا فراغاتٍ مكانَ هذه الكلمات، وأزرارًا في بنكِ الكلماتِ بترتيبٍ عشوائيٍّ، يَختارُ منها الطالبُ ويَملأُ الفراغات.
+      </div>
+      <div class="tp-grid">
+        <div class="tp-field">
+          <label class="tp-label">عنوانُ الموقع</label>
+          <input type="text" class="tp-input" id="ctrl-title" value="حياةُ النحلة" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">الوصفُ التحتي</label>
+          <input type="text" class="tp-input" id="ctrl-subtitle" value="انقر على الكلمةِ من البنك، ثُمَّ على الفراغِ المناسب" oninput="updatePreview()">
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">النصُّ الكامل (ضع الكلماتِ المحذوفةَ بين قوسَين معقوفَين [هكذا])</label>
+          <textarea class="tp-textarea" id="ctrl-text" oninput="updatePreview()" style="min-height:160px;">تَعيشُ النحلةُ في [خليَّة] تَحكمُها [ملكةٌ] واحدة. تَجمعُ [الرحيقَ] من الأزهار، وتُنتجُ [العسلَ] الذي يستعملُه الإنسانُ غذاءً ودواءً.</textarea>
+          <p class="tp-hint">💡 الكلماتُ بين [قوسَين] هي التي ستظهرُ في بنكِ الكلمات. ضع ما لا يَزيدُ على ٦ كلماتٍ لأفضلِ نتيجة.</p>
+        </div>
+        <div class="tp-field">
+          <label class="tp-label">اسمُ المعلِّمِ (اختياري)</label>
+          <input type="text" class="tp-input" id="ctrl-teacher" placeholder="أ. فلان الفلاني" oninput="updatePreview()">
+        </div>
+      </div>
+      <div class="tp-actions">
+        <button class="tp-btn" onclick="downloadFinal()">💾 حفظُ نسخةٍ نهائيَّة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="window.print()">🖨️ طباعة</button>
+        <button class="tp-btn tp-btn-secondary" onclick="resetForm()">↻ إعادةُ التعيين</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="preview-wrap">
+    <div class="preview-header">
+      <h1 class="preview-title" id="preview-title">حياةُ النحلة</h1>
+      <p class="preview-subtitle" id="preview-subtitle">انقر على الكلمةِ من البنك، ثُمَّ على الفراغِ المناسب</p>
+    </div>
+    <p class="fill-text" id="fill-text"></p>
+    <div class="fill-bank" id="fill-bank"></div>
+    <div class="fill-feedback" id="fill-feedback">📝 اختر الكلماتِ من البنكِ، ثُمَّ انقر على الفراغ</div>
+    <div class="signature" id="signature" style="display:none;">من إعدادِ <span class="signature-name" id="signature-name"></span></div>
+  </div>
+</div>
+
+<script>
+function escapeHTML(s) { return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+let selectedWord = null;
+let totalBlanks = 0, filledCorrect = 0;
+
+function updatePreview() {
+  document.getElementById('preview-title').textContent = document.getElementById('ctrl-title').value || 'تمرين';
+  document.getElementById('preview-subtitle').textContent = document.getElementById('ctrl-subtitle').value || '';
+  document.title = (document.getElementById('ctrl-title').value || 'تمرين') + ' — موقع تعليمي';
+
+  const text = document.getElementById('ctrl-text').value;
+  const blanks = [];
+  let processed = escapeHTML(text);
+  processed = processed.replace(/\[([^\]]+)\]/g, (m, w) => {
+    blanks.push(w);
+    const idx = blanks.length - 1;
+    return `<span class="fill-blank" data-answer="${escapeHTML(w)}" data-idx="${idx}" onclick="placeWord(this)">______</span>`;
+  });
+
+  document.getElementById('fill-text').innerHTML = processed;
+
+  const bank = document.getElementById('fill-bank');
+  bank.innerHTML = '';
+  shuffle(blanks).forEach(w => {
+    const btn = document.createElement('button');
+    btn.className = 'fill-word';
+    btn.dataset.word = w;
+    btn.textContent = w;
+    btn.onclick = () => selectWord(btn);
+    bank.appendChild(btn);
+  });
+
+  totalBlanks = blanks.length; filledCorrect = 0; selectedWord = null;
+  document.getElementById('fill-feedback').textContent = '📝 اختر الكلماتِ من البنكِ، ثُمَّ انقر على الفراغ';
+  document.getElementById('fill-feedback').className = 'fill-feedback';
+
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const sig = document.getElementById('signature');
+  if (teacher) { sig.style.display = 'block'; document.getElementById('signature-name').textContent = teacher; }
+  else { sig.style.display = 'none'; }
+}
+
+function selectWord(btn) {
+  if (btn.classList.contains('used')) return;
+  document.querySelectorAll('.fill-word').forEach(w => w.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedWord = btn;
+}
+
+function placeWord(blank) {
+  if (!selectedWord) return;
+  if (blank.classList.contains('correct')) return;
+  const word = selectedWord.dataset.word;
+  if (word === blank.dataset.answer) {
+    blank.textContent = word;
+    blank.classList.remove('wrong'); blank.classList.add('correct', 'filled');
+    selectedWord.classList.add('used');
+    selectedWord.classList.remove('selected');
+    selectedWord = null;
+    filledCorrect++;
+    if (filledCorrect === totalBlanks) {
+      const fb = document.getElementById('fill-feedback');
+      fb.textContent = 'أَحسنتَ! ملأتَ كلَّ الفراغاتِ بصواب 🎉';
+      fb.classList.add('success');
+    }
+  } else {
+    blank.textContent = word; blank.classList.add('wrong');
+    setTimeout(() => { blank.textContent = '______'; blank.classList.remove('wrong'); }, 800);
+    selectedWord.classList.remove('selected');
+    selectedWord = null;
+  }
+}
+
+function toggleTeacherPanel() {
+  const panel = document.getElementById('teacher-panel');
+  const btn = panel.querySelector('.tp-toggle');
+  panel.classList.toggle('tp-collapsed');
+  btn.textContent = panel.classList.contains('tp-collapsed') ? 'إظهارُ اللوحة' : 'إخفاءُ اللوحة';
+}
+
+function downloadFinal() {
+  const title = document.getElementById('ctrl-title').value || 'تمرين';
+  const subtitle = document.getElementById('ctrl-subtitle').value || '';
+  const teacher = document.getElementById('ctrl-teacher').value.trim();
+  const text = document.getElementById('ctrl-text').value;
+
+  const blanks = [];
+  let processed = escapeHTML(text);
+  processed = processed.replace(/\[([^\]]+)\]/g, (m, w) => {
+    blanks.push(w);
+    const idx = blanks.length - 1;
+    return `<span class="fill-blank" data-answer="${escapeHTML(w)}" data-idx="${idx}" onclick="placeWord(this)">______</span>`;
+  });
+
+  const blanksJSON = JSON.stringify(blanks);
+  const sigHTML = teacher ? `<div class="signature">من إعدادِ <span class="signature-name">${escapeHTML(teacher)}</span></div>` : '';
+
+  const finalHTML = `<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHTML(title)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>:root{--emerald-deep:#0F4C3A;--emerald:#1a6b54;--amber:#D97706;--bg-cream:#FAF6EF;--bg-paper:#FFFFFF;--ink:#1F2937;--ink-soft:#6B7280;--line:#E5E0D5;--green-success:#16a34a;--red-error:#dc2626}*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Tajawal',sans-serif;background:var(--bg-cream);color:var(--ink);min-height:100vh;padding:40px 16px;line-height:1.6}.page{max-width:1100px;margin:0 auto}.preview-wrap{background:var(--bg-paper);border-radius:18px;padding:40px 32px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}.preview-header{text-align:center;margin-bottom:36px}.preview-title{font-family:'Reem Kufi',sans-serif;font-size:2rem;font-weight:700;color:var(--emerald-deep);margin-bottom:8px}.preview-subtitle{color:var(--ink-soft);font-size:1.05rem}.fill-text{max-width:800px;margin:0 auto;font-size:1.2rem;line-height:2.4;padding:28px;background:var(--bg-cream);border-radius:12px;border-right:4px solid var(--amber)}.fill-blank{display:inline-block;min-width:80px;padding:4px 12px;margin:0 4px;background:white;border:2px dashed var(--amber);border-radius:8px;cursor:pointer;font-family:'Reem Kufi',sans-serif;font-weight:600;color:var(--amber);transition:all 0.2s;text-align:center}.fill-blank:hover{background:rgba(217,119,6,0.08)}.fill-blank.filled{border-style:solid;background:var(--amber);color:white}.fill-blank.correct{background:var(--green-success);border-color:var(--green-success);color:white}.fill-blank.wrong{background:var(--red-error);border-color:var(--red-error);color:white;animation:shake 0.4s}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}.fill-bank{max-width:800px;margin:24px auto 0;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:16px;background:rgba(15,76,58,0.05);border-radius:12px}.fill-word{background:var(--emerald-deep);color:var(--bg-cream);padding:10px 18px;border:none;border-radius:999px;cursor:pointer;font-family:'Reem Kufi',sans-serif;font-weight:500;transition:all 0.2s}.fill-word:hover{background:var(--emerald);transform:translateY(-2px)}.fill-word.selected{background:var(--amber);transform:scale(1.05)}.fill-word.used{opacity:0.3;cursor:not-allowed;pointer-events:none}.fill-feedback{text-align:center;margin-top:20px;padding:16px;border-radius:12px;background:var(--bg-cream);font-family:'Reem Kufi',sans-serif}.fill-feedback.success{background:rgba(22,163,74,0.1);color:var(--green-success);font-weight:600}.signature{text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:0.85rem;font-family:'Reem Kufi',sans-serif}.signature-name{color:var(--emerald-deep);font-weight:600}@media (max-width:600px){.preview-title{font-size:1.5rem}.fill-text{font-size:1rem;padding:20px}}</style></head>
+<body><div class="page"><div class="preview-wrap">
+<div class="preview-header"><h1 class="preview-title">${escapeHTML(title)}</h1><p class="preview-subtitle">${escapeHTML(subtitle)}</p></div>
+<p class="fill-text">${processed}</p>
+<div class="fill-bank" id="bank"></div>
+<div class="fill-feedback" id="fb">📝 اختر الكلماتِ من البنك، ثم انقر على الفراغ</div>
+${sigHTML}
+</div></div>
+<script>
+const blanks = ${blanksJSON};
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+let sel = null, total = blanks.length, correct = 0;
+const bank = document.getElementById('bank');
+shuffle(blanks).forEach(w => { const b=document.createElement('button'); b.className='fill-word'; b.dataset.word=w; b.textContent=w; b.onclick=()=>{if(b.classList.contains('used'))return; document.querySelectorAll('.fill-word').forEach(x=>x.classList.remove('selected')); b.classList.add('selected'); sel=b;}; bank.appendChild(b); });
+function placeWord(blank){if(!sel||blank.classList.contains('correct'))return;const w=sel.dataset.word;if(w===blank.dataset.answer){blank.textContent=w;blank.classList.add('correct','filled');sel.classList.add('used');sel.classList.remove('selected');sel=null;correct++;if(correct===total){const f=document.getElementById('fb');f.textContent='أَحسنتَ! ملأتَ كلَّ الفراغاتِ بصواب 🎉';f.classList.add('success');}}else{blank.textContent=w;blank.classList.add('wrong');setTimeout(()=>{blank.textContent='______';blank.classList.remove('wrong');},800);sel.classList.remove('selected');sel=null;}}
+<\/script>
+</body></html>`;
+
+  const blob = new Blob([finalHTML], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (title || 'ملء-فراغات').replace(/[^\u0600-\u06FFa-zA-Z0-9-_ ]/g, '') + '.html';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function resetForm() { if (confirm('هل تريدُ إعادةَ القيمِ إلى مثالِ البداية؟')) location.reload(); }
+
+updatePreview();
+</script>
+</body></html>
