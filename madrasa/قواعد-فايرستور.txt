@@ -2,11 +2,19 @@
 // في قواعد فايرستور لمشروع vak-quiz-96d5f (مع بقاء قواعد answers/feedback/lawha/ft_* كما هي).
 // ثم اضغط Publish.
 
-    // ═══ مدرستي (تحضيرات ومتابعة المتعلّمين) — للمعلّم وحده ═══
+    // ═══ مدرستي (تحضيرات ومتابعة المتعلّمين) ═══
+    // المعلّم: يقرأ ويكتب كلَّ شيء
     function scOwner() {
       return request.auth != null &&
         request.auth.token.email == 'haydar.maateeq@gmail.com';
     }
-    match /sc_meta/{doc}    { allow read, write: if scOwner(); }
-    match /sc_classes/{doc} { allow read, write: if scOwner(); }
-    match /sc_days/{doc}    { allow read, write: if scOwner(); }
+    // مشرفٌ قارئ: بريدُه في قائمة viewers داخل الوثيقة sc_meta/access (تُكتب من إعدادات التطبيق)
+    function scViewer() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/sc_meta/access) &&
+        request.auth.token.email in get(/databases/$(database)/documents/sc_meta/access).data.viewers;
+    }
+    match /sc_meta/{doc}    { allow read: if scOwner() || scViewer(); allow write: if scOwner(); }
+    match /sc_classes/{doc} { allow read: if scOwner() || scViewer(); allow write: if scOwner(); }
+    match /sc_days/{doc}    { allow read: if scOwner() || scViewer(); allow write: if scOwner(); }
+    match /sc_log/{doc}     { allow read: if scOwner() || scViewer(); allow write: if scOwner(); }

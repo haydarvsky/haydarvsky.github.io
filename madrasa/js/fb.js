@@ -155,5 +155,6 @@
     }
   };
 
-  root.FB = { Auth: Auth, DB: DEMO ? Demo : Live, demo: DEMO, enc: enc, dec: dec };
+  function isNetErr(e) { return !navigator.onLine || (e && (e.name === 'TypeError' || /fetch|network|Failed to fetch|Load failed/i.test(e.message || ''))) && !(e && e.status); }
+  root.FB = { Auth: Auth, DB: DEMO ? Demo : Live, demo: DEMO, enc: enc, dec: dec, isNetErr: isNetErr };
 })(window);
