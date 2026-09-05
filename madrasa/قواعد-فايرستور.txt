@@ -1,0 +1,12 @@
+// ═══ مدرستي — أضِف هذه الكتلَ داخل match /databases/{database}/documents { ... }
+// في قواعد فايرستور لمشروع vak-quiz-96d5f (مع بقاء قواعد answers/feedback/lawha/ft_* كما هي).
+// ثم اضغط Publish.
+
+    // ═══ مدرستي (تحضيرات ومتابعة المتعلّمين) — للمعلّم وحده ═══
+    function scOwner() {
+      return request.auth != null &&
+        request.auth.token.email == 'haydar.maateeq@gmail.com';
+    }
+    match /sc_meta/{doc}    { allow read, write: if scOwner(); }
+    match /sc_classes/{doc} { allow read, write: if scOwner(); }
+    match /sc_days/{doc}    { allow read, write: if scOwner(); }

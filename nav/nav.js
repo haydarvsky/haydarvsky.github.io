@@ -23,6 +23,7 @@
     video: '<svg viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="3"/><path d="M14 12l-4-2.4v4.8z"/></svg>',
     edu: '<svg viewBox="0 0 24 24"><path d="M12 4.5L21 9l-9 4.5L3 9z"/><path d="M6.5 11v4.6c0 1.3 2.5 2.4 5.5 2.4s5.5-1.1 5.5-2.4V11"/></svg>',
     harf: '<svg viewBox="0 0 24 24"><path d="M5 18c3-1 5-4 6-8M9 6c2 5 5 9 10 10"/><circle cx="12" cy="4.5" r="1" fill="currentColor"/></svg>',
+    school: '<svg viewBox="0 0 24 24"><path d="M4 10.5L12 5l8 5.5"/><path d="M6 10v9h12v-9"/><path d="M10 19v-4.5h4V19"/><path d="M12 5V3"/></svg>',
     store: '<svg viewBox="0 0 24 24"><path d="M4.5 8h15l-1.2 11.5H5.7z"/><path d="M9 8V6.4a3 3 0 0 1 6 0V8"/></svg>',
     gear: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
     back: '<svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg>',
@@ -42,6 +43,7 @@
     alharf:    { t: 'محرّكُ الحرف',       p: '/alharf/',    ico: 'harf', d: 'عرضُ مجمعِ الملكِ سلمان' },
     TOT:       { t: 'دورةُ إعدادِ مدرِّب', p: '/edu/haqiba.html', ico: 'tot', hide: true },
     CCUAi:     { t: 'دورةُ صناعةِ المحتوى', p: '/CCUAi/',   ico: 'ai',  hide: true },
+    madrasa:   { t: 'مدرستي',             p: '/madrasa/',   ico: 'school', hide: true, d: 'تحضيراتٌ ومتابعةُ المتعلّمين' },
     admin:     { t: 'لوحةُ التحكّم',      p: '/admin/',     ico: 'gear', hide: true }
   };
   var MENU = ['', 'articles', 'books', 'brand', 'videos', 'edu', 'alharf'];
