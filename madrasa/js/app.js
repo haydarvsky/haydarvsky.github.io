@@ -492,7 +492,7 @@
     var alerts = {}; collectAlerts().forEach(function (a) { if (a.c._id === c._id) alerts[a.s.id] = 1; });
     var q = (S.stuQ || '').trim();
     var html = classCrumb(c) + '<div class="ttl"><div><h2>' + esc(c.name) + '</h2><p>' + ar(c.students.length) + ' متعلّماً · حاضرٌ ' + ar(c.students.length - absN) + (absN ? ' · غائبٌ ' + ar(absN) : '') + (taken ? ' <span class="taken">✓ تمّ التحضير</span>' : '') + '</p></div>'
-      + '<div class="acts"><a class="btn" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a></div></div>';
+      + '<div class="acts">' + (ro ? '' : '<button class="btn p" id="rndBtn"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/></svg>اختيارٌ عشوائي</button>') + '<a class="btn" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a></div></div>';
     html += '<div class="datebar"><button class="icon-btn" id="dPrev" title="اليومُ التالي"><svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg></button>'
       + '<label class="d" style="cursor:pointer;position:relative">' + DAYS[d.getDay()] + ' ' + ar(d.getDate()) + ' ' + MONTHS[d.getMonth()] + '<small>' + esc(hijri(d)) + '</small><input type="date" id="dPick" value="' + date + '"></label>'
       + '<button class="icon-btn" id="dNext" title="اليومُ السابق"><svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg></button>' + (isToday ? '' : '<button class="btn s" id="dToday">اليوم</button>') + '</div>';
@@ -511,6 +511,7 @@
     $('stuQ').oninput = function () { S.stuQ = this.value; var dd = S.days[c._id] && S.days[c._id].map[date]; $('stuGrid').innerHTML = gridHTML(c, dd ? dd.ev : [], alerts); };
     $('sortSeg').onclick = function (e) { var b = e.target.closest('button'); if (!b) return; S.sort = b.dataset.s; LS.set('sc_sort', S.sort); route(); };
     if ($('modeSeg')) $('modeSeg').onclick = function (e) { var b = e.target.closest('button'); if (!b) return; S.quick = b.dataset.m === 'quick'; route(); };
+    if ($('rndBtn')) $('rndBtn').onclick = function () { randomPick(c, date, alerts); };
     if ($('takenBtn')) $('takenBtn').onclick = async function () { var dd = (await loadDay(c._id, date)) || { ev: [] }; dd.ev = dd.ev || []; dd.taken = true; try { await saveDay(c._id, date, dd); toast('سُجّل التحضير'); log('تحضيرُ فصل', c.name + ' ' + date); route(); } catch (e) { fail(e); } };
     $('stuGrid').addEventListener('click', async function (e) {
       var b = e.target.closest('.stu'); if (!b) return; var s = c.students.filter(function (x) { return x.id === b.dataset.sid; })[0]; if (!s) return;
@@ -532,6 +533,43 @@
   function updatePresence(c, date) {
     var doc = S.days[c._id] && S.days[c._id].map[date]; var all = (doc ? doc.ev : []).filter(function (e) { return e.type === 'absent'; }).length;
     var p = document.querySelector('.ttl p'); if (p) p.innerHTML = ar(c.students.length) + ' متعلّماً · حاضرٌ ' + ar(c.students.length - all) + (all ? ' · غائبٌ ' + ar(all) : '') + (doc && doc.taken ? ' <span class="taken">✓ تمّ التحضير</span>' : '');
+  }
+
+
+  /* ---------------- الاختيارُ العشوائي ---------------- */
+  var RND = { cid: null, date: null, picked: [] };
+  async function randomPick(c, date, alerts) {
+    if (RND.cid !== c._id || RND.date !== date) RND = { cid: c._id, date: date, picked: [] };
+    var doc = (await loadDay(c._id, date)) || { ev: [] }, ev = doc.ev || [];
+    var absent = {}, starredToday = {};
+    ev.forEach(function (e) { if (e.type === 'absent') absent[e.sid] = 1; if (e.type === 'star') starredToday[e.sid] = 1; });
+    var present = (c.students || []).filter(function (s) { return !absent[s.id]; });
+    if (!present.length) { toast('لا حاضرين اليوم', true); return; }
+    var pool = present.filter(function (s) { return !starredToday[s.id] && RND.picked.indexOf(s.id) < 0; });
+    var note = 'لم يشاركْ بعدُ اليوم';
+    if (!pool.length) { RND.picked = []; pool = present.filter(function (s) { return !starredToday[s.id]; }); }
+    if (!pool.length) { pool = present; note = 'شارك الجميعُ اليوم — اختيارٌ بين الحاضرين'; }
+    /* أولويةٌ لمن مشاركاتُه في الفصلِ الدراسيِّ أقلّ: نُرجِّح بالوزن */
+    var tm = currentTerm(), cache = S.days[c._id] || LS.get('sc_days_' + c._id), termStars = {};
+    if (cache && tm) eventsIn(cache.map, tm.start, today()).forEach(function (e) { if (e.type === 'star') termStars[e.sid] = (termStars[e.sid] || 0) + 1; });
+    var weighted = []; pool.forEach(function (s) { var w = Math.max(1, 6 - Math.min(5, termStars[s.id] || 0)); for (var i = 0; i < w; i++) weighted.push(s); });
+    var chosen = weighted[Math.floor(Math.random() * weighted.length)];
+    RND.picked.push(chosen.id);
+    openSheet('<div class="rnd"><div class="rlbl">🎲 المختارُ عشوائياً</div><div class="rname" id="rName">…</div><div class="rsub" id="rSub"></div>'
+      + '<div class="racts"><button class="btn p" id="rStar">✓ شارك — سجّلْ مشاركةً متميّزة</button><button class="btn" id="rAgain">اختيارٌ آخر</button><button class="btn s" id="shClose">إغلاق</button></div>'
+      + '<small style="color:var(--muted)">يتجاوزُ الغائبين ومن شاركَ اليوم، ويرجّحُ من قلّت مشاركاتُه في الفصل. بقي ' + ar(Math.max(0, pool.length - 1)) + ' لم يُختَرْ بعد.</small></div>');
+    /* دورانُ أسماءٍ سريع ثمّ الاستقرار */
+    var nameEl = $('rName'), t = 0, spin = setInterval(function () { nameEl.textContent = present[Math.floor(Math.random() * present.length)].name; if (++t > 14) { clearInterval(spin); nameEl.textContent = chosen.name; nameEl.classList.add('on'); $('rSub').textContent = note + ' · مشاركاتُه في الفصل: ' + ar(termStars[chosen.id] || 0); highlight(chosen.id); } }, 70);
+    function highlight(sid) { var b = document.querySelector('.stu[data-sid="' + sid + '"]'); if (!b) return; b.classList.add('picked'); b.scrollIntoView({ block: 'center', behavior: 'smooth' }); setTimeout(function () { b.classList.remove('picked'); }, 4000); }
+    $('shClose').onclick = closeSheet;
+    $('rAgain').onclick = function () { closeSheet(); setTimeout(function () { randomPick(c, date, alerts); }, 280); };
+    $('rStar').onclick = async function () {
+      var d2 = (await loadDay(c._id, date)) || { ev: [] }; d2.ev = d2.ev || [];
+      d2.ev.push({ id: uid('e'), sid: chosen.id, type: 'star', cat: 'إجابةٌ متميّزة', ts: Date.now() });
+      try { await saveDay(c._id, date, d2); toast('سُجّلت مشاركةُ ' + chosen.name); } catch (e) { fail(e); }
+      var b = document.querySelector('.stu[data-sid="' + chosen.id + '"]'); if (b) b.outerHTML = stuChip(c, chosen, d2.ev, alerts && alerts[chosen.id]);
+      closeSheet();
+    };
   }
 
   /* الورقةُ المنبثقة */
