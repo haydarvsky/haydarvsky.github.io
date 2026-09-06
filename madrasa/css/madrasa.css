@@ -426,7 +426,9 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px;border-t
   .stu .nm{font-size:15px}
   .period.free{padding:4px 12px;font-size:14px}
   .period.free .n{width:26px;height:26px;font-size:13px}
-  .searchbar .seg{flex:1;justify-content:center}
-  .searchbar .seg button{flex:1;padding:6px 8px;font-size:13px}
+  .searchbar{flex-direction:column;align-items:stretch;gap:8px}
+  .searchbar input{min-width:0}
+  .searchbar .seg{width:100%;justify-content:center}
+  .searchbar .seg button{flex:1;padding:7px 8px;font-size:14px;white-space:nowrap}
 }
 @media print{.bnav{display:none !important}}
