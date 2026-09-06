@@ -177,7 +177,7 @@
   var ROUTES = { '': home, prep: prep, classes: classes, class: classView, student: studentDash, schedule: scheduleView, settings: settingsView, overview: overview, log: logView };
   async function route() {
     var p = parts(), r = p[0] || '';
-    document.querySelectorAll('#tabs a').forEach(function (a) {
+    document.querySelectorAll('#tabs a, #bnav a').forEach(function (a) {
       var on = a.dataset.r === r || (['class', 'student', 'overview'].indexOf(r) >= 0 && a.dataset.r === 'classes') || (r === 'log' && a.dataset.r === 'settings');
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });

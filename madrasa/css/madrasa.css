@@ -376,3 +376,57 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px;border-t
 .today-prep a{background:#FFF7E3;border-radius:100px;padding:0 10px}
 .archived-list .card{opacity:.85}
 @media print{.netbar,.searchbar,.quickhint,.seg{display:none !important}}
+
+/* ===== الجوال: شريطٌ سفليٌّ بدلَ القوائمِ العلوية ===== */
+.bnav{display:none}
+@media(max-width:720px){
+  .hv-nav{display:none !important}
+  .tabs{display:none}
+  .hd .wrap{padding:10px 16px 10px;flex-wrap:nowrap;gap:10px;align-items:center}
+  .hd .brand{gap:10px;flex:0 0 auto}
+  .hd .brand img{height:34px}
+  .hd h1{font-size:22px;line-height:1.2}
+  .hd .sub{display:none}
+  .hd .date{flex:1;font-size:12px;line-height:1.35;opacity:.9}
+  .hd .date b{font-size:14px}
+  .hd .user{flex:0 0 auto;font-size:0;gap:6px}
+  .hd .user span{font-size:0}
+  .hd .user .dot{font-size:0}
+  .hd .user .q,.hd .user .ro{font-size:11px}
+  .hd .user button{font-size:12px;padding:1px 9px}
+  main{padding:16px 0 calc(92px + env(safe-area-inset-bottom))}
+  .wrap{padding:0 14px}
+  .ttl{margin-bottom:14px;gap:10px}
+  .ttl h2{font-size:27px}
+  .ttl .acts .btn{padding:6px 14px;font-size:15px}
+  .crumb{font-size:13px;margin-bottom:4px}
+  footer{display:none}
+  .today{gap:14px;margin-bottom:18px}
+  .grid{gap:12px;grid-template-columns:1fr 1fr}
+  .grid .card.green,.grid .card.gold{grid-column:1/-1}
+  .cls-card .crow .btn{padding:4px 10px;font-size:13px}
+  .card{padding:16px 18px}
+  .card h3{font-size:21px}
+  .card .ico{width:38px;height:38px;margin-bottom:8px}
+  .period{padding:9px 12px}
+  .tiles{gap:8px}
+  .tile{padding:12px 14px}
+  .tile .v{font-size:34px}
+  .panel{padding:14px 16px}
+  .sheet{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+  .bnav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:75;background:var(--green-deep);border-top:1px solid rgba(232,223,204,.14);padding:6px 6px calc(6px + env(safe-area-inset-bottom));justify-content:space-around;box-shadow:0 -10px 30px rgba(6,34,25,.25)}
+  .bnav a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px 4px;border-radius:12px;color:rgba(232,223,204,.7);font-size:11.5px;line-height:1.2;transition:color var(--t-fast),background var(--t-fast)}
+  .bnav a svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+  .bnav a[aria-current]{color:var(--gold);background:rgba(217,164,65,.1)}
+  .bnav a.mid svg{width:26px;height:26px}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom))}
+  .students{grid-template-columns:1fr 1fr;gap:8px}
+  .stu{padding:10px 10px;min-height:56px;gap:8px}
+  .stu .av{width:30px;height:30px;font-size:14px}
+  .stu .nm{font-size:15px}
+  .period.free{padding:4px 12px;font-size:14px}
+  .period.free .n{width:26px;height:26px;font-size:13px}
+  .searchbar .seg{flex:1;justify-content:center}
+  .searchbar .seg button{flex:1;padding:6px 8px;font-size:13px}
+}
+@media print{.bnav{display:none !important}}
