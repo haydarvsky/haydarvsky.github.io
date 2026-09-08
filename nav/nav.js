@@ -47,6 +47,9 @@
     admin:     { t: 'لوحةُ التحكّم',      p: '/admin/',     ico: 'gear', hide: true }
   };
   var MENU = ['', 'articles', 'books', 'brand', 'videos', 'edu', 'alharf'];
+  /* إخفاءُ قائمةِ الأقسامِ وترسِ لوحةِ التحكّم من الشريط — يبقى رابطُ الرئيسةِ والمسارُ ورجوع.
+     أعِدْه بجعلِ SHOW_MENU = true (أو بوسمِ <meta name="hv-menu" content="on"> في الصفحة). */
+  var SHOW_MENU = false;
 
   function meta(n) { var m = document.querySelector('meta[name="' + n + '"]'); return m ? (m.getAttribute('content') || '').trim() : ''; }
   function isOwner() {
@@ -83,10 +86,15 @@
     var backUrl = parent ? (parent.charAt(0) === '/' ? ROOT + parent : parent) : (seg ? ROOT + sec.p : ROOT + '/');
     var adminUrl = ROOT + (sec.admin || '/admin/');
 
-    /* المسار */
+    /* المسار — حين تُخفى الأقسامُ يبقى «الرئيسة» رابطاً وحيداً ثمّ عنوانُ الصفحةِ نصّاً */
+    var showMenu = SHOW_MENU || meta('hv-menu') === 'on';
     var crumbs = '<li><a href="' + ROOT + '/">' + esc(SEC[''].t) + '</a></li>';
-    if (seg) crumbs += '<li>' + (atSecRoot ? '<span aria-current="page">' + esc(sec.t) + '</span>' : '<a href="' + ROOT + sec.p + '">' + esc(sec.t) + '</a>') + '</li>';
-    if (parent && parentTitle) crumbs += '<li><a href="' + esc(backUrl) + '">' + esc(parentTitle) + '</a></li>';
+    if (showMenu) {
+      if (seg) crumbs += '<li>' + (atSecRoot ? '<span aria-current="page">' + esc(sec.t) + '</span>' : '<a href="' + ROOT + sec.p + '">' + esc(sec.t) + '</a>') + '</li>';
+      if (parent && parentTitle) crumbs += '<li><a href="' + esc(backUrl) + '">' + esc(parentTitle) + '</a></li>';
+    } else if (seg && atSecRoot) {
+      crumbs += '<li><span aria-current="page">' + esc(sec.t) + '</span></li>';
+    }
     if (!atSecRoot && pageTitle && pageTitle !== sec.t) crumbs += '<li><span aria-current="page" title="' + esc(pageTitle) + '">' + esc(pageTitle) + '</span></li>';
 
     /* قائمةُ الأقسام */
@@ -98,16 +106,16 @@
       + (isOwner() ? '<span class="hv-sep"></span><a href="' + ROOT + '/admin/"' + (seg === 'admin' ? ' aria-current="page"' : '') + '><span class="hv-i">' + I.gear + '</span><span>لوحةُ التحكّم<small>كلُّ الأقسامِ من مكانٍ واحد</small></span></a>' : '');
 
     var acts = '<button type="button" class="hv-btn hv-back"><span class="hv-tx">رجوع</span>' + I.back + '</button>'
-      + '<div class="hv-menu"><button type="button" class="hv-btn hv-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="hv-pop">' + I.grid + '<span class="hv-tx">الأقسام</span></button>'
-      + '<div class="hv-pop" id="hv-pop" role="menu">' + items + '</div></div>'
-      + (isOwner() ? '<a class="hv-btn hv-gear" href="' + adminUrl + '" title="لوحةُ التحكّم" aria-label="لوحةُ التحكّم">' + I.gear + '</a>' : '');
+      + (showMenu ? '<div class="hv-menu"><button type="button" class="hv-btn hv-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="hv-pop">' + I.grid + '<span class="hv-tx">الأقسام</span></button>'
+        + '<div class="hv-pop" id="hv-pop" role="menu">' + items + '</div></div>'
+        + (isOwner() ? '<a class="hv-btn hv-gear" href="' + adminUrl + '" title="لوحةُ التحكّم" aria-label="لوحةُ التحكّم">' + I.gear + '</a>' : '') : '');
 
     var nav;
     if (mode === 'mini') {
       nav = el('<nav class="hv-nav hv-mini" aria-label="التنقّل في الموقع"><div class="hv-in">'
         + '<div class="hv-pill"><button type="button" class="hv-toggle" aria-expanded="false" aria-label="قائمةُ التنقّل"><img src="' + LOGO + '" alt=""></button>'
         + '<div class="hv-chips"><a class="hv-btn" href="' + ROOT + '/">' + I.home + '<span class="hv-tx">الرئيسة</span></a>'
-        + (seg ? '<a class="hv-btn" href="' + esc(backUrl) + '">' + I[sec.ico] + '<span class="hv-tx">' + esc(parentTitle || sec.t) + '</span></a>' : '')
+        + ((showMenu && seg) ? '<a class="hv-btn" href="' + esc(backUrl) + '">' + I[sec.ico] + '<span class="hv-tx">' + esc(parentTitle || sec.t) + '</span></a>' : '')
         + '<div class="hv-acts">' + acts + '</div></div></div>'
         + '</div></nav>');
       document.body.appendChild(nav);
@@ -145,12 +153,14 @@
 
     /* القائمة */
     var btn = nav.querySelector('.hv-menu-btn'), pop = nav.querySelector('.hv-pop');
-    function openPop() { pop.classList.add('on'); btn.setAttribute('aria-expanded', 'true'); var f = pop.querySelector('a'); if (f) f.focus({ preventScroll: true }); }
-    function closePop() { pop.classList.remove('on'); btn.setAttribute('aria-expanded', 'false'); }
-    btn.addEventListener('click', function (e) { e.stopPropagation(); pop.classList.contains('on') ? closePop() : openPop(); });
-    document.addEventListener('click', function (e) { if (!nav.contains(e.target)) closePop(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pop.classList.contains('on')) { closePop(); btn.focus(); } });
-    pop.addEventListener('click', function (e) { e.stopPropagation(); });
+    function openPop() { if (!pop) return; pop.classList.add('on'); btn.setAttribute('aria-expanded', 'true'); var f = pop.querySelector('a'); if (f) f.focus({ preventScroll: true }); }
+    function closePop() { if (!pop) return; pop.classList.remove('on'); btn.setAttribute('aria-expanded', 'false'); }
+    if (btn && pop) {
+      btn.addEventListener('click', function (e) { e.stopPropagation(); pop.classList.contains('on') ? closePop() : openPop(); });
+      document.addEventListener('click', function (e) { if (!nav.contains(e.target)) closePop(); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pop.classList.contains('on')) { closePop(); btn.focus(); } });
+      pop.addEventListener('click', function (e) { e.stopPropagation(); });
+    }
 
     window.HVNav = { section: seg, back: backUrl, admin: adminUrl, nav: nav };
   }

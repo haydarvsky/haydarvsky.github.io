@@ -63,17 +63,17 @@
       </p>
 
       <div class="cta">
-        <a class="btn btn-a" href="#المحتوى" data-magnet data-in style="--d:1020ms">
+        <a class="btn btn-a" href="#المحتوى" data-magnet data-in style="--d:1020ms;display:none" hidden>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
           تصفَّح أعمالي
         </a>
-        <a class="btn btn-b" href="#تواصل" data-in style="--d:1090ms">للتواصل</a>
+        <!-- كان: class="btn btn-b" --><a class="btn btn-a" href="#تواصل" data-in style="--d:1090ms">للتواصل</a>
       </div>
 
     </div>
   </div>
 
-  <div class="cue" data-in style="--d:1260ms" aria-hidden="true">
+  <div class="cue" data-in style="--d:1260ms;display:none" aria-hidden="true" hidden>
     <span class="rail"></span>
     <span>انزلْ للأقسام</span>
   </div>
@@ -81,13 +81,13 @@
 
 <main class="sections" id="المحتوى">
   <div class="wrap">
-    <div class="shead rev">
+    <div class="shead rev" style="display:none" hidden>
       <h2>الأقسام</h2>
       <p>اختر ما تُحبُّ الاطّلاعَ عليه</p>
       <div class="rule"></div>
     </div>
 
-    <div class="grid">
+    <div class="grid" style="display:none" hidden>
 
       <!-- المقالات -->
       <a class="card rev" href="https://haydarvsky.github.io/articles/" data-step="0">
@@ -219,7 +219,8 @@ var SOCIAL = {
   youtube  : 'https://www.youtube.com/@Haydarvsky'
 };
 /* رابطُ لوحةِ التحكّم يظهرُ لصاحبِ الموقعِ وحدَه (بعد دخولِه مرّةً من /admin/) */
-try{ if(localStorage.getItem('hv_owner')||localStorage.getItem('hv_token')||localStorage.getItem('ar_token')||localStorage.getItem('bg_token')) document.getElementById('admLink').hidden=false; }catch(e){}
+/* مخفيٌّ حالياً بطلبِ صاحبِ الموقع — لإعادتِه احذفْ false && من السطر */
+try{ if(false && (localStorage.getItem('hv_owner')||localStorage.getItem('hv_token')||localStorage.getItem('ar_token')||localStorage.getItem('bg_token'))) document.getElementById('admLink').hidden=false; }catch(e){}
 document.querySelectorAll('[data-net]').forEach(function(a){
   var url = SOCIAL[a.dataset.net];
   if(url){ a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.classList.remove('soon'); }
