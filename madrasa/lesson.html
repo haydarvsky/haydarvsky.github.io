@@ -160,9 +160,6 @@ body.noans .opts .o.c::before{background:transparent;border-color:rgba(15,76,58,
 body.noans .opts .o.c::after{display:none}
 .opts .o.long{grid-column:span 2}
 
-/* ذيلُ الورقة */
-.lfoot{margin-top:26px;border-top:1px solid var(--line);padding-top:9px;display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted)}
-
 /* ===== وضعُ التعديل ===== */
 body.edit [contenteditable]{outline:none;border-radius:5px;transition:background .15s}
 body.edit [contenteditable]:hover{background:rgba(217,164,65,.10);box-shadow:0 0 0 3px rgba(217,164,65,.10)}
@@ -230,7 +227,6 @@ body.edit .addrow{display:flex}
   .chips{gap:5px;margin:6px 0}.chips .c{font-size:12.4px;padding:0 11px}
   .tcap{font-size:13.4px;margin:7px 0 -2px}
   table.ord{font-size:12.8px}table.ord th{font-size:11.5px;padding:3px 9px}table.ord td{padding:2.5px 9px}
-  .lfoot{display:none}
   .qa,.out,table.ord tr{break-inside:avoid}
   .sec-h{break-after:avoid}
   .sec-intro{break-after:avoid}
@@ -265,6 +261,7 @@ var qs=new URLSearchParams(location.search);
 var ID=qs.get('id')||'';
 if(qs.get('noans')) document.body.classList.add('noans');
 var TEACHER='أ. حيدر المعاتيق';
+var SCHOOL='ثانوية طلحة بن عبيدالله. بنين - قسم اللغة العربية';
 
 var INDEX=[];
 
@@ -363,7 +360,7 @@ function renderSec(s){
 }
 function render(){
   var m=M.meta;
-  var h='<div class="sheet"><header class="lh"><div class="l"><img src="/img/logo-cream.svg" alt="حيدر"><div><h1>التحضيرُ اليومي</h1><div class="s">وزارةُ التربية — اللغةُ العربية</div></div></div>'
+  var h='<div class="sheet"><header class="lh"><div class="l"><img src="/img/logo-cream.svg" alt="حيدر"><div><h1>التحضيرُ اليومي</h1><div class="s">'+esc(SCHOOL)+'</div></div></div>'
     +'<div class="r">'+esc(TEACHER)+'<b>'+esc(m.grade||'')+'</b></div></header>'
     +'<div class="ltitle"><div class="kick" contenteditable data-m="aspect">'+esc(m.aspect||'')+'</div><h2 contenteditable data-m="subject">'+esc(m.subject||'')+'</h2><div class="rule"></div></div>'
     +'<div class="pad"><div class="meta">'
@@ -374,7 +371,6 @@ function render(){
     +'</div>';
   h+=M.sections.map(renderSec).join('');
   h+='<div class="addrow noprint" id="addSec"><button data-add="sec-list">+ قسمُ بنود</button><button data-add="sec-out">+ قسمُ نواتج</button><button data-add="sec-qa">+ قسمُ أسئلة</button></div>';
-  h+='<div class="lfoot"><span>'+esc(TEACHER)+' — '+esc(M.title||'')+'</span><span>مدرستي · haydarvsky.github.io</span></div>';
   h+='</div></div>';
   $('app').innerHTML=h;
   bind();
