@@ -191,9 +191,9 @@
     $('hdDate').innerHTML = '<b>' + DAYS[d.getDay()] + ' ' + ar(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + ar(d.getFullYear()) + '</b>' + esc(hijri(d));
     var u = Auth.user(), n = queue().length, me = FB.profile();
     var ft = document.querySelector('footer');
-    if (ft) ft.innerHTML = 'مدرستي — أداةُ المعلّم <b>' + esc(me.short) + '</b> · البياناتُ محفوظةٌ في حسابِه وحدَه';
+    if (ft) ft.innerHTML = u && !FB.demo ? 'مدرستي — أداةُ المعلّم <b>' + esc(me.short) + '</b> · البياناتُ محفوظةٌ في حسابِه وحدَه' : 'مدرستي — أداةُ المعلّم · البياناتُ محفوظةٌ في حسابِ كلِّ معلّمٍ وحدَه';
     var pf = document.querySelector('.print-foot');
-    if (pf) pf.textContent = me.name + ' — تقريرُ متابعةِ المتعلّمين · مدرستي';
+    if (pf) pf.textContent = (u && !FB.demo ? me.name + ' — ' : '') + 'تقريرُ متابعةِ المتعلّمين · مدرستي';
     var sb = document.querySelector('.hd .sub');
     if (sb && u && !FB.demo) sb.textContent = me.short;
     $('hdUser').innerHTML = u ? '<span class="dot' + (navigator.onLine ? '' : ' off') + '"></span><span>' + esc(FB.demo ? 'وضعٌ تجريبيّ (محليّ)' : u.email) + '</span>' + (RO() ? '<span class="ro">قراءةٌ فقط</span>' : '') + (n ? '<span class="q" title="تسجيلاتٌ بانتظارِ الإرسال">' + ar(n) + '</span>' : '') + '<button type="button" id="logout">خروج</button>' : '<span class="dot off"></span><span>غيرُ متّصل</span>';
@@ -770,7 +770,7 @@
     return '<div class="catbars">' + keys.map(function (k) { return '<div class="hbar"><span class="nm">' + esc(k) + '</span><span class="tr"><i style="width:' + (100 * m[k] / max) + '%;background:' + t.color + '"></i></span><span class="v">' + ar(m[k]) + '</span></div>'; }).join('') + '</div>';
   }
   function reportHead(title, sub) {
-    return '<div class="report-head"><div style="display:flex;gap:12px;align-items:center"><img src="/img/logo-dark.svg" alt=""><div class="rt"><h2>' + esc(title) + '</h2><p>' + esc(sub) + '</p></div></div><div class="rd">أ. حيدر المعاتيق<br>' + fmtDate(today(), true) + '</div></div>';
+    return '<div class="report-head"><div style="display:flex;gap:12px;align-items:center"><img src="/img/logo-dark.svg" alt=""><div class="rt"><h2>' + esc(title) + '</h2><p>' + esc(sub) + '</p></div></div><div class="rd">' + esc(FB.profile().name) + '<br>' + fmtDate(today(), true) + '</div></div>';
   }
   var LEGEND = '<div class="legend">' + TYPES.map(function (t) { return '<span><i style="background:' + t.color + '"></i>' + t.label + '</span>'; }).join('') + '</div>';
   var SERIES = TYPES.map(function (t) { return { key: t.key, label: t.label, color: t.hex }; });
@@ -816,7 +816,7 @@
     var notes = lg.filter(function (e) { return e.note || e.cat; }).slice(0, 5).map(function (e) { return '• ' + fmtDate(e.date) + ': ' + TYPE[e.type].label + (e.cat ? ' (' + e.cat + ')' : '') + (e.note ? ' — ' + e.note : ''); });
     var txt = 'السلامُ عليكم ورحمةُ الله\nوليَّ أمرِ المتعلّم ' + s.name + ' — ' + c.name + '\n\nهذا ملخّصُ متابعتِه في ' + R.label + ':\n'
       + (attend !== null ? '• نسبةُ الحضور: ' + ar(attend) + '٪\n' : '') + '• أيّامُ الغياب: ' + ar(counts.absent) + '\n• المشاركاتُ المتميّزة: ' + ar(counts.star) + '\n• تسجيلاتُ السلوك: ' + ar(counts.bad) + '\n• درجةُ السلوك: ' + (sc > 0 ? '+' : '') + ar(sc) + '\n'
-      + (notes.length ? '\nأبرزُ الملاحظات:\n' + notes.join('\n') + '\n' : '') + '\nنشكرُ تعاونَكم ومتابعتَكم.\nأ. حيدر المعاتيق — معلّمُ اللغةِ العربية';
+      + (notes.length ? '\nأبرزُ الملاحظات:\n' + notes.join('\n') + '\n' : '') + '\nنشكرُ تعاونَكم ومتابعتَكم.\n' + FB.profile().name + ' — معلّمُ اللغةِ العربية';
     openSheet('<div class="who"><div><h3>رسالةٌ لوليِّ الأمر</h3><small>' + esc(s.name) + ' — عدّلِ النصَّ ثمّ انسخْه أو أرسلْه</small></div></div><textarea class="msgbox" id="pmsg">' + esc(txt) + '</textarea>'
       + '<div class="foot" style="flex-wrap:wrap"><button class="btn s" id="shClose">إغلاق</button><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" id="pmBrief">PDF صفحةٍ واحدة</button><button class="btn" id="pmCopy">نسخُ النصّ</button><a class="btn p" id="pmWa" target="_blank" rel="noopener">إرسالٌ بواتساب</a></div></div>');
     var wa = $('pmWa'); var upd = function () { wa.href = 'https://wa.me/?text=' + encodeURIComponent($('pmsg').value); }; upd(); $('pmsg').oninput = upd;
