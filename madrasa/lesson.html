@@ -135,10 +135,10 @@ ul.li li::before{content:'';position:absolute;inset-inline-start:6px;top:.78em;w
 .verse .vl{display:block;font-size:13px;color:var(--muted);font-weight:400}
 
 /* الإجابات */
-.ans{margin-top:7px;border-inline-end:2px solid rgba(15,76,58,.16);padding-inline-end:12px;margin-inline-start:34px}
+.ans{margin-top:7px;border-inline-start:2px solid rgba(15,76,58,.16);padding-inline-start:12px;margin-inline-start:34px}
 .ans .tag{font-size:12px;color:var(--amber);font-weight:700;letter-spacing:.02em}
 .ans .a,.bul .a{position:relative;padding-inline-start:16px;margin-top:1px}
-.bul{margin-top:5px;margin-inline-start:34px}
+.bul{margin-top:5px;margin-inline-start:34px;padding-inline-start:12px}
 .ans .a::before,.bul .a::before{content:'';position:absolute;inset-inline-start:2px;top:.8em;width:5px;height:5px;border-radius:50%;background:var(--green);opacity:.45}
 body.noans .ans{display:none}
 body.noans .qa{padding-bottom:16px}
@@ -160,7 +160,7 @@ body.noans .qa::after{content:'';display:block;margin-top:9px;border-bottom:1px 
 .lines i{display:block;border-bottom:1px dotted rgba(42,26,15,.35);height:1.9em}
 
 /* فروعُ السؤال (أ، ب) */
-.part{margin-top:9px;padding-inline-end:12px;margin-inline-start:34px;border-inline-end:1px dashed rgba(15,76,58,.18)}
+.part{margin-top:9px;padding-inline-start:12px;margin-inline-start:34px;border-inline-start:1px dashed rgba(15,76,58,.18)}
 .part .pq{color:var(--green-deep);font-weight:700}
 .part .pl{display:inline-block;min-width:20px;color:var(--amber)}
 
@@ -193,6 +193,58 @@ body.noans .opts .o.c{font-weight:400;color:inherit}
 body.noans .opts .o.c::before{background:transparent;border-color:rgba(15,76,58,.4)}
 body.noans .opts .o.c::after{display:none}
 .opts .o.long{grid-column:span 2}
+
+
+/* ===== الطباعةُ الأحاديةُ اللون: أسودُ صافٍ على أبيض، بلا تدرّجٍ رمادي ===== */
+body.mono{background:#fff;color:#000}
+body.mono .sheet{box-shadow:none;border:1px solid #000;border-radius:0}
+body.mono .lh{background:#fff;color:#000;border-bottom:2px solid #000}
+body.mono .lh::before{display:none}
+body.mono .lh h1,body.mono .lh .s,body.mono .lh .r,body.mono .lh .r b{color:#000;opacity:1}
+body.mono .lh img{content:url('/img/logo-dark.svg')}
+body.mono .ltitle .kick,body.mono .ltitle h2{color:#000}
+body.mono .ltitle .rule{background:#000}
+body.mono .meta .f{background:#fff;border:1px solid #000;border-radius:0}
+body.mono .meta .f label{color:#000}
+body.mono .meta .f .v{color:#000}
+body.mono .meta .f .v:empty::before{color:#000}
+body.mono .sec-h .dot{background:#000;box-shadow:none}
+body.mono .sec-h h3{color:#000}
+body.mono .sec-h .ln{background:#000}
+body.mono .sec-intro{color:#000}
+body.mono ul.li li::before{background:#000}
+body.mono .out{background:#fff;border:1px solid #000;border-radius:0}
+body.mono .out ul.li li::before{background:#000;opacity:1}
+body.mono .qa{background:#fff;border:1px solid #000;border-inline-start:3px solid #000;border-radius:0}
+body.mono .qa .qn{background:#fff;color:#000;border:1px solid #000;border-radius:0;inset-inline-start:0;top:0}
+body.mono .qa .q,body.mono .qa .prompt{color:#000}
+body.mono .quote{background:#fff;border:1px solid #000;border-radius:0;color:#000}
+body.mono .verse,body.mono .verse .vl{color:#000}
+body.mono .ans{border-inline-start:1px solid #000}
+body.mono .ans .tag{color:#000}
+body.mono .ans .a{color:#000}
+body.mono .ans .a::before{background:#000;opacity:1}
+body.mono .bul .a::before{background:#000;opacity:1}
+body.mono .note{background:#fff;border:1px solid #000;border-inline-start:3px solid #000;border-radius:0;color:#000}
+body.mono .note .nt{color:#000}
+body.mono .chips .c{background:#fff;border:1px solid #000;color:#000;border-radius:0}
+body.mono .tcap{color:#000}
+body.mono .part{border-inline-start:1px solid #000}
+body.mono .part .pq,body.mono .part .pl{color:#000}
+body.mono .blank{color:#000;border-bottom:1.5px solid #000}
+body.mono.noans .blank{color:transparent;border-bottom-color:#000}
+body.mono table.ord th{background:#fff;color:#000;border:1px solid #000;border-radius:0}
+body.mono table.ord td{background:#fff;border:1px solid #000;color:#000}
+body.mono table.ord td.ac{background:#fff;color:#000}
+body.mono.noans table.ord td.ac{color:transparent}
+body.mono .opts .o{color:#000}
+body.mono .opts .o::before{border-color:#000}
+body.mono .opts .o.c{color:#000}
+body.mono .opts .o.c::before{background:#000;border-color:#000}
+body.mono .opts .o.c::after{border-color:#fff}
+body.mono .lines i{border-bottom:1px solid #000}
+body.mono .qa::after{border-bottom-color:#000}
+body.mono .lfoot{color:#000;border-top-color:#000}
 
 /* ===== وضعُ التعديل ===== */
 body.edit [contenteditable]{outline:none;border-radius:5px;transition:background .15s}
@@ -262,6 +314,12 @@ body.edit .addrow{display:flex}
   .tcap{font-size:13.4px;margin:7px 0 -2px}
   table.ord{font-size:12.8px}table.ord th{font-size:11.5px;padding:3px 9px}table.ord td{padding:2.5px 9px}
   .qa,.out,table.ord tr{break-inside:avoid}
+  /* لا فراغَ يدفعُ صفحةً فارغةً في آخرِ الملفّ */
+  .sec:last-child{margin-bottom:0}
+  .sec:last-child .qa:last-child{margin-bottom:0}
+  body.mono .sheet{border:none}
+  body.mono .qa{padding:6px 11px 7px;margin-bottom:6px}
+  body.mono .meta .f{min-height:36px}
   .sec-h{break-after:avoid}
   .sec-intro{break-after:avoid}
 }
@@ -276,6 +334,7 @@ body.edit .addrow{display:flex}
     <button class="tb" id="bSave"><svg viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5H5z"/><path d="M8.5 4.5v5h7v-5M8.5 19.5v-6h7v6"/></svg><i>حفظٌ ونشرٌ إلى الموقع</i></button>
     <button class="tb" id="bDeck"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><i>العرضُ التقديمي</i></button>
     <button class="tb" id="bJson"><svg viewBox="0 0 24 24"><path d="M12 3.5v12"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg><i>تنزيلُ ملفِّ البيانات</i></button>
+    <button class="tb" id="bMono"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" stroke="none"/></svg><i>طباعةٌ أحاديةُ اللون (أبيض وأسود)</i></button>
     <button class="tb p" id="bPrint"><svg viewBox="0 0 24 24"><path d="M7 9V3.5h10V9"/><rect x="4" y="9" width="16" height="7.5" rx="2"/><path d="M7 14h10v6.5H7z"/></svg><i>طباعة / PDF</i></button>
     <a class="bnd" href="index.html#/"><img src="/img/logo-cream.svg" alt="حيدر"><div><b>مدرستي</b><small>التحضيرُ اليومي</small></div></a>
   </div>
@@ -662,7 +721,7 @@ function boot(){
   });
 }
 function renderIndex(){
-  ['bEdit','bAns','bSave','bJson','bPrint','bDeck'].forEach(function(k){$(k).hidden=true});
+  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono'].forEach(function(k){$(k).hidden=true});
   $('crumb').innerHTML='<a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a><span class="sep">›</span><b>التحضيراتُ التفاعلية</b>';
   fetch('data/lessons/index.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){
     var h='<div class="idx">';
@@ -697,6 +756,16 @@ $('bSave').onclick=function(){
   }).then(function(){ b.disabled=false; b.querySelector('i').textContent='حفظٌ ونشرٌ إلى الموقع'; });
 };
 $('bDeck').onclick=function(){location.href='deck.html?id='+encodeURIComponent(ID)};
+function monoBtn(){var on=document.body.classList.contains('mono');
+  $('bMono').classList.toggle('on',on);
+  $('bMono').querySelector('i').textContent=on?'أحاديةُ اللون — للعودةِ إلى الألوان':'طباعةٌ أحاديةُ اللون (أبيض وأسود)';}
+$('bMono').onclick=function(){
+  document.body.classList.toggle('mono');
+  try{localStorage.setItem('sc_mono',document.body.classList.contains('mono')?'1':'')}catch(e){}
+  monoBtn();
+};
+try{ if(localStorage.getItem('sc_mono')) document.body.classList.add('mono'); }catch(e){}
+monoBtn();
 $('bPrint').onclick=function(){if(document.body.classList.contains('edit')){document.body.classList.remove('edit');$('bEdit').classList.remove('on')}window.print()};
 $('bJson').onclick=function(){readBack();var b=new Blob([JSON.stringify(M,null,2)],{type:'application/json'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=(ID||'lesson')+'.json';a.click();toast('نُزِّل ملفُ البيانات');};
