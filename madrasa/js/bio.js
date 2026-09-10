@@ -3,8 +3,14 @@
    التأكيدُ يُحفَظُ ليومِه فقط. يُحمَّلُ بسطرٍ واحد في أيِّ صفحةٍ من مدرستي. */
 (function () {
   'use strict';
-  var FROM = 9 * 60 + 10, TO = 10 * 60 + 10;   /* ٠٩:١٠ ← ١٠:١٠ */
   var KEY = 'sc_bio_done';
+  /* الوقتُ من إعداداتِ المعلّم (يكتبُها التطبيقُ في sc_bio_cfg)، والافتراضيُّ ٠٩:١٠ ← ١٠:١٠ */
+  function cfg() {
+    var c = { on: true, from: '09:10', to: '10:10' };
+    try { var j = JSON.parse(localStorage.getItem('sc_bio_cfg') || 'null'); if (j) c = Object.assign(c, j); } catch (e) { }
+    return c;
+  }
+  function mins(t) { var p = String(t || '').split(':'); return (+p[0] || 0) * 60 + (+p[1] || 0); }
 
   var CSS = ''
     + '.biobar{position:relative;z-index:57;background:#B3261E;color:#fff;display:flex;align-items:center;justify-content:center;'
@@ -38,15 +44,17 @@
   function markDone() { try { localStorage.setItem(KEY, todayKey()); } catch (e) { } }
 
   function inWindow() {
+    var c = cfg(); if (!c.on) return false;
     var d = new Date();
     if (d.getDay() === 5 || d.getDay() === 6) return false;   /* الجمعةُ والسبتُ عطلة */
     var m = d.getHours() * 60 + d.getMinutes();
-    return m >= FROM && m < TO;
+    return m >= mins(c.from) && m < mins(c.to);
   }
   function left() {
     var d = new Date(), m = d.getHours() * 60 + d.getMinutes();
-    return Math.max(0, TO - m);
+    return Math.max(0, mins(cfg().to) - m);
   }
+  function fmt(t) { var p = String(t || '').split(':'); var h = +p[0] || 0, mm = p[1] || '00'; return ar((h % 12) || 12) + ':' + ar(mm); }
   function ar(n) { return String(n).replace(/\d/g, function (x) { return '٠١٢٣٤٥٦٧٨٩'[x]; }); }
 
   var bar = null;
@@ -63,11 +71,12 @@
     if (!show) { if (bar) bar.remove(), bar = null; return; }
     build().innerHTML = ICON
       + '<span>تأكّدْ من تسجيلِ بصمةِ التواجد</span>'
-      + '<span class="t">يُغلَقُ التسجيلُ الساعةَ ١٠:١٠ — بقيَ ' + ar(left()) + ' دقيقة</span>'
+      + '<span class="t">يُغلَقُ التسجيلُ الساعةَ ' + fmt(cfg().to) + ' — بقيَ ' + ar(left()) + ' دقيقة</span>'
       + '<button type="button">سجّلتُ البصمة</button>';
     bar.querySelector('button').onclick = function () { markDone(); render(); };
   }
 
   function start() { render(); setInterval(render, 30000); }
+  window.HVBio = { refresh: render };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();

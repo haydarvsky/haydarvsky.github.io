@@ -184,7 +184,7 @@
     if (DEMO) return preview() || GUEST;   /* في التجربةِ فقط: ?as=m يفتحُ مساحةَ محمدٍ للاختبار */
     return teacherOf(u && u.email) || null;
   }
-  function profile() { return teacher() || preview() || GUEST; }
+  function profile() { return teacher() || (DEMO ? preview() : null) || GUEST; }
   root.FB = {
     Auth: Auth, DB: DEMO ? Demo : Live, demo: DEMO, enc: enc, dec: dec, isNetErr: isNetErr,
     teachers: TEACHERS, teacher: teacher, profile: profile, preview: preview, guest: GUEST,

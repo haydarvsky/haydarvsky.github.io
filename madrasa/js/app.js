@@ -68,7 +68,7 @@
         { id: 't2', name: 'الفصلُ الدراسيُّ الثاني ' + ar(y) + '/' + ar(y + 1), start: (y + 1) + '-02-01', end: (y + 1) + '-06-30' }
       ],
       schedule: {}, times: DEFAULT_TIMES.map(function (t) { return { s: t.s, e: t.e }; }),
-      marks: DEFAULT_MARKS.map(function (m) { return Object.assign({}, m); }), periods: 7, cats: DEFAULT_CATS, weights: DEFAULT_W, absAlert: 3, badAlert: 3, viewers: []
+      marks: DEFAULT_MARKS.map(function (m) { return Object.assign({}, m); }), periods: 7, bio: { on: true, from: '09:10', to: '10:10' }, cats: DEFAULT_CATS, weights: DEFAULT_W, absAlert: 3, badAlert: 3, viewers: []
     };
   }
   function normSettings(st) {
@@ -77,6 +77,7 @@
     if (!Array.isArray(st.times) || !st.times.length) st.times = DEFAULT_TIMES.map(function (t) { return { s: t.s, e: t.e }; });
     if (!Array.isArray(st.marks)) st.marks = DEFAULT_MARKS.map(function (m) { return Object.assign({}, m); });
     if (!st.periods) st.periods = 7;
+    st.bio = Object.assign({ on: true, from: '09:10', to: '10:10' }, st.bio || {});
     if (!Array.isArray(st.viewers)) st.viewers = [];
     return st;
   }
@@ -90,13 +91,15 @@
       var st = res[0], cl = res[1];
       S.settings = normSettings(st);
       if (!st && !RO()) await DB.set(C('sc_meta'), 'settings', S.settings).catch(function () { });
+      pushBio();
       S.allClasses = cl; splitClasses(); persistCore();
     } catch (e) { if (!cached || !FB.isNetErr(e)) throw e; }
   }
   function splitClasses() {
     S.classes = (S.allClasses || []).filter(function (c) { return !c.archived; }).sort(function (a, b) { return (a.order || 0) - (b.order || 0) || String(a.name).localeCompare(b.name, 'ar'); });
   }
-  function persistCore() { LS.set(K('sc_core_v1'), { settings: S.settings, allClasses: S.allClasses }); }
+  function persistCore() { LS.set(K('sc_core_v1'), { settings: S.settings, allClasses: S.allClasses }); pushBio(); }
+  function pushBio() { try { if (S.settings && S.settings.bio) { localStorage.setItem('sc_bio_cfg', JSON.stringify(S.settings.bio)); if (window.HVBio) window.HVBio.refresh(); } } catch (e) { } }
   function currentTerm(d) {
     d = d || today(); var t = (S.settings.terms || []).filter(function (t) { return t.start <= d && d <= t.end; })[0];
     return t || (S.settings.terms || []).slice().sort(function (a, b) { return a.start < b.start ? 1 : -1; })[0] || null;
@@ -210,8 +213,8 @@
     closeSheet(); document.body.classList.remove('brief');
     renderHeader();
     var fn = ROUTES[r] || home;
-    var needsAuth = r !== 'prep';
-    if (needsAuth && !Auth.user()) return loginView();
+    var needsAuth = true;   /* الموقعُ كلُّه للمعلّمَينِ المسجَّلَين */
+    if (!Auth.user()) return loginView();
     try {
       view.innerHTML = '<div class="loading"><span class="spin"></span></div>';
       if (needsAuth) await loadCore();
@@ -229,7 +232,7 @@
       + '<div class="field"><label>كلمةُ المرور</label><input id="lpw" type="password" autocomplete="current-password"></div>'
       + '<button class="btn p" id="lgo" style="width:100%;justify-content:center;margin-top:6px">دخول</button>'
       + '<div class="alt">أوّلُ مرّة؟ <button type="button" id="lnew">أنشئْ حسابَك</button> · <button type="button" id="lforgot">نسيتُ كلمةَ المرور</button></div>'
-      + '<div class="alt" style="margin-top:22px;border-top:1px solid var(--line);padding-top:12px">أو <a href="#/prep" style="color:var(--green);font-weight:700">تصفّحِ التحضيرات</a> بلا دخول · <a href="?demo=1#/" style="color:var(--muted)">وضعٌ تجريبيّ</a></div></div>';
+      + '<div class="alt" style="margin-top:22px;border-top:1px solid var(--line);padding-top:12px;color:var(--muted)">الموقعُ خاصٌّ بمعلّمَيه المسجَّلَين · <a href="?demo=1#/" style="color:var(--muted)">وضعٌ تجريبيّ</a></div></div>';
     var go = async function (mode) {
       var em = $('lemail').value.trim(), pw = $('lpw').value;
       $('lerr').innerHTML = '';
@@ -237,7 +240,10 @@
       $('lgo').disabled = true;
       try {
         if (mode === 'forgot') { await Auth.resetPassword(em); $('lerr').innerHTML = '<div class="ok">أُرسلت رسالةُ الاستعادةِ إلى بريدك</div>'; }
-        else { await (mode === 'new' ? Auth.signUp(em, pw) : Auth.signIn(em, pw)); LS.set('sc_last_email', em); setRole(); route(); }
+        else {
+          if (mode === 'new' && !FB.teachers[em.toLowerCase()]) throw new Error('هذا البريدُ غيرُ مسموحٍ له بإنشاءِ حساب — الموقعُ خاصٌّ بمعلّمَيه.');
+          await (mode === 'new' ? Auth.signUp(em, pw) : Auth.signIn(em, pw)); LS.set('sc_last_email', em); setRole(); route();
+        }
       } catch (e) { $('lerr').innerHTML = '<div class="err">' + esc(e.message) + '</div>'; }
       $('lgo').disabled = false;
     };
@@ -961,6 +967,10 @@
       html += '</div>' + (ro ? '' : '<div class="row" style="margin-top:12px"><button class="btn" id="tAdd" style="flex:0 0 auto">إضافةُ فصلٍ دراسي</button></div>') + '</div>';
       html += '<div class="panel"><h3>تصنيفاتُ المشاركة</h3><div class="hint">تظهرُ كأزرارٍ عند تسجيلِ مشاركةٍ متميّزة — يُحفَظُ التصنيفُ فورَ إضافتِه</div>' + chips('star') + '<h3 style="margin-top:14px">تصنيفاتُ السلوك</h3><div class="hint">تظهرُ عند تسجيلِ سلوكٍ غيرِ لائق — يُحفَظُ التصنيفُ فورَ إضافتِه</div>' + chips('bad') + '</div>';
       html += '<div class="panel"><h3>أوزانُ درجةِ السلوك والتنبيهات</h3><div class="hint">درجةُ المتعلّم = مجموعُ أوزانِ تسجيلاتِه في المدّة</div><div class="weights">' + TYPES.map(function (t) { return '<label>' + t.label + '<input type="number" step="0.5" data-w="' + t.key + '" value="' + esc(st.weights[t.key]) + '"' + (ro ? ' readonly' : '') + '></label>'; }).join('') + '<label>تنبيهُ الغياب (أيّام)<input type="number" min="1" id="absAlert" value="' + esc(st.absAlert) + '"' + (ro ? ' readonly' : '') + '></label><label>تنبيهُ السلوك (تسجيلات)<input type="number" min="1" id="badAlert" value="' + esc(st.badAlert) + '"' + (ro ? ' readonly' : '') + '></label></div></div>';
+      html += '<div class="panel"><h3>تنبيهُ بصمةِ التواجد</h3><div class="hint">في هذه المدّةِ من أيّامِ الدوامِ يصيرُ الموقعُ أحمرَ ويذكّرُك بتسجيلِ البصمةِ حتى تؤكّدَها</div>'
+        + '<div class="weights"><label>التنبيهُ مفعَّل<select id="bioOn"' + (ro ? ' disabled' : '') + '><option value="1"' + (st.bio.on ? ' selected' : '') + '>نعم</option><option value="0"' + (!st.bio.on ? ' selected' : '') + '>لا</option></select></label>'
+        + '<label>من<input type="time" id="bioFrom" value="' + esc(st.bio.from) + '"' + (ro ? ' readonly' : '') + '></label>'
+        + '<label>إلى<input type="time" id="bioTo" value="' + esc(st.bio.to) + '"' + (ro ? ' readonly' : '') + '></label></div></div>';
       if (!ro) html += '<div class="row" style="margin-bottom:18px"><button class="btn p" id="tSave" style="flex:0 0 auto">حفظُ الإعدادات</button></div>';
       var u = Auth.user();
       html += '<div class="panel"><h3>الحساب</h3><div class="hint">' + esc(FB.demo ? 'وضعٌ تجريبيٌّ محليّ — البياناتُ في هذا المتصفّحِ فقط' : 'مسجَّلٌ بـ ' + (u ? u.email : '') + (ro ? ' (قراءةٌ فقط)' : ' (المعلّم)')) + '</div>'
@@ -1005,6 +1015,7 @@
       view.querySelectorAll('.term').forEach(function (r) { var t = {}; r.querySelectorAll('[data-k]').forEach(function (i) { t[i.dataset.k] = i.value; }); t.id = (st.terms[+r.dataset.i] || {}).id || uid('t'); if (t.name && t.start && t.end) terms.push(t); }); st.terms = terms;
       view.querySelectorAll('input[data-w]').forEach(function (i) { st.weights[i.dataset.w] = num(i.value, 0); });
       if ($('absAlert')) { st.absAlert = Math.max(1, num($('absAlert').value, 3)); st.badAlert = Math.max(1, num($('badAlert').value, 3)); }
+      if ($('bioOn')) { st.bio = { on: $('bioOn').value === '1', from: $('bioFrom').value || '09:10', to: $('bioTo').value || '10:10' }; }
     }
     render();
   }

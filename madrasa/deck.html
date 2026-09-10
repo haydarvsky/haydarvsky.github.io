@@ -8,8 +8,8 @@
 <meta name="theme-color" content="#062219">
 <meta name="hv-nav" content="off">
 <link rel="icon" href="/img/logo-cream.svg">
-<script src="js/fb.js?v=9"></script>
-<script src="js/bio.js?v=9"></script>
+<script src="js/fb.js?v=10"></script>
+<script src="js/bio.js?v=10"></script>
 <style>
 :root{
   --green:#0F4C3A; --deep:#0A3428; --ink:#062219;
@@ -353,6 +353,11 @@ setTimeout(function(){$('hintbar').classList.add('off')},6000);
 /* ============ الإقلاع ============ */
 (window.FB&&FB.Auth?FB.Auth.restore().catch(function(){}):Promise.resolve()).then(function(){
   if(window.FB&&FB.profile) ME=FB.profile();
+  if(!(window.FB&&FB.teacher&&(FB.teacher()||FB.demo))){
+    $('wrap').innerHTML='<section class="slide on"><div class="cover"><img class="mark" src="/img/logo-cream.svg" alt=""><div class="over">هذا العرضُ لمعلّمَي مدرستي</div>'
+      +'<h1>ادخلْ بحسابِك أوّلاً</h1><div class="rule"></div><div class="meta"><a href="index.html#/" style="color:var(--gold)">الدخولُ إلى مدرستي</a></div></div></section>';
+    $('count').textContent='—'; throw {gated:true};
+  }
   return fetch('data/decks/'+ID+'.json',{cache:'no-cache'});
 }).then(function(r){
   if(!r.ok) throw 0; return r.json();
@@ -365,7 +370,8 @@ setTimeout(function(){$('hintbar').classList.add('off')},6000);
   build();
   var h=parseInt(location.hash.replace('#',''),10);
   show(h>0&&h<=S.length?h-1:0);
-}).catch(function(){
+}).catch(function(e){
+  if(e&&e.gated) return;
   $('wrap').innerHTML='<section class="slide on"><div class="cover"><div class="over">لا عرضَ لهذا التحضيرِ بعد</div>'
     +'<h1>العرضُ التقديمي</h1><div class="rule"></div>'
     +'<div class="meta"><a href="lesson.html?id='+encodeURIComponent(ID)+'" style="color:var(--gold)">العودةُ إلى التحضير</a></div></div></section>';

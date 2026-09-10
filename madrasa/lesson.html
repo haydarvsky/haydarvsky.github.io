@@ -13,8 +13,8 @@
 <meta name="hv-parent-title" content="مدرستي">
 <script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
 <script src="/admin/js/gh-api.js"></script>
-<script src="js/fb.js?v=9"></script>
-<script src="js/bio.js?v=9"></script>
+<script src="js/fb.js?v=10"></script>
+<script src="js/bio.js?v=10"></script>
 <style>
 :root{
   --green:#0F4C3A; --green-deep:#0A3428; --green-ink:#062219;
@@ -699,7 +699,12 @@ function locate(){
   }).catch(function(){return null});
 }
 function boot(){
-  if(!ID){ renderIndex(); return; }
+  if(!ID){
+    (window.FB&&FB.Auth?FB.Auth.restore().catch(function(){}):Promise.resolve()).then(function(){
+      if(window.FB&&FB.teacher&&(FB.teacher()||FB.demo)) renderIndex(); else gate();
+    });
+    return;
+  }
   var local=null; try{local=JSON.parse(localStorage.getItem(key())||'null')}catch(e){}
   var base=fetch('data/lessons/'+ID+'.json',{cache:'no-cache'}).then(function(r){return r.json()}).catch(function(){return null});
   var cloud=(window.FB&&FB.Auth?FB.Auth.restore():Promise.resolve(null)).then(function(){
@@ -710,6 +715,7 @@ function boot(){
   }).catch(function(){return null});
 
   Promise.all([base,cloud]).then(function(r){
+    if(!CLOUD && !(window.FB&&FB.demo)){ gate(); return; }
     var j=r[0], cl=r[1], remote=null;
     if(cl&&cl.json){ try{remote=JSON.parse(cl.json)}catch(e){} }
     ORIG=j;
@@ -720,6 +726,14 @@ function boot(){
     if(remote||local) stamp();
     locate().then(function(x){ chrome(x&&x.topic, x?x.idx:0); });
   });
+}
+/* الموقعُ خاصٌّ بمعلّمَيه: بلا دخولٍ لا تُعرَضُ الورقة */
+function gate(){
+  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono'].forEach(function(k){var b=$(k);if(b)b.hidden=true});
+  $('pager').hidden=true;
+  $('app').innerHTML='<div class="idx" style="text-align:center;padding-top:40px"><img src="/img/logo-dark.svg" alt="" style="height:64px;margin:0 auto 14px">'
+    +'<h2>هذه الصفحةُ لمعلّمَي مدرستي</h2><p style="color:var(--muted);margin:6px 0 18px">ادخلْ بحسابِك ثمّ عُدْ إلى هذا الرابط</p>'
+    +'<a class="btn p" href="index.html#/" style="display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border-radius:100px;background:var(--green);color:#fff;font-weight:700">الدخولُ إلى مدرستي</a></div>';
 }
 function renderIndex(){
   ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono'].forEach(function(k){$(k).hidden=true});
