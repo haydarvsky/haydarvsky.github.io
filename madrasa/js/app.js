@@ -886,7 +886,7 @@
       html += '<div class="panel"><h3>الفصولُ الدراسية</h3><div class="hint">تُستعملُ مدّةُ الفصلِ الحاليِّ في لوحاتِ القياس ونسبِ الحضور</div><div class="terms" id="terms">';
       (st.terms || []).forEach(function (t, i) { html += '<div class="term" data-i="' + i + '"><input data-k="name" value="' + esc(t.name) + '" placeholder="اسمُ الفصل"' + (ro ? ' readonly' : '') + '><input type="date" data-k="start" value="' + t.start + '"' + (ro ? ' readonly' : '') + '><input type="date" data-k="end" value="' + t.end + '"' + (ro ? ' readonly' : '') + '>' + (ro ? '' : '<button class="icon-btn" data-act="del" title="حذف"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>') + '</div>'; });
       html += '</div>' + (ro ? '' : '<div class="row" style="margin-top:12px"><button class="btn" id="tAdd" style="flex:0 0 auto">إضافةُ فصلٍ دراسي</button></div>') + '</div>';
-      html += '<div class="panel"><h3>تصنيفاتُ المشاركة</h3><div class="hint">تظهرُ كأزرارٍ عند تسجيلِ مشاركةٍ متميّزة</div>' + chips('star') + '<h3 style="margin-top:14px">تصنيفاتُ السلوك</h3><div class="hint">تظهرُ عند تسجيلِ سلوكٍ غيرِ لائق</div>' + chips('bad') + '</div>';
+      html += '<div class="panel"><h3>تصنيفاتُ المشاركة</h3><div class="hint">تظهرُ كأزرارٍ عند تسجيلِ مشاركةٍ متميّزة — يُحفَظُ التصنيفُ فورَ إضافتِه</div>' + chips('star') + '<h3 style="margin-top:14px">تصنيفاتُ السلوك</h3><div class="hint">تظهرُ عند تسجيلِ سلوكٍ غيرِ لائق — يُحفَظُ التصنيفُ فورَ إضافتِه</div>' + chips('bad') + '</div>';
       html += '<div class="panel"><h3>أوزانُ درجةِ السلوك والتنبيهات</h3><div class="hint">درجةُ المتعلّم = مجموعُ أوزانِ تسجيلاتِه في المدّة</div><div class="weights">' + TYPES.map(function (t) { return '<label>' + t.label + '<input type="number" step="0.5" data-w="' + t.key + '" value="' + esc(st.weights[t.key]) + '"' + (ro ? ' readonly' : '') + '></label>'; }).join('') + '<label>تنبيهُ الغياب (أيّام)<input type="number" min="1" id="absAlert" value="' + esc(st.absAlert) + '"' + (ro ? ' readonly' : '') + '></label><label>تنبيهُ السلوك (تسجيلات)<input type="number" min="1" id="badAlert" value="' + esc(st.badAlert) + '"' + (ro ? ' readonly' : '') + '></label></div></div>';
       if (!ro) html += '<div class="row" style="margin-bottom:18px"><button class="btn p" id="tSave" style="flex:0 0 auto">حفظُ الإعدادات</button></div>';
       var u = Auth.user();
@@ -905,9 +905,15 @@
       $('terms').addEventListener('click', function (e) { var b = e.target.closest('[data-act=del]'); if (!b) return; collect(); st.terms.splice(+b.closest('.term').dataset.i, 1); render(); });
       view.querySelectorAll('.chipedit[data-type]').forEach(function (box) {
         var type = box.dataset.type;
-        box.addEventListener('click', function (e) { var b = e.target.closest('[data-rm]'); if (!b) return; collect(); st.cats[type] = st.cats[type].filter(function (k) { return k !== b.dataset.rm; }); render(); });
-        box.querySelector('input[data-add]').addEventListener('keydown', function (e) { if (e.key !== 'Enter') return; var v = this.value.trim(); if (!v) return; collect(); if (st.cats[type].indexOf(v) < 0) st.cats[type].push(v); render(); });
+        box.addEventListener('click', function (e) { var b = e.target.closest('[data-rm]'); if (!b) return; collect(); st.cats[type] = st.cats[type].filter(function (k) { return k !== b.dataset.rm; }); saveCats('حُذف التصنيف'); });
+        var inp = box.querySelector('input[data-add]');
+        function addCat() { var v = inp.value.trim(); if (!v) return false; collect(); if (st.cats[type].indexOf(v) < 0) st.cats[type].push(v); inp.value = ''; return true; }
+        inp.addEventListener('keydown', function (e) { if (e.key !== 'Enter') return; e.preventDefault(); if (addCat()) saveCats('أُضيف التصنيف'); });
+        inp.addEventListener('blur', function () { if (addCat()) saveCats('أُضيف التصنيف'); });
       });
+      function saveCats(msg) {
+        saveSettings().then(function () { log('تعديلُ التصنيفات'); toast(msg); }).catch(fail).then(render, render);
+      }
       $('viewers').addEventListener('click', function (e) { var b = e.target.closest('[data-rmv]'); if (!b) return; collect(); st.viewers = st.viewers.filter(function (v) { return v !== b.dataset.rmv; }); render(); });
       $('viewerAdd').addEventListener('keydown', function (e) { if (e.key !== 'Enter') return; var v = this.value.trim().toLowerCase(); if (!v || !/@/.test(v)) return; collect(); if (st.viewers.indexOf(v) < 0) st.viewers.push(v); render(); });
       $('tSave').onclick = async function () { collect(); try { await saveSettings(); await write('set', 'sc_meta', 'access', { viewers: st.viewers }); log('حفظُ الإعدادات'); toast('حُفظ'); } catch (err) { fail(err); } };
@@ -915,6 +921,13 @@
       $('archYear').onclick = archiveYear;
     }
     function collect() {
+      /* ما كُتبَ في صناديقِ الإضافةِ ولم يُؤكَّدْ بـEnter يُحتسَبُ أيضاً */
+      view.querySelectorAll('.chipedit[data-type] input[data-add]').forEach(function (i) {
+        var v = i.value.trim(), t = i.dataset.add;
+        if (v && (st.cats[t] || []).indexOf(v) < 0) { st.cats[t] = (st.cats[t] || []).concat([v]); i.value = ''; }
+      });
+      var va = $('viewerAdd');
+      if (va) { var ve = va.value.trim().toLowerCase(); if (ve && /@/.test(ve) && st.viewers.indexOf(ve) < 0) { st.viewers.push(ve); va.value = ''; } }
       var terms = [];
       view.querySelectorAll('.term').forEach(function (r) { var t = {}; r.querySelectorAll('[data-k]').forEach(function (i) { t[i.dataset.k] = i.value; }); t.id = (st.terms[+r.dataset.i] || {}).id || uid('t'); if (t.name && t.start && t.end) terms.push(t); }); st.terms = terms;
       view.querySelectorAll('input[data-w]').forEach(function (i) { st.weights[i.dataset.w] = num(i.value, 0); });
