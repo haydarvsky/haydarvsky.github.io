@@ -42,6 +42,18 @@
   function C(n) { return n + WS; }
   function K(n) { return n + WS; }
 
+  /* توقيتُ الدوامِ المدرسيِّ للمرحلةِ الثانوية — الافتراضيُّ ويُعدَّلُ يدويّاً من الجدول */
+  var DEFAULT_TIMES = [
+    { s: '07:55', e: '08:40' }, { s: '08:45', e: '09:30' }, { s: '09:35', e: '10:20' },
+    { s: '10:35', e: '11:20' }, { s: '11:25', e: '12:10' }, { s: '12:20', e: '13:05' },
+    { s: '13:10', e: '13:55' }
+  ];
+  /* الفواصلُ غيرُ الدراسية: after = رقمُ الحصّةِ التي تليها (0 = قبلَ الأولى) */
+  var DEFAULT_MARKS = [
+    { id: 'assembly', name: 'لقاءُ الصباح', after: 0, s: '07:45', e: '07:55' },
+    { id: 'break1', name: 'الفرصةُ الأولى', after: 3, s: '10:20', e: '10:35' },
+    { id: 'salah', name: 'فرصةُ الصلاة', after: 5, s: '12:10', e: '12:20' }
+  ];
   var DEFAULT_CATS = {
     star: ['إجابةٌ متميّزة', 'قراءةٌ جيّدة', 'عملٌ جماعي', 'مبادرة', 'واجبٌ نموذجي'],
     bad: ['تأخّر', 'لم يُحضرِ الكتاب', 'إزعاج', 'لم يحلَّ الواجب', 'استخدامُ الهاتف']
@@ -55,12 +67,16 @@
         { id: 't1', name: 'الفصلُ الدراسيُّ الأوّل ' + ar(y) + '/' + ar(y + 1), start: y + '-09-01', end: (y + 1) + '-01-31' },
         { id: 't2', name: 'الفصلُ الدراسيُّ الثاني ' + ar(y) + '/' + ar(y + 1), start: (y + 1) + '-02-01', end: (y + 1) + '-06-30' }
       ],
-      schedule: {}, times: [], cats: DEFAULT_CATS, weights: DEFAULT_W, absAlert: 3, badAlert: 3, viewers: []
+      schedule: {}, times: DEFAULT_TIMES.map(function (t) { return { s: t.s, e: t.e }; }),
+      marks: DEFAULT_MARKS.map(function (m) { return Object.assign({}, m); }), periods: 7, cats: DEFAULT_CATS, weights: DEFAULT_W, absAlert: 3, badAlert: 3, viewers: []
     };
   }
   function normSettings(st) {
     var d = defaultSettings(); st = Object.assign(d, st || {});
     st.cats = Object.assign({}, DEFAULT_CATS, st.cats || {}); st.weights = Object.assign({}, DEFAULT_W, st.weights || {});
+    if (!Array.isArray(st.times) || !st.times.length) st.times = DEFAULT_TIMES.map(function (t) { return { s: t.s, e: t.e }; });
+    if (!Array.isArray(st.marks)) st.marks = DEFAULT_MARKS.map(function (m) { return Object.assign({}, m); });
+    if (!st.periods) st.periods = 7;
     if (!Array.isArray(st.viewers)) st.viewers = [];
     return st;
   }
@@ -252,7 +268,16 @@
     else if (!sched.some(Boolean)) html += '<div class="empty"><b>الجدولُ فارغٌ لهذا اليوم</b><a class="btn p" href="#/schedule" style="margin-top:10px">رتّبِ الجدولَ الأسبوعي</a></div>';
     else {
       html += '<div class="periods">';
+      var marks = S.settings.marks || [];
+      function markHTML(after) {
+        return marks.filter(function (m) { return (+m.after || 0) === after; }).map(function (m) {
+          var on = false;
+          if (m.s && m.e) { var ms = m.s.split(':'), me = m.e.split(':'); on = nowMin >= (+ms[0] * 60 + +ms[1]) && nowMin < (+me[0] * 60 + +me[1]); }
+          return '<div class="period brk' + (on ? ' now' : '') + '"><span class="n">•</span><span class="c">' + esc(m.name || 'فاصل') + '</span><span class="m">' + (m.s ? esc(m.s + '–' + m.e) : '') + '</span></div>';
+        }).join('');
+      }
       for (var i = 0; i < per; i++) {
+        html += markHTML(i);
         var c = sched[i] ? cls(sched[i]) : null;
         var t = times[i] || null, isNow = false;
         if (t && t.s && t.e) { var s = t.s.split(':'), e = t.e.split(':'); isNow = nowMin >= (+s[0] * 60 + +s[1]) && nowMin < (+e[0] * 60 + +e[1]); }
@@ -261,6 +286,7 @@
           html += '<a class="period' + (isNow ? ' now' : '') + '" href="#/class/' + c._id + '"><span class="n">' + ar(i + 1) + '</span><span class="c">' + esc(c.name) + (preps.length ? '<span class="today-prep">' + preps.map(function (it) { return '<span>📄 ' + esc(it.title) + '</span>'; }).join('') + '</span>' : '') + '</span><span class="m">' + (t && t.s ? esc(t.s + '–' + t.e) : ar(c.students ? c.students.length : 0) + ' متعلّماً') + '</span></a>';
         } else html += '<div class="period free"><span class="n">' + ar(i + 1) + '</span><span class="c">حصّةٌ فارغة</span></div>';
       }
+      for (var mk = per; mk <= 12; mk++) html += markHTML(mk);
       html += '</div>';
       var todays = prepM.items.filter(function (it) { return it.date === today(); });
       if (todays.length) html += '<div class="panel" style="margin-top:12px"><h3>تحضيرُ اليوم</h3><div class="files">' + todays.map(function (it) { return '<a class="file" href="prep/' + it.grade + '/' + it.sem + '/' + encodeURIComponent(it.file) + '" target="_blank" rel="noopener"><div class="pdf">PDF</div><div class="t"><b>' + esc(it.title) + '</b><small>' + esc(GRADES[it.grade]) + (it.unit ? ' · الوحدة ' + esc(it.unit) : '') + (it.lesson ? ' · ' + esc(it.lesson) : '') + '</small></div></a>'; }).join('') + '</div></div>';
@@ -872,16 +898,32 @@
     var html = '<div class="ttl"><div><h2>الجدولُ الأسبوعي</h2><p>ضعْ فصلَ كلِّ حصّةٍ — تظهرُ حصصُ اليومِ في الرئيسة وتُحسَبُ بها نسبةُ الحضور</p></div><div class="acts"><div class="field" style="margin:0;flex-direction:row;align-items:center;gap:8px"><label>عددُ الحصص</label><input type="number" id="perN" min="1" max="10" value="' + per + '" style="width:70px"></div><button class="btn p" id="schSave">حفظُ الجدول</button></div></div>';
     if (!S.classes.length) html += '<div class="err">أضفْ فصولَك أوّلاً من «متابعةُ المتعلّمين» ثمّ عُدْ إلى الجدول</div>';
     html += '<div class="panel" style="overflow-x:auto"><table class="tt"><thead><tr><th></th>' + [0, 1, 2, 3, 4].map(function (d) { return '<th>' + DAYS[d] + '</th>'; }).join('') + '<th style="width:150px">الوقت</th></tr></thead><tbody>';
+    var TI = 'padding:6px;border:1px solid var(--line);border-radius:8px;font-size:13px;flex:1';
+    function markRows(after) {
+      return (st.marks || []).map(function (m, mi) { return { m: m, mi: mi }; })
+        .filter(function (x) { return (+x.m.after || 0) === after; })
+        .map(function (x) {
+          return '<tr class="mark" data-mi="' + x.mi + '"><td class="pn">•</td>'
+            + '<td colspan="5"><input data-mk="' + x.mi + '" data-k="name" value="' + esc(x.m.name || '') + '" style="' + TI + ';width:100%"></td>'
+            + '<td><div style="display:flex;gap:4px"><input type="time" data-mk="' + x.mi + '" data-k="s" value="' + esc(x.m.s || '') + '" style="' + TI + '"><input type="time" data-mk="' + x.mi + '" data-k="e" value="' + esc(x.m.e || '') + '" style="' + TI + '"></div>'
+            + '<button class="icon-btn" data-rmk="' + x.mi + '" title="حذفُ الفاصل" style="margin-top:5px"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></td></tr>';
+        }).join('');
+    }
     for (var i = 0; i < per; i++) {
+      html += markRows(i);
       html += '<tr><td class="pn">' + ar(i + 1) + '</td>';
       [0, 1, 2, 3, 4].forEach(function (d) {
         var v = (st.schedule[d] || [])[i] || '';
         html += '<td><select data-d="' + d + '" data-i="' + i + '" class="' + (v ? '' : 'empty') + '"><option value="">—</option>' + S.classes.map(function (c) { return '<option value="' + c._id + '"' + (c._id === v ? ' selected' : '') + '>' + esc(c.name) + '</option>'; }).join('') + '</select></td>';
       });
       var t = st.times[i] || {};
-      html += '<td><div style="display:flex;gap:4px"><input type="time" data-ti="' + i + '" data-k="s" value="' + esc(t.s || '') + '" style="flex:1;padding:6px;border:1px solid var(--line);border-radius:8px;font-size:13px"><input type="time" data-ti="' + i + '" data-k="e" value="' + esc(t.e || '') + '" style="flex:1;padding:6px;border:1px solid var(--line);border-radius:8px;font-size:13px"></div></td></tr>';
+      html += '<td><div style="display:flex;gap:4px"><input type="time" data-ti="' + i + '" data-k="s" value="' + esc(t.s || '') + '" style="' + TI + '"><input type="time" data-ti="' + i + '" data-k="e" value="' + esc(t.e || '') + '" style="' + TI + '"></div></td></tr>';
     }
-    html += '</tbody></table></div><p style="color:var(--muted);font-size:14px">الجمعةُ والسبتُ عطلة. الوقتُ اختياريٌّ لتمييزِ الحصّةِ الجاريةِ في الرئيسة.</p>';
+    for (var mk = per; mk <= 12; mk++) html += markRows(mk);
+    html += '</tbody></table></div>'
+      + '<div class="row" style="margin:10px 0 4px"><button class="btn" id="mkAdd" style="flex:0 0 auto">إضافةُ فاصل (طابور / فرصة)</button>'
+      + '<button class="btn" id="tmReset" style="flex:0 0 auto">استعادةُ التوقيتِ الوزاريّ</button></div>'
+      + '<p style="color:var(--muted);font-size:14px">الجمعةُ والسبتُ عطلة. الافتراضيُّ توقيتُ المرحلةِ الثانوية: لقاءُ الصباح ٧٫٤٥ والحصّةُ ٤٥ دقيقةً وفرصتانِ — وكلُّ وقتٍ يُعدَّلُ يدويّاً.</p>';
     view.innerHTML = html;
     view.querySelectorAll('select').forEach(function (s) { s.onchange = function () { s.classList.toggle('empty', !s.value); }; });
     $('perN').onchange = function () { st.periods = Math.max(1, Math.min(10, +$('perN').value || 7)); collect(); scheduleView(); };
@@ -890,8 +932,22 @@
       Object.keys(sch).forEach(function (d) { for (var k = 0; k < sch[d].length; k++) if (sch[d][k] === undefined) sch[d][k] = null; });
       var times = []; view.querySelectorAll('input[data-ti]').forEach(function (inp) { var i = +inp.dataset.ti; times[i] = times[i] || { s: '', e: '' }; times[i][inp.dataset.k] = inp.value; });
       st.schedule = sch; st.times = times.map(function (t) { return t || { s: '', e: '' }; });
+      view.querySelectorAll('input[data-mk]').forEach(function (inp) {
+        var m = st.marks[+inp.dataset.mk]; if (m) m[inp.dataset.k] = inp.value;
+      });
     }
     $('schSave').onclick = async function () { collect(); try { await saveSettings(); log('حفظُ الجدول'); toast('حُفظ الجدول'); } catch (e) { fail(e); } };
+    $('mkAdd').onclick = function () { collect(); st.marks.push({ id: uid('mk'), name: 'فاصل', after: 1, s: '', e: '' }); scheduleView(); };
+    $('tmReset').onclick = function () {
+      if (!confirm('استعادةُ توقيتِ وزارةِ التربيةِ للمرحلةِ الثانوية؟ يُستبدَلُ وقتُ الحصصِ والفواصلِ فقط، ولا يتغيّرُ توزيعُ الفصول.')) return;
+      st.times = DEFAULT_TIMES.map(function (t) { return { s: t.s, e: t.e }; });
+      st.marks = DEFAULT_MARKS.map(function (m) { return Object.assign({}, m); });
+      st.periods = 7; scheduleView();
+    };
+    view.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-rmk]'); if (!b) return;
+      collect(); st.marks.splice(+b.dataset.rmk, 1); scheduleView();
+    });
   }
 
   /* ---------------- الإعدادات ---------------- */

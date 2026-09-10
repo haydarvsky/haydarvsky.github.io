@@ -465,3 +465,11 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px;border-t
 .lesson .deck:hover{background:var(--green-deep);transform:translateY(-1px);box-shadow:var(--sh)}
 .lesson .deck svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:720px){.lesson .deck span{display:none}.lesson .deck{padding:6px 9px}}
+
+/* ===== الفواصلُ غيرُ الدراسية في يومِ الرئيسة والجدول ===== */
+.period.brk{background:rgba(232,223,204,.45);border-style:dashed;color:var(--muted)}
+.period.brk .n{background:transparent;border:1px dashed var(--line);color:var(--amber)}
+.period.brk .c{font-weight:700;color:var(--green)}
+.period.brk.now{border-color:var(--amber);background:rgba(194,120,10,.1)}
+table.tt tr.mark td{background:rgba(232,223,204,.35)}
+table.tt tr.mark .pn{color:var(--amber)}
