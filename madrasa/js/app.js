@@ -279,17 +279,24 @@
     var r = await fetch('data/prep.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).catch(function () { return LS.get('sc_prep_cache', { items: [] }); });
     S.prep = r; LS.set('sc_prep_cache', r); return r;
   }
+  async function loadLessons(force) {
+    if (S.lessons && !force) return S.lessons;
+    var r = await fetch('data/lessons/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).catch(function () { return LS.get('sc_lessons_cache', { topics: [] }); });
+    S.lessons = r; LS.set('sc_lessons_cache', r); return r;
+  }
+  function topicsFor(g, s) { return ((S.lessons && S.lessons.topics) || []).filter(function (t) { return String(t.grade) === String(g) && String(t.sem) === String(s); }); }
   function ghToken() { for (var i = 0; i < TOKEN_KEYS.length; i++) { var v = localStorage.getItem(TOKEN_KEYS[i]); if (v) return v; } return ''; }
   function fmtSize(b) { return b > 1048576 ? (b / 1048576).toFixed(1).replace('.', '٫') + ' م.ب' : Math.max(1, Math.round(b / 1024)) + ' ك.ب'; }
   function safeName(n) { return n.replace(/[\/\\#?%*:|"<>]+/g, '-').replace(/\s+/g, ' ').trim(); }
   async function prep(p) {
     var m = await loadPrep();
-    var g = p[0], s = p[1];
+    await loadLessons().catch(function () { });
+    var g = p[0], s = p[1], tp = p[2];
     var crumbs = '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/prep">التحضيرات</a>' + (g ? '<span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a>' : '') + (s ? '<span class="sep">›</span>' + esc(SEMS[s]) : '') + '</div>';
     if (!g) {
       var html = crumbs + '<div class="ttl"><div><h2>التحضيرات</h2><p>كلُّ تحضيراتِك مرتّبةً بالصفِّ ثمّ بالفصلِ الدراسي</p></div></div><div class="gradecards">';
       ['10', '11', '12'].forEach(function (k) {
-        var n = m.items.filter(function (i) { return i.grade === k; }).length;
+        var n = m.items.filter(function (i) { return i.grade === k; }).length + ['1', '2'].reduce(function (a, sm) { return a + topicsFor(k, sm).reduce(function (b, t) { return b + t.lessons.length; }, 0); }, 0);
         html += '<a class="card hov" href="#/prep/' + k + '"><div class="big">' + ar(k) + '</div><h3>' + esc(GRADES[k]) + '</h3><p>' + (n ? ar(n) + ' تحضيراً' : 'لا ملفّاتَ بعد') + '</p></a>';
       });
       view.innerHTML = html + '</div>'; return;
@@ -298,12 +305,26 @@
     if (!s) {
       var html2 = crumbs + '<div class="ttl"><div><h2>' + esc(GRADES[g]) + '</h2><p>اخترِ الفصلَ الدراسي</p></div></div><div class="sems">';
       ['1', '2'].forEach(function (k) {
-        var n = m.items.filter(function (i) { return i.grade === g && i.sem === k; }).length;
+        var n = m.items.filter(function (i) { return i.grade === g && i.sem === k; }).length + topicsFor(g, k).reduce(function (a, t) { return a + t.lessons.length; }, 0);
         html2 += '<a class="card hov" href="#/prep/' + g + '/' + k + '"><div class="kick">' + esc(GRADES[g]) + '</div><h3>' + esc(SEMS[k]) + '</h3><p>' + (n ? ar(n) + ' تحضيراً' : 'لا ملفّاتَ بعد') + '</p></a>';
       });
       view.innerHTML = html2 + '</div>'; return;
     }
+    if (tp) { renderTopic(g, s, tp); return; }
     renderPrepFolder(g, s, crumbs);
+  }
+  function renderTopic(g, s, tid) {
+    var t = topicsFor(g, s).filter(function (x) { return x.id === tid; })[0];
+    if (!t) { location.hash = '#/prep/' + g + '/' + s; return; }
+    var html = '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/prep">التحضيرات</a><span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a><span class="sep">›</span><a href="#/prep/' + g + '/' + s + '">' + esc(SEMS[s]) + '</a><span class="sep">›</span>' + esc(t.title) + '</div>'
+      + '<div class="ttl"><div><h2>' + esc(t.title) + '</h2><p>' + esc(t.unit || '') + ' — ' + ar(t.lessons.length) + ' تحضيراً' + (t.note ? ' · ' + esc(t.note) : '') + '</p></div></div>'
+      + '<div class="lessons">';
+    t.lessons.forEach(function (l, i) {
+      html += '<a class="lesson" href="lesson.html?id=' + encodeURIComponent(l.id) + '"><span class="n">' + ar(i + 1) + '</span>'
+        + '<span class="t"><b>' + esc(l.title) + '</b><small>' + esc(l.sub || '') + '</small></span>'
+        + (l.kind ? '<span class="k">' + esc(l.kind) + '</span>' : '') + '</a>';
+    });
+    view.innerHTML = html + '</div>';
   }
   function itemMeta(i) { var parts = []; if (i.unit) parts.push('الوحدة ' + i.unit); if (i.lesson) parts.push(i.lesson); if (i.week) parts.push('الأسبوع ' + ar(i.week)); if (i.date) parts.push('حصّة ' + fmtDate(i.date)); return parts.map(esc).join(' · '); }
   function crumbsFor(g, s) { return '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/prep">التحضيرات</a><span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a><span class="sep">›</span>' + esc(SEMS[s]) + '</div>'; }
@@ -312,13 +333,25 @@
     var items = S.prep.items.filter(function (i) { return i.grade === g && i.sem === s; }).sort(function (a, b) { return (num(a.week, 0) - num(b.week, 0)) || (a.order || 0) - (b.order || 0) || String(a.added).localeCompare(String(b.added)); });
     if (q) items = items.filter(function (i) { return [i.title, i.file, i.unit, i.lesson, i.week, i.date].join(' ').indexOf(q) >= 0; });
     var canUp = !!ghToken();
-    var html = crumbs + '<div class="ttl"><div><h2>' + esc(SEMS[s]) + '</h2><p>' + esc(GRADES[g]) + ' — ' + (items.length ? ar(items.length) + ' تحضيراً' : 'المجلّدُ فارغ') + '</p></div>'
+    var nInt = topicsFor(g, s).reduce(function (a, t) { return a + t.lessons.length; }, 0);
+    var cnt = [];
+    if (nInt) cnt.push(ar(nInt) + ' تحضيراً تفاعليّاً');
+    if (items.length) cnt.push(ar(items.length) + ' ملفَّ PDF');
+    var html = crumbs + '<div class="ttl"><div><h2>' + esc(SEMS[s]) + '</h2><p>' + esc(GRADES[g]) + ' — ' + (cnt.length ? cnt.join(' · ') : 'المجلّدُ فارغ') + '</p></div>'
       + '<div class="acts">' + (canUp ? '<button class="btn p" id="pickBtn">إضافةُ PDF</button>' : '<button class="btn" id="tokBtn">تفعيلُ الرفع</button>') + '</div></div>';
+    var tps = topicsFor(g, s);
+    if (tps.length) {
+      html += '<div class="panel topics"><h3>التحضيراتُ التفاعلية</h3><div class="hint">تُعرَضُ في الموقع، وتُعدَّلُ في مكانِها، وتُطبَعُ PDF ببراندِك.</div><div class="grid">';
+      tps.forEach(function (t) {
+        html += '<a class="card hov" href="#/prep/' + g + '/' + s + '/' + encodeURIComponent(t.id) + '"><div class="kick">' + esc(t.unit || '') + '</div><h3>' + esc(t.title) + '</h3><p>' + ar(t.lessons.length) + ' تحضيراً تفاعليّاً</p></a>';
+      });
+      html += '</div></div>';
+    }
     html += '<div class="searchbar"><input id="prepQ" placeholder="ابحثْ بالعنوانِ أو الوحدةِ أو الدرس…" value="' + esc(q) + '"></div>';
     if (canUp) html += '<div class="drop" id="drop"><b>أفلتْ ملفّاتَ PDF هنا</b>أو انقرْ للاختيار — يُرفَعُ الملفُّ إلى الموقعِ ويُحفَظُ باسمِه<input type="file" id="fileIn" accept="application/pdf" multiple hidden><div class="prog" id="prog" hidden><i></i></div></div>';
     else html += '<div id="tokBox" hidden class="panel"><h3>رمزُ الرفع</h3><div class="hint">ألصقْ رمزَ GitHub (Contents R/W على المستودع) مرّةً واحدة؛ يُحفَظُ في هذا المتصفّح كما في مركزِ التحكّم.</div><div class="inline-add"><input id="tokIn" type="password" placeholder="ghp_…"><button class="btn p" id="tokSave">حفظ</button></div></div>';
     html += '<div class="files" id="files">';
-    if (!items.length) html += '<div class="empty"><b>' + (q ? 'لا نتائج' : 'لا تحضيراتَ بعد') + '</b>' + (q ? 'جرّبْ كلمةً أخرى' : canUp ? 'أفلتْ أوّلَ ملفٍّ في المربّعِ أعلاه' : 'فعّلِ الرفعَ ثمّ أضفِ الملفّات') + '</div>';
+    if (!items.length) html += '<div class="empty"><b>' + (q ? 'لا نتائج' : 'لا ملفّاتِ PDF بعد') + '</b>' + (q ? 'جرّبْ كلمةً أخرى' : canUp ? 'أفلتْ أوّلَ ملفٍّ في المربّعِ أعلاه' : 'فعّلِ الرفعَ ثمّ أضفِ الملفّات') + '</div>';
     items.forEach(function (i) {
       var url = 'prep/' + g + '/' + s + '/' + encodeURIComponent(i.file), meta = itemMeta(i);
       html += '<div class="file" data-id="' + i.id + '"><div class="pdf">PDF</div><div class="t"><b title="' + esc(i.title) + '">' + esc(i.title) + '</b><small>' + (meta ? meta + ' · ' : '') + esc(i.file) + (i.size ? ' · ' + fmtSize(i.size) : '') + '</small></div>'
