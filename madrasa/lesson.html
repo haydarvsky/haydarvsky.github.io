@@ -189,7 +189,7 @@ body.noans table.ord td.ac{color:transparent}
 .opts .o::before{content:'';position:absolute;inset-inline-start:2px;top:.62em;width:14px;height:14px;border:1.5px solid rgba(15,76,58,.4);border-radius:4px}
 .opts .o.c{font-weight:700;color:var(--green)}
 .opts .o.c::before{background:var(--green);border-color:var(--green)}
-.opts .o.c::after{content:'';position:absolute;inset-inline-start:6px;top:.85em;width:4px;height:8px;border:solid var(--cream);border-width:0 0 2px 2px;transform:rotate(-45deg) translateY(-2px)}
+.opts .o.c::after{content:'✓';position:absolute;inset-inline-start:2px;top:.62em;width:14px;height:14px;display:grid;place-items:center;color:var(--cream);font-size:11px;font-weight:700;line-height:1}
 body.noans .opts .o.c{font-weight:400;color:inherit}
 body.noans .opts .o.c::before{background:transparent;border-color:rgba(15,76,58,.4)}
 body.noans .opts .o.c::after{display:none}
@@ -242,7 +242,7 @@ body.mono .opts .o{color:#000}
 body.mono .opts .o::before{border-color:#000}
 body.mono .opts .o.c{color:#000}
 body.mono .opts .o.c::before{background:#000;border-color:#000}
-body.mono .opts .o.c::after{border-color:#fff}
+body.mono .opts .o.c::after{color:#fff}
 body.mono .lines i{border-bottom:1px solid #000}
 body.mono .qa::after{border-bottom-color:#000}
 body.mono .lfoot{color:#000;border-top-color:#000}
