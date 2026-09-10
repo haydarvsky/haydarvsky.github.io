@@ -547,6 +547,7 @@ function save(quiet){
   }
   if(!quiet) toast('حُفظ في هذا المتصفّح');
   stamp();
+  chrome(NAV.topic,NAV.idx);   /* المسارُ والعنوانُ يتبعانِ سطرَ التناول */
 }
 function stamp(){
   var at=null; try{at=localStorage.getItem(atKey())}catch(e){}
@@ -567,8 +568,10 @@ function stamp(){
 var GRADES={10:'الصفُّ العاشر',11:'الصفُّ الحاديَ عشر',12:'الصفُّ الثانيَ عشر'};
 var SEMS={1:'الفصلُ الدراسيُّ الأوّل',2:'الفصلُ الدراسيُّ الثاني'};
 var APP='index.html#/';
+var NAV={topic:null,idx:0};
 
 function chrome(topic,idx){
+  NAV.topic=topic; NAV.idx=idx;
   var c=$('crumb'), pg=$('pager');
   var h='<a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a>';
   if(topic){
@@ -576,19 +579,22 @@ function chrome(topic,idx){
       +'<span class="sep">›</span><a href="'+APP+'prep/'+topic.grade+'/'+topic.sem+'">'+esc(SEMS[topic.sem]||'')+'</a>'
       +'<span class="sep">›</span><a href="'+APP+'prep/'+topic.grade+'/'+topic.sem+'/'+encodeURIComponent(topic.id)+'">'+esc(topic.title)+'</a>';
   }
-  h+='<span class="sep">›</span><b>'+esc((topic&&topic.lessons[idx]&&topic.lessons[idx].title)||(M&&M.sub)||'التحضير')+'</b>';
+  var here=(M&&M.meta&&M.meta.aspect)||(topic&&topic.lessons[idx]&&topic.lessons[idx].title)||'التحضير';
+  h+='<span class="sep">›</span><b>'+esc(here)+'</b>';
   c.innerHTML=h;
   if(!topic){ pg.hidden=true; return; }
   var CH={r:'<svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg>',l:'<svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg>'};
   var cell=function(l,dir){
     var lbl=dir<0?'السابق':'التالي', ico=dir<0?CH.r:CH.l, cls=dir<0?'':'nx';
-    var body='<span class="ar">'+ico+'</span><span class="tx"><small>'+lbl+'</small><b>'+(l?esc(l.title):'لا يوجد')+'</b></span>';
+    var ti=l?l.title:'';
+    if(l){try{var d=JSON.parse(localStorage.getItem('sc_lesson_'+l.id)||'null');if(d&&d.meta&&d.meta.aspect)ti=d.meta.aspect}catch(e){}}
+    var body='<span class="ar">'+ico+'</span><span class="tx"><small>'+lbl+'</small><b>'+(l?esc(ti):'لا يوجد')+'</b></span>';
     return l ? '<a class="'+cls+'" href="?id='+encodeURIComponent(l.id)+'">'+body+'</a>'
              : '<span class="'+cls+'">'+body+'</span>';
   };
   pg.innerHTML=cell(topic.lessons[idx-1],-1)+cell(topic.lessons[idx+1],1);
   pg.hidden=false;
-  document.title=((topic.lessons[idx]&&topic.lessons[idx].title)||'التحضير')+' — مدرستي';
+  document.title=here+' — مدرستي';
 }
 function locate(){
   return fetch('data/lessons/index.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){
@@ -619,7 +625,9 @@ function renderIndex(){
     var h='<div class="idx">';
     (j.topics||[]).forEach(function(t){
       h+='<h2>'+esc(t.title)+'</h2><div class="g">'
-        +t.lessons.map(function(l){return '<a href="?id='+encodeURIComponent(l.id)+'"><div class="k">'+esc(l.kind||t.unit||'')+'</div><h3>'+esc(l.title)+'</h3><p>'+esc(l.sub||'')+'</p></a>'}).join('')
+        +t.lessons.map(function(l){var ti=l.title;
+          try{var d=JSON.parse(localStorage.getItem('sc_lesson_'+l.id)||'null');if(d&&d.meta&&d.meta.aspect)ti=d.meta.aspect}catch(e){}
+          return '<a href="?id='+encodeURIComponent(l.id)+'"><div class="k">'+esc(l.kind||t.unit||'')+'</div><h3>'+esc(ti)+'</h3><p>'+esc(l.sub||'')+'</p></a>'}).join('')
         +'</div>';
     });
     $('app').innerHTML=h+'</div>';

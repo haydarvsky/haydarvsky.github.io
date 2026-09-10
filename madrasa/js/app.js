@@ -285,6 +285,14 @@
     S.lessons = r; LS.set('sc_lessons_cache', r); return r;
   }
   function topicsFor(g, s) { return ((S.lessons && S.lessons.topics) || []).filter(function (t) { return String(t.grade) === String(g) && String(t.sem) === String(s); }); }
+  /* عنوانُ التحضيرِ في القائمةِ هو سطرُ التناولِ داخلَه — فإنْ عُدِّلَ محليّاً تبِعَه العنوان */
+  function lessonTitle(l) {
+    try {
+      var d = JSON.parse(localStorage.getItem('sc_lesson_' + l.id) || 'null');
+      if (d && d.meta && d.meta.aspect) return d.meta.aspect;
+    } catch (e) { }
+    return l.title;
+  }
   function ghToken() { for (var i = 0; i < TOKEN_KEYS.length; i++) { var v = localStorage.getItem(TOKEN_KEYS[i]); if (v) return v; } return ''; }
   function fmtSize(b) { return b > 1048576 ? (b / 1048576).toFixed(1).replace('.', '٫') + ' م.ب' : Math.max(1, Math.round(b / 1024)) + ' ك.ب'; }
   function safeName(n) { return n.replace(/[\/\\#?%*:|"<>]+/g, '-').replace(/\s+/g, ' ').trim(); }
@@ -321,7 +329,7 @@
       + '<div class="lessons">';
     t.lessons.forEach(function (l, i) {
       html += '<a class="lesson" href="lesson.html?id=' + encodeURIComponent(l.id) + '"><span class="n">' + ar(i + 1) + '</span>'
-        + '<span class="t"><b>' + esc(l.title) + '</b><small>' + esc(l.sub || '') + '</small></span>'
+        + '<span class="t"><b>' + esc(lessonTitle(l)) + '</b><small>' + esc(l.sub || '') + '</small></span>'
         + (l.kind ? '<span class="k">' + esc(l.kind) + '</span>' : '') + '</a>';
     });
     view.innerHTML = html + '</div>';
