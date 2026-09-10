@@ -409,9 +409,9 @@ function readOpts(el){return [].map.call(el.querySelectorAll('.o'),function(d){v
 function readBack(){
   var app=$('app');
   app.querySelectorAll('[data-m]').forEach(function(el){
-    var k=el.dataset.m; if(el.closest('.meta')||!(k in M.meta)) M.meta[k]=txt(el);
+    var k=el.dataset.m;
+    if(el.closest('.meta')||!(k in M.meta)||M.meta[k]==null||M.meta[k]==='') M.meta[k]=txt(el);
   });
-  /* العنوانُ والتناولُ في الترويسةِ يتبعان meta */
   M.sections=[].map.call(app.querySelectorAll('.sec'),function(se){
     var s={t:se.dataset.t,title:txt(se.querySelector('.sec-h h3'))};
     var iv=se.querySelector('.sec-intro'); if(iv) s.intro=txt(iv);
@@ -498,7 +498,12 @@ function bind(){
       if(li2&&li2.parentNode.children.length>1){e.preventDefault();var pv=li2.previousElementSibling;li2.remove();if(pv)pv.focus();}
     }
   });
-  app.addEventListener('input',function(){clearTimeout(bind._t);bind._t=setTimeout(function(){save(true)},900)});
+  app.addEventListener('input',function(e){
+    var t=e.target&&e.target.dataset&&e.target.dataset.m;
+    if(t){ var v=e.target.innerText;
+      app.querySelectorAll('[data-m="'+t+'"]').forEach(function(x){ if(x!==e.target&&x.innerText!==v) x.textContent=v; }); }
+    clearTimeout(bind._t);bind._t=setTimeout(function(){save(true)},900);
+  });
   app.addEventListener('paste',function(e){
     if(!e.target.isContentEditable)return;
     e.preventDefault();
