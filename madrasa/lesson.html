@@ -281,7 +281,7 @@ body.edit .addrow{display:flex}
 'use strict';
 var $=function(i){return document.getElementById(i)};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
-var nl=function(x){return esc(x).replace(/\n/g,'<br>')};
+var nl=function(x){return esc(x).replace(/\n/g,'<br>').replace(/ {2,}/g,function(m){return new Array(m.length+1).join('\u00A0')})};
 var toast=function(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on')},2200)};
 var qs=new URLSearchParams(location.search);
 var ID=qs.get('id')||'';
@@ -291,7 +291,8 @@ var SCHOOL='ثانوية طلحة بن عبيدالله. بنين - قسم ال�
 
 var INDEX=[];
 
-var M=null; /* النموذج */
+var M=null;   /* النموذجُ الحيّ */
+var ORIG=null; /* نسخةُ الموقعِ الأصلية */
 
 /* ============ العرض ============ */
 function metaField(k,label,cls){
@@ -332,28 +333,28 @@ function renderTable(t){
 function renderOpts(op){
   return '<div class="opts" data-k="opts">'+op.map(function(o){
     var long=(o.text||'').length>46;
-    return '<div class="o'+(o.correct?' c':'')+(long?' long':'')+'" contenteditable data-k="opt" data-c="'+(o.correct?1:0)+'">'+esc(o.text)+'</div>';
+    return '<div class="o'+(o.correct?' c':'')+(long?' long':'')+'" contenteditable data-k="opt" data-c="'+(o.correct?1:0)+'">'+nl(o.text)+'</div>';
   }).join('')+'</div>';
 }
 function renderNote(n){
   var o=typeof n==='string'?{text:n}:n;
   return '<div class="note" data-k="note">'+(o.title?'<span class="nt" contenteditable data-k="nt">'+esc(o.title)+'</span>':'')
-    +'<span contenteditable data-k="ntx">'+esc(o.text)+'</span></div>';
+    +'<span contenteditable data-k="ntx">'+nl(o.text)+'</span></div>';
 }
 function renderChips(a){
-  return '<div class="chips" data-k="chips">'+a.map(function(c){return '<span class="c" contenteditable data-k="chip">'+esc(c)+'</span>'}).join('')+'</div>';
+  return '<div class="chips" data-k="chips">'+a.map(function(c){return '<span class="c" contenteditable data-k="chip">'+nl(c)+'</span>'}).join('')+'</div>';
 }
 function renderQA(it){
   var h='<div class="qa" data-i="qa">'+tools('qa');
   h+='<div class="qn" contenteditable data-k="n">'+esc(it.n||'')+'</div>';
-  if(it.quote!=null) h+='<div class="quote" contenteditable data-k="quote">'+esc(it.quote)+'</div>';
+  if(it.quote!=null) h+='<div class="quote" contenteditable data-k="quote">'+nl(it.quote)+'</div>';
   if(it.verse!=null){
     var sh=String(it.verse).split(/\s{2,}|\s*\.\.\.\s*|\s*…\s*/).filter(Boolean);
     h+='<div class="verse" data-k="verse"><span class="vl" contenteditable data-k="vlabel">'+esc(it.vlabel||'قال الشاعر:')+'</span>'
-      +'<span class="sh" data-k="v">'+sh.map(function(x){return '<span contenteditable data-k="sh">'+esc(x)+'</span>'}).join('')+'</span></div>';
+      +'<span class="sh" data-k="v">'+sh.map(function(x){return '<span contenteditable data-k="sh">'+nl(x)+'</span>'}).join('')+'</span></div>';
   }
-  h+='<div class="q" contenteditable data-k="q">'+esc(it.q||'')+'</div>';
-  if(it.prompt!=null) h+='<div class="prompt" contenteditable data-k="prompt">'+esc(it.prompt)+'</div>';
+  h+='<div class="q" contenteditable data-k="q">'+nl(it.q||'')+'</div>';
+  if(it.prompt!=null) h+='<div class="prompt" contenteditable data-k="prompt">'+nl(it.prompt)+'</div>';
   if(it.fill) h+=renderFill(it.fill);
   if(it.bullets) h+=renderBullets(it.bullets);
   if(it.note) h+=renderNote(it.note);
@@ -366,7 +367,7 @@ function renderQA(it){
   return h+'</div>';
 }
 function renderPart(p){
-  var h='<div class="part" data-i="part"><div class="pq"><span class="pl" contenteditable data-k="l">'+esc(p.l||'')+'</span><span contenteditable data-k="pq">'+esc(p.q||'')+'</span></div>';
+  var h='<div class="part" data-i="part"><div class="pq"><span class="pl" contenteditable data-k="l">'+esc(p.l||'')+'</span><span contenteditable data-k="pq">'+nl(p.q||'')+'</span></div>';
   if(p.options) h+=renderOpts(p.options);
   h+=renderAns(p.a);
   return h+'</div>';
@@ -375,7 +376,7 @@ function renderSec(s){
   var h='<section class="sec" data-t="'+s.t+'"><div class="sec-h"><span class="dot"></span><h3 contenteditable data-k="title">'+esc(s.title||'')+'</h3><span class="ln"></span>'+tools('sec')+'</div>';
   if(s.intro!=null) h+='<p class="sec-intro" contenteditable data-k="intro">'+esc(s.intro)+'</p>';
   if(s.t==='list'||s.t==='outcomes'){
-    var ul='<ul class="li" data-k="items">'+(s.items||[]).map(function(x){return '<li contenteditable data-k="li">'+esc(x)+'</li>'}).join('')+'</ul>';
+    var ul='<ul class="li" data-k="items">'+(s.items||[]).map(function(x){return '<li contenteditable data-k="li">'+nl(x)+'</li>'}).join('')+'</ul>';
     h+= s.t==='outcomes' ? '<div class="out">'+ul+'</div>' : ul;
     h+='<div class="addrow noprint"><button data-add="li">+ بند</button></div>';
   } else if(s.t==='qa'){
@@ -434,11 +435,11 @@ function readBack(){
           var cap=tb.previousElementSibling&&tb.previousElementSibling.classList.contains('tcap')?txt(tb.previousElementSibling):null;
           var o2={head:[].map.call(tb.querySelectorAll('thead th'),txt),
             ans:(tb.dataset.ans||'').split(',').filter(function(x){return x!==''}).map(Number),
-            rows:[].map.call(tb.querySelectorAll('tbody tr'),function(tr){return [].map.call(tr.cells,txt)}).filter(function(r){return r.join('')})};
+            rows:[].map.call(tb.querySelectorAll('tbody tr'),function(tr){return [].map.call(tr.cells,txt)})};
           if(cap!=null) o2.caption=cap; return o2;
         });
         if(tbs.length) o.table=tbs.length===1?tbs[0]:tbs;
-        if((el=one('.note'))){var nt=el.querySelector('[data-k=nt]');o.note=nt?{title:txt(nt),text:txt(el.querySelector('[data-k=ntx]'))}:txt(el.querySelector('[data-k=ntx]'))}
+        if((el=one('.note'))){var nt=el.querySelector('[data-k=nt]'),ntx=txt(el.querySelector('[data-k=ntx]'));o.note=nt?{title:txt(nt),text:ntx}:{text:ntx}}
         if((el=one('.chips'))) o.chips=[].map.call(el.querySelectorAll('.c'),txt).filter(Boolean);
         if((el=one('.lines'))) o.lines=Number(el.dataset.n)||el.children.length;
         if((el=one('.opts'))) o.options=readOpts(el);
@@ -456,7 +457,6 @@ function readBack(){
     }
     return s;
   });
-  M.title=M.meta.subject; M.sub=M.meta.aspect;
   return M;
 }
 
@@ -530,15 +530,32 @@ function arNum(n){return String(n).replace(/\d/g,function(d){return '٠١٢٣٤�
 
 /* ============ الحفظ ============ */
 function key(){return 'sc_lesson_'+ID}
+function atKey(){return 'sc_lesson_'+ID+'_at'}
 function save(quiet){
   readBack();
-  try{localStorage.setItem(key(),JSON.stringify(M))}catch(e){}
+  try{
+    localStorage.setItem(key(),JSON.stringify(M));
+    localStorage.setItem(atKey(),new Date().toISOString());
+  }catch(e){
+    toast('تعذّر الحفظ: '+(e&&e.message||e));
+    return;
+  }
   if(!quiet) toast('حُفظ في هذا المتصفّح');
   stamp();
 }
 function stamp(){
-  $('hint').innerHTML='آخرُ حفظٍ محليّ: '+new Date().toLocaleString('ar-KW',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'long'})
-   +' · <span style="opacity:.7">التعديلُ مباشرٌ على الورقة؛ Enter يضيفُ سطراً · Alt+نقرة يحدّدُ الإجابةَ الصحيحةَ في الاختيارات</span>';
+  var at=null; try{at=localStorage.getItem(atKey())}catch(e){}
+  var d=at?new Date(at):new Date();
+  $('hint').innerHTML='<b style="color:var(--gold)">مُعدَّلٌ ومحفوظٌ في هذا المتصفّح</b> — '
+   +d.toLocaleString('ar-KW',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'long'})
+   +' · <span style="opacity:.7">Enter يضيفُ سطراً · Alt+نقرة يحدّدُ الإجابةَ الصحيحةَ في الاختيارات</span>'
+   +' · <button id="bReset" style="background:none;border:none;color:var(--cream);text-decoration:underline;cursor:pointer;font:inherit;padding:0">استرجاعُ نسخةِ الموقع</button>';
+  var rb=$('bReset'); if(rb) rb.onclick=function(){
+    if(!ORIG){toast('لا نسخةَ أصليّةً محمّلة');return}
+    if(!confirm('حذفُ تعديلاتِك والعودةُ إلى نسخةِ الموقع؟')) return;
+    try{localStorage.removeItem(key());localStorage.removeItem(atKey())}catch(e){}
+    M=JSON.parse(JSON.stringify(ORIG)); render(); $('hint').innerHTML=''; toast('عادتْ نسخةُ الموقع');
+  };
 }
 
 /* ============ الإقلاع ============ */
@@ -582,7 +599,7 @@ function boot(){
   if(!ID){ renderIndex(); return; }
   var local=null; try{local=JSON.parse(localStorage.getItem(key())||'null')}catch(e){}
   fetch('data/lessons/'+ID+'.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){
-    M=local||j; M._src=j; render(); if(local) stamp();
+    ORIG=j; M=local||j; render(); if(local) stamp();
   }).catch(function(){
     if(local){M=local;render();stamp();}
     else $('app').innerHTML='<div class="idx"><h2>لم يُعثَرْ على التحضير</h2><p>تحقّقْ من الرابط.</p></div>';
