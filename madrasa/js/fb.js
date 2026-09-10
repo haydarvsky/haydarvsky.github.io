@@ -169,12 +169,6 @@
   };
 
   function isNetErr(e) { return !navigator.onLine || (e && (e.name === 'TypeError' || /fetch|network|Failed to fetch|Load failed/i.test(e.message || ''))) && !(e && e.status); }
-  /* هويّةُ المعلّمِ الحالي: الاسمُ والمدرسةُ ولاحقةُ مساحتِه المعزولة */
-  function teacher() {
-    var u = Auth.user();
-    if (DEMO) return GUEST;
-    return teacherOf(u && u.email) || null;
-  }
   /* معاينةُ هويّةِ معلّمٍ آخرَ بلا دخول: ?as=m — عرضٌ فقط، لا يمنحُ أيَّ صلاحيّةِ بيانات */
   function preview() {
     var m = /[?&]as=([^&]+)/.exec(location.search);
@@ -183,6 +177,12 @@
     if (k === 'm' || k === 'mohammed') return TEACHERS['taroot80@gmail.com'];
     if (k === 'h' || k === 'haydar') return TEACHERS['haydar.maateeq@gmail.com'];
     return teacherOf(k);
+  }
+  /* هويّةُ المعلّمِ الحالي: الاسمُ والمدرسةُ ولاحقةُ مساحتِه المعزولة */
+  function teacher() {
+    var u = Auth.user();
+    if (DEMO) return preview() || GUEST;   /* في التجربةِ فقط: ?as=m يفتحُ مساحةَ محمدٍ للاختبار */
+    return teacherOf(u && u.email) || null;
   }
   function profile() { return teacher() || preview() || GUEST; }
   root.FB = {

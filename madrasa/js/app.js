@@ -1061,7 +1061,9 @@
 
   /* ---------------- الوضعُ التجريبي: بذرة ---------------- */
   async function seedDemo() {
-    if (!FB.demo || localStorage.getItem('sc_demo_db_v1')) return;
+    if (!FB.demo) return;
+    var have = []; try { have = await DB.list(C('sc_classes')); } catch (e) { have = []; }
+    if (have.length) return;
     var c1 = 'cdemo1', c2 = 'cdemo2', names1 = ['علي حسين', 'محمد جاسم', 'يوسف عبدالله', 'حسن الصالح', 'عبدالعزيز فهد', 'أحمد الكندري', 'سالم ناصر', 'خالد العنزي', 'فيصل مبارك', 'عمر السبيعي', 'بدر الشمري', 'ناصر العجمي'];
     var names2 = ['حمد راشد', 'جابر علي', 'مشاري سعد', 'طلال يوسف', 'ضاري فهد', 'عبدالرحمن صالح', 'راكان محمد', 'سعود عبدالله', 'نواف حسين', 'زيد الرشيدي'];
     var st1 = names1.map(function (n, i) { return { id: 'sd1' + i, name: n, no: String(i + 1) }; }), st2 = names2.map(function (n, i) { return { id: 'sd2' + i, name: n, no: String(i + 1) }; });
