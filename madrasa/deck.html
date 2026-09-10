@@ -166,6 +166,91 @@ table.t td:first-child{border-radius:0 14px 14px 0}table.t td:last-child{border-
 .points .p b{display:block;font-size:calc(var(--tx)*1.02);margin:.35em 0 .1em;color:#fff}
 .points .p span{color:var(--dim);font-size:calc(var(--tx)*.86);line-height:1.6;display:block}
 
+
+/* ===== العصفُ الذهني ===== */
+.bs{position:relative;height:min(66vh,700px);display:grid;place-items:center}
+.bs .core{position:relative;z-index:2;width:min(34vw,330px,42vh);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;text-align:center;padding:clamp(18px,3vw,44px);
+  background:radial-gradient(circle at 50% 35%,rgba(217,164,65,.28),rgba(217,164,65,.08) 60%,transparent 72%),rgba(15,76,58,.55);
+  border:1.5px solid rgba(217,164,65,.55);box-shadow:0 0 0 clamp(10px,1.6vw,22px) rgba(217,164,65,.06),0 30px 80px -40px #000;
+  font-family:'Sakkal Saad Poster',serif;font-size:clamp(18px,2.2vw,34px);color:#fff;line-height:1.35}
+.bs .core small{display:block;font-family:'Sakkal Saad',sans-serif;font-weight:400;font-size:.5em;color:var(--gold);margin-bottom:.4em;letter-spacing:.03em}
+.bs .bub{position:absolute;left:50%;top:50%;width:clamp(150px,17vw,250px);min-height:clamp(56px,7vh,84px);padding:clamp(6px,1vh,12px) clamp(12px,1.4vw,20px);
+  border-radius:100px;display:grid;place-items:center;text-align:center;font-weight:700;font-size:calc(var(--tx)*.9);line-height:1.4;
+  border:1.5px dashed rgba(241,233,214,.28);color:transparent;transform:translate(-50%,-50%) translate(var(--x),var(--y)) scale(.92);
+  transition:all .5s var(--e)}
+.bs .bub::before{content:attr(data-i);position:absolute;font-family:'Sakkal Saad Poster',serif;color:rgba(241,233,214,.28);font-size:1.1em;transition:opacity .3s}
+.bs .bub.in{color:#fff;border:1.5px solid var(--gold);background:linear-gradient(to left,rgba(15,76,58,.85),rgba(15,76,58,.45));transform:translate(-50%,-50%) translate(var(--x),var(--y)) scale(1);
+  box-shadow:0 20px 50px -30px #000}
+.bs .bub.in::before{opacity:0}
+.bs .ray{position:absolute;left:50%;top:50%;height:1px;width:var(--len);transform-origin:0 50%;transform:rotate(var(--a));background:linear-gradient(to right,rgba(217,164,65,.55),transparent);z-index:1}
+@media(max-width:760px){
+  .bs{height:auto;display:block;padding-bottom:10px}
+  .bs .core{width:min(72vw,260px);margin:0 auto 14px;font-size:clamp(17px,4.8vw,22px)}
+  .bs .ray{display:none}
+  .bs .bub{position:static;transform:none;width:100%;min-height:0;margin:8px 0;border-radius:16px;padding:10px 14px}
+  .bs .bub.in{transform:none}
+}
+
+/* ===== المشهدُ المرسوم ===== */
+.scene{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(18px,3vw,56px);align-items:center}
+.scene .art{width:100%;max-height:min(56vh,560px)}
+.scene .art svg{width:100%;height:100%;display:block}
+.scene .txt h2{font-size:var(--h2);color:#fff;line-height:1.3}
+.scene .txt p{color:var(--dim);font-size:calc(var(--tx)*1.02);margin:.6em 0 0}
+.scene .txt .ask{margin-top:clamp(12px,2vh,22px);padding:clamp(9px,1.4vh,16px) clamp(14px,1.6vw,24px);border-radius:16px;background:rgba(217,164,65,.1);border:1px solid rgba(217,164,65,.3);color:var(--gold);font-weight:700;font-size:calc(var(--tx)*1.05)}
+@media(max-width:900px){.scene{grid-template-columns:1fr}.scene .art{max-height:32vh}}
+.art .g{stroke:var(--gold);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.art .c{stroke:rgba(241,233,214,.75);fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+.art .f{fill:rgba(217,164,65,.14)}
+.art .w{stroke:rgba(241,233,214,.35);fill:none;stroke-width:1.2;stroke-linecap:round}
+.art .draw{stroke-dasharray:1400;stroke-dashoffset:1400;animation:draw 2.6s var(--e) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.art .float{animation:float 4.5s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* ===== فكّر – زاوج – شارك ===== */
+.tps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.6vw,24px)}
+.tps .s{position:relative;border-radius:22px;padding:clamp(16px,2.4vh,30px) clamp(14px,1.6vw,26px);background:linear-gradient(165deg,rgba(241,233,214,.09),rgba(241,233,214,.02));border:1px solid rgba(241,233,214,.14);text-align:center}
+.tps .s .k{font-family:'Sakkal Saad Poster',serif;font-size:clamp(30px,4vw,62px);color:var(--gold);line-height:1}
+.tps .s b{display:block;font-size:calc(var(--tx)*1.15);color:#fff;margin:.25em 0 .15em}
+.tps .s span{display:block;color:var(--dim);font-size:calc(var(--tx)*.88);line-height:1.6}
+.tps .s .t{display:inline-block;margin-top:.6em;font-size:var(--sm);color:var(--gold);border:1px solid rgba(217,164,65,.4);border-radius:100px;padding:1px 12px}
+@media(max-width:900px){.tps{grid-template-columns:1fr}}
+.tps-q{text-align:center;font-size:var(--h3);color:#fff;font-weight:700;padding:clamp(8px,1.4vh,16px) clamp(16px,2vw,30px);border-radius:16px;background:rgba(217,164,65,.09);border:1px solid rgba(217,164,65,.24)}
+
+/* ===== الخطُّ الزمني ===== */
+.tl{display:grid;grid-template-columns:repeat(6,1fr);gap:clamp(6px,.8vw,14px);position:relative;padding-top:clamp(14px,2vh,24px)}
+.tl::before{content:'';position:absolute;left:4%;right:4%;top:calc(clamp(14px,2vh,24px) + clamp(16px,1.6vw,22px));height:2px;background:linear-gradient(to left,var(--gold),rgba(217,164,65,.2))}
+.tl .e{position:relative;text-align:center}
+.tl .e .n{width:clamp(32px,3.2vw,44px);height:clamp(32px,3.2vw,44px);border-radius:50%;background:var(--gold);color:var(--ink);font-family:'Sakkal Saad Poster',serif;font-weight:700;display:grid;place-items:center;margin:0 auto clamp(8px,1.2vh,14px);box-shadow:0 0 0 6px rgba(217,164,65,.18);position:relative;z-index:1}
+.tl .e p{margin:0;font-size:calc(var(--tx)*.82);line-height:1.5;color:var(--cream);background:rgba(241,233,214,.06);border:1px solid rgba(241,233,214,.12);border-radius:14px;padding:clamp(8px,1.2vh,14px) clamp(8px,.8vw,12px);min-height:3.4em}
+@media(max-width:900px){.tl{grid-template-columns:repeat(2,1fr)}.tl::before{display:none}}
+
+/* ===== كلمةٌ مضيئةٌ في الآية ===== */
+.verses .v mark{background:none;color:var(--gold);text-shadow:0 0 22px rgba(217,164,65,.45);border-bottom:2px solid rgba(217,164,65,.55)}
+
+/* ===== المؤقّت (الدقيقةُ الواحدة) ===== */
+.timer{position:fixed;right:clamp(16px,3vw,46px);bottom:clamp(64px,9vh,96px);z-index:18;width:clamp(96px,10vw,150px);aspect-ratio:1;display:grid;place-items:center;
+  transform:scale(.6);opacity:0;pointer-events:none;transition:all .35s var(--e)}
+.timer.on{transform:none;opacity:1;pointer-events:auto}
+.timer svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.timer circle{fill:none;stroke-width:5}
+.timer .bg{stroke:rgba(241,233,214,.14)}
+.timer .fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.timer.end .fg{stroke:#E0503E}
+.timer .num{font-family:'Sakkal Saad Poster',serif;font-size:clamp(26px,3vw,46px);color:#fff;font-variant-numeric:tabular-nums;line-height:1}
+.timer .lb{position:absolute;bottom:14%;font-size:calc(var(--sm)*.85);color:var(--dim)}
+.timer.end{animation:shake .5s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+
+/* ===== ملاحظةُ المعلّم ===== */
+.tip{position:fixed;left:clamp(16px,3vw,46px);top:clamp(56px,8.5vh,80px);z-index:18;max-width:min(420px,60vw);background:rgba(4,22,15,.92);border:1px solid rgba(217,164,65,.4);border-radius:16px;padding:12px 16px;
+  font-size:calc(var(--sm)*1.05);line-height:1.7;color:var(--cream);box-shadow:0 20px 50px -30px #000;transform:translateY(12px);opacity:0;pointer-events:none;transition:all .3s var(--e)}
+.tip.on{transform:none;opacity:1;pointer-events:auto}
+.tools button.hot{color:var(--gold);border-color:var(--gold);box-shadow:0 0 0 4px rgba(217,164,65,.15)}
+.tip b{display:block;color:var(--gold);font-size:calc(var(--sm)*.9);margin-bottom:2px}
+.tip:empty{display:none}
+
 /* ===== ظهورُ الخطوات ===== */
 .step{opacity:0;transform:translateY(14px);transition:opacity .4s var(--e),transform .45s var(--e)}
 .step.in{opacity:1;transform:none}
@@ -198,6 +283,8 @@ table.t td:first-child{border-radius:0 14px 14px 0}table.t td:last-child{border-
       <button id="bNext" title="التالي"><svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg></button>
       <button id="bMap" title="فهرسُ الشرائح (Esc)"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button>
       <button id="bFull" title="ملءُ الشاشة (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <button id="bTimer" title="مؤقّتُ الدقيقةِ الواحدة (T)"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="7.5"/><path d="M12 9v4.5l3 2M9.5 3.5h5M12 3.5v2"/></svg></button>
+      <button id="bTip" title="ملاحظةُ المعلّم (N)"><svg viewBox="0 0 24 24"><path d="M9.5 18.5h5M10 21h4"/><path d="M12 3.5a6 6 0 0 0-3.5 10.9c.7.6 1 1.3 1 2.1h5c0-.8.3-1.5 1-2.1A6 6 0 0 0 12 3.5z"/></svg></button>
       <button id="bBack" title="العودةُ للتحضير"><svg viewBox="0 0 24 24"><path d="M5 3.5h9.5L19 8v12.5H5z"/><path d="M14.5 3.5V8H19"/><path d="M8 12h8M8 15.5h5"/></svg></button>
     </div>
     <div class="bar"><i id="prog"></i></div>
@@ -205,7 +292,9 @@ table.t td:first-child{border-radius:0 14px 14px 0}table.t td:last-child{border-
   </div>
 </div>
 <div class="map" id="map" hidden><h3>شرائحُ العرض</h3><div class="g" id="mapG"></div></div>
-<div class="hintbar" id="hintbar">المسافةُ أو ← للتقدّم · → للرجوع · Esc للفهرس · F لملءِ الشاشة</div>
+<div class="hintbar" id="hintbar">المسافةُ أو ← للتقدّم · → للرجوع · T مؤقّتُ الدقيقة · N ملاحظةُ المعلّم · Esc الفهرس · F ملءُ الشاشة</div>
+<div class="timer" id="timer"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="44"/><circle class="fg" id="tfg" cx="50" cy="50" r="44"/></svg><div class="num" id="tnum">٦٠</div><div class="lb">ثانية</div></div>
+<div class="tip" id="tip"></div>
 
 <script>
 (function(){
@@ -219,6 +308,22 @@ var D=null, S=[], i=0, step=0;
 var ME={name:'أ. حيدر المعاتيق',short:'حيدر المعاتيق',school:'ثانوية طلحة بن عبيدالله. بنين - قسم اللغة العربية'};
 /* {{teacher}} و{{school}} تُستبدلانِ باسمِ المعلّمِ الداخلِ ومدرستِه */
 function fill(x){return String(x==null?'':x).replace(/\{\{teacher\}\}/g,ME.short).replace(/\{\{school\}\}/g,ME.school)}
+
+
+/* رسومٌ خطّيّةٌ بسيطة تُرسَمُ أمامَ الطلبة */
+var ART={
+  river:'<svg viewBox="0 0 400 300"><circle cx="330" cy="58" r="22" class="g draw"/><path class="g draw" d="M318 44a22 22 0 1 0 24 30 17 17 0 0 1-24-30z"/>'
+   +'<g class="w"><path class="draw" d="M0 200c30-12 60-12 90 0s60 12 90 0 60-12 90 0 60 12 90 0 30-8 40-6"/><path class="draw" d="M0 232c30-12 60-12 90 0s60 12 90 0 60-12 90 0 60 12 90 0 30-8 40-6"/><path class="draw" d="M0 264c30-12 60-12 90 0s60 12 90 0 60-12 90 0 60 12 90 0 30-8 40-6"/></g>'
+   +'<g class="float"><path class="f" d="M150 196c0 18 24 30 50 30s50-12 50-30l-8-14H158z"/><path class="g draw" d="M150 196c0 18 24 30 50 30s50-12 50-30l-8-14H158z"/><path class="c draw" d="M158 182h84M165 190h70"/><path class="g draw" d="M172 182c8-16 16-22 28-22s20 6 28 22"/></g>'
+   +'<g class="c"><path class="draw" d="M40 200v-70M40 130l-12-18M40 150l14-16M40 118l10-14"/><path class="draw" d="M70 200v-52M70 148l-10-14M70 162l10-12"/><path class="draw" d="M350 200v-60M350 140l-11-16M350 158l12-14"/></g></svg>',
+  palace:'<svg viewBox="0 0 400 300"><g class="g"><path class="draw" d="M40 240h320"/><path class="draw" d="M70 240V120h30v120M130 240V110h30v130M240 240V110h30v130M300 240V120h30v120"/><path class="draw" d="M60 120h260l-16-30H76z"/><path class="draw" d="M180 240v-70a20 20 0 0 1 40 0v70"/><path class="draw" d="M100 90l100-40 100 40"/></g>'
+   +'<g class="c"><path class="draw" d="M100 130v20M330 130v20M62 260h276"/></g><circle class="f" cx="200" cy="48" r="10"/></svg>',
+  heart:'<svg viewBox="0 0 400 300"><path class="f" d="M200 250C130 200 80 160 80 110a50 50 0 0 1 95-22 50 50 0 0 1 95 22c0 50-50 90-70 140z"/><path class="g draw" d="M200 250C130 200 80 160 80 110a50 50 0 0 1 95-22 50 50 0 0 1 95 22c0 50-50 90-70 140z"/>'
+   +'<g class="c"><path class="draw" d="M96 150c30 12 60 14 90 12 40-3 70-14 118-10"/><path class="draw" d="M104 178c30 10 60 12 90 10 40-3 70-12 110-8"/><path class="draw" d="M120 122c26 9 52 11 80 10 34-2 62-10 100-6"/></g>'
+   +'<g class="g"><path class="draw" d="M304 150l14-6-6 14M326 172l14-6-6 14"/></g></svg>',
+  eye:'<svg viewBox="0 0 400 300"><path class="g draw" d="M60 150c50-70 230-70 280 0-50 70-230 70-280 0z"/><circle class="g draw" cx="200" cy="150" r="34"/><circle class="f" cx="200" cy="150" r="16"/>'
+   +'<g class="w"><path class="draw" d="M0 250c40-10 80-10 120 0s80 10 120 0 80-10 120 0 30-4 40-2"/></g><g class="c"><path class="draw" d="M330 60l14 14M340 46l10 10M354 66l-10-10"/></g></svg>'
+};
 
 /* ============ بناءُ الشرائح ============ */
 function tick(){return '<span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>'}
@@ -247,7 +352,8 @@ var B={
   verses:function(s){
     return (s.title?head(s.title):'')
       +'<div class="verses">'+s.items.map(function(v,k){
-        return '<div class="v step" data-s="'+k+'">'+nl(v.t)+(v.n?'<em>'+nl(v.n)+'</em>':'')+'</div>'}).join('')
+        var t=nl(v.t); (v.hl||[]).forEach(function(w){t=t.split(esc(w)).join('<mark>'+esc(w)+'</mark>')});
+        return '<div class="v step" data-s="'+k+'">'+t+(v.n?'<em>'+nl(v.n)+'</em>':'')+'</div>'}).join('')
       +(s.src?'<div class="src">'+nl(s.src)+'</div>':'')+'</div>';
   },
   question:function(s){
@@ -271,6 +377,35 @@ var B={
   },
   table:function(s){
     return (s.title?head(s.title):'')+tableHTML(s.table,0);
+  },
+
+  brainstorm:function(s){
+    var n=s.ideas.length, RX=Math.min(34,22+n*2.4), RY=27, rays='', bubs='';
+    for(var k=0;k<n;k++){
+      var a=-90+k*(360/n), rad=a*Math.PI/180;
+      var x=Math.cos(rad)*RX, y=Math.sin(rad)*RY;
+      rays+='<span class="ray" style="--a:'+a+'deg;--len:'+(RX*0.85)+'vw"></span>';
+      bubs+='<div class="bub step" data-s="'+k+'" data-i="'+ar(k+1)+'" style="--x:'+x+'vw;--y:'+y+'vh">'+nl(s.ideas[k])+'</div>';
+    }
+    return head(s.title||'عصفٌ ذهني')
+      +'<div class="bs">'+rays+'<div class="core"><small>'+nl(s.kick||'فكّرْ… ثمّ شارِكْ')+'</small>'+nl(s.q)+'</div>'+bubs+'</div>';
+  },
+  scene:function(s){
+    return '<div class="scene"><div class="art">'+(ART[s.art]||'')+'</div><div class="txt">'
+      +'<h2>'+nl(s.title)+'</h2>'+(s.p?'<p>'+nl(s.p)+'</p>':'')+(s.ask?'<div class="ask step" data-s="0">'+nl(s.ask)+'</div>':'')+'</div></div>';
+  },
+  think:function(s){
+    return head(s.title||'فكّر — زاوج — شارك')
+      +'<div class="tps-q">'+nl(s.q)+'</div>'
+      +'<div class="tps">'
+      +'<div class="s step" data-s="0"><div class="k">١</div><b>فكّرْ</b><span>'+nl(s.think||'وحدَك، اكتبْ فكرةً واحدةً على الأقلّ')+'</span><i class="t">دقيقة</i></div>'
+      +'<div class="s step" data-s="1"><div class="k">٢</div><b>زاوِجْ</b><span>'+nl(s.pair||'ناقشْ زميلَك واتّفقا على أقوى فكرة')+'</span><i class="t">دقيقتان</i></div>'
+      +'<div class="s step" data-s="2"><div class="k">٣</div><b>شارِكْ</b><span>'+nl(s.share||'اعرضا فكرتَكما على الصفّ')+'</span><i class="t">للصفّ</i></div>'
+      +'</div>';
+  },
+  timeline:function(s){
+    return head(s.title||'تسلسلُ الأحداث')
+      +'<div class="tl">'+s.items.map(function(t,k){return '<div class="e step" data-s="'+k+'"><div class="n">'+ar(k+1)+'</div><p>'+nl(t)+'</p></div>'}).join('')+'</div>';
   },
   points:function(s){
     return head(s.title||'الخلاصة')
@@ -308,6 +443,8 @@ function show(k,atEnd){
   step=atEnd?st.length:0;
   paint();
   $('count').textContent=ar(k+1)+' / '+ar(S.length);
+  tStop(); tipPaint();
+  $('bTimer').classList.toggle('hot',!!(S[k]&&S[k].timer));
   $('prog').style.width=((k+1)/S.length*100)+'%';
   var cur=$('mapG').querySelector('.cur'); if(cur)cur.classList.remove('cur');
   var nb=$('mapG').querySelector('[data-go="'+k+'"]'); if(nb)nb.classList.add('cur');
@@ -326,6 +463,25 @@ function next(){ if(step<steps(i).length){step++;paint();return} if(i<S.length-1
 function prev(){ if(step>0){step--;paint();return} if(i>0) show(i-1,true); }
 function go(k){ if(k>=0&&k<S.length) show(k); }
 
+
+/* ===== مؤقّتُ الدقيقةِ الواحدة ===== */
+var T={on:false,left:60,total:60,iv:null};
+var CIRC=2*Math.PI*44;
+function tPaint(){ $('tnum').textContent=ar(T.left); $('tfg').style.strokeDasharray=CIRC; $('tfg').style.strokeDashoffset=CIRC*(1-T.left/T.total); }
+function tStart(sec){
+  clearInterval(T.iv); T.total=sec||60; T.left=T.total; T.on=true; $('timer').classList.add('on'); $('timer').classList.remove('end'); tPaint();
+  T.iv=setInterval(function(){ T.left--; if(T.left<=0){T.left=0;clearInterval(T.iv);$('timer').classList.add('end');} tPaint(); },1000);
+}
+function tStop(){ clearInterval(T.iv); T.on=false; $('timer').classList.remove('on','end'); }
+function tToggle(){ if(T.on) tStop(); else tStart((S[i]&&S[i].timer)||60); }
+$('bTimer').onclick=tToggle;
+$('timer').onclick=tToggle;
+
+/* ===== ملاحظةُ المعلّم ===== */
+var tipOn=false;
+function tipPaint(){ var t=S[i]&&S[i].tip; $('tip').innerHTML=t?'<b>للمعلّم</b>'+nl(t):''; $('tip').classList.toggle('on',tipOn&&!!t); $('bTip').style.color=(S[i]&&S[i].tip)?'var(--gold)':''; }
+$('bTip').onclick=function(){tipOn=!tipOn;tipPaint()};
+
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'){ $('map').hidden=!$('map').hidden; e.preventDefault(); return; }
   if($('map').hidden===false && e.key!=='Escape') return;
@@ -336,6 +492,8 @@ document.addEventListener('keydown',function(e){
   else if(e.key==='Home'){e.preventDefault();go(0)}
   else if(e.key==='End'){e.preventDefault();go(S.length-1)}
   else if(e.key==='f'||e.key==='F'){full()}
+  else if(e.key==='t'||e.key==='T'){tToggle()}
+  else if(e.key==='n'||e.key==='N'){tipOn=!tipOn;tipPaint()}
 });
 function full(){ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); }
 $('bNext').onclick=next; $('bPrev').onclick=prev; $('bFull').onclick=full;
