@@ -456,3 +456,12 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px;border-t
 .lesson .t small{color:var(--muted);font-size:14px}
 .lesson .k{flex:0 0 auto;font-size:13px;color:var(--amber);border:1px solid rgba(194,120,10,.3);border-radius:100px;padding:1px 12px}
 @media(max-width:720px){.lesson{padding:10px 13px;gap:10px}.lesson .t b{font-size:18px}.lesson .k{display:none}}
+
+/* ===== زرُّ العرضِ التقديمي في قائمةِ التحضيرات ===== */
+.lesson>.go{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.lesson .deck{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;padding:5px 14px;border-radius:100px;
+  background:var(--green);color:var(--cream);font-size:14px;font-weight:700;border:1px solid var(--green);
+  transition:transform var(--t-fast) var(--e-out),background var(--t-fast),box-shadow var(--t-fast)}
+.lesson .deck:hover{background:var(--green-deep);transform:translateY(-1px);box-shadow:var(--sh)}
+.lesson .deck svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:720px){.lesson .deck span{display:none}.lesson .deck{padding:6px 9px}}

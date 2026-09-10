@@ -35,17 +35,25 @@ button,input,select,textarea{font:inherit;color:inherit}
 
 /* ===== شريطُ الأدوات ===== */
 .bar{position:sticky;top:var(--hvnav,0px);z-index:40;background:var(--green-deep);color:var(--cream);box-shadow:0 8px 24px -18px #000}
-.bar .in{max-width:1000px;margin:0 auto;padding:10px 18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.bar .bnd{display:flex;align-items:center;gap:10px;margin-inline-end:auto}
-.bar .bnd img{height:30px}
-.bar .bnd b{font-family:'Sakkal Saad Poster',serif;font-size:19px}
-.bar .bnd small{display:block;font-size:12px;opacity:.6;margin-top:-4px}
-.tb{display:inline-flex;align-items:center;gap:7px;padding:6px 15px;border-radius:100px;border:1px solid rgba(232,223,204,.28);background:transparent;color:var(--cream);cursor:pointer;font-size:15px;font-weight:700;transition:all .17s var(--e-out);white-space:nowrap}
-.tb:hover{background:rgba(232,223,204,.12)}
-.tb svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.bar .in{max-width:1000px;margin:0 auto;padding:8px 18px;display:flex;align-items:center;gap:6px}
+.bar .bnd{display:flex;align-items:center;gap:9px;margin-inline-start:auto;opacity:.85;transition:opacity .17s}
+.bar .bnd:hover{opacity:1}
+.bar .bnd img{height:26px}
+.bar .bnd b{font-family:'Sakkal Saad Poster',serif;font-size:17px}
+.bar .bnd small{display:block;font-size:11px;opacity:.6;margin-top:-4px}
+/* أزرارُ الأدوات: أيقونةٌ صغيرةٌ وتلميحٌ عند التمرير */
+.tb{position:relative;width:30px;height:30px;flex:0 0 auto;border-radius:9px;border:1px solid rgba(232,223,204,.22);background:transparent;color:var(--cream);cursor:pointer;display:grid;place-items:center;padding:0;transition:all .17s var(--e-out)}
+.tb:hover,.tb:focus-visible{background:rgba(232,223,204,.14);border-color:rgba(232,223,204,.5);outline:none}
+.tb svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .tb.on{background:var(--gold);color:var(--green-ink);border-color:var(--gold)}
-.tb.p{background:var(--cream);color:var(--green-ink);border-color:var(--cream)}
+.tb.p{background:rgba(232,223,204,.9);color:var(--green-ink);border-color:transparent}
 .tb.p:hover{background:#fff}
+.tb i{position:absolute;top:calc(100% + 7px);inset-inline-start:50%;transform:translateX(50%) translateY(-4px);
+  background:var(--green-ink);color:var(--cream);border:1px solid rgba(232,223,204,.18);border-radius:8px;
+  padding:2px 10px;font-size:13px;font-style:normal;font-weight:400;white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity .16s var(--e-out),transform .16s var(--e-out);z-index:5;box-shadow:0 10px 24px -14px #000}
+.tb:hover i,.tb:focus-visible i{opacity:1;transform:translateX(50%) translateY(0)}
+@media(max-width:520px){.tb i{display:none}}
 .crumb{max-width:1000px;margin:0 auto;padding:0 18px 9px;display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:14px;color:rgba(232,223,204,.66)}
 .crumb a{color:rgba(232,223,204,.9);border-bottom:1px solid transparent}
 .crumb a:hover{color:var(--gold);border-bottom-color:rgba(217,164,65,.5)}
@@ -261,12 +269,13 @@ body.edit .addrow{display:flex}
 
 <div class="bar noprint">
   <div class="in">
+    <button class="tb" id="bEdit"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/><path d="M14.5 6.5 17.5 9.5"/></svg><i>تعديلُ التحضير</i></button>
+    <button class="tb on" id="bAns"><svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><i>الإجابات ظاهرة</i></button>
+    <button class="tb" id="bSave"><svg viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5H5z"/><path d="M8.5 4.5v5h7v-5M8.5 19.5v-6h7v6"/></svg><i>حفظُ التعديلات</i></button>
+    <button class="tb" id="bDeck"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><i>العرضُ التقديمي</i></button>
+    <button class="tb" id="bJson"><svg viewBox="0 0 24 24"><path d="M12 3.5v12"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg><i>تنزيلُ ملفِّ البيانات</i></button>
+    <button class="tb p" id="bPrint"><svg viewBox="0 0 24 24"><path d="M7 9V3.5h10V9"/><rect x="4" y="9" width="16" height="7.5" rx="2"/><path d="M7 14h10v6.5H7z"/></svg><i>طباعة / PDF</i></button>
     <a class="bnd" href="index.html#/"><img src="/img/logo-cream.svg" alt="حيدر"><div><b>مدرستي</b><small>التحضيرُ اليومي</small></div></a>
-    <button class="tb" id="bEdit"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/><path d="M14.5 6.5 17.5 9.5"/></svg>تعديل</button>
-    <button class="tb on" id="bAns"><svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg>الإجابات</button>
-    <button class="tb" id="bSave"><svg viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5H5z"/><path d="M8.5 4.5v5h7v-5M8.5 19.5v-6h7v6"/></svg>حفظ</button>
-    <button class="tb" id="bJson"><svg viewBox="0 0 24 24"><path d="M12 3.5v12"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg>JSON</button>
-    <button class="tb p" id="bPrint"><svg viewBox="0 0 24 24"><path d="M7 9V3.5h10V9"/><rect x="4" y="9" width="16" height="7.5" rx="2"/><path d="M7 14h10v6.5H7z"/></svg>طباعة / PDF</button>
   </div>
   <div class="crumb" id="crumb"></div>
   <div class="hint" id="hint"></div>
@@ -619,7 +628,7 @@ function boot(){
   });
 }
 function renderIndex(){
-  ['bEdit','bAns','bSave','bJson','bPrint'].forEach(function(k){$(k).hidden=true});
+  ['bEdit','bAns','bSave','bJson','bPrint','bDeck'].forEach(function(k){$(k).hidden=true});
   $('crumb').innerHTML='<a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a><span class="sep">›</span><b>التحضيراتُ التفاعلية</b>';
   fetch('data/lessons/index.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){
     var h='<div class="idx">';
@@ -638,10 +647,11 @@ function renderIndex(){
 $('bEdit').onclick=function(){document.body.classList.toggle('edit');this.classList.toggle('on',document.body.classList.contains('edit'));
   document.body.classList.contains('edit')?toast('وضعُ التعديل — انقرْ على أيِّ نصٍّ لتغييره'):save();};
 function ansBtn(){var b=$('bAns'),on=!document.body.classList.contains('noans');
-  b.classList.toggle('on',on);b.lastChild.textContent=on?'الإجابات':'نسخةُ المتعلّم';}
+  b.classList.toggle('on',on);b.querySelector('i').textContent=on?'الإجابات ظاهرة — للتبديل إلى نسخةِ المتعلّم':'نسخةُ المتعلّم — للتبديل إلى نسخةِ المعلّم';}
 $('bAns').onclick=function(){document.body.classList.toggle('noans');ansBtn();};
 ansBtn();
 $('bSave').onclick=function(){save()};
+$('bDeck').onclick=function(){location.href='deck.html?id='+encodeURIComponent(ID)};
 $('bPrint').onclick=function(){if(document.body.classList.contains('edit')){document.body.classList.remove('edit');$('bEdit').classList.remove('on')}window.print()};
 $('bJson').onclick=function(){readBack();var b=new Blob([JSON.stringify(M,null,2)],{type:'application/json'});
   var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=(ID||'lesson')+'.json';a.click();toast('نُزِّل ملفُ البيانات');};

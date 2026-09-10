@@ -328,9 +328,11 @@
       + '<div class="ttl"><div><h2>' + esc(t.title) + '</h2><p>' + esc(t.unit || '') + ' — ' + ar(t.lessons.length) + ' تحضيراً' + (t.note ? ' · ' + esc(t.note) : '') + '</p></div></div>'
       + '<div class="lessons">';
     t.lessons.forEach(function (l, i) {
-      html += '<a class="lesson" href="lesson.html?id=' + encodeURIComponent(l.id) + '"><span class="n">' + ar(i + 1) + '</span>'
-        + '<span class="t"><b>' + esc(lessonTitle(l)) + '</b><small>' + esc(l.sub || '') + '</small></span>'
-        + (l.kind ? '<span class="k">' + esc(l.kind) + '</span>' : '') + '</a>';
+      html += '<div class="lesson"><a class="go" href="lesson.html?id=' + encodeURIComponent(l.id) + '"><span class="n">' + ar(i + 1) + '</span>'
+        + '<span class="t"><b>' + esc(lessonTitle(l)) + '</b><small>' + esc(l.sub || '') + '</small></span></a>'
+        + (l.kind ? '<span class="k">' + esc(l.kind) + '</span>' : '')
+        + (l.deck ? '<a class="deck" href="deck.html?id=' + encodeURIComponent(l.id) + '" title="العرضُ التقديميُّ للطلبة"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><span>العرض</span></a>' : '')
+        + '</div>';
     });
     view.innerHTML = html + '</div>';
   }

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>العرضُ التقديمي — مدرستي</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#062219">
+<meta name="hv-nav" content="off">
+<link rel="icon" href="/img/logo-cream.svg">
+<style>
+:root{
+  --green:#0F4C3A; --deep:#0A3428; --ink:#062219;
+  --gold:#D9A441; --amber:#E0B057; --cream:#F1E9D6; --dim:rgba(241,233,214,.62);
+  --e:cubic-bezier(.22,.61,.36,1);
+  --pad:clamp(24px,4.4vw,74px);
+  --h1:clamp(34px,6.2vw,86px);
+  --h2:clamp(26px,4.1vw,58px);
+  --h3:clamp(20px,2.5vw,34px);
+  --tx:clamp(17px,1.85vw,29px);
+  --sm:clamp(13px,1.15vw,18px);
+}
+@font-face{font-family:'Sakkal Saad';src:url('/fonts/sakkal-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Sakkal Saad';src:url('/fonts/sakkal-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Sakkal Saad Poster';src:url('/fonts/poster-700.woff2') format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Sakkal Saad Poster';src:url('/fonts/poster-900.woff2') format('woff2');font-weight:900;font-display:swap}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--ink);color:var(--cream);font-family:'Sakkal Saad',system-ui,sans-serif;overflow:hidden;
+  -webkit-font-smoothing:antialiased;font-size:var(--tx);line-height:1.75}
+h1,h2,h3{font-family:'Sakkal Saad Poster','Sakkal Saad',serif;margin:0;font-weight:700;line-height:1.22}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+[hidden]{display:none!important}
+
+/* ===== الخلفية ===== */
+.bg{position:fixed;inset:0;z-index:0;background:
+  radial-gradient(120% 90% at 88% -10%,rgba(217,164,65,.20),transparent 58%),
+  radial-gradient(90% 80% at 6% 108%,rgba(15,76,58,.85),transparent 62%),
+  linear-gradient(160deg,#08281E 0%,#062219 55%,#04160F 100%)}
+.bg::after{content:'';position:absolute;inset:0;opacity:.055;
+  background-image:radial-gradient(circle at 1px 1px,var(--cream) 1px,transparent 0);background-size:26px 26px}
+
+/* ===== المسرح ===== */
+.stage{position:relative;z-index:1;height:100svh;display:grid;grid-template-rows:auto 1fr auto}
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px var(--pad) 0}
+.top .id{display:flex;align-items:center;gap:11px;min-width:0}
+.top .id img{height:clamp(24px,2.4vw,34px);width:auto;opacity:.9}
+.top .id b{font-family:'Sakkal Saad Poster',serif;font-size:var(--sm);letter-spacing:.01em}
+.top .id small{display:block;font-size:calc(var(--sm)*.85);color:var(--dim);margin-top:-3px}
+.top .kick{font-size:var(--sm);color:var(--gold);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.slidewrap{position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;padding:clamp(10px,2vh,26px) var(--pad);display:flex;flex-direction:column;justify-content:center;gap:clamp(10px,1.7vh,22px);
+  opacity:0;visibility:hidden;transform:translateY(18px) scale(.985);transition:opacity .42s var(--e),transform .52s var(--e),visibility .42s}
+.slide.on{opacity:1;visibility:visible;transform:none}
+.slide.out{transform:translateY(-14px) scale(.99)}
+.slide>*{max-width:1520px;width:100%;margin-inline:auto}
+
+/* ===== الشريطُ السفلي ===== */
+.bottom{display:flex;align-items:center;gap:14px;padding:0 var(--pad) 14px}
+.bar{flex:1;height:3px;background:rgba(241,233,214,.14);border-radius:3px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(to left,var(--gold),var(--amber));border-radius:3px;transition:width .45s var(--e)}
+.count{font-size:var(--sm);color:var(--dim);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tools{display:flex;gap:6px}
+.tools button{width:clamp(30px,2.6vw,38px);height:clamp(30px,2.6vw,38px);border-radius:50%;border:1px solid rgba(241,233,214,.2);display:grid;place-items:center;transition:all .18s var(--e)}
+.tools button:hover{background:rgba(241,233,214,.12);border-color:var(--gold);color:var(--gold)}
+.tools svg{width:52%;height:52%;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== الغلاف ===== */
+.cover{text-align:center;gap:0}
+.cover .mark{width:clamp(52px,6vw,86px);margin:0 auto clamp(10px,2vh,22px);opacity:.95}
+.cover .over{font-size:var(--h3);color:var(--gold);font-weight:700;letter-spacing:.02em}
+.cover h1{font-size:var(--h1);color:#fff;margin:.12em 0 .18em;text-shadow:0 10px 40px rgba(0,0,0,.4)}
+.cover .rule{width:clamp(90px,10vw,150px);height:3px;background:var(--gold);border-radius:3px;margin:0 auto clamp(12px,2.4vh,26px)}
+.cover .meta{display:flex;justify-content:center;gap:clamp(14px,3vw,46px);flex-wrap:wrap;color:var(--dim);font-size:var(--h3)}
+.cover .meta b{color:var(--cream);font-weight:700}
+
+/* ===== العناوين ===== */
+.head{display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.head .dot{width:clamp(9px,.85vw,13px);height:clamp(9px,.85vw,13px);border-radius:50%;background:var(--gold);flex:0 0 auto;box-shadow:0 0 0 6px rgba(217,164,65,.16)}
+.head h2{font-size:var(--h2);color:#fff}
+.head .ln{flex:1;height:1px;background:linear-gradient(to left,rgba(241,233,214,.3),transparent)}
+
+/* ===== فاصلُ المشهد ===== */
+.divider{text-align:center}
+.divider .n{font-family:'Sakkal Saad Poster',serif;font-size:clamp(64px,13vw,190px);color:rgba(217,164,65,.16);line-height:.9}
+.divider h2{font-size:var(--h1);color:#fff;margin-top:-.28em}
+.divider p{color:var(--gold);font-size:var(--h3);margin:.35em 0 0}
+
+/* ===== النواتج ===== */
+.outs{display:grid;gap:clamp(7px,1.2vh,14px)}
+.outs li{list-style:none;display:flex;align-items:flex-start;gap:clamp(11px,1.2vw,20px);
+  background:linear-gradient(to left,rgba(241,233,214,.07),rgba(241,233,214,.02));border:1px solid rgba(241,233,214,.11);
+  border-radius:16px;padding:clamp(8px,1.2vh,15px) clamp(13px,1.5vw,24px)}
+.outs li .i{flex:0 0 auto;width:clamp(28px,2.6vw,40px);height:clamp(28px,2.6vw,40px);border-radius:12px;background:rgba(217,164,65,.16);color:var(--gold);
+  display:grid;place-items:center;font-weight:700;font-family:'Sakkal Saad Poster',serif;font-size:calc(var(--tx)*.9)}
+.outs li span{padding-top:.08em}
+
+/* ===== الآيات ===== */
+.verses{display:grid;gap:clamp(8px,1.5vh,20px);text-align:center}
+.verses .v{font-size:clamp(19px,2.35vw,38px);line-height:2.05;color:#fff;font-weight:700;position:relative;
+  padding:clamp(6px,1vh,14px) clamp(18px,3vw,54px);border-radius:18px;background:rgba(241,233,214,.045);border:1px solid rgba(241,233,214,.09)}
+.verses .v em{font-style:normal;color:var(--gold);font-size:.62em;font-family:'Sakkal Saad Poster',serif;
+  display:inline-grid;place-items:center;min-width:2.05em;height:2.05em;border-radius:50%;border:1.5px solid rgba(217,164,65,.5);margin-inline-start:.5em;vertical-align:.15em}
+.verses .src{color:var(--dim);font-size:var(--sm)}
+
+/* ===== السؤال ===== */
+.q{font-size:var(--h3);color:var(--gold);font-weight:700;display:flex;gap:12px;align-items:flex-start}
+.q .n{flex:0 0 auto;background:var(--gold);color:var(--ink);border-radius:10px;padding:0 .55em;font-family:'Sakkal Saad Poster',serif;font-size:.86em}
+.quote{text-align:center;font-size:clamp(19px,2.3vw,36px);color:#fff;font-weight:700;line-height:1.95;
+  background:rgba(217,164,65,.09);border:1px solid rgba(217,164,65,.24);border-radius:18px;padding:clamp(8px,1.4vh,18px) clamp(18px,3vw,50px)}
+.quote::before{content:'﴿ ';color:var(--gold)}.quote::after{content:' ﴾';color:var(--gold)}
+.verseline{text-align:center;color:#fff;font-size:clamp(18px,2.1vw,33px);line-height:1.9}
+.verseline .sh{display:flex;justify-content:center;gap:clamp(22px,4vw,80px);flex-wrap:wrap}
+.verseline .lbl{display:block;color:var(--dim);font-size:var(--sm);font-weight:400;margin-bottom:.2em}
+.prompt{color:var(--cream);font-size:var(--tx)}
+
+/* ===== الإجابات ===== */
+.ans{display:grid;gap:clamp(7px,1.1vh,13px)}
+.ans .a{display:flex;gap:clamp(10px,1.1vw,18px);align-items:flex-start;
+  background:linear-gradient(to left,rgba(15,76,58,.62),rgba(15,76,58,.3));border:1px solid rgba(217,164,65,.3);
+  border-radius:16px;padding:clamp(8px,1.2vh,15px) clamp(13px,1.6vw,26px);box-shadow:0 18px 40px -30px #000}
+.ans .a .tick{flex:0 0 auto;width:clamp(22px,1.9vw,30px);height:clamp(22px,1.9vw,30px);border-radius:50%;background:var(--gold);color:var(--ink);display:grid;place-items:center;margin-top:.15em}
+.ans .a .tick svg{width:60%;height:60%;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+
+/* ===== أكملْ ===== */
+.fill{display:flex;flex-wrap:wrap;gap:clamp(8px,1.1vw,18px);justify-content:center;font-size:clamp(18px,2.1vw,33px)}
+.fill .w{background:rgba(241,233,214,.07);border:1px solid rgba(241,233,214,.14);border-radius:14px;padding:.2em .9em;font-weight:700}
+.fill .w.b{background:rgba(217,164,65,.14);border-color:rgba(217,164,65,.45);color:var(--gold)}
+.fill .w.b.hide{color:transparent;background:rgba(241,233,214,.04);border-style:dashed;min-width:5.5em}
+
+/* ===== الترتيب ===== */
+.order{display:grid;gap:clamp(6px,1vh,12px)}
+.order .o{display:flex;align-items:center;gap:clamp(11px,1.3vw,22px);background:rgba(241,233,214,.055);border:1px solid rgba(241,233,214,.12);
+  border-radius:16px;padding:clamp(7px,1.05vh,14px) clamp(13px,1.6vw,24px);transition:all .3s var(--e)}
+.order .o .num{flex:0 0 auto;width:clamp(30px,2.7vw,44px);height:clamp(30px,2.7vw,44px);border-radius:50%;display:grid;place-items:center;
+  font-family:'Sakkal Saad Poster',serif;font-weight:700;font-size:calc(var(--tx)*.95);
+  border:1.5px dashed rgba(241,233,214,.3);color:transparent;transition:all .35s var(--e)}
+.order .o.show{border-color:rgba(217,164,65,.45);background:linear-gradient(to left,rgba(15,76,58,.5),rgba(241,233,214,.04))}
+.order .o.show .num{border-style:solid;border-color:var(--gold);background:var(--gold);color:var(--ink);transform:scale(1.06)}
+
+/* ===== اختيارٌ من متعدّد ===== */
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:clamp(7px,1.1vh,14px)}
+.opts .o{display:flex;gap:12px;align-items:flex-start;background:rgba(241,233,214,.05);border:1px solid rgba(241,233,214,.12);
+  border-radius:15px;padding:clamp(7px,1.05vh,14px) clamp(12px,1.5vw,22px);transition:all .3s var(--e)}
+.opts .o .b{flex:0 0 auto;width:clamp(22px,1.8vw,28px);height:clamp(22px,1.8vw,28px);border-radius:9px;border:1.5px solid rgba(241,233,214,.3);margin-top:.15em}
+.opts .o.right{background:linear-gradient(to left,rgba(15,76,58,.7),rgba(15,76,58,.35));border-color:var(--gold);box-shadow:0 18px 40px -30px #000}
+.opts .o.right .b{background:var(--gold);border-color:var(--gold)}
+.opts .o.dim{opacity:.42}
+@media(max-width:900px){.opts{grid-template-columns:1fr}}
+
+/* ===== جدول ===== */
+table.t{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:calc(var(--tx)*.94)}
+table.t th{background:rgba(217,164,65,.16);color:var(--gold);font-weight:700;padding:.4em .9em;text-align:start;font-size:calc(var(--tx)*.82)}
+table.t th:first-child{border-radius:0 14px 14px 0}table.t th:last-child{border-radius:14px 0 0 14px}
+table.t td{background:rgba(241,233,214,.05);padding:.42em .9em;vertical-align:top}
+table.t td:first-child{border-radius:0 14px 14px 0}table.t td:last-child{border-radius:14px 0 0 14px}
+
+/* ===== الخلاصة ===== */
+.points{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:clamp(9px,1.4vw,20px)}
+.points .p{background:linear-gradient(165deg,rgba(241,233,214,.09),rgba(241,233,214,.02));border:1px solid rgba(241,233,214,.13);
+  border-radius:20px;padding:clamp(13px,1.8vh,26px) clamp(14px,1.6vw,26px);text-align:center}
+.points .p .g{font-family:'Sakkal Saad Poster',serif;font-size:clamp(28px,3.4vw,52px);color:var(--gold);line-height:1}
+.points .p b{display:block;font-size:calc(var(--tx)*1.02);margin:.35em 0 .1em;color:#fff}
+.points .p span{color:var(--dim);font-size:calc(var(--tx)*.86);line-height:1.6;display:block}
+
+/* ===== ظهورُ الخطوات ===== */
+.step{opacity:0;transform:translateY(14px);transition:opacity .4s var(--e),transform .45s var(--e)}
+.step.in{opacity:1;transform:none}
+
+/* ===== الفهرس ===== */
+.map{position:fixed;inset:0;z-index:20;background:rgba(4,22,15,.94);backdrop-filter:blur(8px);padding:var(--pad);overflow:auto}
+.map h3{font-size:var(--h3);color:var(--gold);margin-bottom:16px}
+.map .g{display:grid;gap:10px;grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+.map button{text-align:start;background:rgba(241,233,214,.06);border:1px solid rgba(241,233,214,.12);border-radius:14px;padding:11px 15px;transition:all .2s var(--e)}
+.map button:hover,.map button.cur{border-color:var(--gold);background:rgba(217,164,65,.14)}
+.map button i{display:block;font-style:normal;color:var(--gold);font-size:var(--sm);font-weight:700}
+.map button span{font-size:calc(var(--tx)*.85);color:var(--cream)}
+
+.hintbar{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:15;font-size:calc(var(--sm)*.95);color:var(--dim);
+  background:rgba(4,22,15,.7);border:1px solid rgba(241,233,214,.12);border-radius:100px;padding:4px 16px;transition:opacity .5s}
+.hintbar.off{opacity:0;pointer-events:none}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<div class="stage">
+  <div class="top">
+    <div class="id"><img src="/img/logo-cream.svg" alt=""><div><b id="tTitle">—</b><small id="tSub"></small></div></div>
+    <div class="kick" id="tKick"></div>
+  </div>
+  <div class="slidewrap" id="wrap"></div>
+  <div class="bottom">
+    <div class="tools">
+      <button id="bPrev" title="السابق"><svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg></button>
+      <button id="bNext" title="التالي"><svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg></button>
+      <button id="bMap" title="فهرسُ الشرائح (Esc)"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5"/></svg></button>
+      <button id="bFull" title="ملءُ الشاشة (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 15v5h-5M20 9V4h-5M4 15v5h5"/></svg></button>
+      <button id="bBack" title="العودةُ للتحضير"><svg viewBox="0 0 24 24"><path d="M5 3.5h9.5L19 8v12.5H5z"/><path d="M14.5 3.5V8H19"/><path d="M8 12h8M8 15.5h5"/></svg></button>
+    </div>
+    <div class="bar"><i id="prog"></i></div>
+    <div class="count" id="count">—</div>
+  </div>
+</div>
+<div class="map" id="map" hidden><h3>شرائحُ العرض</h3><div class="g" id="mapG"></div></div>
+<div class="hintbar" id="hintbar">المسافةُ أو ← للتقدّم · → للرجوع · Esc للفهرس · F لملءِ الشاشة</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(i){return document.getElementById(i)};
+var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
+var nl=function(x){return esc(x).replace(/\n/g,'<br>').replace(/ {2,}/g,function(m){return new Array(m.length+1).join(' ')})};
+var ar=function(n){return String(n).replace(/\d/g,function(d){return '٠١٢٣٤٥٦٧٨٩'[d]})};
+var ID=new URLSearchParams(location.search).get('id')||'';
+var D=null, S=[], i=0, step=0;
+
+/* ============ بناءُ الشرائح ============ */
+function tick(){return '<span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>'}
+function head(t){return '<div class="head"><span class="dot"></span><h2>'+nl(t)+'</h2><span class="ln"></span></div>'}
+function ansList(a,from){
+  return '<div class="ans">'+a.map(function(x,k){return '<div class="a step" data-s="'+(from+k)+'">'+tick()+'<div>'+nl(x)+'</div></div>'}).join('')+'</div>';
+}
+var B={
+  cover:function(s){
+    return '<div class="cover">'
+      +'<img class="mark" src="/img/logo-cream.svg" alt="">'
+      +(s.over?'<div class="over">'+nl(s.over)+'</div>':'')
+      +'<h1>'+nl(s.title)+'</h1><div class="rule"></div>'
+      +(s.meta?'<div class="meta">'+s.meta.map(function(m){return '<div>'+nl(m.k)+' <b>'+nl(m.v)+'</b></div>'}).join('')+'</div>':'')
+      +'</div>';
+  },
+  divider:function(s){
+    return '<div class="divider">'+(s.n?'<div class="n">'+nl(s.n)+'</div>':'')
+      +'<h2>'+nl(s.title)+'</h2>'+(s.sub?'<p>'+nl(s.sub)+'</p>':'')+'</div>';
+  },
+  outcomes:function(s){
+    return head(s.title||'نواتجُ التعلّم')
+      +'<ul class="outs">'+s.items.map(function(x,k){
+        return '<li class="step" data-s="'+k+'"><span class="i">'+ar(k+1)+'</span><span>'+nl(x)+'</span></li>'}).join('')+'</ul>';
+  },
+  verses:function(s){
+    return (s.title?head(s.title):'')
+      +'<div class="verses">'+s.items.map(function(v,k){
+        return '<div class="v step" data-s="'+k+'">'+nl(v.t)+(v.n?'<em>'+nl(v.n)+'</em>':'')+'</div>'}).join('')
+      +(s.src?'<div class="src">'+nl(s.src)+'</div>':'')+'</div>';
+  },
+  question:function(s){
+    var h='', n=0;
+    h+='<div class="q">'+(s.n?'<span class="n">'+nl(s.n)+'</span>':'')+'<span>'+nl(s.q)+'</span></div>';
+    if(s.quote) h+='<div class="quote">'+nl(s.quote)+'</div>';
+    if(s.verse) h+='<div class="verseline">'+(s.vlabel?'<span class="lbl">'+nl(s.vlabel)+'</span>':'')
+      +'<span class="sh">'+String(s.verse).split(/\s{2,}/).map(function(x){return '<span>'+nl(x)+'</span>'}).join('')+'</span></div>';
+    if(s.prompt) h+='<div class="prompt">'+nl(s.prompt)+'</div>';
+    if(s.fill) h+='<div class="fill">'+s.fill.map(function(w){
+      var m=/^\[\[([\s\S]*)\]\]$/.exec(w);
+      return m?'<span class="w b hide step" data-s="'+(n++)+'" data-fill="1">'+nl(m[1])+'</span>':'<span class="w">'+nl(w)+'</span>';
+    }).join('')+'</div>';
+    if(s.options) h+='<div class="opts">'+s.options.map(function(o){
+      return '<div class="o'+(o.correct?' right':' dim')+' step" data-s="'+n+'" data-opt="1"><span class="b"></span><span>'+nl(o.text)+'</span></div>'}).join('')+'</div>', n++;
+    if(s.order) h+='<div class="order">'+s.order.map(function(o,k){
+      return '<div class="o step" data-s="'+(n+k)+'" data-order="1"><span class="num">'+nl(o.n)+'</span><span>'+nl(o.t)+'</span></div>'}).join('')+'</div>', n+=s.order.length;
+    if(s.a) h+=ansList(s.a,n), n+=s.a.length;
+    if(s.table) h+=tableHTML(s.table,n), n++;
+    return h;
+  },
+  table:function(s){
+    return (s.title?head(s.title):'')+tableHTML(s.table,0);
+  },
+  points:function(s){
+    return head(s.title||'الخلاصة')
+      +'<div class="points">'+s.items.map(function(p,k){
+        return '<div class="p step" data-s="'+k+'">'+(p.g?'<div class="g">'+nl(p.g)+'</div>':'')
+          +'<b>'+nl(p.t)+'</b>'+(p.d?'<span>'+nl(p.d)+'</span>':'')+'</div>'}).join('')+'</div>';
+  }
+};
+function tableHTML(t,s){
+  return '<table class="t step" data-s="'+s+'"><thead><tr>'+t.head.map(function(h){return '<th>'+nl(h)+'</th>'}).join('')+'</tr></thead><tbody>'
+    +t.rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+nl(c)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table>';
+}
+
+/* ============ العرض ============ */
+function build(){
+  $('wrap').innerHTML=S.map(function(s,k){
+    var fn=B[s.t]||B.question;
+    return '<section class="slide" data-k="'+k+'">'+fn(s)+'</section>';
+  }).join('');
+  $('mapG').innerHTML=S.map(function(s,k){
+    return '<button data-go="'+k+'"><i>'+ar(k+1)+'</i><span>'+esc(s.title||s.q||s.over||'شريحة')+'</span></button>';
+  }).join('');
+  $('mapG').onclick=function(e){var b=e.target.closest('[data-go]');if(!b)return;go(+b.dataset.go);$('map').hidden=true};
+}
+function slides(){return $('wrap').querySelectorAll('.slide')}
+function steps(k){return slides()[k].querySelectorAll('.step')}
+function show(k,atEnd){
+  var all=slides();
+  [].forEach.call(all,function(el,n){
+    el.classList.toggle('on',n===k);
+    el.classList.toggle('out',n<k);
+  });
+  i=k;
+  var st=steps(k);
+  step=atEnd?st.length:0;
+  paint();
+  $('count').textContent=ar(k+1)+' / '+ar(S.length);
+  $('prog').style.width=((k+1)/S.length*100)+'%';
+  var cur=$('mapG').querySelector('.cur'); if(cur)cur.classList.remove('cur');
+  var nb=$('mapG').querySelector('[data-go="'+k+'"]'); if(nb)nb.classList.add('cur');
+  try{history.replaceState(null,'','?id='+encodeURIComponent(ID)+'#'+(k+1))}catch(e){}
+}
+function paint(){
+  [].forEach.call(steps(i),function(el,n){
+    var on=n<step;
+    el.classList.toggle('in',on);
+    if(el.dataset.fill) el.classList.toggle('hide',!on);
+    if(el.dataset.order) el.classList.toggle('show',on);
+    if(el.dataset.opt) el.classList.toggle('dim',!on&&!el.classList.contains('right'));
+  });
+}
+function next(){ if(step<steps(i).length){step++;paint();return} if(i<S.length-1) show(i+1); }
+function prev(){ if(step>0){step--;paint();return} if(i>0) show(i-1,true); }
+function go(k){ if(k>=0&&k<S.length) show(k); }
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){ $('map').hidden=!$('map').hidden; e.preventDefault(); return; }
+  if($('map').hidden===false && e.key!=='Escape') return;
+  if(e.key===' '||e.key==='ArrowLeft'||e.key==='PageDown'||e.key==='Enter'){e.preventDefault();next()}
+  else if(e.key==='ArrowRight'||e.key==='PageUp'||e.key==='Backspace'){e.preventDefault();prev()}
+  else if(e.key==='ArrowDown'){e.preventDefault();go(i+1)}
+  else if(e.key==='ArrowUp'){e.preventDefault();go(i-1)}
+  else if(e.key==='Home'){e.preventDefault();go(0)}
+  else if(e.key==='End'){e.preventDefault();go(S.length-1)}
+  else if(e.key==='f'||e.key==='F'){full()}
+});
+function full(){ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); }
+$('bNext').onclick=next; $('bPrev').onclick=prev; $('bFull').onclick=full;
+$('bMap').onclick=function(){$('map').hidden=!$('map').hidden};
+$('bBack').onclick=function(){location.href='lesson.html?id='+encodeURIComponent(ID)};
+$('wrap').addEventListener('click',function(e){ if(e.target.closest('button'))return; next(); });
+var tx=0,ty=0;
+$('wrap').addEventListener('touchstart',function(e){tx=e.touches[0].clientX;ty=e.touches[0].clientY},{passive:true});
+$('wrap').addEventListener('touchend',function(e){
+  var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){ dx<0?next():prev(); }
+},{passive:true});
+setTimeout(function(){$('hintbar').classList.add('off')},6000);
+
+/* ============ الإقلاع ============ */
+fetch('data/decks/'+ID+'.json',{cache:'no-cache'}).then(function(r){
+  if(!r.ok) throw 0; return r.json();
+}).then(function(j){
+  D=j; S=j.slides||[];
+  $('tTitle').textContent=j.title||'التحضير';
+  $('tSub').textContent=j.sub||'';
+  $('tKick').textContent=j.kick||'';
+  document.title=(j.title||'العرض')+' — عرضٌ تقديمي';
+  build();
+  var h=parseInt(location.hash.replace('#',''),10);
+  show(h>0&&h<=S.length?h-1:0);
+}).catch(function(){
+  $('wrap').innerHTML='<section class="slide on"><div class="cover"><div class="over">لا عرضَ لهذا التحضيرِ بعد</div>'
+    +'<h1>العرضُ التقديمي</h1><div class="rule"></div>'
+    +'<div class="meta"><a href="lesson.html?id='+encodeURIComponent(ID)+'" style="color:var(--gold)">العودةُ إلى التحضير</a></div></div></section>';
+  $('count').textContent='—';
+});
+})();
+</script>
+</body>
+</html>
