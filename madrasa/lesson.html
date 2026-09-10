@@ -12,6 +12,8 @@
 <meta name="hv-parent" content="/madrasa/">
 <meta name="hv-parent-title" content="مدرستي">
 <script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
+<script src="/admin/js/gh-api.js"></script>
+<script src="js/fb.js?v=8"></script>
 <style>
 :root{
   --green:#0F4C3A; --green-deep:#0A3428; --green-ink:#062219;
@@ -271,7 +273,7 @@ body.edit .addrow{display:flex}
   <div class="in">
     <button class="tb" id="bEdit"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/><path d="M14.5 6.5 17.5 9.5"/></svg><i>تعديلُ التحضير</i></button>
     <button class="tb on" id="bAns"><svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><i>الإجابات ظاهرة</i></button>
-    <button class="tb" id="bSave"><svg viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5H5z"/><path d="M8.5 4.5v5h7v-5M8.5 19.5v-6h7v6"/></svg><i>حفظُ التعديلات</i></button>
+    <button class="tb" id="bSave"><svg viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5H5z"/><path d="M8.5 4.5v5h7v-5M8.5 19.5v-6h7v6"/></svg><i>حفظٌ ونشرٌ إلى الموقع</i></button>
     <button class="tb" id="bDeck"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><i>العرضُ التقديمي</i></button>
     <button class="tb" id="bJson"><svg viewBox="0 0 24 24"><path d="M12 3.5v12"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg><i>تنزيلُ ملفِّ البيانات</i></button>
     <button class="tb p" id="bPrint"><svg viewBox="0 0 24 24"><path d="M7 9V3.5h10V9"/><rect x="4" y="9" width="16" height="7.5" rx="2"/><path d="M7 14h10v6.5H7z"/></svg><i>طباعة / PDF</i></button>
@@ -295,8 +297,9 @@ var toast=function(m){var t=$('toast');t.textContent=m;t.classList.add('on');cle
 var qs=new URLSearchParams(location.search);
 var ID=qs.get('id')||'';
 if(qs.get('noans')) document.body.classList.add('noans');
-var TEACHER='أ. حيدر المعاتيق';
-var SCHOOL='ثانوية طلحة بن عبيدالله. بنين - قسم اللغة العربية';
+var ME=(window.FB&&FB.profile&&FB.profile())||{name:'أ. حيدر المعاتيق',school:'ثانوية طلحة بن عبيدالله. بنين - قسم اللغة العربية'};
+var TEACHER=ME.name, SCHOOL=ME.school;
+var CLOUD=false;  /* هل نحن داخلونَ بحسابٍ يسمحُ بالمشاركة؟ */
 
 var INDEX=[];
 
@@ -544,24 +547,43 @@ function arNum(n){return String(n).replace(/\d/g,function(d){return '٠١٢٣٤�
 
 /* ============ الحفظ ============ */
 function key(){return 'sc_lesson_'+ID}
+/* رمزُ GitHub — هو نفسُه المستعمَلُ في رفعِ ملفّاتِ التحضير */
+function ghToken(){ var ks=['hv_token','gh_token','github_token'];
+  for(var n=0;n<ks.length;n++){var v=localStorage.getItem(ks[n]);if(v)return v}
+  for(var k in localStorage){if(/_token$/.test(k)&&localStorage[k])return localStorage[k]}
+  return ''; }
+/* يكتبُ ملفَّ الدرسِ في المستودعِ فتصيرُ نسخةُ الموقعِ هي نسختَك */
+function publish(){
+  var tok=ghToken();
+  if(!tok||!window.GhApi) return Promise.reject(new Error('لا رمزَ نشرٍ في هذا المتصفّح'));
+  var gh=new GhApi({owner:'haydarvsky',repo:'haydarvsky.github.io',branch:'main',token:tok});
+  return gh.commit({
+    message:'مدرستي: تحديثُ تحضير «'+((M.meta&&M.meta.aspect)||ID)+'»',
+    files:[{path:'madrasa/data/lessons/'+ID+'.json',text:JSON.stringify(M,null,2)}]
+  });
+}
 function atKey(){return 'sc_lesson_'+ID+'_at'}
 function save(quiet){
   readBack();
+  var txt;
+  try{ txt=JSON.stringify(M); }catch(e){ toast('تعذّر الحفظ: '+(e&&e.message||e)); return; }
   try{
-    localStorage.setItem(key(),JSON.stringify(M));
+    localStorage.setItem(key(),txt);
     localStorage.setItem(atKey(),new Date().toISOString());
-  }catch(e){
-    toast('تعذّر الحفظ: '+(e&&e.message||e));
-    return;
-  }
-  if(!quiet) toast('حُفظ في هذا المتصفّح');
+  }catch(e){}
+  if(CLOUD){
+    FB.DB.set('sc_lessons',ID,{json:txt,at:new Date().toISOString(),by:(FB.Auth.user()||{}).email||''})
+      .then(function(){ if(!quiet) toast('حُفظ — يظهرُ للمعلّمَينِ معاً'); })
+      .catch(function(e){ toast('حُفظ محليّاً؛ تعذّرَتِ المزامنة: '+((e&&e.message)||e)); });
+  } else if(!quiet) toast('حُفظ في هذا المتصفّح');
   stamp();
   chrome(NAV.topic,NAV.idx);   /* المسارُ والعنوانُ يتبعانِ سطرَ التناول */
 }
 function stamp(){
   var at=null; try{at=localStorage.getItem(atKey())}catch(e){}
-  var d=at?new Date(at):new Date();
-  $('hint').innerHTML='<b style="color:var(--gold)">مُعدَّلٌ ومحفوظٌ في هذا المتصفّح</b> — '
+  if(!at){ $('hint').innerHTML='<span style="opacity:.7">التعديلُ مباشرٌ على الورقة · Enter يضيفُ سطراً · Alt+نقرة يحدّدُ الإجابةَ الصحيحة · زرُّ الحفظِ ينشرُ إلى الموقع</span>'; return; }
+  var d=new Date(at);
+  $('hint').innerHTML='<b style="color:var(--gold)">'+(CLOUD?'مُعدَّلٌ ومحفوظٌ للمعلّمَينِ معاً':'مُعدَّلٌ ومحفوظٌ في هذا المتصفّح')+'</b> — '
    +d.toLocaleString('ar-KW',{hour:'2-digit',minute:'2-digit',day:'numeric',month:'long'})
    +' · <span style="opacity:.7">Enter يضيفُ سطراً · Alt+نقرة يحدّدُ الإجابةَ الصحيحةَ في الاختيارات</span>'
    +' · <button id="bReset" style="background:none;border:none;color:var(--cream);text-decoration:underline;cursor:pointer;font:inherit;padding:0">استرجاعُ نسخةِ الموقع</button>';
@@ -569,6 +591,7 @@ function stamp(){
     if(!ORIG){toast('لا نسخةَ أصليّةً محمّلة');return}
     if(!confirm('حذفُ تعديلاتِك والعودةُ إلى نسخةِ الموقع؟')) return;
     try{localStorage.removeItem(key());localStorage.removeItem(atKey())}catch(e){}
+    if(CLOUD) FB.DB.del('sc_lessons',ID).catch(function(){});
     M=JSON.parse(JSON.stringify(ORIG)); render(); $('hint').innerHTML=''; toast('عادتْ نسخةُ الموقع');
   };
 }
@@ -618,13 +641,24 @@ function locate(){
 function boot(){
   if(!ID){ renderIndex(); return; }
   var local=null; try{local=JSON.parse(localStorage.getItem(key())||'null')}catch(e){}
-  fetch('data/lessons/'+ID+'.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){
-    ORIG=j; M=local||j; render(); if(local) stamp();
-  }).catch(function(){
-    if(local){M=local;render();stamp();}
-    else $('app').innerHTML='<div class="idx"><h2>لم يُعثَرْ على التحضير</h2><p>تحقّقْ من الرابط.</p></div>';
-  }).then(function(){
-    locate().then(function(r){ chrome(r&&r.topic, r?r.idx:0); });
+  var base=fetch('data/lessons/'+ID+'.json',{cache:'no-cache'}).then(function(r){return r.json()}).catch(function(){return null});
+  var cloud=(window.FB&&FB.Auth?FB.Auth.restore():Promise.resolve(null)).then(function(){
+    var me=FB.profile&&FB.profile(); ME=me||ME; TEACHER=ME.name; SCHOOL=ME.school;
+    CLOUD=!!(FB.teacher&&FB.teacher()&&!FB.demo);
+    if(!CLOUD) return null;
+    return FB.DB.get('sc_lessons',ID).catch(function(){return null});
+  }).catch(function(){return null});
+
+  Promise.all([base,cloud]).then(function(r){
+    var j=r[0], cl=r[1], remote=null;
+    if(cl&&cl.json){ try{remote=JSON.parse(cl.json)}catch(e){} }
+    ORIG=j;
+    M=remote||local||j;
+    if(!M){ $('app').innerHTML='<div class="idx"><h2>لم يُعثَرْ على التحضير</h2><p>تحقّقْ من الرابط.</p></div>'; return; }
+    if(remote){ try{localStorage.setItem(key(),JSON.stringify(remote));localStorage.setItem(atKey(),cl.at||new Date().toISOString())}catch(e){} }
+    render();
+    if(remote||local) stamp();
+    locate().then(function(x){ chrome(x&&x.topic, x?x.idx:0); });
   });
 }
 function renderIndex(){
@@ -650,7 +684,18 @@ function ansBtn(){var b=$('bAns'),on=!document.body.classList.contains('noans');
   b.classList.toggle('on',on);b.querySelector('i').textContent=on?'الإجابات ظاهرة — للتبديل إلى نسخةِ المتعلّم':'نسخةُ المتعلّم — للتبديل إلى نسخةِ المعلّم';}
 $('bAns').onclick=function(){document.body.classList.toggle('noans');ansBtn();};
 ansBtn();
-$('bSave').onclick=function(){save()};
+$('bSave').onclick=function(){
+  save();
+  var b=$('bSave'); b.disabled=true; b.querySelector('i').textContent='جارٍ النشرُ إلى الموقع…';
+  publish().then(function(){
+    ORIG=JSON.parse(JSON.stringify(M));
+    toast('نُشر إلى الموقع — يظهرُ للجميعِ خلالَ دقيقة');
+    try{localStorage.removeItem(key());localStorage.removeItem(atKey())}catch(e){}
+    stamp();
+  }).catch(function(e){
+    toast('حُفظ، ولم يُنشَرْ إلى الموقع: '+((e&&e.message)||e));
+  }).then(function(){ b.disabled=false; b.querySelector('i').textContent='حفظٌ ونشرٌ إلى الموقع'; });
+};
 $('bDeck').onclick=function(){location.href='deck.html?id='+encodeURIComponent(ID)};
 $('bPrint').onclick=function(){if(document.body.classList.contains('edit')){document.body.classList.remove('edit');$('bEdit').classList.remove('on')}window.print()};
 $('bJson').onclick=function(){readBack();var b=new Blob([JSON.stringify(M,null,2)],{type:'application/json'});

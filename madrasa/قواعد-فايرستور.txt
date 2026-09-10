@@ -3,18 +3,38 @@
 // ثم اضغط Publish.
 
     // ═══ مدرستي (تحضيرات ومتابعة المتعلّمين) ═══
-    // المعلّم: يقرأ ويكتب كلَّ شيء
-    function scOwner() {
-      return request.auth != null &&
-        request.auth.token.email == 'haydar.maateeq@gmail.com';
+    // معلّمو النظام: كلٌّ له مساحتُه المعزولة، والتحضيراتُ والعروضُ مشتركةٌ بينهم
+    function scTeacher() {
+      return request.auth != null && request.auth.token.email in [
+        'haydar.maateeq@gmail.com',
+        'taroot80@gmail.com'
+      ];
     }
-    // مشرفٌ قارئ: بريدُه في قائمة viewers داخل الوثيقة sc_meta/access (تُكتب من إعدادات التطبيق)
-    function scViewer() {
-      return request.auth != null &&
-        exists(/databases/$(database)/documents/sc_meta/access) &&
-        request.auth.token.email in get(/databases/$(database)/documents/sc_meta/access).data.viewers;
+    function scIsHaydar() {
+      return request.auth != null && request.auth.token.email == 'haydar.maateeq@gmail.com';
     }
-    match /sc_meta/{doc}    { allow read: if scOwner() || scViewer(); allow write: if scOwner(); }
-    match /sc_classes/{doc} { allow read: if scOwner() || scViewer(); allow write: if scOwner(); }
-    match /sc_days/{doc}    { allow read: if scOwner() || scViewer(); allow write: if scOwner(); }
-    match /sc_log/{doc}     { allow read: if scOwner() || scViewer(); allow write: if scOwner(); }
+    function scIsMohammed() {
+      return request.auth != null && request.auth.token.email == 'taroot80@gmail.com';
+    }
+    // مشرفٌ قارئ: بريدُه في قائمة viewers داخل وثيقةِ access في مساحةِ المعلّم
+    function scViewerIn(space) {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/$(space)/access) &&
+        request.auth.token.email in get(/databases/$(database)/documents/$(space)/access).data.viewers;
+    }
+
+    // ─── مشترَكٌ بين المعلّمَين: التحضيراتُ المعدَّلةُ والعروضُ التقديمية ───
+    match /sc_lessons/{doc} { allow read, write: if scTeacher(); }
+    match /sc_decks/{doc}   { allow read, write: if scTeacher(); }
+
+    // ─── مساحةُ أ. حيدر المعاتيق (بلا لاحقة) ───
+    match /sc_meta/{doc}    { allow read: if scIsHaydar() || scViewerIn('sc_meta'); allow write: if scIsHaydar(); }
+    match /sc_classes/{doc} { allow read: if scIsHaydar() || scViewerIn('sc_meta'); allow write: if scIsHaydar(); }
+    match /sc_days/{doc}    { allow read: if scIsHaydar() || scViewerIn('sc_meta'); allow write: if scIsHaydar(); }
+    match /sc_log/{doc}     { allow read: if scIsHaydar() || scViewerIn('sc_meta'); allow write: if scIsHaydar(); }
+
+    // ─── مساحةُ أ. محمد المعاتيق (لاحقة _m) ───
+    match /sc_meta_m/{doc}    { allow read: if scIsMohammed() || scViewerIn('sc_meta_m'); allow write: if scIsMohammed(); }
+    match /sc_classes_m/{doc} { allow read: if scIsMohammed() || scViewerIn('sc_meta_m'); allow write: if scIsMohammed(); }
+    match /sc_days_m/{doc}    { allow read: if scIsMohammed() || scViewerIn('sc_meta_m'); allow write: if scIsMohammed(); }
+    match /sc_log_m/{doc}     { allow read: if scIsMohammed() || scViewerIn('sc_meta_m'); allow write: if scIsMohammed(); }

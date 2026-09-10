@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#062219">
 <meta name="hv-nav" content="off">
 <link rel="icon" href="/img/logo-cream.svg">
+<script src="js/fb.js?v=8"></script>
 <style>
 :root{
   --green:#0F4C3A; --deep:#0A3428; --ink:#062219;
@@ -210,10 +211,13 @@ table.t td:first-child{border-radius:0 14px 14px 0}table.t td:last-child{border-
 'use strict';
 var $=function(i){return document.getElementById(i)};
 var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})};
-var nl=function(x){return esc(x).replace(/\n/g,'<br>').replace(/ {2,}/g,function(m){return new Array(m.length+1).join(' ')})};
+var nl=function(x){return esc(fill(x)).replace(/\n/g,'<br>').replace(/ {2,}/g,function(m){return new Array(m.length+1).join(' ')})};
 var ar=function(n){return String(n).replace(/\d/g,function(d){return '٠١٢٣٤٥٦٧٨٩'[d]})};
 var ID=new URLSearchParams(location.search).get('id')||'';
 var D=null, S=[], i=0, step=0;
+var ME={name:'أ. حيدر المعاتيق',short:'حيدر المعاتيق',school:'ثانوية طلحة بن عبيدالله. بنين - قسم اللغة العربية'};
+/* {{teacher}} و{{school}} تُستبدلانِ باسمِ المعلّمِ الداخلِ ومدرستِه */
+function fill(x){return String(x==null?'':x).replace(/\{\{teacher\}\}/g,ME.short).replace(/\{\{school\}\}/g,ME.school)}
 
 /* ============ بناءُ الشرائح ============ */
 function tick(){return '<span class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>'}
@@ -346,14 +350,17 @@ $('wrap').addEventListener('touchend',function(e){
 setTimeout(function(){$('hintbar').classList.add('off')},6000);
 
 /* ============ الإقلاع ============ */
-fetch('data/decks/'+ID+'.json',{cache:'no-cache'}).then(function(r){
+(window.FB&&FB.Auth?FB.Auth.restore().catch(function(){}):Promise.resolve()).then(function(){
+  if(window.FB&&FB.profile) ME=FB.profile();
+  return fetch('data/decks/'+ID+'.json',{cache:'no-cache'});
+}).then(function(r){
   if(!r.ok) throw 0; return r.json();
 }).then(function(j){
   D=j; S=j.slides||[];
-  $('tTitle').textContent=j.title||'التحضير';
-  $('tSub').textContent=j.sub||'';
-  $('tKick').textContent=j.kick||'';
-  document.title=(j.title||'العرض')+' — عرضٌ تقديمي';
+  $('tTitle').textContent=fill(j.title||'التحضير');
+  $('tSub').textContent=fill(j.sub||'');
+  $('tKick').textContent=fill(j.kick||'');
+  document.title=fill(j.title||'العرض')+' — عرضٌ تقديمي';
   build();
   var h=parseInt(location.hash.replace('#',''),10);
   show(h>0&&h<=S.length?h-1:0);

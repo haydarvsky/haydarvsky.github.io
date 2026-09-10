@@ -37,6 +37,10 @@
   var S = { user: null, role: 'owner', settings: null, classes: null, allClasses: null, days: {}, prep: null, date: today(), dashFilter: 'term', quick: false, sort: 'manual' };
   var LS = { get: function (k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } }, set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { } }, del: function (k) { try { localStorage.removeItem(k); } catch (e) { } } };
   function RO() { return S.role !== 'owner'; }
+  /* لاحقةُ المساحةِ المعزولة: الفصولُ والأيامُ والإعداداتُ والسجلُّ لكلِّ معلّمٍ وحدَه */
+  var WS = '';
+  function C(n) { return n + WS; }
+  function K(n) { return n + WS; }
 
   var DEFAULT_CATS = {
     star: ['إجابةٌ متميّزة', 'قراءةٌ جيّدة', 'عملٌ جماعي', 'مبادرة', 'واجبٌ نموذجي'],
@@ -62,32 +66,32 @@
   }
   async function loadCore(force) {
     if (S.settings && S.classes && !force) return;
-    var cached = LS.get('sc_core_v1');
+    var cached = LS.get(K('sc_core_v1'));
     if (cached) { S.settings = normSettings(cached.settings); S.allClasses = cached.allClasses || cached.classes || []; splitClasses(); }
     if (!force && cached && !navigator.onLine) return;
     try {
-      var res = await Promise.all([DB.get('sc_meta', 'settings'), DB.list('sc_classes')]);
+      var res = await Promise.all([DB.get(C('sc_meta'), 'settings'), DB.list(C('sc_classes'))]);
       var st = res[0], cl = res[1];
       S.settings = normSettings(st);
-      if (!st && !RO()) await DB.set('sc_meta', 'settings', S.settings).catch(function () { });
+      if (!st && !RO()) await DB.set(C('sc_meta'), 'settings', S.settings).catch(function () { });
       S.allClasses = cl; splitClasses(); persistCore();
     } catch (e) { if (!cached || !FB.isNetErr(e)) throw e; }
   }
   function splitClasses() {
     S.classes = (S.allClasses || []).filter(function (c) { return !c.archived; }).sort(function (a, b) { return (a.order || 0) - (b.order || 0) || String(a.name).localeCompare(b.name, 'ar'); });
   }
-  function persistCore() { LS.set('sc_core_v1', { settings: S.settings, allClasses: S.allClasses }); }
+  function persistCore() { LS.set(K('sc_core_v1'), { settings: S.settings, allClasses: S.allClasses }); }
   function currentTerm(d) {
     d = d || today(); var t = (S.settings.terms || []).filter(function (t) { return t.start <= d && d <= t.end; })[0];
     return t || (S.settings.terms || []).slice().sort(function (a, b) { return a.start < b.start ? 1 : -1; })[0] || null;
   }
   function cls(id) { return (S.allClasses || []).filter(function (c) { return c._id === id; })[0]; }
-  function saveSettings() { persistCore(); return write('set', 'sc_meta', 'settings', S.settings); }
+  function saveSettings() { persistCore(); return write('set', C('sc_meta'), 'settings', S.settings); }
 
   /* ---------------- الطابورُ بلا إنترنت ---------------- */
-  var QKEY = 'sc_queue_v1';
-  function queue() { return LS.get(QKEY, []); }
-  function setQueue(q) { LS.set(QKEY, q); renderNet(); }
+  function QKEY() { return 'sc_queue_v1' + WS; }
+  function queue() { return LS.get(QKEY(), []); }
+  function setQueue(q) { LS.set(QKEY(), q); renderNet(); }
   async function write(op, col, id, data) {
     if (RO()) throw new Error('حسابُك للقراءةِ فقط');
     if (queue().length || !navigator.onLine) { pushQ(op, col, id, data); flush(); return; }
@@ -121,23 +125,23 @@
   async function log(act, detail) {
     if (RO()) return;
     var id = 'log_' + today().slice(0, 7);
-    var doc = S.logCache && S.logCache._id === id ? S.logCache : (await DB.get('sc_log', id).catch(function () { return null; })) || { items: [] };
+    var doc = S.logCache && S.logCache._id === id ? S.logCache : (await DB.get(C('sc_log'), id).catch(function () { return null; })) || { items: [] };
     doc.items = (doc.items || []).concat([{ ts: Date.now(), act: act, d: String(detail || '') }]).slice(-500);
     S.logCache = Object.assign({ _id: id }, doc);
-    write('set', 'sc_log', id, { items: doc.items }).catch(function () { });
+    write('set', C('sc_log'), id, { items: doc.items }).catch(function () { });
   }
 
   /* أيامُ فصلٍ: ذاكرةٌ لكلِّ فصل + نسخةٌ محلّية للعملِ بلا شبكة */
-  function persistDays(cid) { LS.set('sc_days_' + cid, S.days[cid]); }
+  function persistDays(cid) { LS.set(K('sc_days_') + cid, S.days[cid]); }
   async function loadDays(cid, force) {
     var c = S.days[cid];
     if (c && !force && Date.now() - c.at < 10 * 60 * 1000) return c.map;
-    var ls = LS.get('sc_days_' + cid);
+    var ls = LS.get(K('sc_days_') + cid);
     if (!navigator.onLine && ls) { S.days[cid] = ls; return ls.map; }
     try {
-      var rows = await DB.query('sc_days', [['cls', 'EQUAL', cid]]);
+      var rows = await DB.query(C('sc_days'), [['cls', 'EQUAL', cid]]);
       var map = {}; rows.forEach(function (r) { map[r.date] = r; });
-      queue().forEach(function (q) { if (q.col === 'sc_days' && q.data && q.data.cls === cid) { if (q.op === 'del') delete map[q.data.date]; else map[q.data.date] = Object.assign({ _id: q.id }, q.data); } });
+      queue().forEach(function (q) { if (q.col === C('sc_days') && q.data && q.data.cls === cid) { if (q.op === 'del') delete map[q.data.date]; else map[q.data.date] = Object.assign({ _id: q.id }, q.data); } });
       S.days[cid] = { at: Date.now(), map: map }; persistDays(cid);
       return map;
     } catch (e) { if (ls) { S.days[cid] = ls; toast('عرضُ آخرِ نسخةٍ محفوظة'); return ls.map; } throw e; }
@@ -145,10 +149,10 @@
   async function loadDay(cid, date) {
     var c = S.days[cid];
     if (c && c.map[date] !== undefined) return c.map[date];
-    var ls = LS.get('sc_days_' + cid);
+    var ls = LS.get(K('sc_days_') + cid);
     if (!S.days[cid]) S.days[cid] = ls || { at: 0, map: {} };
     try {
-      var d = await DB.get('sc_days', cid + '_' + date);
+      var d = await DB.get(C('sc_days'), cid + '_' + date);
       S.days[cid].map[date] = d || null; persistDays(cid);
       return d;
     } catch (e) { if (FB.isNetErr(e)) return S.days[cid].map[date] || null; throw e; }
@@ -156,19 +160,25 @@
   async function saveDay(cid, date, doc) {
     var id = cid + '_' + date;
     if (!S.days[cid]) S.days[cid] = { at: 0, map: {} };
-    if (!doc.ev.length && !doc.taken) { S.days[cid].map[date] = null; persistDays(cid); await write('del', 'sc_days', id, { cls: cid, date: date }); return; }
+    if (!doc.ev.length && !doc.taken) { S.days[cid].map[date] = null; persistDays(cid); await write('del', C('sc_days'), id, { cls: cid, date: date }); return; }
     var data = { cls: cid, date: date, ev: doc.ev }; if (doc.taken) data.taken = true;
     S.days[cid].map[date] = Object.assign({ _id: id }, data); persistDays(cid);
-    await write('set', 'sc_days', id, data);
+    await write('set', C('sc_days'), id, data);
   }
 
   /* ---------------- الترويسة ---------------- */
   function renderHeader() {
     var d = new Date();
     $('hdDate').innerHTML = '<b>' + DAYS[d.getDay()] + ' ' + ar(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + ar(d.getFullYear()) + '</b>' + esc(hijri(d));
-    var u = Auth.user(), n = queue().length;
+    var u = Auth.user(), n = queue().length, me = FB.profile();
+    var ft = document.querySelector('footer');
+    if (ft) ft.innerHTML = 'مدرستي — أداةُ المعلّم <b>' + esc(me.short) + '</b> · البياناتُ محفوظةٌ في حسابِه وحدَه';
+    var pf = document.querySelector('.print-foot');
+    if (pf) pf.textContent = me.name + ' — تقريرُ متابعةِ المتعلّمين · مدرستي';
+    var sb = document.querySelector('.hd .sub');
+    if (sb && u && !FB.demo) sb.textContent = me.short;
     $('hdUser').innerHTML = u ? '<span class="dot' + (navigator.onLine ? '' : ' off') + '"></span><span>' + esc(FB.demo ? 'وضعٌ تجريبيّ (محليّ)' : u.email) + '</span>' + (RO() ? '<span class="ro">قراءةٌ فقط</span>' : '') + (n ? '<span class="q" title="تسجيلاتٌ بانتظارِ الإرسال">' + ar(n) + '</span>' : '') + '<button type="button" id="logout">خروج</button>' : '<span class="dot off"></span><span>غيرُ متّصل</span>';
-    var lo = $('logout'); if (lo) lo.onclick = function () { if (queue().length && !confirm('هناك تسجيلاتٌ لم تُرسَلْ بعد — تبقى محفوظةً في هذا المتصفّح حتى تدخلَ ثانية. متابعةُ الخروج؟')) return; Auth.signOut(); S.user = null; S.settings = null; S.classes = null; S.allClasses = null; S.days = {}; LS.del('sc_core_v1'); route(); };
+    var lo = $('logout'); if (lo) lo.onclick = function () { if (queue().length && !confirm('هناك تسجيلاتٌ لم تُرسَلْ بعد — تبقى محفوظةً في هذا المتصفّح حتى تدخلَ ثانية. متابعةُ الخروج؟')) return; Auth.signOut(); S.user = null; S.settings = null; S.classes = null; S.allClasses = null; S.days = {}; LS.del(K('sc_core_v1')); route(); };
     renderNet();
   }
 
@@ -220,7 +230,12 @@
     $('lforgot').onclick = function () { go('forgot'); };
     $('lpw').addEventListener('keydown', function (e) { if (e.key === 'Enter') go('in'); });
   }
-  function setRole() { var u = Auth.user(); S.role = (!u || FB.demo || (u.email || '').toLowerCase() === Auth.cfg.OWNER_EMAIL) ? 'owner' : 'viewer'; }
+  function setRole() {
+    var u = Auth.user(), t = FB.teacher();
+    S.role = (!u || FB.demo || t) ? 'owner' : 'viewer';
+    WS = t ? t.ws : '';
+    S.me = FB.profile();
+  }
 
   /* ---------------- الرئيسة: اليوم ---------------- */
   async function home() {
@@ -261,7 +276,7 @@
   function collectAlerts() {
     var out = [], tm = currentTerm(); if (!tm) return out;
     (S.classes || []).forEach(function (c) {
-      var cache = S.days[c._id] || LS.get('sc_days_' + c._id); if (!cache) return;
+      var cache = S.days[c._id] || LS.get(K('sc_days_') + c._id); if (!cache) return;
       var evs = eventsIn(cache.map, tm.start, today());
       (c.students || []).forEach(function (s) {
         var a = evs.filter(function (e) { return e.sid === s.id && e.type === 'absent'; }).length, b = evs.filter(function (e) { return e.sid === s.id && e.type === 'bad'; }).length;
@@ -443,7 +458,7 @@
       $('cAdd').onclick = async function () {
         var n = $('cName').value.trim(); if (!n) { $('cName').focus(); return; }
         var id = uid('c'), doc = { name: n, grade: $('cGrade').value, order: S.classes.length + 1, students: [], created: today() };
-        try { await write('set', 'sc_classes', id, doc); S.allClasses.push(Object.assign({ _id: id }, doc)); splitClasses(); persistCore(); log('إضافةُ فصل', n); location.hash = '#/class/' + id + '/students'; } catch (e) { fail(e); }
+        try { await write('set', C('sc_classes'), id, doc); S.allClasses.push(Object.assign({ _id: id }, doc)); splitClasses(); persistCore(); log('إضافةُ فصل', n); location.hash = '#/class/' + id + '/students'; } catch (e) { fail(e); }
       };
       $('cName').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('cAdd').click(); });
     }
@@ -458,7 +473,7 @@
   async function saveClass(c, what) {
     var d = { name: c.name, grade: c.grade, order: c.order || 0, students: c.students || [], created: c.created || today() };
     if (c.archived) { d.archived = true; d.archivedAt = c.archivedAt || today(); if (c.year) d.year = c.year; }
-    persistCore(); await write('set', 'sc_classes', c._id, d); if (what) log(what, c.name);
+    persistCore(); await write('set', C('sc_classes'), c._id, d); if (what) log(what, c.name);
   }
   function sortedStudents(c) {
     var list = (c.students || []).slice();
@@ -519,7 +534,7 @@
       $('cSave').onclick = async function () { var old = c.name; c.name = $('cRename').value.trim() || c.name; c.grade = $('cGrade2').value; try { await saveClass(c, old !== c.name ? 'تعديلُ اسمِ فصل: ' + old + ' ← ' + c.name : 'تعديلُ فصل'); toast('حُفظ'); render(); } catch (err) { fail(err); } };
       var ab = $('cArch'); if (ab) ab.onclick = async function () { if (!confirm('أرشفةُ «' + c.name + '»؟ يختفي من القوائمِ اليومية ويبقى تقريرُه في الأرشيف.')) return; c.archived = true; c.archivedAt = today(); try { await saveClass(c, 'أرشفةُ فصل'); splitClasses(); persistCore(); location.hash = '#/classes'; } catch (err) { fail(err); } };
       var un = $('cUnarch'); if (un) un.onclick = async function () { c.archived = false; try { await saveClass(c, 'إعادةُ فصلٍ من الأرشيف'); splitClasses(); persistCore(); location.hash = '#/classes'; } catch (err) { fail(err); } };
-      $('cDel').onclick = async function () { if (!confirm('حذفُ الفصلِ «' + c.name + '» نهائياً بكلِّ متعلّميه وسجلِّه اليومي؟ لا يمكنُ التراجع.')) return; if (!confirm('تأكيدٌ أخير: حذفٌ نهائي؟')) return; try { var map = await loadDays(c._id); for (var k in map) if (map[k]) await write('del', 'sc_days', c._id + '_' + k, { cls: c._id, date: k }); await write('del', 'sc_classes', c._id, {}); S.allClasses = S.allClasses.filter(function (x) { return x._id !== c._id; }); splitClasses(); persistCore(); LS.del('sc_days_' + c._id); log('حذفُ فصلٍ نهائياً', c.name); location.hash = '#/classes'; } catch (err) { fail(err); } };
+      $('cDel').onclick = async function () { if (!confirm('حذفُ الفصلِ «' + c.name + '» نهائياً بكلِّ متعلّميه وسجلِّه اليومي؟ لا يمكنُ التراجع.')) return; if (!confirm('تأكيدٌ أخير: حذفٌ نهائي؟')) return; try { var map = await loadDays(c._id); for (var k in map) if (map[k]) await write('del', C('sc_days'), c._id + '_' + k, { cls: c._id, date: k }); await write('del', C('sc_classes'), c._id, {}); S.allClasses = S.allClasses.filter(function (x) { return x._id !== c._id; }); splitClasses(); persistCore(); LS.del(K('sc_days_') + c._id); log('حذفُ فصلٍ نهائياً', c.name); location.hash = '#/classes'; } catch (err) { fail(err); } };
     }
     render();
   }
@@ -593,7 +608,7 @@
     if (!pool.length) { RND.picked = []; pool = present.filter(function (s) { return !starredToday[s.id]; }); }
     if (!pool.length) { pool = present; note = 'شارك الجميعُ اليوم — اختيارٌ بين الحاضرين'; }
     /* أولويةٌ لمن مشاركاتُه في الفصلِ الدراسيِّ أقلّ: نُرجِّح بالوزن */
-    var tm = currentTerm(), cache = S.days[c._id] || LS.get('sc_days_' + c._id), termStars = {};
+    var tm = currentTerm(), cache = S.days[c._id] || LS.get(K('sc_days_') + c._id), termStars = {};
     if (cache && tm) eventsIn(cache.map, tm.start, today()).forEach(function (e) { if (e.type === 'star') termStars[e.sid] = (termStars[e.sid] || 0) + 1; });
     var weighted = []; pool.forEach(function (s) { var w = Math.max(1, 6 - Math.min(5, termStars[s.id] || 0)); for (var i = 0; i < w; i++) weighted.push(s); });
     var chosen = weighted[Math.floor(Math.random() * weighted.length)];
@@ -918,7 +933,7 @@
       }
       $('viewers').addEventListener('click', function (e) { var b = e.target.closest('[data-rmv]'); if (!b) return; collect(); st.viewers = st.viewers.filter(function (v) { return v !== b.dataset.rmv; }); render(); });
       $('viewerAdd').addEventListener('keydown', function (e) { if (e.key !== 'Enter') return; var v = this.value.trim().toLowerCase(); if (!v || !/@/.test(v)) return; collect(); if (st.viewers.indexOf(v) < 0) st.viewers.push(v); render(); });
-      $('tSave').onclick = async function () { collect(); try { await saveSettings(); await write('set', 'sc_meta', 'access', { viewers: st.viewers }); log('حفظُ الإعدادات'); toast('حُفظ'); } catch (err) { fail(err); } };
+      $('tSave').onclick = async function () { collect(); try { await saveSettings(); await write('set', C('sc_meta'), 'access', { viewers: st.viewers }); log('حفظُ الإعدادات'); toast('حُفظ'); } catch (err) { fail(err); } };
       $('bkIn').onchange = function () { var f = this.files[0]; if (!f) return; var r = new FileReader(); r.onload = function () { restoreJSON(r.result); }; r.readAsText(f); };
       $('archYear').onclick = archiveYear;
     }
@@ -939,7 +954,7 @@
   }
   async function allDaysDump() {
     var out = {};
-    for (var i = 0; i < S.allClasses.length; i++) { var c = S.allClasses[i]; var m; try { m = await loadDays(c._id, true); } catch (e) { m = (LS.get('sc_days_' + c._id) || { map: {} }).map; } out[c._id] = Object.keys(m).filter(function (k) { return m[k]; }).sort().map(function (k) { var d = m[k]; return { date: d.date, ev: d.ev || [], taken: !!d.taken }; }); }
+    for (var i = 0; i < S.allClasses.length; i++) { var c = S.allClasses[i]; var m; try { m = await loadDays(c._id, true); } catch (e) { m = (LS.get(K('sc_days_') + c._id) || { map: {} }).map; } out[c._id] = Object.keys(m).filter(function (k) { return m[k]; }).sort().map(function (k) { var d = m[k]; return { date: d.date, ev: d.ev || [], taken: !!d.taken }; }); }
     return out;
   }
   async function backupJSON() {
@@ -958,10 +973,10 @@
     if (!confirm('استعادةُ ' + ar((d.classes || []).length) + ' فصلاً وتسجيلاتِها من نسخةِ ' + (d.at || '').slice(0, 10) + '؟ تُكتَبُ فوقَ ما يطابقُها ولا يُحذَفُ غيرُها.')) return;
     try {
       if (d.settings) { S.settings = normSettings(d.settings); await saveSettings(); }
-      for (var i = 0; i < (d.classes || []).length; i++) { var c = d.classes[i], id = c._id; var x = Object.assign({}, c); delete x._id; delete x._path; await write('set', 'sc_classes', id, x); var ex = cls(id); if (ex) Object.assign(ex, x); else S.allClasses.push(Object.assign({ _id: id }, x)); }
+      for (var i = 0; i < (d.classes || []).length; i++) { var c = d.classes[i], id = c._id; var x = Object.assign({}, c); delete x._id; delete x._path; await write('set', C('sc_classes'), id, x); var ex = cls(id); if (ex) Object.assign(ex, x); else S.allClasses.push(Object.assign({ _id: id }, x)); }
       splitClasses(); persistCore();
       var n = 0, cids = Object.keys(d.days || {});
-      for (var k = 0; k < cids.length; k++) { var list = d.days[cids[k]]; for (var j = 0; j < list.length; j++) { var day = list[j], data = { cls: cids[k], date: day.date, ev: day.ev || [] }; if (day.taken) data.taken = true; await write('set', 'sc_days', cids[k] + '_' + day.date, data); n++; } LS.del('sc_days_' + cids[k]); }
+      for (var k = 0; k < cids.length; k++) { var list = d.days[cids[k]]; for (var j = 0; j < list.length; j++) { var day = list[j], data = { cls: cids[k], date: day.date, ev: day.ev || [] }; if (day.taken) data.taken = true; await write('set', C('sc_days'), cids[k] + '_' + day.date, data); n++; } LS.del(K('sc_days_') + cids[k]); }
       S.days = {}; log('استعادةُ نسخةٍ احتياطية', n + ' يوماً'); toast('استُعيدت النسخة — ' + ar(n) + ' يوماً'); setTimeout(route, 600);
     } catch (e) { fail(e); }
   }
@@ -982,7 +997,7 @@
   /* ---------------- سجلُّ التعديلات ---------------- */
   async function logView() {
     var d = new Date(), items = [];
-    for (var i = 0; i < 6 && items.length < 300; i++) { var m = iso(new Date(d.getFullYear(), d.getMonth() - i, 1)).slice(0, 7); var doc = await DB.get('sc_log', 'log_' + m).catch(function () { return null; }); if (doc && doc.items) items = items.concat(doc.items); }
+    for (var i = 0; i < 6 && items.length < 300; i++) { var m = iso(new Date(d.getFullYear(), d.getMonth() - i, 1)).slice(0, 7); var doc = await DB.get(C('sc_log'), 'log_' + m).catch(function () { return null; }); if (doc && doc.items) items = items.concat(doc.items); }
     items.sort(function (a, b) { return b.ts - a.ts; });
     view.innerHTML = '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/settings">الإعدادات</a><span class="sep">›</span>سجلُّ التعديلات</div><div class="ttl"><div><h2>سجلُّ التعديلات</h2><p>آخرُ ' + ar(Math.min(items.length, 300)) + ' عمليةً: ما أُضيف أو حُذف أو عُدِّل ومتى</p></div></div>'
       + '<div class="panel">' + (items.length ? items.slice(0, 300).map(function (it) { return '<div class="logrow"><span class="t">' + fmtTs(it.ts) + '</span><span><b>' + esc(it.act) + '</b>' + (it.d ? ' — ' + esc(it.d) : '') + '</span></div>'; }).join('') : '<div class="empty">لا عملياتَ مسجَّلة</div>') + '</div>';
@@ -994,12 +1009,12 @@
     var c1 = 'cdemo1', c2 = 'cdemo2', names1 = ['علي حسين', 'محمد جاسم', 'يوسف عبدالله', 'حسن الصالح', 'عبدالعزيز فهد', 'أحمد الكندري', 'سالم ناصر', 'خالد العنزي', 'فيصل مبارك', 'عمر السبيعي', 'بدر الشمري', 'ناصر العجمي'];
     var names2 = ['حمد راشد', 'جابر علي', 'مشاري سعد', 'طلال يوسف', 'ضاري فهد', 'عبدالرحمن صالح', 'راكان محمد', 'سعود عبدالله', 'نواف حسين', 'زيد الرشيدي'];
     var st1 = names1.map(function (n, i) { return { id: 'sd1' + i, name: n, no: String(i + 1) }; }), st2 = names2.map(function (n, i) { return { id: 'sd2' + i, name: n, no: String(i + 1) }; });
-    await DB.set('sc_classes', c1, { name: 'عاشر ٦', grade: '10', order: 1, students: st1, created: today() });
-    await DB.set('sc_classes', c2, { name: 'عاشر ٣', grade: '10', order: 2, students: st2, created: today() });
+    await DB.set(C('sc_classes'), c1, { name: 'عاشر ٦', grade: '10', order: 1, students: st1, created: today() });
+    await DB.set(C('sc_classes'), c2, { name: 'عاشر ٣', grade: '10', order: 2, students: st2, created: today() });
     var st = defaultSettings(); st.schedule = { 0: [c1, null, c2, null, null, null, null], 1: [null, c2, null, c1, null, null, null], 2: [c1, null, null, null, c2, null, null], 3: [null, c1, c2, null, null, null, null], 4: [c2, null, c1, null, null, null, null] };
     st.times = [{ s: '07:30', e: '08:15' }, { s: '08:15', e: '09:00' }, { s: '09:00', e: '09:45' }, { s: '10:05', e: '10:50' }, { s: '10:50', e: '11:35' }, { s: '11:35', e: '12:20' }, { s: '12:20', e: '13:05' }];
     st.terms[0].start = addDays(today(), -50);
-    await DB.set('sc_meta', 'settings', st);
+    await DB.set(C('sc_meta'), 'settings', st);
     var rnd = function (n) { return Math.floor(Math.random() * n); }, pick = function (a) { return a[rnd(a.length)]; };
     for (var d = addDays(today(), -49); d <= today(); d = addDays(d, 1)) {
       var dow = pd(d).getDay(); if (dow === 5 || dow === 6) continue;
@@ -1009,7 +1024,7 @@
           if (Math.random() < (i === 3 ? .3 : .06)) ev.push({ id: uid('e'), sid: s.id, type: 'absent', ts: Date.now() });
           else { if (Math.random() < (i < 3 ? .45 : .15)) ev.push({ id: uid('e'), sid: s.id, type: 'star', cat: pick(DEFAULT_CATS.star), ts: Date.now() }); if (Math.random() < .12) ev.push({ id: uid('e'), sid: s.id, type: 'wc', ts: Date.now() }); if (Math.random() < (i === 7 ? .25 : .04)) ev.push({ id: uid('e'), sid: s.id, type: 'bad', cat: pick(DEFAULT_CATS.bad), ts: Date.now() }); if (Math.random() < .05) ev.push({ id: uid('e'), sid: s.id, type: 'note', note: pick(['لم يُحضرِ الكتاب', 'تحسّنٌ ملحوظٌ في الخطّ', 'يحتاجُ متابعةً في الإملاء', 'قدّم واجبَه مبكّراً']), ts: Date.now() }); }
         });
-        DB.set('sc_days', pair[0] + '_' + d, { cls: pair[0], date: d, ev: ev, taken: true });
+        DB.set(C('sc_days'), pair[0] + '_' + d, { cls: pair[0], date: d, ev: ev, taken: true });
       });
     }
     await new Promise(function (r) { setTimeout(r, 300); });

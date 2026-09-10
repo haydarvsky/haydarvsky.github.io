@@ -6,6 +6,19 @@
     API_KEY: 'AIzaSyADogtO8s6kDuTrs1Tup6J4acY47T5DmdM',   /* مفتاحُ ويب عامٌّ بطبيعته — الحمايةُ في قواعدِ فايرستور */
     OWNER_EMAIL: 'haydar.maateeq@gmail.com'
   };
+  /* ===== المعلّمون: التحضيراتُ والعروضُ مشتركة، وكلُّ ما عداها معزولٌ بلاحقةِ ws ===== */
+  var TEACHERS = {
+    'haydar.maateeq@gmail.com': {
+      ws: '', name: 'أ. حيدر المعاتيق', short: 'حيدر المعاتيق',
+      school: 'ثانوية طلحة بن عبيدالله. بنين - قسم اللغة العربية'
+    },
+    'taroot80@gmail.com': {
+      ws: '_m', name: 'أ. محمد المعاتيق', short: 'محمد المعاتيق',
+      school: 'ثانوية أحمد البشر الرومي. بنين - قسم اللغة العربية'
+    }
+  };
+  var GUEST = TEACHERS['haydar.maateeq@gmail.com'];
+  function teacherOf(email) { return TEACHERS[String(email || '').trim().toLowerCase()] || null; }
   var DEMO = /[?&]demo=1/.test(location.search);
   var SKEY = 'sc_session_v1';
   var BASE = 'https://firestore.googleapis.com/v1/projects/' + CFG.PROJECT_ID + '/databases/(default)/documents';
@@ -156,5 +169,25 @@
   };
 
   function isNetErr(e) { return !navigator.onLine || (e && (e.name === 'TypeError' || /fetch|network|Failed to fetch|Load failed/i.test(e.message || ''))) && !(e && e.status); }
-  root.FB = { Auth: Auth, DB: DEMO ? Demo : Live, demo: DEMO, enc: enc, dec: dec, isNetErr: isNetErr };
+  /* هويّةُ المعلّمِ الحالي: الاسمُ والمدرسةُ ولاحقةُ مساحتِه المعزولة */
+  function teacher() {
+    var u = Auth.user();
+    if (DEMO) return GUEST;
+    return teacherOf(u && u.email) || null;
+  }
+  /* معاينةُ هويّةِ معلّمٍ آخرَ بلا دخول: ?as=m — عرضٌ فقط، لا يمنحُ أيَّ صلاحيّةِ بيانات */
+  function preview() {
+    var m = /[?&]as=([^&]+)/.exec(location.search);
+    if (!m) return null;
+    var k = decodeURIComponent(m[1]).toLowerCase();
+    if (k === 'm' || k === 'mohammed') return TEACHERS['taroot80@gmail.com'];
+    if (k === 'h' || k === 'haydar') return TEACHERS['haydar.maateeq@gmail.com'];
+    return teacherOf(k);
+  }
+  function profile() { return teacher() || preview() || GUEST; }
+  root.FB = {
+    Auth: Auth, DB: DEMO ? Demo : Live, demo: DEMO, enc: enc, dec: dec, isNetErr: isNetErr,
+    teachers: TEACHERS, teacher: teacher, profile: profile, preview: preview, guest: GUEST,
+    ws: function () { var t = teacher(); return t ? t.ws : ''; }
+  };
 })(window);
