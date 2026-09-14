@@ -229,7 +229,7 @@
       if (needsAuth) await loadCore();
       syncGrades();
       await fn(p.slice(1));
-    } catch (e) { console.error(e); view.innerHTML = '<div class="err">' + esc(e.message || e) + '</div><p><a class="btn" href="#/">الرئيسة</a> <button class="btn" onclick="location.reload()">إعادةُ التحميل</button></p>'; }
+    } catch (e) { console.error(e); view.innerHTML = '<div class="err">' + esc(e.message || e) + '</div><p><a class="btn" href="#/">رئيسةُ مدرستي</a> <button class="btn" onclick="location.reload()">إعادةُ التحميل</button></p>'; }
     window.scrollTo(0, 0);
   }
   window.addEventListener('hashchange', route);
@@ -389,7 +389,7 @@
     var m = await loadPrep();
     await loadLessons().catch(function () { });
     var g = p[0], s = p[1], tp = p[2];
-    var crumbs = '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/prep">التحضيرات</a>' + (g ? '<span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a>' : '') + (s ? '<span class="sep">›</span>' + esc(SEMS[s]) : '') + '</div>';
+    var crumbs = '<div class="crumb"><a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="#/">مدرستي</a><span class="sep">›</span><a href="#/prep">التحضيرات</a>' + (g ? '<span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a>' : '') + (s ? '<span class="sep">›</span>' + esc(SEMS[s]) : '') + '</div>';
     if (!g) {
       var html = crumbs + '<div class="ttl"><div><h2>التحضيرات</h2><p>كلُّ تحضيراتِك مرتّبةً بالصفِّ ثمّ بالفصلِ الدراسي</p></div>'
         + (RO() ? '' : '<div class="acts"><button class="btn" id="gManage">إدارةُ الصفوف</button></div>') + '</div>';
@@ -465,7 +465,7 @@
   function renderTopic(g, s, tid) {
     var t = topicsFor(g, s).filter(function (x) { return x.id === tid; })[0];
     if (!t) { location.hash = '#/prep/' + g + '/' + s; return; }
-    var html = '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/prep">التحضيرات</a><span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a><span class="sep">›</span><a href="#/prep/' + g + '/' + s + '">' + esc(SEMS[s]) + '</a><span class="sep">›</span>' + esc(t.title) + '</div>'
+    var html = '<div class="crumb"><a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="#/">مدرستي</a><span class="sep">›</span><a href="#/prep">التحضيرات</a><span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a><span class="sep">›</span><a href="#/prep/' + g + '/' + s + '">' + esc(SEMS[s]) + '</a><span class="sep">›</span>' + esc(t.title) + '</div>'
       + '<div class="ttl"><div><h2>' + esc(t.title) + '</h2><p>' + esc(t.unit || '') + ' — ' + ar(t.lessons.length) + ' تحضيراً' + (t.note ? ' · ' + esc(t.note) : '') + '</p></div></div>'
       + '<div class="lessons">';
     t.lessons.forEach(function (l, i) {
@@ -486,7 +486,7 @@
     });
   }
   function itemMeta(i) { var parts = []; if (i.unit) parts.push('الوحدة ' + i.unit); if (i.lesson) parts.push(i.lesson); if (i.week) parts.push('الأسبوع ' + ar(i.week)); if (i.date) parts.push('حصّة ' + fmtDate(i.date)); return parts.map(esc).join(' · '); }
-  function crumbsFor(g, s) { return '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/prep">التحضيرات</a><span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a><span class="sep">›</span>' + esc(SEMS[s]) + '</div>'; }
+  function crumbsFor(g, s) { return '<div class="crumb"><a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="#/">مدرستي</a><span class="sep">›</span><a href="#/prep">التحضيرات</a><span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a><span class="sep">›</span>' + esc(SEMS[s]) + '</div>'; }
   function renderPrepFolder(g, s, crumbs) {
     var q = (S.prepQ || '').trim();
     var items = S.prep.items.filter(function (i) { return i.grade === g && i.sem === s; }).sort(function (a, b) { return (num(a.week, 0) - num(b.week, 0)) || (a.order || 0) - (b.order || 0) || String(a.added).localeCompare(String(b.added)); });
@@ -646,7 +646,7 @@
       $('cName').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('cAdd').click(); });
     }
   }
-  function classCrumb(c, extra) { return '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/classes">فصولي</a><span class="sep">›</span><a href="#/class/' + c._id + '">' + esc(c.name) + '</a>' + (extra ? '<span class="sep">›</span>' + extra : '') + '</div>'; }
+  function classCrumb(c, extra) { return '<div class="crumb"><a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="#/">مدرستي</a><span class="sep">›</span><a href="#/classes">فصولي</a><span class="sep">›</span><a href="#/class/' + c._id + '">' + esc(c.name) + '</a>' + (extra ? '<span class="sep">›</span>' + extra : '') + '</div>'; }
   async function classView(p) {
     var c = cls(p[0]); if (!c) { location.hash = '#/classes'; return; }
     if (p[1] === 'report') return classReport(c);
@@ -1035,7 +1035,7 @@
         r.avg = Math.round(score(evs) / n * 10) / 10; r.starPer = Math.round(r.star / n * 10) / 10; r.badPer = Math.round(r.bad / n * 10) / 10;
         return r;
       });
-      var html = '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span>مقارنةُ الفصول</div>' + reportHead('مقارنةُ الفصول', R.label) + '<div class="ttl"><div><h2>مقارنةُ الفصول</h2><p>' + esc(R.label) + ' — أيُّ فصلٍ يحتاجُ جهداً أكبر</p></div><div class="acts"><button class="btn p" id="printBtn">تصديرُ PDF</button></div></div>' + filtersHTML();
+      var html = '<div class="crumb"><a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="#/">مدرستي</a><span class="sep">›</span>مقارنةُ الفصول</div>' + reportHead('مقارنةُ الفصول', R.label) + '<div class="ttl"><div><h2>مقارنةُ الفصول</h2><p>' + esc(R.label) + ' — أيُّ فصلٍ يحتاجُ جهداً أكبر</p></div><div class="acts"><button class="btn p" id="printBtn">تصديرُ PDF</button></div></div>' + filtersHTML();
       if (!rows.length) { html += '<div class="empty"><b>لا فصولَ بعد</b></div>'; view.innerHTML = html; bindFilters(render); $('printBtn').onclick = function () { window.print(); }; return; }
       var maxStar = Math.max(0.1, Math.max.apply(null, rows.map(function (r) { return r.starPer; }))), maxBad = Math.max(0.1, Math.max.apply(null, rows.map(function (r) { return r.badPer; })));
       html += '<div class="today" style="margin-bottom:0"><div class="panel"><h3>المشاركةُ لكلِّ متعلّم</h3><div class="hint">مشاركاتٌ متميّزة ÷ عددِ المتعلّمين</div><div class="hbars">' + rows.slice().sort(function (a, b) { return b.starPer - a.starPer; }).map(function (r) { return '<div class="hbar"><span class="nm">' + esc(r.c.name) + '</span><span class="tr"><i style="width:' + (100 * r.starPer / maxStar) + '%"></i></span><span class="v">' + ar(r.starPer) + '</span></div>'; }).join('') + '</div></div>'
@@ -1217,7 +1217,7 @@
     var d = new Date(), items = [];
     for (var i = 0; i < 6 && items.length < 300; i++) { var m = iso(new Date(d.getFullYear(), d.getMonth() - i, 1)).slice(0, 7); var doc = await DB.get(C('sc_log'), 'log_' + m).catch(function () { return null; }); if (doc && doc.items) items = items.concat(doc.items); }
     items.sort(function (a, b) { return b.ts - a.ts; });
-    view.innerHTML = '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/settings">الإعدادات</a><span class="sep">›</span>سجلُّ التعديلات</div><div class="ttl"><div><h2>سجلُّ التعديلات</h2><p>آخرُ ' + ar(Math.min(items.length, 300)) + ' عمليةً: ما أُضيف أو حُذف أو عُدِّل ومتى</p></div></div>'
+    view.innerHTML = '<div class="crumb"><a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="#/">مدرستي</a><span class="sep">›</span><a href="#/settings">الإعدادات</a><span class="sep">›</span>سجلُّ التعديلات</div><div class="ttl"><div><h2>سجلُّ التعديلات</h2><p>آخرُ ' + ar(Math.min(items.length, 300)) + ' عمليةً: ما أُضيف أو حُذف أو عُدِّل ومتى</p></div></div>'
       + '<div class="panel">' + (items.length ? items.slice(0, 300).map(function (it) { return '<div class="logrow"><span class="t">' + fmtTs(it.ts) + '</span><span><b>' + esc(it.act) + '</b>' + (it.d ? ' — ' + esc(it.d) : '') + '</span></div>'; }).join('') : '<div class="empty">لا عملياتَ مسجَّلة</div>') + '</div>';
   }
 

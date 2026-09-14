@@ -13,9 +13,9 @@
 <meta name="hv-parent-title" content="مدرستي">
 <script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
 <script src="/admin/js/gh-api.js"></script>
-<script src="js/fb.js?v=14"></script>
-<script src="js/bio.js?v=14"></script>
-<script src="js/deck-export.js?v=14"></script>
+<script src="js/fb.js?v=15"></script>
+<script src="js/bio.js?v=15"></script>
+<script src="js/deck-export.js?v=15"></script>
 <style>
 :root{
   --green:#0F4C3A; --green-deep:#0A3428; --green-ink:#062219;
@@ -699,7 +699,7 @@ function chrome(topic,idx){
   var c=$('crumb'), pg=$('pager');
   var cur=topic&&topic.lessons[idx];
   $('bDeckDl').hidden=!(cur&&cur.deck&&window.DeckExport);
-  var h='<a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a>';
+  var h='<a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a>';
   if(topic){
     h+='<span class="sep">›</span><a href="'+APP+'prep/'+topic.grade+'">'+esc(GRADES[topic.grade]||'')+'</a>'
       +'<span class="sep">›</span><a href="'+APP+'prep/'+topic.grade+'/'+topic.sem+'">'+esc(SEMS[topic.sem]||'')+'</a>'
@@ -771,7 +771,7 @@ function gate(){
 }
 function renderIndex(){
   ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono','bDeckDl','bFsDn','bFsUp'].forEach(function(k){$(k).hidden=true});
-  $('crumb').innerHTML='<a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a><span class="sep">›</span><b>التحضيراتُ التفاعلية</b>';
+  $('crumb').innerHTML='<a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a><span class="sep">›</span><b>التحضيراتُ التفاعلية</b>';
   fetch('data/lessons/index.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){
     var h='<div class="idx">';
     (j.topics||[]).forEach(function(t){
