@@ -220,7 +220,7 @@
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     closeSheet(); document.body.classList.remove('brief');
-    renderHeader();
+    renderHeader(); nextTick();
     var fn = ROUTES[r] || home;
     var needsAuth = true;   /* الموقعُ كلُّه للمعلّمَينِ المسجَّلَين */
     if (!Auth.user()) return loginView();
@@ -229,6 +229,7 @@
       if (needsAuth) await loadCore();
       syncGrades();
       await fn(p.slice(1));
+      nextTick();
     } catch (e) { console.error(e); view.innerHTML = '<div class="err">' + esc(e.message || e) + '</div><p><a class="btn" href="#/">رئيسةُ مدرستي</a> <button class="btn" onclick="location.reload()">إعادةُ التحميل</button></p>'; }
     window.scrollTo(0, 0);
   }
@@ -320,6 +321,47 @@
     view.innerHTML = html;
     if (!RO()) view.querySelectorAll('[data-temp]').forEach(function (b) { b.onclick = function () { tempPeriodSheet(+b.dataset.temp); }; });
   }
+  /* الحصّةُ القادمةُ في ترويسةِ الرئيسة: أقربُ حصّةٍ لم تبدأْ بعد (من الجدولِ أو حصصِ اليومِ المؤقّتة) مع عدٍّ تنازليّ */
+  function atTime(day, hm) { var p = String(hm || '').split(':'), x = new Date(day); x.setHours(+p[0] || 0, +p[1] || 0, 0, 0); return x; }
+  function nextPeriod(now) {
+    var st = S.settings; if (!st || !S.allClasses) return null;
+    var per = st.periods || 7, times = st.times || [];
+    for (var off = 0; off < 8; off++) {
+      var day = new Date(now); day.setDate(day.getDate() + off);
+      var sched = (st.schedule || {})[day.getDay()] || [], ex = (st.extra || {})[iso(day)] || {};
+      for (var i = 0; i < per; i++) {
+        var t = times[i]; if (!t || !t.s) continue;
+        var c = sched[i] ? cls(sched[i]) : null, x = (!c || c.archived) ? ex[i] : null;
+        if (c && c.archived) c = null;
+        if (!c && !x) continue;
+        var start = atTime(day, t.s);
+        if (start > now) return { i: i, name: c ? c.name : (x.cls || x.kind || 'حصّةٌ مؤقّتة'), kind: c ? '' : (x.cls ? x.kind : ''), t: t, start: start, off: off, dow: day.getDay(), id: c ? c._id : '' };
+      }
+    }
+    return null;
+  }
+  function leftHTML(ms) {
+    var s = Math.max(0, Math.floor(ms / 1000)), d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+    var p2 = function (n) { return ('0' + n).slice(-2); };
+    if (d) return (d === 1 ? 'يومٌ و' : d === 2 ? 'يومانِ و' : ar(d) + ' أيّامٍ و') + '<bdi dir="ltr">' + ar(p2(h) + ':' + p2(m)) + '</bdi>';
+    return '<bdi dir="ltr">' + ar((h ? p2(h) + ':' : '') + p2(m) + ':' + p2(x)) + '</bdi>';
+  }
+  function nextTick() {
+    var box = $('hdNext'); if (!box) return;
+    var n = (!(parts()[0]) && Auth.user()) ? nextPeriod(new Date()) : null;
+    if (!n) { box.hidden = true; box.dataset.k = ''; return; }
+    var key = n.start.getTime() + '|' + n.name;
+    if (box.dataset.k !== key) {
+      var when = n.off === 0 ? 'اليوم' : n.off === 1 ? 'غداً' : DAYS[n.dow];
+      box.dataset.k = key;
+      box.setAttribute('href', n.id ? '#/class/' + n.id : '#/');
+      box.innerHTML = '<span class="lb">حصّتُك القادمة' + (n.kind ? ' · ' + esc(n.kind) : '') + '</span><b class="nm">' + esc(n.name) + '</b><span class="mt">الحصّةُ ' + ar(n.i + 1) + ' · ' + when + ' ' + ar(n.t.s) + '</span><span class="lf"><small>المتبقّي</small><b id="hdLeft"></b></span>';
+    }
+    $('hdLeft').innerHTML = leftHTML(n.start - Date.now());
+    box.hidden = false;
+  }
+  setInterval(nextTick, 1000);
+
   /* حصّةٌ مؤقّتةٌ في حصّةٍ فارغة — لليومِ فقط: settings.extra[تاريخ][رقمُ الحصّة] = {kind, cls, note} */
   var TEMP_KINDS = ['احتياط', 'درسٌ ريادي', 'نشاط', 'اجتماع', 'أخرى'];
   function tempPeriodSheet(i) {

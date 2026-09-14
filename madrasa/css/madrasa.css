@@ -35,6 +35,17 @@ button,input,select,textarea{font:inherit;letter-spacing:0;color:inherit}
 .hd .sub{font-size:15px;opacity:.7;margin-top:-2px}
 .hd .date{text-align:left;font-size:15px;opacity:.85;line-height:1.5}
 .hd .date b{display:block;font-size:20px;color:var(--gold);font-weight:700}
+/* الحصّةُ القادمةُ في ترويسةِ الرئيسة */
+.hd .nextp{display:grid;grid-template-columns:auto auto;column-gap:18px;align-items:center;padding:10px 12px 10px 18px;border:1px solid rgba(232,223,204,.2);border-radius:18px;background:rgba(255,255,255,.05);color:var(--cream);text-decoration:none;line-height:1.35;margin-inline:auto;transition:border-color .2s}
+.hd .nextp[hidden]{display:none}
+.hd .nextp:hover{border-color:var(--gold)}
+.hd .nextp .lb{grid-column:1;font-size:13px;color:var(--gold)}
+.hd .nextp .nm{grid-column:1;font-size:24px;font-weight:700;color:#fff}
+.hd .nextp .mt{grid-column:1;font-size:14px;opacity:.8}
+.hd .nextp .lf{grid-column:2;grid-row:1/4;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 14px;border-radius:13px;background:var(--gold);color:var(--green-ink);min-width:118px}
+.hd .nextp .lf small{font-size:12px;font-weight:700;opacity:.75}
+.hd .nextp .lf b{font-size:22px;font-weight:700;white-space:nowrap}
+.hd .nextp .lf bdi{font-variant-numeric:tabular-nums}
 .hd .user{display:flex;align-items:center;gap:10px;font-size:14px;opacity:.85}
 .hd .user .dot{width:9px;height:9px;border-radius:50%;background:#7BC67E;box-shadow:0 0 0 3px rgba(123,198,126,.25)}
 .hd .user .dot.off{background:#d66;box-shadow:0 0 0 3px rgba(214,102,102,.25)}
@@ -389,6 +400,14 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px;border-t
   .hd .sub{display:none}
   .hd .date{flex:1;font-size:12px;line-height:1.35;opacity:.9}
   .hd .date b{font-size:14px}
+  .hd .wrap:has(.nextp:not([hidden])){flex-wrap:wrap;row-gap:8px}
+  .hd .nextp{order:9;flex:1 1 100%;margin:0;padding:7px 8px 7px 12px;grid-template-columns:1fr auto;border-radius:14px}
+  .hd .nextp .lb{font-size:11px}
+  .hd .nextp .nm{font-size:18px}
+  .hd .nextp .mt{font-size:12px}
+  .hd .nextp .lf{min-width:96px;padding:5px 10px;border-radius:10px}
+  .hd .nextp .lf small{font-size:10px}
+  .hd .nextp .lf b{font-size:17px}
   .hd .user{flex:0 0 auto;font-size:0;gap:6px}
   .hd .user span{font-size:0}
   .hd .user .dot{font-size:0}
