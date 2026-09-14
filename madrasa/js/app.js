@@ -63,6 +63,9 @@
   ];
   /* خاناتٌ ثابتةٌ في الجدولِ الأسبوعيِّ غيرُ الفصول — تُحفَظُ في schedule بهذه القيم */
   var FIXED = { '@meet': 'اجتماع', '@sub': 'احتياط' };
+  /* توصيةٌ ثابتةٌ على المتعلّم (students[].rec) — تظهرُ على بطاقتِه في كلِّ حصّة */
+  var PIN = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3.5h6l-1 5.5 3 3V14H7v-2l3-3z"/><path d="M12 14v6.5"/></svg>';
+  var REC_QUICK = ['ضعفُ نظر', 'ضعفُ سمع', 'يحتاجُ متابعة', 'حالةٌ صحيّة', 'يُسمَحُ له بالخروجِ للحمّام', 'يجلسُ في الأمام'];
   var DEFAULT_CATS = {
     star: ['إجابةٌ متميّزة', 'قراءةٌ جيّدة', 'عملٌ جماعي', 'مبادرة', 'واجبٌ نموذجي'],
     bad: ['تأخّر', 'لم يُحضرِ الكتاب', 'إزعاج', 'لم يحلَّ الواجب', 'استخدامُ الهاتف']
@@ -213,6 +216,17 @@
   }
 
   /* ---------------- التوجيه ---------------- */
+  /* زرُّ «رجوع» في سطرِ الأقسام: مستوىً واحدٌ إلى الأعلى داخلَ التطبيق، ومن رئيسةِ مدرستي إلى رئيسةِ الموقع */
+  function backHash(p) {
+    var r = p[0] || '';
+    if (!r) return 'https://haydarvsky.github.io/';
+    if (r === 'class') return p[2] ? '#/class/' + p[1] : '#/classes';
+    if (r === 'student') return '#/class/' + p[1];
+    if (r === 'overview') return '#/classes';
+    if (r === 'log') return '#/settings';
+    if (p.length > 1) return '#/' + p.slice(0, -1).map(encodeURIComponent).join('/');
+    return '#/';
+  }
   function parts() { return location.hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent); }
   var ROUTES = { '': home, prep: prep, classes: classes, class: classView, student: studentDash, schedule: scheduleView, settings: settingsView, overview: overview, log: logView };
   async function route() {
@@ -221,6 +235,7 @@
       var on = a.dataset.r === r || (['class', 'student', 'overview'].indexOf(r) >= 0 && a.dataset.r === 'classes') || (r === 'log' && a.dataset.r === 'settings');
       if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
+    var tb = $('tBack'); if (tb) tb.setAttribute('href', backHash(p));
     closeSheet(); document.body.classList.remove('brief');
     renderHeader(); nextTick();
     var fn = ROUTES[r] || home;
@@ -813,7 +828,7 @@
       + (ro ? '' : '<div class="seg" id="modeSeg"><button data-m="sheet" aria-pressed="' + (!S.quick) + '">تسجيلٌ مفصّل</button><button data-m="quick" aria-pressed="' + (!!S.quick) + '">تحديدُ الغائبين</button></div>') + '</div>';
     if (S.quick && !ro) html += '<div class="quickhint"><span>وضعٌ سريع: انقرِ الاسمَ لتبديلِ الغياب — ثمّ اضغطْ «تمّ التحضير»</span><button class="btn s p" id="takenBtn">✓ تمّ التحضير' + (absN ? '' : ' — الكلُّ حاضر') + '</button></div>';
     if (!c.students.length) html += '<div class="empty"><b>لا متعلّمينَ في هذا الفصل</b><a class="btn p" href="#/class/' + c._id + '/students" style="margin-top:10px">أضفِ الأسماء</a></div>';
-    html += '<div class="students" id="stuGrid">' + gridHTML(c, ev, alerts) + '</div><div class="legend">' + TYPES.map(function (t) { return '<span><i style="background:' + t.color + '"></i>' + t.label + '</span>'; }).join('') + '</div>';
+    html += '<div class="students" id="stuGrid">' + gridHTML(c, ev, alerts) + '</div><div class="legend">' + TYPES.map(function (t) { return '<span><i style="background:' + t.color + '"></i>' + t.label + '</span>'; }).join('') + '<span class="lg-rec">' + PIN + 'توصية</span></div>';
     view.innerHTML = html;
     $('dPrev').onclick = function () { S.date = addDays(date, 1); route(); };
     $('dNext').onclick = function () { S.date = addDays(date, -1); route(); };
@@ -839,7 +854,7 @@
   function stuChip(c, s, ev, alert) {
     var es = ev.filter(function (e) { return e.sid === s.id; }), abs = es.some(function (e) { return e.type === 'absent'; });
     var pips = TYPES.filter(function (t) { return t.key !== 'absent'; }).map(function (t) { var n = es.filter(function (e) { return e.type === t.key; }).length; return n ? '<span class="pip ' + t.key + '" title="' + t.label + '">' + ar(n) + '</span>' : ''; }).join('');
-    return '<button class="stu' + (abs ? ' absent' : '') + (S.quick ? ' quick' : '') + '" data-sid="' + s.id + '">' + (s.no ? '<span class="no">' + esc(s.no) + '</span>' : '') + (alert ? '<span class="alert" title="تجاوز حدَّ التنبيه">!</span>' : '') + '<span class="av">' + esc(initials(s.name)) + '</span><span class="nm">' + esc(s.name) + '</span><span class="bd">' + pips + '</span></button>';
+    return '<button class="stu' + (abs ? ' absent' : '') + (s.rec ? ' has-rec' : '') + (S.quick ? ' quick' : '') + '" data-sid="' + s.id + '">' + (s.no ? '<span class="no">' + esc(s.no) + '</span>' : '') + (alert ? '<span class="alert" title="تجاوز حدَّ التنبيه">!</span>' : '') + '<span class="av">' + esc(initials(s.name)) + '</span><span class="nm">' + esc(s.name) + (s.rec ? '<span class="rec" title="توصية: ' + esc(s.rec) + '">' + PIN + '<span>' + esc(s.rec) + '</span></span>' : '') + '</span><span class="bd">' + pips + '</span></button>';
   }
   function updatePresence(c, date) {
     var doc = S.days[c._id] && S.days[c._id].map[date]; var all = (doc ? doc.ev : []).filter(function (e) { return e.type === 'absent'; }).length;
@@ -889,7 +904,14 @@
   $('sheetBg').onclick = closeSheet;
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
   async function openStudentSheet(c, s, date, alerts) {
-    var ro = RO() || c.archived, pendingCat = null; alerts = alerts || {};
+    var ro = RO() || c.archived, pendingCat = null, recEdit = false; alerts = alerts || {};
+    async function setRec(v) {
+      var st = (c.students || []).filter(function (x) { return x.id === s.id; })[0] || s;
+      v = String(v || '').trim();
+      if (v) { st.rec = v; s.rec = v; } else { delete st.rec; delete s.rec; }
+      try { await saveClass(c, (v ? 'توصية: ' : 'إزالةُ توصية: ') + s.name); toast(v ? 'حُفظت التوصية' : 'أُزيلت التوصية'); } catch (e) { fail(e); }
+      recEdit = false; render(); refreshChip();
+    }
     async function mutate(fn, what) {
       var doc = (await loadDay(c._id, date)) || { ev: [] }; doc.ev = doc.ev || [];
       fn(doc);
@@ -903,7 +925,14 @@
     }
     function render() {
       var doc = S.days[c._id] && S.days[c._id].map[date]; var es = (doc ? doc.ev : []).filter(function (e) { return e.sid === s.id; });
-      var html = '<div class="who"><span class="av">' + esc(initials(s.name)) + '</span><div><h3>' + esc(s.name) + '</h3><small>' + esc(c.name) + ' — ' + fmtDate(date, true) + '</small></div><a class="btn s" style="margin-inline-start:auto" href="#/student/' + c._id + '/' + s.id + '">لوحةُ القياس</a></div>';
+      var html = '<div class="who"><span class="av">' + esc(initials(s.name)) + '</span><div><h3>' + esc(s.name) + '</h3><small>' + esc(c.name) + ' — ' + fmtDate(date, true) + '</small></div><div style="margin-inline-start:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' + (!ro && !s.rec && !recEdit ? '<button class="btn s recbtn" id="recBtn">' + PIN + 'توصية</button>' : '') + '<a class="btn s" href="#/student/' + c._id + '/' + s.id + '">لوحةُ القياس</a></div></div>';
+      if (recEdit && !ro) {
+        html += '<div class="recedit"><label>توصيةٌ ثابتةٌ على المتعلّم — تظهرُ على بطاقتِه في كلِّ حصّةٍ حتى تُزيلَها</label><input id="recIn" maxlength="90" value="' + esc(s.rec || '') + '" placeholder="مثال: ضعفُ نظر — يجلسُ في الصفِّ الأوّل">'
+          + '<div class="cats recq">' + REC_QUICK.map(function (k) { return '<button type="button" data-rq="' + esc(k) + '">' + esc(k) + '</button>'; }).join('') + '</div>'
+          + '<div class="row"><button class="btn p" id="recSave">حفظُ التوصية</button>' + (s.rec ? '<button class="btn s d" id="recDel">إزالةُ التوصية</button>' : '') + '<button class="btn s" id="recCancel">إلغاء</button></div></div>';
+      } else if (s.rec) {
+        html += '<div class="recbar">' + PIN + '<div><b>توصية</b><span>' + esc(s.rec) + '</span></div>' + (ro ? '' : '<button class="x" id="recEditB">تعديل</button>') + '</div>';
+      }
       if (!ro) {
         html += '<div class="acts4">';
         TYPES.filter(function (t) { return t.key !== 'note'; }).forEach(function (t) {
@@ -923,6 +952,16 @@
       html += '<div class="foot"><small style="color:var(--muted)">' + (ro ? 'قراءةٌ فقط' : 'النقرُ على الزرِّ يسجّلُ فوراً · × يحذف') + '</small><button class="btn s" id="shClose">إغلاق</button></div>';
       openSheet(html);
       var sh = $('sheet');
+      if ($('recBtn')) $('recBtn').onclick = function () { recEdit = true; render(); setTimeout(function () { var i = $('recIn'); if (i) i.focus(); }, 280); };
+      if ($('recEditB')) $('recEditB').onclick = function () { recEdit = true; render(); };
+      if ($('recIn')) {
+        var ri = $('recIn');
+        sh.querySelectorAll('[data-rq]').forEach(function (b) { b.onclick = function () { var v = ri.value.trim(), k = b.dataset.rq; if (v.indexOf(k) < 0) ri.value = v ? v + ' — ' + k : k; ri.focus(); }; });
+        $('recSave').onclick = function () { setRec(ri.value); };
+        ri.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); setRec(ri.value); } });
+        $('recCancel').onclick = function () { recEdit = false; render(); };
+        if ($('recDel')) $('recDel').onclick = function () { setRec(''); };
+      }
       sh.querySelectorAll('.act').forEach(function (b) {
         b.onclick = function () {
           var t = b.dataset.t;
@@ -931,7 +970,7 @@
           mutate(function (doc) { doc.ev.push({ id: uid('e'), sid: s.id, type: t, ts: Date.now() }); });
         };
       });
-      sh.querySelectorAll('.cats button').forEach(function (b) { b.onclick = function () { var t = pendingCat, cat = b.dataset.cat; mutate(function (doc) { var e = { id: uid('e'), sid: s.id, type: t, ts: Date.now() }; if (cat) e.cat = cat; doc.ev.push(e); }); }; });
+      sh.querySelectorAll('.cats:not(.recq) button').forEach(function (b) { b.onclick = function () { var t = pendingCat, cat = b.dataset.cat; mutate(function (doc) { var e = { id: uid('e'), sid: s.id, type: t, ts: Date.now() }; if (cat) e.cat = cat; doc.ev.push(e); }); }; });
       sh.querySelectorAll('.ev .x').forEach(function (x) { x.onclick = function () { mutate(function (doc) { doc.ev = doc.ev.filter(function (e) { return e.id !== x.dataset.id; }); }, 'حذفُ تسجيل'); }; });
       if ($('noteAdd')) { $('noteAdd').onclick = function () { var v = $('noteIn').value.trim(); if (!v) return; mutate(function (doc) { doc.ev.push({ id: uid('e'), sid: s.id, type: 'note', note: v, ts: Date.now() }); }); }; $('noteIn').addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('noteAdd').click(); } }); }
       $('shClose').onclick = closeSheet;
@@ -1009,6 +1048,7 @@
       var sc = score(evs);
       var html = classCrumb(c, esc(s.name)) + reportHead('تقريرُ متابعة: ' + s.name, c.name + ' — ' + R.label);
       html += '<div class="ttl"><div><h2>' + esc(s.name) + '</h2><p>' + esc(c.name) + ' · ' + esc(R.label) + '</p></div><div class="acts"><a class="btn" href="#/class/' + c._id + '">المتابعةُ اليومية</a><button class="btn" id="parentBtn">رسالةٌ لوليِّ الأمر</button><button class="btn p" id="printBtn"><svg viewBox="0 0 24 24"><path d="M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M7 9V4h10v5M7 14h10v6H7z"/></svg>تصديرُ PDF</button></div></div>';
+      if (s.rec) html += '<div class="recbar big">' + PIN + '<div><b>توصية</b><span>' + esc(s.rec) + '</span></div></div>';
       html += filtersHTML();
       html += '<div class="tiles">';
       html += '<div class="tile hero"><div class="l">نسبةُ الحضور</div><div class="v">' + (attend === null ? '—' : ar(attend) + '<small>٪</small>') + '</div><div class="s">' + (school ? 'من ' + ar(school.size) + ' حصّةً بحسبِ الجدول' : 'رتّبِ الجدولَ الأسبوعيَّ لحسابِها') + '</div></div>';

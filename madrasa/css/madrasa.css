@@ -58,6 +58,34 @@ button,input,select,textarea{font:inherit;letter-spacing:0;color:inherit}
 .tabs a svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .tabs a:hover{color:#fff}
 .tabs a[aria-current]{color:var(--gold);border-bottom-color:var(--gold)}
+/* «رجوع» في طرفِ سطرِ الأقسام (يسار)، ويُخفى زرُّ الشريطِ العلويِّ في هذه الصفحة */
+.tabs a.tback{margin-inline-start:auto;align-self:center;padding:6px 12px 6px 10px;border:1px solid rgba(232,223,204,.28);border-radius:100px;font-size:15px;gap:4px;color:var(--cream)}
+.tabs a.tback svg{width:16px;height:16px}
+.tabs a.tback:hover{border-color:var(--gold);color:var(--gold)}
+body:has(#tBack) .hv-nav .hv-back{display:none !important}
+/* التوصية */
+.stu.has-rec{border-color:var(--gold);box-shadow:inset -4px 0 0 var(--gold)}
+.stu.has-rec:hover{box-shadow:inset -4px 0 0 var(--gold),var(--sh)}
+.stu .nm{min-width:0}
+.stu .nm .rec{display:flex;align-items:center;gap:2px;margin-top:3px;font-size:12.5px;font-weight:700;color:var(--amber);line-height:1.35;text-decoration:none}
+.stu .nm .rec>span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stu .nm .rec svg{flex:0 0 auto;display:inline-block}
+.stu .nm .rec svg,.recbar svg,.recbtn svg,.legend .lg-rec svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px;margin-inline-end:3px}
+.legend .lg-rec{color:var(--amber);font-weight:700}
+.recbtn{color:var(--amber);border-color:rgba(217,164,65,.6)}
+.recbar{display:flex;align-items:center;gap:10px;background:#FFF4DC;border:1px solid rgba(217,164,65,.55);border-inline-start:5px solid var(--gold);border-radius:12px;padding:10px 12px;margin:-4px 0 14px}
+.recbar>svg{width:20px;height:20px;color:var(--amber);flex:0 0 auto;margin:0}
+.recbar div{flex:1;min-width:0;line-height:1.45}
+.recbar b{display:block;font-size:12px;color:var(--amber)}
+.recbar span{font-size:17px;font-weight:700;color:var(--green)}
+.recbar .x{border:0;background:transparent;color:var(--amber);font:inherit;font-size:14px;cursor:pointer;text-decoration:underline;flex:0 0 auto}
+.recbar.big{margin:0 0 16px}
+.recbar.big span{font-size:20px}
+.recedit{background:#FFFAEE;border:1px dashed var(--gold);border-radius:12px;padding:12px;margin:-4px 0 14px}
+.recedit label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.recedit input{width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:16px;background:#fff}
+.recedit .cats{margin:8px 0}
+.recedit .row{display:flex;gap:8px;flex-wrap:wrap}
 
 main{padding:28px 0 80px}
 .crumb{font-size:15px;color:var(--muted);margin-bottom:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
