@@ -490,3 +490,21 @@ table.tt tr.mark .pn{color:var(--amber)}
 .cls-card .cman{display:inline-flex;gap:6px;margin-inline-start:auto}
 .cls-card .cman .icon-btn{width:30px;height:30px}
 .cls-card .cman .icon-btn.del:hover{color:#A63D2F;border-color:#A63D2F}
+
+/* ===== الحصّةُ المؤقّتة (لليومِ فقط) في الحصصِ الفارغة ===== */
+button.period{width:100%;font:inherit;text-align:start;cursor:pointer}
+button.period:disabled{cursor:default}
+.period.free .m.add{opacity:0;color:var(--amber);font-weight:700;transition:opacity var(--t-fast)}
+.period.free:hover,.period.free:focus-visible{opacity:1}
+.period.free:hover .m.add,.period.free:focus-visible .m.add{opacity:1}
+@media(hover:none){.period.free .m.add{opacity:.9}}
+.period.temp{border:1.5px dashed var(--gold);background:linear-gradient(to left,#FFF9EA,var(--card))}
+.period.temp .n{background:var(--gold);color:var(--green-ink)}
+.period.temp .tk{display:inline-block;background:var(--green);color:var(--cream);border-radius:100px;padding:0 10px;font-size:14px;margin-inline-end:4px}
+.period.temp .tn{display:block;font-weight:400;font-size:14px;color:var(--muted);line-height:1.5;margin-top:2px}
+.period.temp.now{background:var(--green);border-style:solid}
+.period.temp.now .tk{background:var(--gold);color:var(--green-ink)}
+.period.temp.now .tn{color:rgba(232,223,204,.8)}
+.tkinds{margin:4px 0 0}
+.tkinds button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}
+.sheet textarea#tNote{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;font-size:16px;resize:vertical}

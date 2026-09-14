@@ -86,6 +86,7 @@
     if (!st.periods) st.periods = 7;
     st.bio = Object.assign({ on: true, from: '09:10', to: '10:10' }, st.bio || {});
     if (!Array.isArray(st.viewers)) st.viewers = [];
+    if (!st.extra || typeof st.extra !== 'object' || Array.isArray(st.extra)) st.extra = {};
     if (!Array.isArray(st.grades)) st.grades = GRADE_DEF.map(function (g) { return Object.assign({}, g); });
     return st;
   }
@@ -280,8 +281,9 @@
     html += '<div class="today"><div>';
     if (dow === 5 || dow === 6) html += '<div class="empty"><b>عطلةُ نهايةِ الأسبوع</b>استرحْ يا أستاذ</div>';
     else if (!S.classes.length) html += '<div class="empty"><b>لا فصولَ بعد</b>أضفْ فصولَك أوّلاً من «متابعةُ المتعلّمين»</div>';
-    else if (!sched.some(Boolean)) html += '<div class="empty"><b>الجدولُ فارغٌ لهذا اليوم</b><a class="btn p" href="#/schedule" style="margin-top:10px">رتّبِ الجدولَ الأسبوعي</a></div>';
     else {
+      var extraToday = ((S.settings.extra || {})[today()]) || {};
+      if (!sched.some(Boolean)) html += '<div class="hint" style="margin-bottom:10px">الجدولُ فارغٌ لهذا اليوم — <a href="#/schedule" style="color:var(--amber)">رتّبِ الجدولَ الأسبوعي</a>، أو انقرْ حصّةً فارغةً لتضيفَ حصّةً مؤقّتةً لليومِ فقط</div>';
       html += '<div class="periods">';
       var marks = S.settings.marks || [];
       function markHTML(after) {
@@ -299,7 +301,10 @@
         if (c) {
           var preps = prepM.items.filter(function (it) { return it.grade === c.grade && it.date === today(); });
           html += '<a class="period' + (isNow ? ' now' : '') + '" href="#/class/' + c._id + '"><span class="n">' + ar(i + 1) + '</span><span class="c">' + esc(c.name) + (preps.length ? '<span class="today-prep">' + preps.map(function (it) { return '<span>📄 ' + esc(it.title) + '</span>'; }).join('') + '</span>' : '') + '</span><span class="m">' + (t && t.s ? esc(t.s + '–' + t.e) : ar(c.students ? c.students.length : 0) + ' متعلّماً') + '</span></a>';
-        } else html += '<div class="period free"><span class="n">' + ar(i + 1) + '</span><span class="c">حصّةٌ فارغة</span></div>';
+        } else if (extraToday[i]) {
+          var x = extraToday[i];
+          html += '<button type="button" class="period temp' + (isNow ? ' now' : '') + '" data-temp="' + i + '"' + (RO() ? ' disabled' : '') + '><span class="n">' + ar(i + 1) + '</span><span class="c"><span class="tk">' + esc(x.kind || 'حصّةٌ مؤقّتة') + '</span>' + (x.cls ? ' ' + esc(x.cls) : '') + (x.note ? '<small class="tn">' + esc(x.note) + '</small>' : '') + '</span><span class="m">' + (t && t.s ? esc(t.s + '–' + t.e) + ' · ' : '') + 'لليومِ فقط</span></button>';
+        } else html += '<button type="button" class="period free" data-temp="' + i + '"' + (RO() ? ' disabled' : '') + '><span class="n">' + ar(i + 1) + '</span><span class="c">حصّةٌ فارغة</span>' + (RO() ? '' : '<span class="m add">+ حصّةٌ مؤقّتة</span>') + '</button>';
       }
       for (var mk = per; mk <= 12; mk++) html += markHTML(mk);
       html += '</div>';
@@ -313,6 +318,34 @@
     S.classes.slice(0, 6).forEach(function (c) { html += classCard(c); });
     html += '</div></div>';
     view.innerHTML = html;
+    if (!RO()) view.querySelectorAll('[data-temp]').forEach(function (b) { b.onclick = function () { tempPeriodSheet(+b.dataset.temp); }; });
+  }
+  /* حصّةٌ مؤقّتةٌ في حصّةٍ فارغة — لليومِ فقط: settings.extra[تاريخ][رقمُ الحصّة] = {kind, cls, note} */
+  var TEMP_KINDS = ['احتياط', 'درسٌ ريادي', 'نشاط', 'اجتماع', 'أخرى'];
+  function tempPeriodSheet(i) {
+    var day = today(), ex = S.settings.extra = S.settings.extra || {};
+    var cur = (ex[day] || {})[i] || null, kind = cur ? cur.kind : 'احتياط';
+    var t = (S.settings.times || [])[i];
+    openSheet('<div class="who"><div><h3>' + (cur ? 'تعديلُ الحصّةِ المؤقّتة' : 'حصّةٌ مؤقّتة') + ' — الحصّةُ ' + ar(i + 1) + '</h3><small>' + DAYS[new Date().getDay()] + ' ' + fmtDate(day) + (t && t.s ? ' · ' + esc(t.s + '–' + t.e) : '') + ' · تظهرُ اليومَ فقط</small></div></div>'
+      + '<div class="field"><label>نوعُ الحصّة</label><div class="cats tkinds">' + TEMP_KINDS.map(function (k) { return '<button type="button" data-k="' + esc(k) + '" aria-pressed="' + (k === kind) + '">' + esc(k) + '</button>'; }).join('') + '</div></div>'
+      + '<div class="field"><label>الفصلُ أو المكان (اختياري)</label><input id="tCls" value="' + esc(cur ? cur.cls || '' : '') + '" placeholder="مثال: ١١ علمي ٣ · المختبر · المسرح"></div>'
+      + '<div class="field"><label>ملاحظة</label><textarea id="tNote" rows="3" placeholder="مثال: احتياط بدلَ أ. فلان · تجهيزُ مسابقةِ الإذاعة">' + esc(cur ? cur.note || '' : '') + '</textarea></div>'
+      + '<div class="foot">' + (cur ? '<button class="btn s d" id="tDel">إزالةُ الحصّة</button>' : '<button class="btn s" id="shClose">إلغاء</button>') + '<button class="btn p" id="tSave">حفظ</button></div>');
+    if ($('shClose')) $('shClose').onclick = closeSheet;
+    $('sheet').querySelector('.tkinds').onclick = function (e) {
+      var b = e.target.closest('button'); if (!b) return; kind = b.dataset.k;
+      this.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b); });
+    };
+    function commit(val, msg) {
+      /* تُحذَفُ الأيامُ المنقضيةُ حتى لا تكبرَ الإعدادات */
+      Object.keys(ex).forEach(function (d) { if (d < day) delete ex[d]; });
+      if (val) { ex[day] = ex[day] || {}; ex[day][i] = val; }
+      else if (ex[day]) { delete ex[day][i]; if (!Object.keys(ex[day]).length) delete ex[day]; }
+      closeSheet();
+      saveSettings().then(function () { log(msg, 'الحصّةُ ' + (i + 1) + (val ? ' — ' + val.kind : '')); toast(val ? 'أُضيفت الحصّةُ لليوم' : 'أُزيلت الحصّة'); }).catch(fail).then(home, home);
+    }
+    $('tSave').onclick = function () { commit({ kind: kind, cls: $('tCls').value.trim(), note: $('tNote').value.trim() }, cur ? 'تعديلُ حصّةٍ مؤقّتة' : 'إضافةُ حصّةٍ مؤقّتة'); };
+    if ($('tDel')) $('tDel').onclick = function () { if (confirm('إزالةُ هذه الحصّةِ المؤقّتة؟')) commit(null, 'إزالةُ حصّةٍ مؤقّتة'); };
   }
   function collectAlerts() {
     var out = [], tm = currentTerm(); if (!tm) return out;
