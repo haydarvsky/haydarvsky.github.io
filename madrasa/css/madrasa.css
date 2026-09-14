@@ -473,3 +473,15 @@ footer{text-align:center;color:var(--muted);font-size:14px;padding:20px;border-t
 .period.brk.now{border-color:var(--amber);background:rgba(194,120,10,.1)}
 table.tt tr.mark td{background:rgba(232,223,204,.35)}
 table.tt tr.mark .pn{color:var(--amber)}
+
+/* ===== تنزيلُ العرضِ في قائمةِ التحضيرات ===== */
+.lesson .deck.dl{background:transparent;color:var(--green);cursor:pointer;font:inherit;font-size:14px;font-weight:700}
+.lesson .deck.dl:hover{background:var(--cream);color:var(--green-deep)}
+.lesson .deck.dl:disabled{opacity:.6;cursor:progress}
+
+/* ===== إدارةُ الصفوف ===== */
+.term.grow{grid-template-columns:96px 1fr 34px 34px 34px}
+.term.grow input[data-k=short]{text-align:center;font-weight:700}
+.term.grow .icon-btn:disabled{opacity:.3;cursor:default}
+#gPanel{margin-bottom:16px}
+@media(max-width:560px){.term.grow{grid-template-columns:64px 1fr 30px 30px 30px}}

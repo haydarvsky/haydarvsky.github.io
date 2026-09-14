@@ -8,8 +8,8 @@
 <meta name="theme-color" content="#062219">
 <meta name="hv-nav" content="off">
 <link rel="icon" href="/img/logo-cream.svg">
-<script src="js/fb.js?v=11"></script>
-<script src="js/bio.js?v=11"></script>
+<script src="js/fb.js?v=12"></script>
+<script src="js/bio.js?v=12"></script>
 <style>
 :root{
   --green:#0F4C3A; --deep:#0A3428; --ink:#062219;
@@ -483,9 +483,12 @@ var esc=function(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){re
 var nl=function(x){return esc(fill(x)).replace(/\n/g,'<br>').replace(/ {2,}/g,function(m){return new Array(m.length+1).join(' ')})};
 var ar=function(n){return String(n).replace(/\d/g,function(d){return '٠١٢٣٤٥٦٧٨٩'[d]})};
 var arInt=function(t){return +String(t).replace(/[٠-٩]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'.indexOf(d)})||0};
-var ID=new URLSearchParams(location.search).get('id')||'';
+/* نسخةٌ منزَّلة: البياناتُ مضمَّنةٌ في الملفِّ نفسِه فلا دخولَ ولا شبكة */
+var OFF=window.__DECK_OFFLINE__||null;
+var ID=OFF?OFF.id:(new URLSearchParams(location.search).get('id')||'');
 var D=null, S=[], i=0, step=0;
 var ME={name:'أ. حيدر المعاتيق',short:'حيدر المعاتيق',school:'ثانوية طلحة بن عبيدالله. بنين - قسم اللغة العربية'};
+if(OFF&&OFF.me) ME=OFF.me;
 /* {{teacher}} و{{school}} تُستبدلانِ باسمِ المعلّمِ الداخلِ ومدرستِه */
 function fill(x){return String(x==null?'':x).replace(/\{\{teacher\}\}/g,ME.short).replace(/\{\{school\}\}/g,ME.school)}
 
@@ -671,7 +674,7 @@ function show(k,atEnd){
   $('prog').style.width=((k+1)/S.length*100)+'%';
   var cur=$('mapG').querySelector('.cur'); if(cur)cur.classList.remove('cur');
   var nb=$('mapG').querySelector('[data-go="'+k+'"]'); if(nb)nb.classList.add('cur');
-  try{history.replaceState(null,'','?id='+encodeURIComponent(ID)+'#'+(k+1))}catch(e){}
+  try{history.replaceState(null,'',(OFF?'':'?id='+encodeURIComponent(ID))+'#'+(k+1))}catch(e){}
 }
 var lastStep={};
 function paint(){
@@ -766,6 +769,7 @@ function todayISO(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth
 function askedKey(){return 'sc_deck_asked_'+(RS.cls?RS.cls._id:'')+'_'+todayISO()}
 function loadClasses(){
   if(RS.classes) return Promise.resolve(RS.classes);
+  if(OFF) return Promise.resolve(RS.classes=OFF.classes||[]);
   if(!(window.FB&&FB.DB&&(FB.teacher()||FB.demo))) return Promise.resolve(RS.classes=[]);
   return FB.DB.list('sc_classes'+WSX).then(function(l){ RS.classes=(l||[]).filter(function(c){return !c.archived}).sort(function(a,b){return (a.order||0)-(b.order||0)}); return RS.classes; }).catch(function(){return RS.classes=[]});
 }
@@ -774,7 +778,7 @@ function chooseClass(id){
   try{localStorage.setItem('sc_deck_cls',id||'')}catch(e){}
   try{RS.asked=JSON.parse(localStorage.getItem(askedKey())||'[]')}catch(e){RS.asked=[]}
   paintPill();
-  if(!RS.cls) return Promise.resolve();
+  if(!RS.cls||!(window.FB&&FB.DB)) return Promise.resolve();
   return FB.DB.get('sc_days'+WSX, id+'_'+todayISO()).then(function(d){ ((d&&d.ev)||[]).forEach(function(e){ if(e.type==='absent') RS.absent[e.sid]=1; }); }).catch(function(){});
 }
 function paintPill(){ $('clsPill').textContent=RS.cls?RS.cls.name:''; }
@@ -894,6 +898,7 @@ function full(){ if(document.fullscreenElement) document.exitFullscreen(); else 
 $('bNext').onclick=next; $('bPrev').onclick=prev; $('bFull').onclick=full;
 $('bMap').onclick=function(){$('map').hidden=!$('map').hidden};
 $('bBack').onclick=function(){location.href='lesson.html?id='+encodeURIComponent(ID)};
+if(OFF) $('bBack').hidden=true;
 $('wrap').addEventListener('click',function(e){
   if(e.target.closest('button')||dragging)return;
   var t=e.target, x;
@@ -916,7 +921,7 @@ $('wrap').addEventListener('touchend',function(e){
 setTimeout(function(){$('hintbar').classList.add('off')},6000);
 
 /* ============ الإقلاع ============ */
-(window.FB&&FB.Auth?FB.Auth.restore().catch(function(){}):Promise.resolve()).then(function(){
+(OFF?Promise.resolve({ok:true,json:function(){return OFF.deck}}):(window.FB&&FB.Auth?FB.Auth.restore().catch(function(){}):Promise.resolve()).then(function(){
   if(window.FB&&FB.profile) ME=FB.profile();
   if(!(window.FB&&FB.teacher&&(FB.teacher()||FB.demo))){
     $('wrap').innerHTML='<section class="slide on"><div class="cover"><img class="mark" src="/img/logo-cream.svg" alt=""><div class="over">هذا العرضُ لمعلّمَي مدرستي</div>'
@@ -924,7 +929,7 @@ setTimeout(function(){$('hintbar').classList.add('off')},6000);
     $('count').textContent='—'; throw {gated:true};
   }
   return fetch('data/decks/'+ID+'.json',{cache:'no-cache'});
-}).then(function(r){
+})).then(function(r){
   if(!r.ok) throw 0; return r.json();
 }).then(function(j){
   D=j; S=j.slides||[];

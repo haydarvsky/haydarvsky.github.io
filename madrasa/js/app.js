@@ -12,7 +12,14 @@
     { key: 'note', label: 'ملاحظة', color: 'var(--c-note)', hex: '#7A6A58', ico: '<svg viewBox="0 0 24 24"><path d="M5 4h14v12l-4 4H5z"/><path d="M15 20v-4h4M8 9h8M8 13h5"/></svg>' }
   ];
   var TYPE = {}; TYPES.forEach(function (t) { TYPE[t.key] = t; });
-  var GRADES = { '10': 'الصفُّ العاشر', '11': 'الصفُّ الحاديَ عشر', '12': 'الصفُّ الثانيَ عشر' };
+  /* الصفوفُ تُدارُ من «التحضيرات» وتُحفَظُ في إعداداتِ كلِّ معلّم (settings.grades) — id ثابتٌ تُربَطُ به الملفّاتُ والفصول */
+  var GRADE_DEF = [{ id: '10', name: 'الصفُّ العاشر', short: '١٠' }, { id: '11', name: 'الصفُّ الحاديَ عشر', short: '١١' }, { id: '12', name: 'الصفُّ الثانيَ عشر', short: '١٢' }];
+  var GRADE_LIST = GRADE_DEF, GRADES = {};
+  function syncGrades() {
+    GRADE_LIST = (S && S.settings && Array.isArray(S.settings.grades)) ? S.settings.grades : GRADE_DEF;
+    GRADES = {}; GRADE_LIST.forEach(function (g) { GRADES[g.id] = g.name; });
+  }
+  syncGrades();
   var SEMS = { '1': 'الفصلُ الدراسيُّ الأوّل', '2': 'الفصلُ الدراسيُّ الثاني' };
   var DAYS = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
   var MONTHS = ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
@@ -79,6 +86,7 @@
     if (!st.periods) st.periods = 7;
     st.bio = Object.assign({ on: true, from: '09:10', to: '10:10' }, st.bio || {});
     if (!Array.isArray(st.viewers)) st.viewers = [];
+    if (!Array.isArray(st.grades)) st.grades = GRADE_DEF.map(function (g) { return Object.assign({}, g); });
     return st;
   }
   async function loadCore(force) {
@@ -218,6 +226,7 @@
     try {
       view.innerHTML = '<div class="loading"><span class="spin"></span></div>';
       if (needsAuth) await loadCore();
+      syncGrades();
       await fn(p.slice(1));
     } catch (e) { console.error(e); view.innerHTML = '<div class="err">' + esc(e.message || e) + '</div><p><a class="btn" href="#/">الرئيسة</a> <button class="btn" onclick="location.reload()">إعادةُ التحميل</button></p>'; }
     window.scrollTo(0, 0);
@@ -299,7 +308,7 @@
     }
     if (alerts.length) html += '<div class="panel" style="margin-top:12px"><h3>تنبيهات</h3><div class="hint">متعلّمون تجاوزوا حدَّ الغيابِ أو السلوك في الفصلِ الدراسيِّ الحالي</div><div class="alerts">' + alerts.slice(0, 8).map(alertHTML).join('') + '</div></div>';
     html += '</div><div class="grid">'
-      + '<a class="card green" href="#/prep"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 3.5h9.5L19 8v12.5H5z"/><path d="M14.5 3.5V8H19"/><path d="M8 12h8M8 15.5h8"/></svg></div><h3>التحضيرات</h3><p>ملفّاتُ تحضيرِك للصفوفِ الثلاثةِ بفصلَيها</p></a>'
+      + '<a class="card green" href="#/prep"><div class="ico"><svg viewBox="0 0 24 24"><path d="M5 3.5h9.5L19 8v12.5H5z"/><path d="M14.5 3.5V8H19"/><path d="M8 12h8M8 15.5h8"/></svg></div><h3>التحضيرات</h3><p>ملفّاتُ تحضيرِك لكلِّ صفوفِك بفصلَيها</p></a>'
       + '<a class="card gold" href="#/classes"><div class="ico"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 19a6 6 0 0 1 12 0"/><path d="M14.5 19a4.5 4.5 0 0 1 7-3.5"/></svg></div><span class="cnt">' + ar(S.classes.length) + ' فصول</span><h3>متابعةُ المتعلّمين</h3><p>غيابٌ ومشاركةٌ وسلوكٌ وملاحظاتٌ يوماً بيوم</p></a>';
     S.classes.slice(0, 6).forEach(function (c) { html += classCard(c); });
     html += '</div></div>';
@@ -349,12 +358,19 @@
     var g = p[0], s = p[1], tp = p[2];
     var crumbs = '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/prep">التحضيرات</a>' + (g ? '<span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a>' : '') + (s ? '<span class="sep">›</span>' + esc(SEMS[s]) : '') + '</div>';
     if (!g) {
-      var html = crumbs + '<div class="ttl"><div><h2>التحضيرات</h2><p>كلُّ تحضيراتِك مرتّبةً بالصفِّ ثمّ بالفصلِ الدراسي</p></div></div><div class="gradecards">';
-      ['10', '11', '12'].forEach(function (k) {
-        var n = m.items.filter(function (i) { return i.grade === k; }).length + ['1', '2'].reduce(function (a, sm) { return a + topicsFor(k, sm).reduce(function (b, t) { return b + t.lessons.length; }, 0); }, 0);
-        html += '<a class="card hov" href="#/prep/' + k + '"><div class="big">' + ar(k) + '</div><h3>' + esc(GRADES[k]) + '</h3><p>' + (n ? ar(n) + ' تحضيراً' : 'لا ملفّاتَ بعد') + '</p></a>';
+      var html = crumbs + '<div class="ttl"><div><h2>التحضيرات</h2><p>كلُّ تحضيراتِك مرتّبةً بالصفِّ ثمّ بالفصلِ الدراسي</p></div>'
+        + (RO() ? '' : '<div class="acts"><button class="btn" id="gManage">إدارةُ الصفوف</button></div>') + '</div>';
+      html += '<div class="panel" id="gPanel" hidden></div>';
+      html += '<div class="gradecards">';
+      if (!GRADE_LIST.length) html += '<div class="empty" style="grid-column:1/-1"><b>لا صفوفَ بعد</b>أضفْ صفّاً من «إدارةُ الصفوف»</div>';
+      GRADE_LIST.forEach(function (g) {
+        var k = g.id;
+        var n = gradeCount(k);
+        html += '<a class="card hov" href="#/prep/' + encodeURIComponent(k) + '"><div class="big">' + esc(g.short || ar(k)) + '</div><h3>' + esc(g.name) + '</h3><p>' + (n ? ar(n) + ' تحضيراً' : 'لا ملفّاتَ بعد') + '</p></a>';
       });
-      view.innerHTML = html + '</div>'; return;
+      view.innerHTML = html + '</div>';
+      if ($('gManage')) $('gManage').onclick = function () { var pn = $('gPanel'); pn.hidden = !pn.hidden; if (!pn.hidden) gradesEditor(pn); };
+      return;
     }
     if (!GRADES[g]) { location.hash = '#/prep'; return; }
     if (!s) {
@@ -368,6 +384,51 @@
     if (tp) { renderTopic(g, s, tp); return; }
     renderPrepFolder(g, s, crumbs);
   }
+  function gradeCount(k) {
+    return (S.prep ? S.prep.items : []).filter(function (i) { return i.grade === k; }).length + ['1', '2'].reduce(function (a, sm) { return a + topicsFor(k, sm).reduce(function (b, t) { return b + t.lessons.length; }, 0); }, 0);
+  }
+  /* إضافةُ الصفوفِ وحذفُها وتسميتُها وترتيبُها — تُحفَظُ في إعداداتِ المعلّم */
+  function gradesEditor(box) {
+    var list = GRADE_LIST.map(function (g) { return Object.assign({}, g); });
+    function paint() {
+      box.innerHTML = '<h3>إدارةُ الصفوف</h3><div class="hint">غيّرِ اسمَ الصفِّ أو رمزَه الظاهرَ على البطاقة، أو رتّبْه، أو احذفْه، أو أضفْ صفّاً جديداً ثمّ اضغطْ «حفظُ الصفوف». الملفّاتُ والفصولُ مربوطةٌ بالصفِّ نفسِه فلا يضيعُ شيءٌ بتغييرِ اسمِه.</div>'
+        + '<div class="terms grades-edit">' + (list.length ? list.map(function (g, i) {
+          return '<div class="term grow" data-i="' + i + '"><input data-k="short" value="' + esc(g.short || '') + '" placeholder="الرمز" maxlength="6" title="الرمزُ الكبيرُ على البطاقة"><input data-k="name" value="' + esc(g.name) + '" placeholder="اسمُ الصفّ">'
+            + '<button class="icon-btn" data-g="up" title="أعلى"' + (i ? '' : ' disabled') + '><svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6"/></svg></button>'
+            + '<button class="icon-btn" data-g="down" title="أسفل"' + (i < list.length - 1 ? '' : ' disabled') + '><svg viewBox="0 0 24 24"><path d="M6 10l6 6 6-6"/></svg></button>'
+            + '<button class="icon-btn" data-g="del" title="حذفُ الصفّ"><svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg></button></div>';
+        }).join('') : '<div class="hint">لا صفوف — أضفْ صفّاً</div>') + '</div>'
+        + '<div class="row" style="margin-top:12px"><button class="btn" id="gAdd" style="flex:0 0 auto">+ إضافةُ صفّ</button><button class="btn p" id="gSave" style="flex:0 0 auto">حفظُ الصفوف</button><button class="btn" id="gCancel" style="flex:0 0 auto">إلغاء</button></div>';
+    }
+    function collect() {
+      box.querySelectorAll('.term.grow').forEach(function (r) { var g = list[+r.dataset.i]; r.querySelectorAll('[data-k]').forEach(function (inp) { g[inp.dataset.k] = inp.value.trim(); }); });
+    }
+    paint();
+    box.onclick = async function (e) {
+      var b = e.target.closest('button'); if (!b) return;
+      if (b.id === 'gCancel') { box.hidden = true; return; }
+      collect();
+      if (b.id === 'gAdd') { list.push({ id: uid('g'), name: '', short: '' }); paint(); var ins = box.querySelectorAll('input[data-k=name]'); ins[ins.length - 1].focus(); return; }
+      if (b.id === 'gSave') {
+        var empty = list.filter(function (g) { return !g.name; });
+        if (empty.length) { toast('اكتبْ اسمَ كلِّ صفٍّ قبلَ الحفظ', true); return; }
+        S.settings.grades = list; syncGrades();
+        try { await saveSettings(); log('تعديلُ الصفوف', list.map(function (g) { return g.name; }).join('، ')); toast('حُفظت الصفوف'); route(); } catch (err) { fail(err); }
+        return;
+      }
+      var row = b.closest('.term'); if (!row) return; var i = +row.dataset.i;
+      if (b.dataset.g === 'up' && i > 0) { list.splice(i - 1, 0, list.splice(i, 1)[0]); }
+      else if (b.dataset.g === 'down' && i < list.length - 1) { list.splice(i + 1, 0, list.splice(i, 1)[0]); }
+      else if (b.dataset.g === 'del') {
+        var g = list[i], n = gradeCount(g.id), nc = (S.allClasses || []).filter(function (c) { return c.grade === g.id; }).length;
+        var msg = 'حذفُ «' + (g.name || 'صفٌّ جديد') + '»؟';
+        if (n || nc) msg += '\n\nمرتبطٌ به ' + (n ? ar(n) + ' تحضيراً' : '') + (n && nc ? ' و' : '') + (nc ? ar(nc) + ' فصلاً' : '') + ' — لا تُحذَفُ الملفّاتُ ولا الفصول، لكنّها تختفي من قائمةِ الصفوفِ حتى تُعيدَ الصفّ.';
+        if (!confirm(msg)) return;
+        list.splice(i, 1);
+      }
+      paint();
+    };
+  }
   function renderTopic(g, s, tid) {
     var t = topicsFor(g, s).filter(function (x) { return x.id === tid; })[0];
     if (!t) { location.hash = '#/prep/' + g + '/' + s; return; }
@@ -378,10 +439,18 @@
       html += '<div class="lesson"><a class="go" href="lesson.html?id=' + encodeURIComponent(l.id) + '"><span class="n">' + ar(i + 1) + '</span>'
         + '<span class="t"><b>' + esc(lessonTitle(l)) + '</b><small>' + esc(l.sub || '') + '</small></span></a>'
         + (l.kind ? '<span class="k">' + esc(l.kind) + '</span>' : '')
-        + (l.deck ? '<a class="deck" href="deck.html?id=' + encodeURIComponent(l.id) + '" title="العرضُ التقديميُّ للطلبة"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><span>العرض</span></a>' : '')
+        + (l.deck ? '<a class="deck" href="deck.html?id=' + encodeURIComponent(l.id) + '" title="العرضُ التقديميُّ للطلبة"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><span>العرض</span></a>'
+          + '<button class="deck dl" data-dl="' + esc(l.id) + '" title="تنزيلُ العرضِ ملفَّ HTML يعملُ بلا إنترنت"><svg viewBox="0 0 24 24"><path d="M12 3.5v11"/><path d="m7.5 10 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg><span>تنزيل</span></button>' : '')
         + '</div>';
     });
     view.innerHTML = html + '</div>';
+    view.querySelectorAll('[data-dl]').forEach(function (b) {
+      b.onclick = function () {
+        if (!window.DeckExport) { toast('أداةُ التنزيلِ لم تُحمَّل — أعدْ تحميلَ الصفحة', true); return; }
+        var sp = b.querySelector('span'), old = sp.textContent; b.disabled = true; sp.textContent = 'يُجهَّز…';
+        DeckExport.download(b.dataset.dl).then(function () { toast('نُزِّل العرض — افتحْه في أيِّ متصفّح ولو بلا إنترنت'); }).catch(fail).then(function () { b.disabled = false; sp.textContent = old; });
+      };
+    });
   }
   function itemMeta(i) { var parts = []; if (i.unit) parts.push('الوحدة ' + i.unit); if (i.lesson) parts.push(i.lesson); if (i.week) parts.push('الأسبوع ' + ar(i.week)); if (i.date) parts.push('حصّة ' + fmtDate(i.date)); return parts.map(esc).join(' · '); }
   function crumbsFor(g, s) { return '<div class="crumb"><a href="#/">الرئيسة</a><span class="sep">›</span><a href="#/prep">التحضيرات</a><span class="sep">›</span><a href="#/prep/' + g + '">' + esc(GRADES[g]) + '</a><span class="sep">›</span>' + esc(SEMS[s]) + '</div>'; }
@@ -478,7 +547,7 @@
   }
   async function classes() {
     var html = '<div class="ttl"><div><h2>فصولي</h2><p>اخترْ فصلاً للمتابعةِ اليومية، أو أضفْ فصلاً جديداً</p></div><div class="acts"><a class="btn" href="#/overview">مقارنةُ الفصول</a></div></div>';
-    if (!RO()) html += '<div class="panel"><h3>إضافةُ فصل</h3><div class="row"><div class="field" style="flex:2"><label>اسمُ الفصل</label><input id="cName" placeholder="مثال: عاشر ٦"></div><div class="field"><label>الصفّ</label><select id="cGrade"><option value="10">العاشر</option><option value="11">الحاديَ عشر</option><option value="12">الثانيَ عشر</option></select></div><div class="field" style="flex:0 0 auto"><label>&nbsp;</label><button class="btn p" id="cAdd">إضافة</button></div></div></div>';
+    if (!RO()) html += '<div class="panel"><h3>إضافةُ فصل</h3><div class="row"><div class="field" style="flex:2"><label>اسمُ الفصل</label><input id="cName" placeholder="مثال: عاشر ٦"></div><div class="field"><label>الصفّ</label><select id="cGrade">' + GRADE_LIST.map(function (g) { return '<option value="' + esc(g.id) + '">' + esc(g.name) + '</option>'; }).join('') + '</select></div><div class="field" style="flex:0 0 auto"><label>&nbsp;</label><button class="btn p" id="cAdd">إضافة</button></div></div></div>';
     html += '<div class="grid" id="clsGrid">';
     if (!S.classes.length) html += '<div class="empty" style="grid-column:1/-1"><b>لا فصولَ بعد</b>أضفْ أوّلَ فصلٍ من الأعلى — ثمّ أدخلْ أسماءَ متعلّميه</div>';
     S.classes.forEach(function (c) { html += classCard(c); });
@@ -526,7 +595,7 @@
       c.students.forEach(function (s, i) { html += '<div class="srow" data-id="' + s.id + '" draggable="' + (!ro) + '">' + (ro ? '' : '<span class="grip" title="اسحبْ للترتيب">⋮⋮</span>') + '<span class="n num">' + ar(i + 1) + '</span><input value="' + esc(s.name) + '" data-act="edit"' + (ro ? ' readonly' : '') + '><input class="no" value="' + esc(s.no || '') + '" data-act="no" placeholder="رقم" title="رقمُ الجلوس"' + (ro ? ' readonly' : '') + '>' + (ro ? '' : '<button class="icon-btn" data-act="del" title="حذف"><svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg></button>') + '</div>'; });
       if (!c.students.length) html += '<div class="empty"><b>لا متعلّمينَ بعد</b>اكتبِ الأسماءَ أعلاه</div>';
       html += '</div>';
-      if (!ro) html += '<div class="manage"><details><summary>إعداداتُ الفصل</summary><div class="row" style="margin-top:12px"><div class="field"><label>اسمُ الفصل</label><input id="cRename" value="' + esc(c.name) + '"></div><div class="field"><label>الصفّ</label><select id="cGrade2">' + Object.keys(GRADES).map(function (k) { return '<option value="' + k + '"' + (k === c.grade ? ' selected' : '') + '>' + GRADES[k] + '</option>'; }).join('') + '</select></div><div class="field" style="flex:0 0 auto"><label>&nbsp;</label><button class="btn" id="cSave">حفظ</button></div></div><div class="row">' + (c.archived ? '<button class="btn s" id="cUnarch" style="flex:0 0 auto">إعادةُ الفصلِ من الأرشيف</button>' : '<button class="btn s" id="cArch" style="flex:0 0 auto">أرشفةُ الفصل</button>') + '<button class="btn d s" id="cDel" style="flex:0 0 auto">حذفُ الفصلِ نهائياً</button></div></details></div>';
+      if (!ro) html += '<div class="manage"><details><summary>إعداداتُ الفصل</summary><div class="row" style="margin-top:12px"><div class="field"><label>اسمُ الفصل</label><input id="cRename" value="' + esc(c.name) + '"></div><div class="field"><label>الصفّ</label><select id="cGrade2">' + GRADE_LIST.map(function (g) { return '<option value="' + esc(g.id) + '"' + (g.id === c.grade ? ' selected' : '') + '>' + esc(g.name) + '</option>'; }).join('') + (GRADES[c.grade] ? '' : '<option value="' + esc(c.grade) + '" selected>صفٌّ محذوف</option>') + '</select></div><div class="field" style="flex:0 0 auto"><label>&nbsp;</label><button class="btn" id="cSave">حفظ</button></div></div><div class="row">' + (c.archived ? '<button class="btn s" id="cUnarch" style="flex:0 0 auto">إعادةُ الفصلِ من الأرشيف</button>' : '<button class="btn s" id="cArch" style="flex:0 0 auto">أرشفةُ الفصل</button>') + '<button class="btn d s" id="cDel" style="flex:0 0 auto">حذفُ الفصلِ نهائياً</button></div></details></div>';
       view.innerHTML = html;
       if (ro) return;
       var add = async function (names) {

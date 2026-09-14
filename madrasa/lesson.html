@@ -13,8 +13,9 @@
 <meta name="hv-parent-title" content="مدرستي">
 <script src="https://haydarvsky.github.io/nav/nav.js" defer></script>
 <script src="/admin/js/gh-api.js"></script>
-<script src="js/fb.js?v=11"></script>
-<script src="js/bio.js?v=11"></script>
+<script src="js/fb.js?v=12"></script>
+<script src="js/bio.js?v=12"></script>
+<script src="js/deck-export.js?v=12"></script>
 <style>
 :root{
   --green:#0F4C3A; --green-deep:#0A3428; --green-ink:#062219;
@@ -287,12 +288,29 @@ body.edit .addrow{display:flex}
   .sheet{margin:14px 10px 40px;border-radius:12px}
 }
 
+/* ===== حجمُ الخط: يكبُرُ المحتوى ويصغُرُ على الشاشةِ وفي الطباعة ===== */
+.ltitle>*,.pad>*{zoom:var(--fs,1)}
+
+/* غلافُ الطباعة: جدولٌ يكرّرُ فراغَ الهامشِ أعلى كلِّ صفحةٍ وأسفلَها،
+   لأنّ هامشَ @page صفرٌ — وبه يمتنعُ المتصفّحُ عن طباعةِ سطرِ الرابطِ والتاريخِ ورقمِ الصفحة */
+.pt{display:block;border-collapse:collapse;width:100%}
+.pt>thead,.pt>tfoot{display:none}
+.pt>tbody,.pt>tbody>tr,.pt>tbody>tr>td{display:block;padding:0}
+
 /* ===== الطباعة ===== */
+@page{size:A4;margin:0}
 @media print{
-  @page{size:A4;margin:11mm 12mm 13mm}
+  @page{size:A4;margin:0}
+  .pt{display:table;table-layout:fixed}
+  .pt>thead{display:table-header-group}
+  .pt>tfoot{display:table-footer-group}
+  .pt>tbody{display:table-row-group}
+  .pt>tbody>tr,.pt>thead>tr,.pt>tfoot>tr{display:table-row}
+  .pt>tbody>tr>td,.pt>thead>tr>td,.pt>tfoot>tr>td{display:table-cell;padding:0}
+  .pt-top{height:11mm}.pt-bot{height:13mm}
   body{background:#fff;font-size:13.4px;line-height:1.72;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .bar,.hint,.toast,.tools,.addrow,.noprint{display:none !important}
-  .sheet{max-width:none;margin:0;box-shadow:none;border-radius:0}
+  .sheet{max-width:none;margin:0;box-shadow:none;border-radius:0;padding:0 12mm;overflow:visible}
   .pad{padding:0}
   .lh{padding:9px 12px;border-radius:10px;margin-bottom:2px}
   .lh img{height:32px}.lh h1{font-size:19px}.lh .s{font-size:11px}.lh .r{font-size:10.5px}.lh .r b{font-size:12.5px}
@@ -334,6 +352,9 @@ body.edit .addrow{display:flex}
     <button class="tb on" id="bAns"><svg viewBox="0 0 24 24"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><i>الإجابات ظاهرة</i></button>
     <button class="tb" id="bSave"><svg viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5H5z"/><path d="M8.5 4.5v5h7v-5M8.5 19.5v-6h7v6"/></svg><i>حفظٌ ونشرٌ إلى الموقع</i></button>
     <button class="tb" id="bDeck"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><i>العرضُ التقديمي</i></button>
+    <button class="tb" id="bDeckDl" hidden><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="11" rx="2"/><path d="M12 11v9"/><path d="m8.5 16.5 3.5 3.5 3.5-3.5"/></svg><i>تنزيلُ العرضِ التقديميّ (HTML)</i></button>
+    <button class="tb" id="bFsDn"><svg viewBox="0 0 24 24"><path d="M3 19 8 6l5 13M4.9 14.5h6.2"/><path d="M15.5 12.5h6"/></svg><i>تصغيرُ الخط</i></button>
+    <button class="tb" id="bFsUp"><svg viewBox="0 0 24 24"><path d="M3 19 8 6l5 13M4.9 14.5h6.2"/><path d="M15.5 12.5h6M18.5 9.5v6"/></svg><i>تكبيرُ الخط</i></button>
     <button class="tb" id="bJson"><svg viewBox="0 0 24 24"><path d="M12 3.5v12"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg><i>تنزيلُ ملفِّ البيانات</i></button>
     <button class="tb" id="bMono"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17"/><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" stroke="none"/></svg><i>طباعةٌ أحاديةُ اللون (أبيض وأسود)</i></button>
     <button class="tb p" id="bPrint"><svg viewBox="0 0 24 24"><path d="M7 9V3.5h10V9"/><rect x="4" y="9" width="16" height="7.5" rx="2"/><path d="M7 14h10v6.5H7z"/></svg><i>طباعة / PDF</i></button>
@@ -459,7 +480,8 @@ function renderSec(s){
 }
 function render(){
   var m=M.meta;
-  var h='<div class="sheet"><header class="lh"><div class="l"><img src="/img/logo-cream.svg" alt="حيدر"><div><h1>التحضيرُ اليومي</h1><div class="s">'+esc(SCHOOL)+'</div></div></div>'
+  var h='<table class="pt"><thead><tr><td><div class="pt-top"></div></td></tr></thead><tfoot><tr><td><div class="pt-bot"></div></td></tr></tfoot><tbody><tr><td>'
+    +'<div class="sheet"><header class="lh"><div class="l"><img src="/img/logo-cream.svg" alt="حيدر"><div><h1>التحضيرُ اليومي</h1><div class="s">'+esc(SCHOOL)+'</div></div></div>'
     +'<div class="r">'+esc(TEACHER)+'<b>'+esc(m.grade||'')+'</b></div></header>'
     +'<div class="ltitle"><div class="kick" contenteditable data-m="aspect">'+esc(m.aspect||'')+'</div><h2 contenteditable data-m="subject">'+esc(m.subject||'')+'</h2><div class="rule"></div></div>'
     +'<div class="pad"><div class="meta">'
@@ -470,7 +492,7 @@ function render(){
     +'</div>';
   h+=M.sections.map(renderSec).join('');
   h+='<div class="addrow noprint" id="addSec"><button data-add="sec-list">+ قسمُ بنود</button><button data-add="sec-out">+ قسمُ نواتج</button><button data-add="sec-qa">+ قسمُ أسئلة</button></div>';
-  h+='</div></div>';
+  h+='</div></div></td></tr></tbody></table>';
   $('app').innerHTML=h;
   bind();
 }
@@ -658,13 +680,25 @@ function stamp(){
 
 /* ============ الإقلاع ============ */
 var GRADES={10:'الصفُّ العاشر',11:'الصفُّ الحاديَ عشر',12:'الصفُّ الثانيَ عشر'};
+/* أسماءُ الصفوفِ كما عدّلها المعلّمُ في التطبيق (نسخةُ الإعداداتِ المحليّة) */
+function loadGrades(){
+  try{
+    var ws=(window.FB&&FB.ws)?FB.ws():'';
+    var core=JSON.parse(localStorage.getItem('sc_core_v1'+ws)||'null');
+    var gl=core&&core.settings&&core.settings.grades;
+    if(Array.isArray(gl)){ GRADES={}; gl.forEach(function(g){GRADES[g.id]=g.name}); }
+  }catch(e){}
+}
 var SEMS={1:'الفصلُ الدراسيُّ الأوّل',2:'الفصلُ الدراسيُّ الثاني'};
 var APP='index.html#/';
 var NAV={topic:null,idx:0};
 
 function chrome(topic,idx){
   NAV.topic=topic; NAV.idx=idx;
+  loadGrades();
   var c=$('crumb'), pg=$('pager');
+  var cur=topic&&topic.lessons[idx];
+  $('bDeckDl').hidden=!(cur&&cur.deck&&window.DeckExport);
   var h='<a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a>';
   if(topic){
     h+='<span class="sep">›</span><a href="'+APP+'prep/'+topic.grade+'">'+esc(GRADES[topic.grade]||'')+'</a>'
@@ -729,14 +763,14 @@ function boot(){
 }
 /* الموقعُ خاصٌّ بمعلّمَيه: بلا دخولٍ لا تُعرَضُ الورقة */
 function gate(){
-  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono'].forEach(function(k){var b=$(k);if(b)b.hidden=true});
+  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono','bDeckDl','bFsDn','bFsUp'].forEach(function(k){var b=$(k);if(b)b.hidden=true});
   $('pager').hidden=true;
   $('app').innerHTML='<div class="idx" style="text-align:center;padding-top:40px"><img src="/img/logo-dark.svg" alt="" style="height:64px;margin:0 auto 14px">'
     +'<h2>هذه الصفحةُ لمعلّمَي مدرستي</h2><p style="color:var(--muted);margin:6px 0 18px">ادخلْ بحسابِك ثمّ عُدْ إلى هذا الرابط</p>'
     +'<a class="btn p" href="index.html#/" style="display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border-radius:100px;background:var(--green);color:#fff;font-weight:700">الدخولُ إلى مدرستي</a></div>';
 }
 function renderIndex(){
-  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono'].forEach(function(k){$(k).hidden=true});
+  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono','bDeckDl','bFsDn','bFsUp'].forEach(function(k){$(k).hidden=true});
   $('crumb').innerHTML='<a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a><span class="sep">›</span><b>التحضيراتُ التفاعلية</b>';
   fetch('data/lessons/index.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){
     var h='<div class="idx">';
@@ -771,6 +805,29 @@ $('bSave').onclick=function(){
   }).then(function(){ b.disabled=false; b.querySelector('i').textContent='حفظٌ ونشرٌ إلى الموقع'; });
 };
 $('bDeck').onclick=function(){location.href='deck.html?id='+encodeURIComponent(ID)};
+$('bDeckDl').onclick=function(){
+  var b=this, tip=b.querySelector('i'); b.disabled=true; tip.textContent='يُجهَّزُ العرض…';
+  DeckExport.download(ID).then(function(){toast('نُزِّل العرض — يعملُ في أيِّ متصفّحٍ بلا إنترنت')})
+    .catch(function(e){toast('تعذّر تنزيلُ العرض: '+((e&&e.message)||e))})
+    .then(function(){b.disabled=false;tip.textContent='تنزيلُ العرضِ التقديميّ (HTML)'});
+};
+/* حجمُ الخط — لكلِّ تحضيرٍ على حدة، ويسري على الطباعة */
+var FS_MIN=.7, FS_MAX=1.5, FS_STEP=.05;
+function fsKey(){return 'sc_fs_'+ID}
+function fsGet(){var v=1;try{v=parseFloat(localStorage.getItem(fsKey()))||1}catch(e){}return Math.min(FS_MAX,Math.max(FS_MIN,v))}
+function fsApply(v,say){
+  v=Math.round(Math.min(FS_MAX,Math.max(FS_MIN,v))*100)/100;
+  document.documentElement.style.setProperty('--fs',v);
+  try{ if(v===1) localStorage.removeItem(fsKey()); else localStorage.setItem(fsKey(),v); }catch(e){}
+  var pc=arNum(Math.round(v*100))+'٪';
+  $('bFsDn').querySelector('i').textContent='تصغيرُ الخط ('+pc+')';
+  $('bFsUp').querySelector('i').textContent='تكبيرُ الخط ('+pc+')';
+  $('bFsDn').disabled=v<=FS_MIN; $('bFsUp').disabled=v>=FS_MAX;
+  if(say) toast('حجمُ الخط '+pc);
+}
+$('bFsDn').onclick=function(){fsApply(fsGet()-FS_STEP,true)};
+$('bFsUp').onclick=function(){fsApply(fsGet()+FS_STEP,true)};
+fsApply(fsGet());
 function monoBtn(){var on=document.body.classList.contains('mono');
   $('bMono').classList.toggle('on',on);
   $('bMono').querySelector('i').textContent=on?'أحاديةُ اللون — للعودةِ إلى الألوان':'طباعةٌ أحاديةُ اللون (أبيض وأسود)';}
