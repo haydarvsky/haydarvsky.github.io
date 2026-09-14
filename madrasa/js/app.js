@@ -543,7 +543,48 @@
   /* ---------------- الفصول ---------------- */
   function classCard(c) {
     return '<div class="card hov cls-card"><span class="grade-badge">' + esc(GRADES[c.grade] || '') + '</span><h3><a href="#/class/' + c._id + '">' + esc(c.name) + '</a></h3><p class="students-n">' + ar((c.students || []).length) + ' متعلّماً' + (c.archived ? ' · مؤرشف' + (c.year ? ' — ' + esc(c.year) : '') : '') + '</p>'
-      + '<div class="crow">' + (c.archived ? '' : '<a class="btn s p" href="#/class/' + c._id + '">المتابعةُ اليومية</a>') + '<a class="btn s g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a><a class="btn s" href="#/class/' + c._id + '/students">المتعلّمون</a></div></div>';
+      + '<div class="crow">' + (c.archived ? '' : '<a class="btn s p" href="#/class/' + c._id + '">المتابعةُ اليومية</a>') + '<a class="btn s g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a><a class="btn s" href="#/class/' + c._id + '/students">المتعلّمون</a>'
+      + (RO() ? '' : '<span class="cman"><button class="icon-btn" data-cm="edit" data-id="' + c._id + '" title="تعديلُ الفصل"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/></svg></button><button class="icon-btn del" data-cm="del" data-id="' + c._id + '" title="حذفُ الفصل"><svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg></button></span>')
+      + '</div></div>';
+  }
+  /* حذفٌ نهائيٌّ بكلِّ الأيامِ المسجَّلة — مشتركٌ بين قائمةِ الفصولِ وإعداداتِ الفصل */
+  async function deleteClass(c) {
+    if (!confirm('حذفُ الفصلِ «' + c.name + '» نهائياً بكلِّ متعلّميه (' + ar((c.students || []).length) + ') وسجلِّه اليومي؟ لا يمكنُ التراجع.\n\nإن أردتَ إبقاءَ تقاريرِه فاختَرِ الأرشفةَ بدلَ الحذف.')) return false;
+    if (!confirm('تأكيدٌ أخير: حذفُ «' + c.name + '» نهائياً؟')) return false;
+    toast('يُحذَفُ…');
+    var map = await loadDays(c._id);
+    for (var k in map) if (map[k]) await write('del', C('sc_days'), c._id + '_' + k, { cls: c._id, date: k });
+    await write('del', C('sc_classes'), c._id, {});
+    S.allClasses = S.allClasses.filter(function (x) { return x._id !== c._id; });
+    /* يُزالُ من الجدولِ الأسبوعيِّ أيضاً */
+    var sch = S.settings.schedule || {}, touched = false;
+    Object.keys(sch).forEach(function (d) { (sch[d] || []).forEach(function (v, i) { if (v === c._id) { sch[d][i] = null; touched = true; } }); });
+    splitClasses(); persistCore(); LS.del(K('sc_days_') + c._id); delete S.days[c._id];
+    if (touched) await saveSettings().catch(function () { });
+    log('حذفُ فصلٍ نهائياً', c.name); toast('حُذف الفصل');
+    return true;
+  }
+  async function archiveClass(c, on) {
+    if (on && !confirm('أرشفةُ «' + c.name + '»؟ يختفي من القوائمِ اليومية ويبقى تقريرُه في الأرشيف.')) return false;
+    c.archived = !!on; if (on) c.archivedAt = today();
+    await saveClass(c, on ? 'أرشفةُ فصل' : 'إعادةُ فصلٍ من الأرشيف'); splitClasses(); persistCore();
+    return true;
+  }
+  function editClassSheet(c, done) {
+    openSheet('<div class="who"><div><h3>تعديلُ الفصل</h3><small>' + esc(c.name) + ' · ' + ar((c.students || []).length) + ' متعلّماً</small></div></div>'
+      + '<div class="row"><div class="field" style="flex:2"><label>اسمُ الفصل</label><input id="eName" value="' + esc(c.name) + '"></div>'
+      + '<div class="field"><label>الصفّ</label><select id="eGrade">' + GRADE_LIST.map(function (g) { return '<option value="' + esc(g.id) + '"' + (g.id === c.grade ? ' selected' : '') + '>' + esc(g.name) + '</option>'; }).join('') + (GRADES[c.grade] ? '' : '<option value="' + esc(c.grade) + '" selected>صفٌّ محذوف</option>') + '</select></div></div>'
+      + '<div class="row" style="margin-top:4px"><button class="btn s" id="eArch" style="flex:0 0 auto">' + (c.archived ? 'إعادةٌ من الأرشيف' : 'أرشفةُ الفصل') + '</button><button class="btn s d" id="eDel" style="flex:0 0 auto">حذفُ الفصلِ نهائياً</button></div>'
+      + '<div class="foot"><button class="btn s" id="shClose">إلغاء</button><button class="btn p" id="eSave">حفظ</button></div>');
+    $('shClose').onclick = closeSheet;
+    $('eName').addEventListener('keydown', function (e) { if (e.key === 'Enter') $('eSave').click(); });
+    $('eSave').onclick = async function () {
+      var n = $('eName').value.trim(); if (!n) { $('eName').focus(); return; }
+      var old = c.name; c.name = n; c.grade = $('eGrade').value;
+      try { await saveClass(c, old !== n ? 'تعديلُ اسمِ فصل: ' + old + ' ← ' + n : 'تعديلُ فصل'); splitClasses(); closeSheet(); toast('حُفظ'); done(); } catch (err) { fail(err); }
+    };
+    $('eArch').onclick = async function () { try { if (await archiveClass(c, !c.archived)) { closeSheet(); toast(c.archived ? 'أُرشف الفصل' : 'أُعيد الفصل'); done(); } } catch (err) { fail(err); } };
+    $('eDel').onclick = async function () { try { if (await deleteClass(c)) { closeSheet(); done(); } } catch (err) { fail(err); } };
   }
   async function classes() {
     var html = '<div class="ttl"><div><h2>فصولي</h2><p>اخترْ فصلاً للمتابعةِ اليومية، أو أضفْ فصلاً جديداً</p></div><div class="acts"><a class="btn" href="#/overview">مقارنةُ الفصول</a></div></div>';
@@ -555,6 +596,14 @@
     var arch = S.allClasses.filter(function (c) { return c.archived; });
     if (arch.length) html += '<div class="manage archived-list"><details><summary>الفصولُ المؤرشفة (' + ar(arch.length) + ')</summary><div class="grid" style="margin-top:14px">' + arch.map(classCard).join('') + '</div></details></div>';
     view.innerHTML = html;
+    view.querySelectorAll('[data-cm]').forEach(function (b) {
+      b.onclick = async function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var c = cls(b.dataset.id); if (!c) return;
+        if (b.dataset.cm === 'edit') editClassSheet(c, classes);
+        else { try { if (await deleteClass(c)) classes(); } catch (err) { fail(err); } }
+      };
+    });
     if ($('cAdd')) {
       $('cAdd').onclick = async function () {
         var n = $('cName').value.trim(); if (!n) { $('cName').focus(); return; }
@@ -633,9 +682,9 @@
         render();
       });
       $('cSave').onclick = async function () { var old = c.name; c.name = $('cRename').value.trim() || c.name; c.grade = $('cGrade2').value; try { await saveClass(c, old !== c.name ? 'تعديلُ اسمِ فصل: ' + old + ' ← ' + c.name : 'تعديلُ فصل'); toast('حُفظ'); render(); } catch (err) { fail(err); } };
-      var ab = $('cArch'); if (ab) ab.onclick = async function () { if (!confirm('أرشفةُ «' + c.name + '»؟ يختفي من القوائمِ اليومية ويبقى تقريرُه في الأرشيف.')) return; c.archived = true; c.archivedAt = today(); try { await saveClass(c, 'أرشفةُ فصل'); splitClasses(); persistCore(); location.hash = '#/classes'; } catch (err) { fail(err); } };
-      var un = $('cUnarch'); if (un) un.onclick = async function () { c.archived = false; try { await saveClass(c, 'إعادةُ فصلٍ من الأرشيف'); splitClasses(); persistCore(); location.hash = '#/classes'; } catch (err) { fail(err); } };
-      $('cDel').onclick = async function () { if (!confirm('حذفُ الفصلِ «' + c.name + '» نهائياً بكلِّ متعلّميه وسجلِّه اليومي؟ لا يمكنُ التراجع.')) return; if (!confirm('تأكيدٌ أخير: حذفٌ نهائي؟')) return; try { var map = await loadDays(c._id); for (var k in map) if (map[k]) await write('del', C('sc_days'), c._id + '_' + k, { cls: c._id, date: k }); await write('del', C('sc_classes'), c._id, {}); S.allClasses = S.allClasses.filter(function (x) { return x._id !== c._id; }); splitClasses(); persistCore(); LS.del(K('sc_days_') + c._id); log('حذفُ فصلٍ نهائياً', c.name); location.hash = '#/classes'; } catch (err) { fail(err); } };
+      var ab = $('cArch'); if (ab) ab.onclick = async function () { try { if (await archiveClass(c, true)) location.hash = '#/classes'; } catch (err) { fail(err); } };
+      var un = $('cUnarch'); if (un) un.onclick = async function () { try { await archiveClass(c, false); location.hash = '#/classes'; } catch (err) { fail(err); } };
+      $('cDel').onclick = async function () { try { if (await deleteClass(c)) location.hash = '#/classes'; } catch (err) { fail(err); } };
     }
     render();
   }

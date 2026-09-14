@@ -485,3 +485,8 @@ table.tt tr.mark .pn{color:var(--amber)}
 .term.grow .icon-btn:disabled{opacity:.3;cursor:default}
 #gPanel{margin-bottom:16px}
 @media(max-width:560px){.term.grow{grid-template-columns:64px 1fr 30px 30px 30px}}
+
+/* ===== تعديلُ الفصلِ وحذفُه من قائمةِ «فصولي» ===== */
+.cls-card .cman{display:inline-flex;gap:6px;margin-inline-start:auto}
+.cls-card .cman .icon-btn{width:30px;height:30px}
+.cls-card .cman .icon-btn.del:hover{color:#A63D2F;border-color:#A63D2F}
