@@ -61,6 +61,8 @@
     { id: 'break1', name: 'الفرصةُ الأولى', after: 3, s: '10:20', e: '10:35' },
     { id: 'salah', name: 'فرصةُ الصلاة', after: 5, s: '12:10', e: '12:20' }
   ];
+  /* خاناتٌ ثابتةٌ في الجدولِ الأسبوعيِّ غيرُ الفصول — تُحفَظُ في schedule بهذه القيم */
+  var FIXED = { '@meet': 'اجتماع', '@sub': 'احتياط' };
   var DEFAULT_CATS = {
     star: ['إجابةٌ متميّزة', 'قراءةٌ جيّدة', 'عملٌ جماعي', 'مبادرة', 'واجبٌ نموذجي'],
     bad: ['تأخّر', 'لم يُحضرِ الكتاب', 'إزعاج', 'لم يحلَّ الواجب', 'استخدامُ الهاتف']
@@ -291,7 +293,7 @@
         return marks.filter(function (m) { return (+m.after || 0) === after; }).map(function (m) {
           var on = false;
           if (m.s && m.e) { var ms = m.s.split(':'), me = m.e.split(':'); on = nowMin >= (+ms[0] * 60 + +ms[1]) && nowMin < (+me[0] * 60 + +me[1]); }
-          return '<div class="period brk' + (on ? ' now' : '') + '"><span class="n">•</span><span class="c">' + esc(m.name || 'فاصل') + '</span><span class="m">' + (m.s ? esc(m.s + '–' + m.e) : '') + '</span></div>';
+          return '<div class="period brk' + (on ? ' now' : '') + '"' + rng(m) + '><span class="n">•</span><span class="c">' + esc(m.name || 'فاصل') + '</span><span class="m">' + (m.s ? esc(m.s + '–' + m.e) : '') + '</span></div>';
         }).join('');
       }
       for (var i = 0; i < per; i++) {
@@ -301,11 +303,13 @@
         if (t && t.s && t.e) { var s = t.s.split(':'), e = t.e.split(':'); isNow = nowMin >= (+s[0] * 60 + +s[1]) && nowMin < (+e[0] * 60 + +e[1]); }
         if (c) {
           var preps = prepM.items.filter(function (it) { return it.grade === c.grade && it.date === today(); });
-          html += '<a class="period' + (isNow ? ' now' : '') + '" href="#/class/' + c._id + '"><span class="n">' + ar(i + 1) + '</span><span class="c">' + esc(c.name) + (preps.length ? '<span class="today-prep">' + preps.map(function (it) { return '<span>📄 ' + esc(it.title) + '</span>'; }).join('') + '</span>' : '') + '</span><span class="m">' + (t && t.s ? esc(t.s + '–' + t.e) : ar(c.students ? c.students.length : 0) + ' متعلّماً') + '</span></a>';
+          html += '<a class="period' + (isNow ? ' now' : '') + '"' + rng(t) + ' href="#/class/' + c._id + '"><span class="n">' + ar(i + 1) + '</span><span class="c">' + esc(c.name) + (preps.length ? '<span class="today-prep">' + preps.map(function (it) { return '<span>📄 ' + esc(it.title) + '</span>'; }).join('') + '</span>' : '') + '</span><span class="m">' + (t && t.s ? esc(t.s + '–' + t.e) : ar(c.students ? c.students.length : 0) + ' متعلّماً') + '</span></a>';
         } else if (extraToday[i]) {
           var x = extraToday[i];
-          html += '<button type="button" class="period temp' + (isNow ? ' now' : '') + '" data-temp="' + i + '"' + (RO() ? ' disabled' : '') + '><span class="n">' + ar(i + 1) + '</span><span class="c"><span class="tk">' + esc(x.kind || 'حصّةٌ مؤقّتة') + '</span>' + (x.cls ? ' ' + esc(x.cls) : '') + (x.note ? '<small class="tn">' + esc(x.note) + '</small>' : '') + '</span><span class="m">' + (t && t.s ? esc(t.s + '–' + t.e) + ' · ' : '') + 'لليومِ فقط</span></button>';
-        } else html += '<button type="button" class="period free" data-temp="' + i + '"' + (RO() ? ' disabled' : '') + '><span class="n">' + ar(i + 1) + '</span><span class="c">حصّةٌ فارغة</span>' + (RO() ? '' : '<span class="m add">+ حصّةٌ مؤقّتة</span>') + '</button>';
+          html += '<button type="button" class="period temp' + (isNow ? ' now' : '') + '"' + rng(t) + ' data-temp="' + i + '"' + (RO() ? ' disabled' : '') + '><span class="n">' + ar(i + 1) + '</span><span class="c"><span class="tk">' + esc(x.kind || 'حصّةٌ مؤقّتة') + '</span>' + (x.cls ? ' ' + esc(x.cls) : '') + (x.note ? '<small class="tn">' + esc(x.note) + '</small>' : '') + '</span><span class="m">' + (t && t.s ? esc(t.s + '–' + t.e) + ' · ' : '') + 'لليومِ فقط</span></button>';
+        } else if (FIXED[sched[i]]) {
+          html += '<button type="button" class="period temp fixed' + (isNow ? ' now' : '') + '"' + rng(t) + ' data-temp="' + i + '"' + (RO() ? ' disabled' : '') + '><span class="n">' + ar(i + 1) + '</span><span class="c"><span class="tk">' + FIXED[sched[i]] + '</span></span><span class="m">' + (t && t.s ? esc(t.s + '–' + t.e) + ' · ' : '') + 'ثابتٌ أسبوعياً</span></button>';
+        } else html += '<button type="button" class="period free' + (isNow ? ' now' : '') + '"' + rng(t) + ' data-temp="' + i + '"' + (RO() ? ' disabled' : '') + '><span class="n">' + ar(i + 1) + '</span><span class="c">حصّةٌ فارغة</span>' + (RO() ? '' : '<span class="m add">+ حصّةٌ مؤقّتة</span>') + '</button>';
       }
       for (var mk = per; mk <= 12; mk++) html += markHTML(mk);
       html += '</div>';
@@ -319,6 +323,7 @@
     S.classes.slice(0, 6).forEach(function (c) { html += classCard(c); });
     html += '</div></div>';
     view.innerHTML = html;
+    nowRings();
     if (!RO()) view.querySelectorAll('[data-temp]').forEach(function (b) { b.onclick = function () { tempPeriodSheet(+b.dataset.temp); }; });
   }
   /* الحصّةُ القادمةُ في ترويسةِ الرئيسة: أقربُ حصّةٍ لم تبدأْ بعد (من الجدولِ أو حصصِ اليومِ المؤقّتة) مع عدٍّ تنازليّ */
@@ -333,6 +338,7 @@
         var t = times[i]; if (!t || !t.s) continue;
         var c = sched[i] ? cls(sched[i]) : null, x = (!c || c.archived) ? ex[i] : null;
         if (c && c.archived) c = null;
+        if (!c && !x && FIXED[sched[i]]) x = { kind: FIXED[sched[i]] };
         if (!c && !x) continue;
         var start = atTime(day, t.s);
         if (start > now) return { i: i, name: c ? c.name : (x.cls || x.kind || 'حصّةٌ مؤقّتة'), kind: c ? '' : (x.cls ? x.kind : ''), t: t, start: start, off: off, dow: day.getDay(), id: c ? c._id : '' };
@@ -360,13 +366,35 @@
     $('hdLeft').innerHTML = leftHTML(n.start - Date.now());
     box.hidden = false;
   }
-  setInterval(nextTick, 1000);
+  /* الحصّةُ الجاريةُ في «اليوم»: دائرةُ تقدّمٍ مكانَ رقمِها + أوّلُها/وسطُها/آخرُها + الباقي بالدقائق */
+  function hm2m(hm) { var p = String(hm || '').split(':'); return (+p[0] || 0) * 60 + (+p[1] || 0); }
+  function rng(t) { return t && t.s && t.e ? ' data-s="' + hm2m(t.s) + '" data-e="' + hm2m(t.e) + '"' : ''; }
+  var PHASES = ['أوّلُها', 'وسطُها', 'آخرُها'], RING = 94.25;
+  function nowRings() {
+    var rows = view.querySelectorAll('.periods .period[data-s]'); if (!rows.length) return;
+    var d = new Date(), now = d.getHours() * 60 + d.getMinutes() + d.getSeconds() / 60;
+    rows.forEach(function (r) {
+      var s = +r.dataset.s, e = +r.dataset.e, on = e > s && now >= s && now < e, n = r.querySelector('.n'); if (!n) return;
+      if (n.dataset.l == null) n.dataset.l = n.textContent;
+      var p = on ? (now - s) / (e - s) : 0, ph = p < 1 / 3 ? 0 : p < 2 / 3 ? 1 : 2, left = Math.max(1, Math.ceil(e - now));
+      var key = on ? Math.round(p * 100) + '|' + left : 'off';
+      if (r.dataset.k === key) return; r.dataset.k = key;
+      r.classList.toggle('now', on);
+      var old = r.querySelector('.ph'); if (old) old.remove();
+      if (!on) { n.classList.remove('ring'); n.textContent = n.dataset.l; return; }
+      n.classList.add('ring');
+      n.innerHTML = '<svg viewBox="0 0 36 36" aria-hidden="true"><circle class="rg-t" cx="18" cy="18" r="15"/><circle class="rg-p" cx="18" cy="18" r="15" stroke-dasharray="' + (RING * p).toFixed(1) + ' ' + RING + '" transform="rotate(-90 18 18)"/></svg><span>' + esc(n.dataset.l) + '</span>';
+      var chips = '<span class="ph" title="مضى ' + ar(Math.round(p * 100)) + '٪ من الوقت">' + PHASES.map(function (x, k) { return '<i' + (k === ph ? ' class="on"' : '') + '>' + x + '</i>'; }).join('') + '<b>باقي ' + ar(left) + ' د</b></span>';
+      var m = r.querySelector('.m'); if (m) m.insertAdjacentHTML('beforebegin', chips); else r.insertAdjacentHTML('beforeend', chips);
+    });
+  }
+  setInterval(function () { nextTick(); nowRings(); }, 1000);
 
   /* حصّةٌ مؤقّتةٌ في حصّةٍ فارغة — لليومِ فقط: settings.extra[تاريخ][رقمُ الحصّة] = {kind, cls, note} */
   var TEMP_KINDS = ['احتياط', 'درسٌ ريادي', 'نشاط', 'اجتماع', 'أخرى'];
   function tempPeriodSheet(i) {
     var day = today(), ex = S.settings.extra = S.settings.extra || {};
-    var cur = (ex[day] || {})[i] || null, kind = cur ? cur.kind : 'احتياط';
+    var cur = (ex[day] || {})[i] || null, kind = cur ? cur.kind : (FIXED[((S.settings.schedule || {})[new Date().getDay()] || [])[i]] || 'احتياط');
     var t = (S.settings.times || [])[i];
     openSheet('<div class="who"><div><h3>' + (cur ? 'تعديلُ الحصّةِ المؤقّتة' : 'حصّةٌ مؤقّتة') + ' — الحصّةُ ' + ar(i + 1) + '</h3><small>' + DAYS[new Date().getDay()] + ' ' + fmtDate(day) + (t && t.s ? ' · ' + esc(t.s + '–' + t.e) : '') + ' · تظهرُ اليومَ فقط</small></div></div>'
       + '<div class="field"><label>نوعُ الحصّة</label><div class="cats tkinds">' + TEMP_KINDS.map(function (k) { return '<button type="button" data-k="' + esc(k) + '" aria-pressed="' + (k === kind) + '">' + esc(k) + '</button>'; }).join('') + '</div></div>'
@@ -1094,7 +1122,7 @@
     if (RO()) { view.innerHTML = '<div class="err">حسابُك للقراءةِ فقط — الجدولُ يُعدَّلُ من حسابِ المعلّم</div>'; return; }
     var st = S.settings; st.schedule = st.schedule || {}; st.times = st.times || [];
     var per = st.periods || 7;
-    var html = '<div class="ttl"><div><h2>الجدولُ الأسبوعي</h2><p>ضعْ فصلَ كلِّ حصّةٍ — تظهرُ حصصُ اليومِ في الرئيسة وتُحسَبُ بها نسبةُ الحضور</p></div><div class="acts"><div class="field" style="margin:0;flex-direction:row;align-items:center;gap:8px"><label>عددُ الحصص</label><input type="number" id="perN" min="1" max="10" value="' + per + '" style="width:70px"></div><button class="btn p" id="schSave">حفظُ الجدول</button></div></div>';
+    var html = '<div class="ttl"><div><h2>الجدولُ الأسبوعي</h2><p>ضعْ فصلَ كلِّ حصّةٍ، أو «اجتماع» و«احتياط» لحصّةٍ ثابتةٍ كلَّ أسبوع — تظهرُ حصصُ اليومِ في الرئيسة وتُحسَبُ بها نسبةُ الحضور</p></div><div class="acts"><div class="field" style="margin:0;flex-direction:row;align-items:center;gap:8px"><label>عددُ الحصص</label><input type="number" id="perN" min="1" max="10" value="' + per + '" style="width:70px"></div><button class="btn p" id="schSave">حفظُ الجدول</button></div></div>';
     if (!S.classes.length) html += '<div class="err">أضفْ فصولَك أوّلاً من «متابعةُ المتعلّمين» ثمّ عُدْ إلى الجدول</div>';
     html += '<div class="panel" style="overflow-x:auto"><table class="tt"><thead><tr><th></th>' + [0, 1, 2, 3, 4].map(function (d) { return '<th>' + DAYS[d] + '</th>'; }).join('') + '<th style="width:150px">الوقت</th></tr></thead><tbody>';
     var TI = 'padding:6px;border:1px solid var(--line);border-radius:8px;font-size:13px;flex:1';
@@ -1113,7 +1141,8 @@
       html += '<tr><td class="pn">' + ar(i + 1) + '</td>';
       [0, 1, 2, 3, 4].forEach(function (d) {
         var v = (st.schedule[d] || [])[i] || '';
-        html += '<td><select data-d="' + d + '" data-i="' + i + '" class="' + (v ? '' : 'empty') + '"><option value="">—</option>' + S.classes.map(function (c) { return '<option value="' + c._id + '"' + (c._id === v ? ' selected' : '') + '>' + esc(c.name) + '</option>'; }).join('') + '</select></td>';
+        html += '<td><select data-d="' + d + '" data-i="' + i + '" class="' + (v ? (FIXED[v] ? 'fx' : '') : 'empty') + '"><option value="">—</option>' + S.classes.map(function (c) { return '<option value="' + c._id + '"' + (c._id === v ? ' selected' : '') + '>' + esc(c.name) + '</option>'; }).join('')
+          + '<optgroup label="غيرُ الفصول">' + Object.keys(FIXED).map(function (k) { return '<option value="' + k + '"' + (k === v ? ' selected' : '') + '>' + FIXED[k] + '</option>'; }).join('') + '</optgroup></select></td>';
       });
       var t = st.times[i] || {};
       html += '<td><div style="display:flex;gap:4px"><input type="time" data-ti="' + i + '" data-k="s" value="' + esc(t.s || '') + '" style="' + TI + '"><input type="time" data-ti="' + i + '" data-k="e" value="' + esc(t.e || '') + '" style="' + TI + '"></div></td></tr>';
@@ -1124,7 +1153,7 @@
       + '<button class="btn" id="tmReset" style="flex:0 0 auto">استعادةُ التوقيتِ الوزاريّ</button></div>'
       + '<p style="color:var(--muted);font-size:14px">الجمعةُ والسبتُ عطلة. الافتراضيُّ توقيتُ المرحلةِ الثانوية: لقاءُ الصباح ٧٫٤٥ والحصّةُ ٤٥ دقيقةً وفرصتانِ — وكلُّ وقتٍ يُعدَّلُ يدويّاً.</p>';
     view.innerHTML = html;
-    view.querySelectorAll('select').forEach(function (s) { s.onchange = function () { s.classList.toggle('empty', !s.value); }; });
+    view.querySelectorAll('select').forEach(function (s) { s.onchange = function () { s.classList.toggle('empty', !s.value); s.classList.toggle('fx', !!FIXED[s.value]); }; });
     $('perN').onchange = function () { st.periods = Math.max(1, Math.min(10, +$('perN').value || 7)); collect(); scheduleView(); };
     function collect() {
       var sch = {}; view.querySelectorAll('select[data-d]').forEach(function (s) { var d = s.dataset.d; sch[d] = sch[d] || []; sch[d][+s.dataset.i] = s.value || null; });

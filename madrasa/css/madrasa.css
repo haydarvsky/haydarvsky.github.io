@@ -524,6 +524,34 @@ button.period:disabled{cursor:default}
 .period.temp.now{background:var(--green);border-style:solid}
 .period.temp.now .tk{background:var(--gold);color:var(--green-ink)}
 .period.temp.now .tn{color:rgba(232,223,204,.8)}
+.period.temp.fixed{border-style:solid;background:#FFF9EA}
+.period.temp.fixed.now{background:var(--green)}
+.tt select.fx{background:#FFF4DC;border-color:var(--gold);color:var(--amber);font-weight:700}
+/* الحصّةُ الجارية: دائرةُ تقدّمٍ + موضعُنا منها */
+.period .n.ring{position:relative;background:transparent !important;border:0 !important;width:42px;height:42px}
+.period .n.ring svg{position:absolute;inset:0;width:100%;height:100%}
+.period .n.ring span{position:relative}
+.period.now .n.ring{color:var(--cream)}
+.period.brk.now .n.ring{color:var(--amber)}
+.period .rg-t{fill:none;stroke:currentColor;stroke-width:4;opacity:.22}
+.period .rg-p{fill:none;stroke:var(--gold);stroke-width:4;stroke-linecap:round;transition:stroke-dasharray .6s ease-out}
+.period.brk .rg-p{stroke:var(--amber)}
+.period .ph{display:flex;align-items:center;gap:4px;flex:0 0 auto;font-size:13px;white-space:nowrap}
+.period .ph i{font-style:normal;padding:2px 9px;border-radius:8px;background:rgba(232,223,204,.14);opacity:.7}
+.period .ph i.on{background:var(--gold);color:var(--green-ink);opacity:1;font-weight:700}
+.period .ph b{margin-inline-start:6px;font-weight:700;color:var(--gold)}
+.period.brk .ph i{background:rgba(194,120,10,.1);color:var(--amber)}
+.period.brk .ph i.on{background:var(--amber);color:#fff}
+.period.brk .ph b{color:var(--amber)}
+.period.free.now{opacity:1;border-style:solid}
+.period.free.now .c{color:inherit}
+.period.free.now .m.add{opacity:.85;color:var(--gold)}
+.periods{container-type:inline-size}
+.period.now .c,.period.now .m{white-space:nowrap}
+.period.now .c{min-width:0;overflow:hidden;text-overflow:ellipsis}
+@container (max-width:440px){.period .ph i:not(.on){display:none}.period .ph b{margin-inline-start:2px}}
+@media(max-width:720px){.period .ph i:not(.on){display:none}.period .ph{font-size:12px}.period .n.ring{width:36px;height:36px}}
+@media print{.period .ph{display:none}}
 .tkinds{margin:4px 0 0}
 .tkinds button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}
 .sheet textarea#tNote{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;font:inherit;font-size:16px;resize:vertical}
