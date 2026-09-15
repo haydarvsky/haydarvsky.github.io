@@ -555,6 +555,12 @@ button.period:disabled{cursor:default}
 .period.temp.fixed{border-style:solid;background:#FFF9EA}
 .period.temp.fixed.now{background:var(--green)}
 .tt select.fx{background:#FFF4DC;border-color:var(--gold);color:var(--amber);font-weight:700}
+/* التنقّلُ بين المتعلّمين في ورقتِهم */
+.sheet .stunav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:-2px 0 12px;padding-bottom:10px;border-bottom:1px dashed var(--line)}
+.sheet .stunav .btn{display:inline-flex;align-items:center;gap:4px;padding-inline:14px}
+.sheet .stunav .btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sheet .stunav .btn:disabled{opacity:.35;cursor:default;pointer-events:none}
+.sheet .stunav .pos{font-size:14px;color:var(--muted)}
 /* كتبُ الصفّ */
 .books{margin-top:28px}
 .bk-h{font-size:24px;color:var(--green);margin:0 0 12px}

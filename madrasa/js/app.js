@@ -914,12 +914,23 @@
   }
 
   /* الورقةُ المنبثقة */
-  function openSheet(html) { var sh = $('sheet'), bg = $('sheetBg'); sh.innerHTML = '<div class="hnd"></div>' + html; sh.hidden = false; bg.hidden = false; requestAnimationFrame(function () { sh.classList.add('on'); bg.classList.add('on'); }); }
-  function closeSheet() { $('sheet').classList.remove('on'); $('sheetBg').classList.remove('on'); setTimeout(function () { $('sheet').hidden = true; $('sheetBg').hidden = true; }, 260); }
+  function openSheet(html) { S.sheetNav = null; var sh = $('sheet'), bg = $('sheetBg'); sh.innerHTML = '<div class="hnd"></div>' + html; sh.hidden = false; bg.hidden = false; requestAnimationFrame(function () { sh.classList.add('on'); bg.classList.add('on'); }); }
+  function closeSheet() { S.sheetNav = null; $('sheet').classList.remove('on'); $('sheetBg').classList.remove('on'); setTimeout(function () { $('sheet').hidden = true; $('sheetBg').hidden = true; }, 260); }
   $('sheetBg').onclick = closeSheet;
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheet(); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') return closeSheet();
+    /* الأسهمُ في ورقةِ المتعلّم: ← التالي، → السابق (خارجَ حقولِ الكتابة) */
+    if (S.sheetNav && !$('sheet').hidden && !/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) { e.preventDefault(); S.sheetNav(e.key === 'ArrowLeft' ? 1 : -1); }
+  });
   async function openStudentSheet(c, s, date, alerts) {
     var ro = RO() || c.archived, pendingCat = null, recEdit = false; alerts = alerts || {};
+    /* التنقّلُ بين المتعلّمين بترتيبِ الشبكةِ الظاهر (الفرزُ والبحث) */
+    function navList() { var q = (S.stuQ || '').trim(); return sortedStudents(c).filter(function (x) { return !q || x.name.indexOf(q) >= 0; }); }
+    function go(dir) {
+      var L = navList(), i = L.findIndex(function (x) { return x.id === s.id; }), n = L[i + dir]; if (!n) return;
+      var b = document.querySelector('.stu[data-sid="' + n.id + '"]'); if (b) b.scrollIntoView({ block: 'nearest' });
+      openStudentSheet(c, n, date, alerts);
+    }
     async function setRec(v) {
       var st = (c.students || []).filter(function (x) { return x.id === s.id; })[0] || s;
       v = String(v || '').trim();
@@ -940,7 +951,9 @@
     }
     function render() {
       var doc = S.days[c._id] && S.days[c._id].map[date]; var es = (doc ? doc.ev : []).filter(function (e) { return e.sid === s.id; });
-      var html = '<div class="who"><span class="av">' + esc(initials(s.name)) + '</span><div><h3>' + esc(s.name) + '</h3><small>' + esc(c.name) + ' — ' + fmtDate(date, true) + '</small></div><div style="margin-inline-start:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' + (!ro && !s.rec && !recEdit ? '<button class="btn s recbtn" id="recBtn">' + PIN + 'توصية</button>' : '') + '<a class="btn s" href="#/student/' + c._id + '/' + s.id + '">لوحةُ القياس</a></div></div>';
+      var L = navList(), pos = L.findIndex(function (x) { return x.id === s.id; });
+      var html = (L.length > 1 ? '<div class="stunav"><button type="button" class="btn s" id="stPrev"' + (pos <= 0 ? ' disabled' : '') + ' title="السابق (→)"><svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg>السابق</button><span class="pos">' + ar(pos + 1) + ' / ' + ar(L.length) + '</span><button type="button" class="btn s" id="stNext"' + (pos >= L.length - 1 ? ' disabled' : '') + ' title="التالي (←)">التالي<svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg></button></div>' : '')
+        + '<div class="who"><span class="av">' + esc(initials(s.name)) + '</span><div><h3>' + esc(s.name) + '</h3><small>' + esc(c.name) + ' — ' + fmtDate(date, true) + '</small></div><div style="margin-inline-start:auto;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">' + (!ro && !s.rec && !recEdit ? '<button class="btn s recbtn" id="recBtn">' + PIN + 'توصية</button>' : '') + '<a class="btn s" href="#/student/' + c._id + '/' + s.id + '">لوحةُ القياس</a></div></div>';
       if (recEdit && !ro) {
         html += '<div class="recedit"><label>توصيةٌ ثابتةٌ على المتعلّم — تظهرُ على بطاقتِه في كلِّ حصّةٍ حتى تُزيلَها</label><input id="recIn" maxlength="90" value="' + esc(s.rec || '') + '" placeholder="مثال: ضعفُ نظر — يجلسُ في الصفِّ الأوّل">'
           + '<div class="cats recq">' + REC_QUICK.map(function (k) { return '<button type="button" data-rq="' + esc(k) + '">' + esc(k) + '</button>'; }).join('') + '</div>'
@@ -967,6 +980,17 @@
       html += '<div class="foot"><small style="color:var(--muted)">' + (ro ? 'قراءةٌ فقط' : 'النقرُ على الزرِّ يسجّلُ فوراً · × يحذف') + '</small><button class="btn s" id="shClose">إغلاق</button></div>';
       openSheet(html);
       var sh = $('sheet');
+      if ($('stPrev')) $('stPrev').onclick = function () { go(-1); };
+      if ($('stNext')) $('stNext').onclick = function () { go(1); };
+      S.sheetNav = go;
+      /* السحبُ في الجوال: يميناً ← التالي كتقليبِ صفحةِ الكتابِ العربي، ويساراً ← السابق */
+      var tx = 0, ty = 0;
+      sh.ontouchstart = function (e) { var t = e.changedTouches[0]; tx = t.clientX; ty = t.clientY; };
+      sh.ontouchend = function (e) {
+        if (!S.sheetNav || (e.target.closest && e.target.closest('input,textarea'))) return;
+        var t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty;
+        if (Math.abs(dx) > 70 && Math.abs(dy) < 45) S.sheetNav(dx > 0 ? 1 : -1);
+      };
       if ($('recBtn')) $('recBtn').onclick = function () { recEdit = true; render(); setTimeout(function () { var i = $('recIn'); if (i) i.focus(); }, 280); };
       if ($('recEditB')) $('recEditB').onclick = function () { recEdit = true; render(); };
       if ($('recIn')) {
