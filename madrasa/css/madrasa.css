@@ -555,6 +555,49 @@ button.period:disabled{cursor:default}
 .period.temp.fixed{border-style:solid;background:#FFF9EA}
 .period.temp.fixed.now{background:var(--green)}
 .tt select.fx{background:#FFF4DC;border-color:var(--gold);color:var(--amber);font-weight:700}
+/* الجدولُ الأسبوعيُّ للعرضِ والطباعة */
+.ttseg{flex:0 0 auto}
+.ttscroll{overflow-x:auto;padding-bottom:4px}
+.ttsheet{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 20px 14px}
+.ttsheet.wide{min-width:780px}
+.ttsheet.tall{min-width:540px}
+.tth{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid var(--gold)}
+.tth img{height:46px;width:auto}
+.tth h3{margin:0;font-size:26px;color:var(--green);line-height:1.2}
+.tth p{margin:0;font-size:15px;color:var(--muted);line-height:1.5}
+.tth .ttterm{margin-inline-start:auto;font-size:14px;color:var(--amber);font-weight:700;text-align:left}
+.ttv{width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;font-size:16px;line-height:1.35;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ttv th,.ttv td{border-inline-start:1px solid var(--line);border-bottom:1px solid var(--line);text-align:center;padding:10px 6px;vertical-align:middle}
+.ttv tr>:first-child{border-inline-start:0}
+.ttv tbody tr:last-child>*{border-bottom:0}
+.ttv thead th{background:var(--green);color:var(--cream);font-weight:700;border-color:rgba(232,223,204,.18);padding:8px 4px;font-size:17px}
+.ttv thead th b{font-size:20px;line-height:1.1}
+.ttv thead th small,.ttv th.pn small{display:block;font-size:12.5px;font-weight:400;opacity:.85;margin-top:2px;white-space:nowrap}
+.ttv th.day,.ttv th.pn{background:#F4EEDF;color:var(--green);font-weight:700;font-size:18px}
+.ttv th.pn b{font-size:20px}
+.ttv td b{color:var(--green);font-size:17px}
+.ttv .tt-fx{display:inline-block;padding:1px 10px;border-radius:100px;background:#FFF1D2;color:var(--amber);font-weight:700;font-size:15px;border:1px solid rgba(217,164,65,.55)}
+.ttv .tt-empty{color:rgba(42,26,15,.22)}
+.ttv td.mk,.ttv tr.mk td{background:#F7F1E3;color:var(--amber);font-size:13px;font-weight:700}
+.ttv.wide th.mk{width:62px;padding:0}
+.ttv.wide td.mk{padding:4px 2px;border-bottom:0}
+.ttv.wide td.mk span{display:block;line-height:1.55;font-size:13px}
+.ttv.wide th.corner{width:84px}
+.ttv.tall th.corner{width:104px}
+.ttv.tall tr.mk td{padding:5px 8px}
+.ttv.tall tr.mk small{font-weight:400;color:var(--muted);margin-inline-start:6px}
+.ttv tr.tt-today th.day,.ttv.tall thead th.tt-today{box-shadow:inset 0 -3px 0 var(--gold)}
+.ttv.wide tr.tt-today td:not(.mk),.ttv.tall td.tt-today{background:rgba(217,164,65,.08)}
+.ttsum{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;margin-top:12px;font-size:14px;color:var(--muted)}
+.ttsum b{color:var(--green);font-size:16px}
+@media print{
+  body.print-tt .ttl,body.print-tt .crumb,body.print-tt .print-foot,body.print-tt .report-head{display:none !important}
+  body.print-tt .ttscroll{overflow:visible}
+  body.print-tt .ttsheet{border:0;padding:0;border-radius:0;min-width:0}
+  body.print-tt .ttv tr.tt-today th.day,body.print-tt .ttv.tall thead th.tt-today{box-shadow:none}
+  body.print-tt .ttv.wide tr.tt-today td:not(.mk),body.print-tt .ttv.tall td.tt-today{background:transparent}
+  .ttv thead th,.ttv th.day,.ttv th.pn,.ttv td.mk,.ttv tr.mk td,.ttv .tt-fx{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
 /* الحصّةُ الجارية: دائرةُ تقدّمٍ + موضعُنا منها */
 .period .n.ring{position:relative;background:transparent !important;border:0 !important;width:42px;height:42px}
 .period .n.ring svg{position:absolute;inset:0;width:100%;height:100%}

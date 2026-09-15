@@ -1158,11 +1158,109 @@
   }
 
   /* ---------------- الجدولُ الأسبوعي ---------------- */
+  /* ---------------- الجدولُ الأسبوعي: عرضٌ بالعرض / بالطول + طباعةٌ وتحميلُ PDF ---------------- */
+  var TT_DAYS = [0, 1, 2, 3, 4];
+  var ICO_PRINT = '<svg viewBox="0 0 24 24"><path d="M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M7 9V4h10v5M7 14h10v6H7z"/></svg>';
+  var ICO_DL = '<svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>';
+  function ttSeg(mode) {
+    return '<div class="seg ttseg" id="ttSeg">' + [['wide', 'بالعرض'], ['tall', 'بالطول']].concat(RO() ? [] : [['edit', 'تعديل']]).map(function (o) { return '<button data-m="' + o[0] + '" aria-pressed="' + (o[0] === mode) + '">' + o[1] + '</button>'; }).join('') + '</div>';
+  }
+  function bindTtSeg(beforeLeave) {
+    var sg = $('ttSeg'); if (!sg) return;
+    sg.onclick = async function (e) {
+      var b = e.target.closest('button[data-m]'); if (!b || b.getAttribute('aria-pressed') === 'true') return;
+      if (beforeLeave && (await beforeLeave()) === false) return;
+      LS.set('sc_tt_mode', b.dataset.m); scheduleView();
+    };
+  }
+  function ttSeq(st) {
+    var per = st.periods || 7, marks = st.marks || [], seq = [];
+    function mk(a) { marks.filter(function (m) { return (+m.after || 0) === a; }).forEach(function (m) { seq.push({ mark: m }); }); }
+    for (var i = 0; i < per; i++) { mk(i); seq.push({ i: i, t: (st.times || [])[i] || {} }); }
+    for (var k = per; k <= 12; k++) mk(k);
+    return seq;
+  }
+  function ttTime(t) { return t && t.s ? '<bdi>' + ar(t.s) + '</bdi>' + (t.e ? ' – <bdi>' + ar(t.e) + '</bdi>' : '') : ''; }
+  function ttCell(v) {
+    if (v && FIXED[v]) return '<span class="tt-fx">' + FIXED[v] + '</span>';
+    var c = v ? cls(v) : null;
+    return c ? '<b>' + esc(c.name) + '</b>' : '<span class="tt-empty">—</span>';
+  }
+  function timetableView(mode) {
+    var st = S.settings, sched = st.schedule || {}, seq = ttSeq(st), now = new Date().getDay(), me = FB.profile() || {}, tm = currentTerm(), land = mode === 'wide', h;
+    if (land) {
+      h = '<table class="ttv wide"><thead><tr><th class="corner">اليوم</th>' + seq.map(function (x) {
+        return x.mark ? '<th class="mk"></th>' : '<th><b>' + ar(x.i + 1) + '</b><small>' + ttTime(x.t) + '</small></th>';
+      }).join('') + '</tr></thead><tbody>' + TT_DAYS.map(function (d, di) {
+        return '<tr' + (d === now ? ' class="tt-today"' : '') + '><th class="day">' + DAYS[d] + '</th>' + seq.map(function (x) {
+          if (x.mark) return di === 0 ? '<td class="mk" rowspan="' + TT_DAYS.length + '"><span>' + String(x.mark.name || 'فاصل').split(/\s+/).map(esc).join('<br>') + '</span></td>' : '';
+          return '<td>' + ttCell((sched[d] || [])[x.i]) + '</td>';
+        }).join('') + '</tr>';
+      }).join('') + '</tbody></table>';
+    } else {
+      h = '<table class="ttv tall"><thead><tr><th class="corner">الحصّة</th>' + TT_DAYS.map(function (d) { return '<th' + (d === now ? ' class="tt-today"' : '') + '>' + DAYS[d] + '</th>'; }).join('') + '</tr></thead><tbody>' + seq.map(function (x) {
+        if (x.mark) return '<tr class="mk"><td colspan="' + (TT_DAYS.length + 1) + '"><span>' + esc(x.mark.name || 'فاصل') + '</span>' + (x.mark.s ? ' <small>' + ttTime(x.mark) + '</small>' : '') + '</td></tr>';
+        return '<tr><th class="pn"><b>' + ar(x.i + 1) + '</b><small>' + ttTime(x.t) + '</small></th>' + TT_DAYS.map(function (d) { return '<td' + (d === now ? ' class="tt-today"' : '') + '>' + ttCell((sched[d] || [])[x.i]) + '</td>'; }).join('') + '</tr>';
+      }).join('') + '</tbody></table>';
+    }
+    var nCls = 0, nMeet = 0, nSub = 0;
+    TT_DAYS.forEach(function (d) { (sched[d] || []).slice(0, st.periods || 7).forEach(function (v) { if (!v) return; if (v === '@meet') nMeet++; else if (v === '@sub') nSub++; else if (cls(v)) nCls++; }); });
+    var sum = '<div class="ttsum"><span>حصصُ الفصول: <b>' + ar(nCls) + '</b></span>' + (nMeet ? '<span>اجتماع: <b>' + ar(nMeet) + '</b></span>' : '') + (nSub ? '<span>احتياط: <b>' + ar(nSub) + '</b></span>' : '') + '<span>المجموعُ في الأسبوع: <b>' + ar(nCls + nMeet + nSub) + '</b></span></div>';
+    var html = '<div class="ttl"><div><h2>الجدولُ الأسبوعي</h2><p>' + (land ? 'بالعرض: الأيّامُ صفوفٌ والحصصُ أعمدة' : 'بالطول: الحصصُ صفوفٌ والأيّامُ أعمدة') + '</p></div><div class="acts">' + ttSeg(mode) + '<button class="btn" id="ttPrint">' + ICO_PRINT + 'طباعة</button><button class="btn p" id="ttPdf">' + ICO_DL + 'تحميل PDF</button></div></div>';
+    html += '<div class="ttscroll"><div class="ttsheet ' + mode + '" id="ttSheet"><div class="tth"><img src="/img/logo-dark.svg" alt=""><div><h3>الجدولُ الأسبوعي</h3><p>' + esc(me.name || '') + (me.school ? ' — ' + esc(me.school) : '') + '</p></div>' + (tm ? '<div class="ttterm">' + esc(tm.name) + '</div>' : '') + '</div>' + h + sum + '</div></div>';
+    if (!S.classes.length && !RO()) html += '<div class="hint" style="margin-top:10px">لا فصولَ بعد — أضفْها من «متابعةُ المتعلّمين» ثمّ رتّبِ الجدولَ من «تعديل»</div>';
+    view.innerHTML = html;
+    bindTtSeg();
+    $('ttPrint').onclick = function () { printTimetable(land); };
+    $('ttPdf').onclick = function () { ttPdf(land); };
+  }
+  function printTimetable(land) {
+    var old = $('ttPage'); if (old) old.remove();
+    var stl = document.createElement('style'); stl.id = 'ttPage';
+    stl.textContent = '@media print{@page{size:A4 ' + (land ? 'landscape' : 'portrait') + ';margin:10mm}}';
+    document.head.appendChild(stl); document.body.classList.add('print-tt');
+    function done() { document.body.classList.remove('print-tt'); stl.remove(); window.removeEventListener('afterprint', done); }
+    window.addEventListener('afterprint', done);
+    window.print();
+  }
+  function loadScript(src) {
+    return new Promise(function (res, rej) {
+      var ex = document.querySelector('script[data-src="' + src + '"]');
+      if (ex) { if (ex.dataset.ok) return res(); ex.addEventListener('load', res); ex.addEventListener('error', rej); return; }
+      var s = document.createElement('script'); s.src = src; s.dataset.src = src;
+      s.onload = function () { s.dataset.ok = '1'; res(); }; s.onerror = rej; document.head.appendChild(s);
+    });
+  }
+  /* PDF حقيقيٌّ يُنزَّل: نسخةٌ من الجدولِ بعرضٍ ثابتٍ خارجَ الشاشة ← html2canvas ← jsPDF بصفحةِ A4 */
+  async function ttPdf(land) {
+    var btn = $('ttPdf'), old = btn.innerHTML, box = null;
+    btn.disabled = true; btn.textContent = 'جارٍ التجهيز…';
+    try {
+      if (!window.html2canvas) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');
+      if (!window.jspdf) await loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+      if (document.fonts && document.fonts.ready) await document.fonts.ready;
+      box = document.createElement('div'); box.className = 'ttcap';
+      box.style.cssText = 'position:fixed;top:0;left:-30000px;width:' + (land ? 1480 : 1000) + 'px';
+      var clone = $('ttSheet').cloneNode(true);
+      clone.querySelectorAll('.tt-today').forEach(function (e) { e.classList.remove('tt-today'); });  /* تمييزُ اليومِ للشاشةِ فقط */
+      box.appendChild(clone); document.body.appendChild(box);
+      var canvas = await window.html2canvas(box.firstChild, { scale: 2, backgroundColor: '#FFFDF8', logging: false });
+      var pdf = new window.jspdf.jsPDF({ orientation: land ? 'landscape' : 'portrait', unit: 'mm', format: 'a4' });
+      var pw = pdf.internal.pageSize.getWidth(), ph = pdf.internal.pageSize.getHeight(), m = 10;
+      var r = Math.min((pw - 2 * m) / canvas.width, (ph - 2 * m) / canvas.height), w = canvas.width * r, hh = canvas.height * r;
+      pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', (pw - w) / 2, m, w, hh);
+      pdf.save('الجدول-الأسبوعي-' + (land ? 'بالعرض' : 'بالطول') + '.pdf');
+      toast('نُزِّل ملفُّ PDF');
+    } catch (e) { console.error(e); toast('تعذّر تجهيزُ PDF — استعملْ «طباعة» واخترْ «حفظ PDF»', true); }
+    finally { if (box) box.remove(); btn.disabled = false; btn.innerHTML = old; }
+  }
   async function scheduleView() {
-    if (RO()) { view.innerHTML = '<div class="err">حسابُك للقراءةِ فقط — الجدولُ يُعدَّلُ من حسابِ المعلّم</div>'; return; }
+    var mode = LS.get('sc_tt_mode', 'wide'); if (['wide', 'tall', 'edit'].indexOf(mode) < 0) mode = 'wide';
+    if (RO() && mode === 'edit') mode = 'wide';
+    if (mode !== 'edit') return timetableView(mode);
     var st = S.settings; st.schedule = st.schedule || {}; st.times = st.times || [];
     var per = st.periods || 7;
-    var html = '<div class="ttl"><div><h2>الجدولُ الأسبوعي</h2><p>ضعْ فصلَ كلِّ حصّةٍ، أو «اجتماع» و«احتياط» لحصّةٍ ثابتةٍ كلَّ أسبوع — تظهرُ حصصُ اليومِ في الرئيسة وتُحسَبُ بها نسبةُ الحضور</p></div><div class="acts"><div class="field" style="margin:0;flex-direction:row;align-items:center;gap:8px"><label>عددُ الحصص</label><input type="number" id="perN" min="1" max="10" value="' + per + '" style="width:70px"></div><button class="btn p" id="schSave">حفظُ الجدول</button></div></div>';
+    var html = '<div class="ttl"><div><h2>الجدولُ الأسبوعي</h2><p>ضعْ فصلَ كلِّ حصّةٍ، أو «اجتماع» و«احتياط» لحصّةٍ ثابتةٍ كلَّ أسبوع — تظهرُ حصصُ اليومِ في الرئيسة وتُحسَبُ بها نسبةُ الحضور</p></div><div class="acts">' + ttSeg('edit') + '<div class="field" style="margin:0;flex-direction:row;align-items:center;gap:8px"><label>عددُ الحصص</label><input type="number" id="perN" min="1" max="10" value="' + per + '" style="width:70px"></div><button class="btn p" id="schSave">حفظُ الجدول</button></div></div>';
     if (!S.classes.length) html += '<div class="err">أضفْ فصولَك أوّلاً من «متابعةُ المتعلّمين» ثمّ عُدْ إلى الجدول</div>';
     html += '<div class="panel" style="overflow-x:auto"><table class="tt"><thead><tr><th></th>' + [0, 1, 2, 3, 4].map(function (d) { return '<th>' + DAYS[d] + '</th>'; }).join('') + '<th style="width:150px">الوقت</th></tr></thead><tbody>';
     var TI = 'padding:6px;border:1px solid var(--line);border-radius:8px;font-size:13px;flex:1';
@@ -1193,8 +1291,11 @@
       + '<button class="btn" id="tmReset" style="flex:0 0 auto">استعادةُ التوقيتِ الوزاريّ</button></div>'
       + '<p style="color:var(--muted);font-size:14px">الجمعةُ والسبتُ عطلة. الافتراضيُّ توقيتُ المرحلةِ الثانوية: لقاءُ الصباح ٧٫٤٥ والحصّةُ ٤٥ دقيقةً وفرصتانِ — وكلُّ وقتٍ يُعدَّلُ يدويّاً.</p>';
     view.innerHTML = html;
-    view.querySelectorAll('select').forEach(function (s) { s.onchange = function () { s.classList.toggle('empty', !s.value); s.classList.toggle('fx', !!FIXED[s.value]); }; });
-    $('perN').onchange = function () { st.periods = Math.max(1, Math.min(10, +$('perN').value || 7)); collect(); scheduleView(); };
+    view.querySelectorAll('select').forEach(function (s) { s.onchange = function () { S.ttDirty = true; s.classList.toggle('empty', !s.value); s.classList.toggle('fx', !!FIXED[s.value]); }; });
+    view.querySelectorAll('input[data-ti],input[data-mk]').forEach(function (inp) { inp.addEventListener('change', function () { S.ttDirty = true; }); });
+    /* الانتقالُ إلى العرضِ يحفظُ التعديلاتِ أوّلاً حتى لا تضيع */
+    bindTtSeg(async function () { if (!S.ttDirty) return; collect(); try { await saveSettings(); S.ttDirty = false; log('حفظُ الجدول'); toast('حُفظ الجدول'); } catch (e) { fail(e); return false; } });
+    $('perN').onchange = function () { S.ttDirty = true; st.periods = Math.max(1, Math.min(10, +$('perN').value || 7)); collect(); scheduleView(); };
     function collect() {
       var sch = {}; view.querySelectorAll('select[data-d]').forEach(function (s) { var d = s.dataset.d; sch[d] = sch[d] || []; sch[d][+s.dataset.i] = s.value || null; });
       Object.keys(sch).forEach(function (d) { for (var k = 0; k < sch[d].length; k++) if (sch[d][k] === undefined) sch[d][k] = null; });
@@ -1204,8 +1305,8 @@
         var m = st.marks[+inp.dataset.mk]; if (m) m[inp.dataset.k] = inp.value;
       });
     }
-    $('schSave').onclick = async function () { collect(); try { await saveSettings(); log('حفظُ الجدول'); toast('حُفظ الجدول'); } catch (e) { fail(e); } };
-    $('mkAdd').onclick = function () { collect(); st.marks.push({ id: uid('mk'), name: 'فاصل', after: 1, s: '', e: '' }); scheduleView(); };
+    $('schSave').onclick = async function () { collect(); try { await saveSettings(); S.ttDirty = false; log('حفظُ الجدول'); toast('حُفظ الجدول'); } catch (e) { fail(e); } };
+    $('mkAdd').onclick = function () { S.ttDirty = true; collect(); st.marks.push({ id: uid('mk'), name: 'فاصل', after: 1, s: '', e: '' }); scheduleView(); };
     $('tmReset').onclick = function () {
       if (!confirm('استعادةُ توقيتِ وزارةِ التربيةِ للمرحلةِ الثانوية؟ يُستبدَلُ وقتُ الحصصِ والفواصلِ فقط، ولا يتغيّرُ توزيعُ الفصول.')) return;
       st.times = DEFAULT_TIMES.map(function (t) { return { s: t.s, e: t.e }; });
