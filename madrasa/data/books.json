@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": "g10-arabi",
+      "grade": "10",
+      "title": "كتاب اللغة العربية",
+      "file": "arabi.pdf",
+      "cover": "arabi.jpg",
+      "pages": 138,
+      "size": 11620764,
+      "order": 1,
+      "added": "2026-09-15",
+      "sem": "1"
+    },
+    {
+      "id": "g10-nahw",
+      "grade": "10",
+      "title": "قواعد النحو والصرف",
+      "file": "nahw.pdf",
+      "cover": "nahw.jpg",
+      "pages": 114,
+      "size": 21341963,
+      "order": 2,
+      "added": "2026-09-15",
+      "sem": "1"
+    },
+    {
+      "id": "g10-balagha",
+      "grade": "10",
+      "title": "فنون البلاغة",
+      "file": "balagha.pdf",
+      "cover": "balagha.jpg",
+      "pages": 82,
+      "size": 12632737,
+      "order": 3,
+      "added": "2026-09-15",
+      "sem": "1"
+    }
+  ]
+}

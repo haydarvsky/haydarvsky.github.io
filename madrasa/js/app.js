@@ -453,6 +453,18 @@
     var r = await fetch('data/prep.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).catch(function () { return LS.get('sc_prep_cache', { items: [] }); });
     S.prep = r; LS.set('sc_prep_cache', r); return r;
   }
+  /* كتبُ الصفِّ الدراسيّة (مشتركةٌ للمعلّمَين): books/<صف>/<ملف>.pdf + غلافُه، والفهرسُ data/books.json */
+  async function loadBooks() {
+    if (S.books) return S.books;
+    var r = await fetch('data/books.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).catch(function () { return LS.get('sc_books_cache', { items: [] }); });
+    S.books = r; LS.set('sc_books_cache', r); return r;
+  }
+  function bookCard(b) {
+    var base = 'books/' + encodeURIComponent(b.grade) + '/', url = base + encodeURIComponent(b.file);
+    return '<div class="bk"><a class="bk-cv" href="' + url + '" target="_blank" rel="noopener" title="فتحُ الكتاب">' + (b.cover ? '<img src="' + base + encodeURIComponent(b.cover) + '" alt="غلافُ ' + esc(b.title) + '" loading="lazy">' : '') + '</a>'
+      + '<div class="bk-t"><h4>' + esc(b.title) + '</h4><p>' + (b.sem && SEMS[b.sem] ? esc(SEMS[b.sem]) + ' · ' : '') + (b.pages ? ar(b.pages) + ' صفحة · ' : '') + (b.size ? ar(fmtSize(b.size)) : '') + '</p>'
+      + '<div class="bk-a"><a class="btn p s" href="' + url + '" download="' + esc(b.title) + '.pdf">' + ICO_DL + 'تحميل PDF</a><a class="btn s" href="' + url + '" target="_blank" rel="noopener">فتح</a></div></div></div>';
+  }
   async function loadLessons(force) {
     if (S.lessons && !force) return S.lessons;
     var r = await fetch('data/lessons/index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).catch(function () { return LS.get('sc_lessons_cache', { topics: [] }); });
@@ -497,7 +509,10 @@
         var n = m.items.filter(function (i) { return i.grade === g && i.sem === k; }).length + topicsFor(g, k).reduce(function (a, t) { return a + t.lessons.length; }, 0);
         html2 += '<a class="card hov" href="#/prep/' + g + '/' + k + '"><div class="kick">' + esc(GRADES[g]) + '</div><h3>' + esc(SEMS[k]) + '</h3><p>' + (n ? ar(n) + ' تحضيراً' : 'لا ملفّاتَ بعد') + '</p></a>';
       });
-      view.innerHTML = html2 + '</div>'; return;
+      html2 += '</div>';
+      var books = ((await loadBooks()).items || []).filter(function (b) { return String(b.grade) === String(g); }).sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
+      if (books.length) html2 += '<div class="books"><h3 class="bk-h">الكتبُ الدراسيّة — ' + esc(GRADES[g]) + '</h3><div class="bk-grid">' + books.map(bookCard).join('') + '</div></div>';
+      view.innerHTML = html2; return;
     }
     if (tp) { renderTopic(g, s, tp); return; }
     renderPrepFolder(g, s, crumbs);

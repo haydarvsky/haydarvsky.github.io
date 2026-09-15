@@ -555,6 +555,19 @@ button.period:disabled{cursor:default}
 .period.temp.fixed{border-style:solid;background:#FFF9EA}
 .period.temp.fixed.now{background:var(--green)}
 .tt select.fx{background:#FFF4DC;border-color:var(--gold);color:var(--amber);font-weight:700}
+/* كتبُ الصفّ */
+.books{margin-top:28px}
+.bk-h{font-size:24px;color:var(--green);margin:0 0 12px}
+.bk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px}
+.bk{display:flex;gap:14px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;transition:border-color var(--t-fast)}
+.bk:hover{border-color:rgba(217,164,65,.6)}
+.bk-cv{flex:0 0 auto;width:92px;border-radius:8px;overflow:hidden;box-shadow:0 10px 22px -14px rgba(6,34,25,.6);border:1px solid var(--line);line-height:0;background:#fff}
+.bk-cv img{width:100%;height:auto;display:block}
+.bk-t{flex:1;min-width:0}
+.bk-t h4{margin:0;font-size:20px;color:var(--green);line-height:1.35}
+.bk-t p{margin:2px 0 10px;font-size:14px;color:var(--muted)}
+.bk-a{display:flex;gap:6px;flex-wrap:wrap}
+.bk-a .btn svg{width:16px;height:16px}
 /* الجدولُ الأسبوعيُّ للعرضِ والطباعة */
 .ttseg{flex:0 0 auto}
 .ttscroll{overflow-x:auto;padding-bottom:4px}
