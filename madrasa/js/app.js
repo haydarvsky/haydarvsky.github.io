@@ -481,6 +481,7 @@
   }
   function ghToken() { for (var i = 0; i < TOKEN_KEYS.length; i++) { var v = localStorage.getItem(TOKEN_KEYS[i]); if (v) return v; } return ''; }
   function fmtSize(b) { return b > 1048576 ? (b / 1048576).toFixed(1).replace('.', '٫') + ' م.ب' : Math.max(1, Math.round(b / 1024)) + ' ك.ب'; }
+  function isHtmlFile(f) { return /\.html?$/i.test(String(f || '')); }
   function safeName(n) { return n.replace(/[\/\\#?%*:|"<>]+/g, '-').replace(/\s+/g, ' ').trim(); }
   async function prep(p) {
     var m = await loadPrep();
@@ -595,9 +596,11 @@
     var nInt = topicsFor(g, s).reduce(function (a, t) { return a + t.lessons.length; }, 0);
     var cnt = [];
     if (nInt) cnt.push(ar(nInt) + ' تحضيراً تفاعليّاً');
-    if (items.length) cnt.push(ar(items.length) + ' ملفَّ PDF');
+    var nPdf = items.filter(function (i) { return !isHtmlFile(i.file); }).length, nHtml = items.length - nPdf;
+    if (nPdf) cnt.push(ar(nPdf) + ' ملفَّ PDF');
+    if (nHtml) cnt.push(nHtml === 1 ? 'عرضَ سلايدات' : ar(nHtml) + ' عروضَ سلايدات');
     var html = crumbs + '<div class="ttl"><div><h2>' + esc(SEMS[s]) + '</h2><p>' + esc(GRADES[g]) + ' — ' + (cnt.length ? cnt.join(' · ') : 'المجلّدُ فارغ') + '</p></div>'
-      + '<div class="acts">' + (canUp ? '<button class="btn p" id="pickBtn">إضافةُ PDF</button>' : '<button class="btn" id="tokBtn">تفعيلُ الرفع</button>') + '</div></div>';
+      + '<div class="acts">' + (canUp ? '<button class="btn p" id="pickBtn">إضافةُ ملفّ</button>' : '<button class="btn" id="tokBtn">تفعيلُ الرفع</button>') + '</div></div>';
     var tps = topicsFor(g, s);
     if (tps.length) {
       html += '<div class="panel topics"><h3>التحضيراتُ التفاعلية</h3><div class="hint">تُعرَضُ في الموقع، وتُعدَّلُ في مكانِها، وتُطبَعُ PDF ببراندِك.</div><div class="grid">';
@@ -607,14 +610,14 @@
       html += '</div></div>';
     }
     html += '<div class="searchbar"><input id="prepQ" placeholder="ابحثْ بالعنوانِ أو الوحدةِ أو الدرس…" value="' + esc(q) + '"></div>';
-    if (canUp) html += '<div class="drop" id="drop"><b>أفلتْ ملفّاتَ PDF هنا</b>أو انقرْ للاختيار — يُرفَعُ الملفُّ إلى الموقعِ ويُحفَظُ باسمِه<input type="file" id="fileIn" accept="application/pdf" multiple hidden><div class="prog" id="prog" hidden><i></i></div></div>';
+    if (canUp) html += '<div class="drop" id="drop"><b>أفلتْ ملفّاتِ PDF أو عروضَ HTML هنا</b>أو انقرْ للاختيار — يُرفَعُ الملفُّ إلى الموقعِ ويُحفَظُ باسمِه<input type="file" id="fileIn" accept="application/pdf,text/html,.pdf,.html,.htm" multiple hidden><div class="prog" id="prog" hidden><i></i></div></div>';
     else html += '<div id="tokBox" hidden class="panel"><h3>رمزُ الرفع</h3><div class="hint">ألصقْ رمزَ GitHub (Contents R/W على المستودع) مرّةً واحدة؛ يُحفَظُ في هذا المتصفّح كما في مركزِ التحكّم.</div><div class="inline-add"><input id="tokIn" type="password" placeholder="ghp_…"><button class="btn p" id="tokSave">حفظ</button></div></div>';
     html += '<div class="files" id="files">';
-    if (!items.length) html += '<div class="empty"><b>' + (q ? 'لا نتائج' : 'لا ملفّاتِ PDF بعد') + '</b>' + (q ? 'جرّبْ كلمةً أخرى' : canUp ? 'أفلتْ أوّلَ ملفٍّ في المربّعِ أعلاه' : 'فعّلِ الرفعَ ثمّ أضفِ الملفّات') + '</div>';
+    if (!items.length) html += '<div class="empty"><b>' + (q ? 'لا نتائج' : 'لا ملفّاتٍ بعد') + '</b>' + (q ? 'جرّبْ كلمةً أخرى' : canUp ? 'أفلتْ أوّلَ ملفٍّ في المربّعِ أعلاه' : 'فعّلِ الرفعَ ثمّ أضفِ الملفّات') + '</div>';
     items.forEach(function (i) {
-      var url = 'prep/' + g + '/' + s + '/' + encodeURIComponent(i.file), meta = itemMeta(i);
-      html += '<div class="file" data-id="' + i.id + '"><div class="pdf">PDF</div><div class="t"><b title="' + esc(i.title) + '">' + esc(i.title) + '</b><small>' + (meta ? meta + ' · ' : '') + esc(i.file) + (i.size ? ' · ' + fmtSize(i.size) : '') + '</small></div>'
-        + '<div class="a"><a class="btn s" href="' + url + '" target="_blank" rel="noopener">عرض</a><a class="btn s p" href="' + url + '" download="' + esc(i.file) + '">تنزيل</a>'
+      var url = 'prep/' + g + '/' + s + '/' + encodeURIComponent(i.file), meta = itemMeta(i), isH = isHtmlFile(i.file);
+      html += '<div class="file" data-id="' + i.id + '"><div class="pdf' + (isH ? ' html' : '') + '">' + (isH ? 'HTML' : 'PDF') + '</div><div class="t"><b title="' + esc(i.title) + '">' + esc(i.title) + '</b><small>' + (meta ? meta + ' · ' : '') + esc(i.file) + (i.size ? ' · ' + fmtSize(i.size) : '') + '</small></div>'
+        + '<div class="a"><a class="btn s' + (isH ? ' p' : '') + '" href="' + url + '" target="_blank" rel="noopener">' + (isH ? 'فتحُ العرض' : 'عرض') + '</a><a class="btn s" href="' + url + '" download="' + esc(i.file) + '">تنزيل</a>'
         + (canUp ? '<button class="icon-btn" data-act="ren" title="تعديلُ البيانات"><svg viewBox="0 0 24 24"><path d="M4 20h4l10-10-4-4L4 16z"/></svg></button><button class="icon-btn" data-act="del" title="حذف"><svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg></button>' : '') + '</div></div>';
     });
     view.innerHTML = html + '</div>';
@@ -656,15 +659,15 @@
     catch (e) { fail(e); await loadPrep(true); throw e; }
   }
   async function uploadFiles(g, s, list) {
-    list = list.filter(function (f) { return /pdf$/i.test(f.name) || f.type === 'application/pdf'; });
-    if (!list.length) { toast('اخترْ ملفّاتَ PDF فقط', true); return; }
+    list = list.filter(function (f) { return /\.(pdf|html?)$/i.test(f.name) || f.type === 'application/pdf' || f.type === 'text/html'; });
+    if (!list.length) { toast('اخترْ ملفَّ PDF أو عرضَ HTML', true); return; }
     var prog = $('prog'), bar = prog.querySelector('i'); prog.hidden = false; bar.style.width = '5%';
     var files = [], now = today();
     for (var i = 0; i < list.length; i++) {
       var f = list[i], name = safeName(f.name);
       S.prep.items = S.prep.items.filter(function (x) { return !(x.grade === g && x.sem === s && x.file === name); });
       files.push({ path: PREFIX + 'prep/' + g + '/' + s + '/' + name, base64: await readB64(f) });
-      S.prep.items.push({ id: uid('p'), grade: g, sem: s, title: name.replace(/\.pdf$/i, ''), file: name, size: f.size, added: now, order: S.prep.items.length + 1, unit: '', lesson: '', week: '', date: '' });
+      S.prep.items.push({ id: uid('p'), grade: g, sem: s, title: name.replace(/\.(pdf|html?)$/i, ''), file: name, size: f.size, added: now, order: S.prep.items.length + 1, unit: '', lesson: '', week: '', date: '' });
       bar.style.width = (5 + 35 * (i + 1) / list.length) + '%';
     }
     try {
