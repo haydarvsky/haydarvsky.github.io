@@ -47,9 +47,12 @@
     admin:     { t: 'لوحةُ التحكّم',      p: '/admin/',     ico: 'gear', hide: true }
   };
   var MENU = ['', 'articles', 'books', 'brand', 'videos', 'edu', 'alharf'];
-  /* قائمةُ الأقسامِ وترسُ لوحةِ التحكّم ظاهرةٌ في الشريط.
+  /* قائمةُ الأقسامِ ظاهرةٌ في الشريط.
      لإخفائِها اجعلْ SHOW_MENU = false (ويُستثنى بوسمِ <meta name="hv-menu" content="on"> في صفحةٍ بعينها). */
   var SHOW_MENU = true;
+  /* لوحاتُ الإدارة لا تظهرُ للزائرِ ولا لصاحبِ الموقعِ في الواجهة — تُفتَحُ برابطِها المباشرِ وحدَه.
+     أعِدْ ترسَ اللوحةِ وبندَها في القائمةِ بجعلِ SHOW_ADMIN = true. */
+  var SHOW_ADMIN = false;
 
   function meta(n) { var m = document.querySelector('meta[name="' + n + '"]'); return m ? (m.getAttribute('content') || '').trim() : ''; }
   function isOwner() {
@@ -103,12 +106,12 @@
       return '<a href="' + ROOT + s.p + '"' + (k === seg ? ' aria-current="page"' : '') + '><span class="hv-i">' + I[s.ico] + '</span><span>' + esc(s.t) + (s.d ? '<small>' + esc(s.d) + '</small>' : '') + '</span></a>';
     }).join('')
       + '<a class="hv-ext" href="' + STORE + '" target="_blank" rel="noopener"><span class="hv-i">' + I.store + '</span><span>متجرُ السكربتات<small>أدواتُ إنديزاين</small></span>' + I.out + '</a>'
-      + (isOwner() ? '<span class="hv-sep"></span><a href="' + ROOT + '/admin/"' + (seg === 'admin' ? ' aria-current="page"' : '') + '><span class="hv-i">' + I.gear + '</span><span>لوحةُ التحكّم<small>كلُّ الأقسامِ من مكانٍ واحد</small></span></a>' : '');
+      + (SHOW_ADMIN && isOwner() ? '<span class="hv-sep"></span><a href="' + ROOT + '/admin/"' + (seg === 'admin' ? ' aria-current="page"' : '') + '><span class="hv-i">' + I.gear + '</span><span>لوحةُ التحكّم<small>كلُّ الأقسامِ من مكانٍ واحد</small></span></a>' : '');
 
     var acts = '<button type="button" class="hv-btn hv-back"><span class="hv-tx">رجوع</span>' + I.back + '</button>'
       + (showMenu ? '<div class="hv-menu"><button type="button" class="hv-btn hv-menu-btn" aria-haspopup="true" aria-expanded="false" aria-controls="hv-pop">' + I.grid + '<span class="hv-tx">الأقسام</span></button>'
         + '<div class="hv-pop" id="hv-pop" role="menu">' + items + '</div></div>'
-        + (isOwner() ? '<a class="hv-btn hv-gear" href="' + adminUrl + '" title="لوحةُ التحكّم" aria-label="لوحةُ التحكّم">' + I.gear + '</a>' : '') : '');
+        + (SHOW_ADMIN && isOwner() ? '<a class="hv-btn hv-gear" href="' + adminUrl + '" title="لوحةُ التحكّم" aria-label="لوحةُ التحكّم">' + I.gear + '</a>' : '') : '');
 
     var nav;
     if (mode === 'mini') {

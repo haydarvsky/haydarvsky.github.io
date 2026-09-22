@@ -218,8 +218,10 @@ var SOCIAL = {
   linkedin : 'https://www.linkedin.com/in/%D8%AD%D9%8A%D8%AF%D8%B1-%D8%A7%D9%84%D9%85%D8%B9%D8%A7%D8%AA%D9%8A%D9%82-95b846248/',
   youtube  : 'https://www.youtube.com/@Haydarvsky'
 };
-/* رابطُ لوحةِ التحكّم يظهرُ لصاحبِ الموقعِ وحدَه (بعد دخولِه مرّةً من /admin/) */
-try{ if(localStorage.getItem('hv_owner')||localStorage.getItem('hv_token')||localStorage.getItem('ar_token')||localStorage.getItem('bg_token')) document.getElementById('admLink').hidden=false; }catch(e){}
+/* رابطُ لوحةِ التحكّم لا يظهرُ لأحدٍ في الواجهة — تُفتَحُ اللوحةُ برابطِها المباشرِ وحدَه.
+   لإعادةِ ظهورِه لصاحبِ الموقعِ (بعد دخولِه مرّةً من /admin/) اجعلْ SHOW_ADMIN = true */
+var SHOW_ADMIN = false;
+try{ if(SHOW_ADMIN && (localStorage.getItem('hv_owner')||localStorage.getItem('hv_token')||localStorage.getItem('ar_token')||localStorage.getItem('bg_token'))) document.getElementById('admLink').hidden=false; }catch(e){}
 document.querySelectorAll('[data-net]').forEach(function(a){
   var url = SOCIAL[a.dataset.net];
   if(url){ a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.classList.remove('soon'); }
