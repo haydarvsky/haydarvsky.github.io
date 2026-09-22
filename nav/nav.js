@@ -47,9 +47,9 @@
     admin:     { t: 'لوحةُ التحكّم',      p: '/admin/',     ico: 'gear', hide: true }
   };
   var MENU = ['', 'articles', 'books', 'brand', 'videos', 'edu', 'alharf'];
-  /* إخفاءُ قائمةِ الأقسامِ وترسِ لوحةِ التحكّم من الشريط — يبقى رابطُ الرئيسةِ والمسارُ ورجوع.
-     أعِدْه بجعلِ SHOW_MENU = true (أو بوسمِ <meta name="hv-menu" content="on"> في الصفحة). */
-  var SHOW_MENU = false;
+  /* قائمةُ الأقسامِ وترسُ لوحةِ التحكّم ظاهرةٌ في الشريط.
+     لإخفائِها اجعلْ SHOW_MENU = false (ويُستثنى بوسمِ <meta name="hv-menu" content="on"> في صفحةٍ بعينها). */
+  var SHOW_MENU = true;
 
   function meta(n) { var m = document.querySelector('meta[name="' + n + '"]'); return m ? (m.getAttribute('content') || '').trim() : ''; }
   function isOwner() {
