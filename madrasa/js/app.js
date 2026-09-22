@@ -459,11 +459,17 @@
     var r = await fetch('data/books.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).catch(function () { return LS.get('sc_books_cache', { items: [] }); });
     S.books = r; LS.set('sc_books_cache', r); return r;
   }
+  /* موضعُ القراءةِ المحفوظُ في العارضِ (book.html) — لكي يكملَ المعلّمُ من حيثُ وقف */
+  function bookPos(id) {
+    try { var o = JSON.parse(localStorage.getItem('sc_book_' + id) || 'null'); return (o && +o.p > 1) ? +o.p : 0; } catch (e) { return 0; }
+  }
   function bookCard(b) {
     var base = 'books/' + encodeURIComponent(b.grade) + '/', url = base + encodeURIComponent(b.file);
-    return '<div class="bk"><a class="bk-cv" href="' + url + '" target="_blank" rel="noopener" title="فتحُ الكتاب">' + (b.cover ? '<img src="' + base + encodeURIComponent(b.cover) + '" alt="غلافُ ' + esc(b.title) + '" loading="lazy">' : '') + '</a>'
+    var open = 'book.html?id=' + encodeURIComponent(b.id), at = bookPos(b.id);
+    return '<div class="bk"><a class="bk-cv" href="' + open + '" title="فتحُ الكتاب">' + (b.cover ? '<img src="' + base + encodeURIComponent(b.cover) + '" alt="غلافُ ' + esc(b.title) + '" loading="lazy">' : '') + (at ? '<span class="bk-at">' + ar(at) + '</span>' : '') + '</a>'
       + '<div class="bk-t"><h4>' + esc(b.title) + '</h4><p>' + (b.sem && SEMS[b.sem] ? esc(SEMS[b.sem]) + ' · ' : '') + (b.pages ? ar(b.pages) + ' صفحة · ' : '') + (b.size ? ar(fmtSize(b.size)) : '') + '</p>'
-      + '<div class="bk-a"><a class="btn p s" href="' + url + '" download="' + esc(b.title) + '.pdf">' + ICO_DL + 'تحميل PDF</a><a class="btn s" href="' + url + '" target="_blank" rel="noopener">فتح</a></div></div></div>';
+      + '<div class="bk-a"><a class="btn p s" href="' + open + '">' + ICO_BOOK + (at ? 'أكملْ من صفحة ' + ar(at) : 'فتحُ الكتاب') + '</a>'
+      + '<a class="btn s" href="' + url + '" download="' + esc(b.title) + '.pdf" title="تحميلُ الملفِّ إلى الجهاز">' + ICO_DL + 'تحميل</a></div></div></div>';
   }
   async function loadLessons(force) {
     if (S.lessons && !force) return S.lessons;
@@ -1204,6 +1210,7 @@
   var TT_DAYS = [0, 1, 2, 3, 4];
   var ICO_PRINT = '<svg viewBox="0 0 24 24"><path d="M7 17H5a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M7 9V4h10v5M7 14h10v6H7z"/></svg>';
   var ICO_DL = '<svg viewBox="0 0 24 24"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19.5h14"/></svg>';
+  var ICO_BOOK = '<svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 1 6.5 18H20v3H6.5"/></svg>';
   function ttSeg(mode) {
     return '<div class="seg ttseg" id="ttSeg">' + [['wide', 'بالعرض'], ['tall', 'بالطول']].concat(RO() ? [] : [['edit', 'تعديل']]).map(function (o) { return '<button data-m="' + o[0] + '" aria-pressed="' + (o[0] === mode) + '">' + o[1] + '</button>'; }).join('') + '</div>';
   }

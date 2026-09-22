@@ -29,6 +29,16 @@
     }).catch(function () { return []; });
   }
 
+  /* توقيتُ حصصِ المعلّم — لتعملَ ساعةُ العرضِ في النسخةِ المنزَّلةِ كما تعملُ في الموقع */
+  function times() {
+    try {
+      var core = JSON.parse(localStorage.getItem('sc_core_v1' + (FB.ws ? FB.ws() : '')) || 'null');
+      var st = core && core.settings;
+      if (!st) return null;
+      return { times: st.times || null, marks: st.marks || null };
+    } catch (e) { return null; }
+  }
+
   function build(id, base) {
     base = base || '';
     return Promise.all([
@@ -45,7 +55,7 @@
       html = html.split('/img/logo-cream.svg').join(logoURI);
       /* لا دخولَ ولا بصمةَ في الملفِّ المنزَّل */
       html = html.replace(/<script src="js\/(fb|bio)\.js[^"]*"><\/script>\s*/g, '');
-      var env = { deck: deck, id: id, me: me ? { name: me.name, short: me.short, school: me.school } : null, classes: cls, at: new Date().toISOString() };
+      var env = { deck: deck, id: id, me: me ? { name: me.name, short: me.short, school: me.school } : null, classes: cls, settings: times(), at: new Date().toISOString() };
       html = html.replace('<script>\n(function(){', '<script>window.__DECK_OFFLINE__=' + js(env) + ';</script>\n<script>\n(function(){');
       if (html.indexOf('__DECK_OFFLINE__') < 0) throw new Error('بنيةُ ملفِّ العرضِ تغيّرت — تعذّر التضمين');
       return { html: html, name: 'عرض — ' + safeName(deck.title || id) + '.html' };

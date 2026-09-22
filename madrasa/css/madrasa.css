@@ -570,6 +570,10 @@ button.period:disabled{cursor:default}
 .bk:hover{border-color:rgba(217,164,65,.6)}
 .bk-cv{flex:0 0 auto;width:92px;border-radius:8px;overflow:hidden;box-shadow:0 10px 22px -14px rgba(6,34,25,.6);border:1px solid var(--line);line-height:0;background:#fff}
 .bk-cv img{width:100%;height:auto;display:block}
+/* شارةُ آخرِ صفحةٍ وقف عندها المعلّم */
+.bk-cv{position:relative}
+.bk-at{position:absolute;inset-inline-end:0;bottom:0;background:var(--gold);color:var(--green-ink,#062219);font-size:12.5px;font-weight:700;
+  line-height:1.6;padding:0 8px;border-radius:8px 0 0 0;box-shadow:0 -4px 12px -8px rgba(6,34,25,.7)}
 .bk-t{flex:1;min-width:0}
 .bk-t h4{margin:0;font-size:20px;color:var(--green);line-height:1.35}
 .bk-t p{margin:2px 0 10px;font-size:14px;color:var(--muted)}

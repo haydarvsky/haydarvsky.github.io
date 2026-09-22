@@ -1,6 +1,6 @@
 /* مدرستي — عاملُ الخدمة: هيكلُ التطبيقِ من الذاكرة، والبياناتُ من الشبكةِ أوّلاً */
-var V = 'madrasa-v22';
-var SHELL = ['/madrasa/', '/madrasa/index.html', '/madrasa/css/madrasa.css?v=22', '/madrasa/js/fb.js?v=22', '/madrasa/js/charts.js?v=22', '/madrasa/js/app.js?v=22', '/madrasa/js/deck-export.js?v=22', '/madrasa/manifest.webmanifest',
+var V = 'madrasa-v23';
+var SHELL = ['/madrasa/', '/madrasa/index.html', '/madrasa/css/madrasa.css?v=23', '/madrasa/js/fb.js?v=23', '/madrasa/js/charts.js?v=23', '/madrasa/js/app.js?v=23', '/madrasa/js/deck-export.js?v=23', '/madrasa/book.html', '/madrasa/manifest.webmanifest',
   '/admin/js/gh-api.js', '/img/logo-cream.svg', '/img/logo-dark.svg', '/fonts/sakkal-400.woff2', '/fonts/sakkal-700.woff2', '/fonts/poster-700.woff2', '/fonts/poster-900.woff2', '/nav/nav.js', '/nav/nav.css'];
 self.addEventListener('install', function (e) { e.waitUntil(caches.open(V).then(function (c) { return Promise.all(SHELL.map(function (u) { return c.add(u).catch(function () { }); })); }).then(function () { return self.skipWaiting(); })); });
 self.addEventListener('activate', function (e) { e.waitUntil(caches.keys().then(function (ks) { return Promise.all(ks.filter(function (k) { return k !== V; }).map(function (k) { return caches.delete(k); })); }).then(function () { return self.clients.claim(); })); });
