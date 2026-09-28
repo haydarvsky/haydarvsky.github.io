@@ -685,7 +685,7 @@
   /* ---------------- الفصول ---------------- */
   function classCard(c) {
     return '<div class="card hov cls-card"><span class="grade-badge">' + esc(GRADES[c.grade] || '') + '</span><h3><a href="#/class/' + c._id + '">' + esc(c.name) + '</a></h3><p class="students-n">' + ar((c.students || []).length) + ' متعلّماً' + (c.archived ? ' · مؤرشف' + (c.year ? ' — ' + esc(c.year) : '') : '') + '</p>'
-      + '<div class="crow">' + (c.archived ? '' : '<a class="btn s p" href="#/class/' + c._id + '">المتابعةُ اليومية</a>') + '<a class="btn s g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a><a class="btn s" href="#/class/' + c._id + '/students">المتعلّمون</a>'
+      + '<div class="crow">' + (c.archived ? '' : '<a class="btn s p" href="#/class/' + c._id + '">المتابعةُ اليومية</a>') + '<a class="btn s g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a><a class="btn s" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn s" href="#/class/' + c._id + '/survey">المسحُ التشخيصي</a>'
       + (RO() ? '' : '<span class="cman"><button class="icon-btn" data-cm="edit" data-id="' + c._id + '" title="تعديلُ الفصل"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/></svg></button><button class="icon-btn del" data-cm="del" data-id="' + c._id + '" title="حذفُ الفصل"><svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg></button></span>')
       + '</div></div>';
   }
@@ -760,6 +760,7 @@
     var c = cls(p[0]); if (!c) { location.hash = '#/classes'; return; }
     if (p[1] === 'report') return classReport(c);
     if (p[1] === 'students') return studentsManage(c);
+    if (p[1] === 'survey') return surveyView(c, p[2]);
     return dailyView(c);
   }
   async function saveClass(c, what) {
@@ -842,7 +843,7 @@
     var alerts = {}; collectAlerts().forEach(function (a) { if (a.c._id === c._id) alerts[a.s.id] = 1; });
     var q = (S.stuQ || '').trim();
     var html = classCrumb(c) + '<div class="ttl"><div><h2>' + esc(c.name) + '</h2><p>' + ar(c.students.length) + ' متعلّماً · حاضرٌ ' + ar(c.students.length - absN) + (absN ? ' · غائبٌ ' + ar(absN) : '') + (taken ? ' <span class="taken">✓ تمّ التحضير</span>' : '') + '</p></div>'
-      + '<div class="acts">' + (ro ? '' : '<button class="btn p" id="rndBtn"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/></svg>اختيارٌ عشوائي</button>') + '<a class="btn" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a></div></div>';
+      + '<div class="acts">' + (ro ? '' : '<button class="btn p" id="rndBtn"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/></svg>اختيارٌ عشوائي</button>') + '<a class="btn" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn" href="#/class/' + c._id + '/survey">المسحُ التشخيصي</a><a class="btn g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a></div></div>';
     html += '<div class="datebar"><button class="icon-btn" id="dPrev" title="اليومُ التالي"><svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg></button>'
       + '<label class="d" style="cursor:pointer;position:relative">' + DAYS[d.getDay()] + ' ' + ar(d.getDate()) + ' ' + MONTHS[d.getMonth()] + '<small>' + esc(hijri(d)) + '</small><input type="date" id="dPick" value="' + date + '"></label>'
       + '<button class="icon-btn" id="dNext" title="اليومُ السابق"><svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg></button>' + (isToday ? '' : '<button class="btn s" id="dToday">اليوم</button>') + '</div>';
@@ -1088,6 +1089,7 @@
     var c = cls(p[0]); if (!c) { location.hash = '#/classes'; return; }
     var s = (c.students || []).filter(function (x) { return x.id === p[1]; })[0] || { id: p[1], name: 'متعلّمٌ محذوف' };
     var map = await loadDays(c._id);
+    await svLoad(c._id).catch(function () { });
     function render() {
       var R = periodRange(), evs = eventsIn(map, R.from, R.to, s.id), counts = {};
       TYPES.forEach(function (t) { counts[t.key] = evs.filter(function (e) { return e.type === t.key; }).length; });
@@ -1103,6 +1105,7 @@
       html += '<div class="tile" style="--tc:var(--green)"><div class="l"><i></i>درجةُ السلوك</div><div class="v sc">' + scoreHTML(sc) + '</div><div class="s">بأوزانِ الإعدادات</div></div>';
       TYPES.filter(function (t) { return t.key !== 'note'; }).forEach(function (t) { html += '<div class="tile" style="--tc:' + t.color + '"><div class="l"><i></i>' + t.label + '</div><div class="v">' + ar(counts[t.key]) + '</div><div class="s">' + (t.key === 'absent' ? 'يومَ غياب' : 'مرّة') + '</div></div>'; });
       html += '</div>';
+      html += svStudentPanel(c, s);
       html += '<div class="panel nobrief"><h3>الإيقاعُ الأسبوعي</h3><div class="hint">عددُ التسجيلاتِ في كلِّ أسبوعٍ من المدّة، مكدَّسةً بنوعِها (الأقدمُ يميناً)</div><div class="chart" id="wk"></div>' + LEGEND + '</div>';
       var cb = catBars(evs, 'star'), bb = catBars(evs, 'bad');
       if (cb || bb) html += '<div class="today" style="margin-bottom:0"><div class="panel"><h3>أنواعُ المشاركة</h3>' + (cb || '<div class="hint">لا مشاركاتَ مصنّفة</div>') + '</div><div class="panel"><h3>أنواعُ السلوك</h3>' + (bb || '<div class="hint">لا تسجيلاتَ سلوك</div>') + '</div></div>';
@@ -1132,6 +1135,172 @@
     $('shClose').onclick = closeSheet;
     $('pmCopy').onclick = function () { var v = $('pmsg').value; (navigator.clipboard ? navigator.clipboard.writeText(v) : Promise.reject()).then(function () { toast('نُسخ'); }, function () { $('pmsg').select(); document.execCommand('copy'); toast('نُسخ'); }); };
     $('pmBrief').onclick = function () { closeSheet(); document.body.classList.add('brief'); setTimeout(function () { window.print(); document.body.classList.remove('brief'); }, 300); };
+  }
+
+  /* ---------------- المسحُ التشخيصي (إملائيٌّ وقرائيّ) ----------------
+     وثيقةٌ لكلِّ فصلٍ في مساحةِ الإعدادات: sc_meta/survey_<cls> = { cls, imla:{date,res}, qira:{date,res} }
+     res[sid] = { s:{k1:1|0 …}, n:'ملاحظة' } — 1 صحٌّ/قوّة، 0 خطأٌ/ضعف، والغائبُ لم يُقيَّمْ بعد */
+  var SV = {
+    imla: { name: 'المسحُ الإملائي', short: 'الإملائي', yes: 'صح', no: 'خطأ', skills: [
+      { k: 'wasl', t: 'همزتا الوصلِ والقطع', s: 'الوصل والقطع' },
+      { k: 'lam', t: 'اللامُ الشمسيّةُ والقمريّة', s: 'الشمسية والقمرية' },
+      { k: 'taa', t: 'التاءُ المربوطةُ والمفتوحة', s: 'التاءان' },
+      { k: 'tanween', t: 'التنوينُ بأنواعِه', s: 'التنوين' },
+      { k: 'aljar', t: 'اتّصالُ «ال» بحروفِ الجرّ', s: '«ال» مع الجر' },
+      { k: 'alif', t: 'الألفُ الليّنة', s: 'الألف الليّنة' },
+      { k: 'hmid', t: 'الهمزةُ المتوسّطة', s: 'المتوسّطة' },
+      { k: 'hend', t: 'الهمزةُ المتطرّفة', s: 'المتطرّفة' }] },
+    qira: { name: 'المسحُ القرائي', short: 'القرائي', yes: 'قوّة', no: 'ضعف', skills: [
+      { k: 'flow', t: 'القراءةُ المتّصلة', s: 'الاتّصال' },
+      { k: 'makharij', t: 'صحّةُ مخارجِ الحروف', s: 'المخارج' },
+      { k: 'dabt', t: 'سلامةُ الضبط', s: 'الضبط' },
+      { k: 'voice', t: 'وضوحُ الصوت', s: 'الصوت' },
+      { k: 'waqf', t: 'حسنُ الوصلِ والوقف', s: 'الوصل والوقف' },
+      { k: 'speed', t: 'السرعةُ المناسبة', s: 'السرعة' },
+      { k: 'expr', t: 'القراءةُ المعبّرة', s: 'التعبير' },
+      { k: 'tone', t: 'التنغيمُ والإلقاءُ المعبّر', s: 'التنغيم' }] }
+  };
+  var SV_TEXT = '<h4>إصلاحُ البيئةِ الاجتماعية</h4><p>للبيئةِ الاجتماعيةِ الأثرُ الأقوى في النفوسِ والأفئدة، فأصلحوا أيّها العقلاءُ أمرَها، وارفعوا من شأنِها، وبثّوا في الجماعاتِ والأفرادِ حبَّ الخيرِ والحقِّ والتقوى، فإن فعلتم خلقتم نشأً صالحاً مؤثّراً، المروءةُ دينُه، والتآلفُ غايتُه، والفضيلةُ دأبُه، والتحرّرُ من كلِّ داءٍ مطمحُه. يأبى التواكلَ ويتحاشى الرذائل، ويحيدُ عن الضلال، وينأى عن مواطنِ البغي، ويسعى لدنياه كأنّه يعيشُ أبداً، ويسعى لآخرتِه كأنّه يموتُ غداً. قال أحدُ الشعراء:</p><p class="bayt"><span>أقبلْ على النفسِ فاستكملْ فضائلَها</span><span>فأنت بالنفسِ لا بالجسمِ إنسانُ</span></p><p>فهلّا فعلتم ذلك أيّها الحكماءُ المصلحون، فاستحققتم به ولاءَ الأمّة، وكنتم ملجأَها الأمينَ إذا ما اربدّتِ الحياةُ وأحاطتها النائباتُ من كلِّ جانب.</p>';
+  function svEmpty(cid) { return { cls: cid, imla: { date: '', res: {} }, qira: { date: '', res: {} } }; }
+  async function svLoad(cid) {
+    S.sv = S.sv || {};
+    if (S.sv[cid]) return S.sv[cid];
+    var d = null;
+    try { d = await DB.get(C('sc_meta'), 'survey_' + cid); } catch (e) { if (!FB.isNetErr(e)) throw e; d = LS.get(K('sc_sv_') + cid, null); }
+    var q = queue().filter(function (x) { return x.col === C('sc_meta') && x.id === 'survey_' + cid; })[0];
+    if (q) d = q.data;
+    d = Object.assign(svEmpty(cid), d || {}); delete d._id; delete d._path;
+    ['imla', 'qira'].forEach(function (k) { d[k] = Object.assign({ date: '', res: {} }, d[k] || {}); d[k].res = d[k].res || {}; });
+    S.sv[cid] = d; LS.set(K('sc_sv_') + cid, d);
+    return d;
+  }
+  var svTimer = {};
+  function svSave(cid, now) {
+    var d = S.sv[cid]; LS.set(K('sc_sv_') + cid, d);
+    clearTimeout(svTimer[cid]);
+    var go = function () { return write('set', C('sc_meta'), 'survey_' + cid, d).catch(fail); };
+    if (now) return go();
+    svTimer[cid] = setTimeout(go, 700);
+  }
+  /* خلاصةُ طالبٍ في مسح: قوّةٌ وضعفٌ ونسبةٌ ومستوى */
+  function svSum(kind, r) {
+    var sk = SV[kind].skills, st = (r && r.s) || {}, yes = [], no = [];
+    sk.forEach(function (x) { if (st[x.k] === 1) yes.push(x); else if (st[x.k] === 0) no.push(x); });
+    var n = yes.length + no.length, pct = n ? Math.round(100 * yes.length / n) : null;
+    var lv = pct === null ? null : pct >= 85 ? { t: 'متمكّن', c: 'lv4' } : pct >= 60 ? { t: 'جيّد', c: 'lv3' } : pct >= 35 ? { t: 'يحتاجُ دعماً', c: 'lv2' } : { t: 'علاجٌ مكثّف', c: 'lv1' };
+    return { yes: yes, no: no, n: n, full: n === sk.length, pct: pct, lv: lv };
+  }
+  function svLevelHTML(sm) { return sm.lv ? '<span class="sv-lv ' + sm.lv.c + '">' + sm.lv.t + ' · ' + ar(sm.pct) + '٪</span>' : '<span class="sv-lv">لم يُقيَّمْ</span>'; }
+  function svChips(list, cls) { return list.map(function (x) { return '<span class="sv-chip ' + cls + '">' + esc(x.t) + '</span>'; }).join(''); }
+
+  async function surveyView(c, kind) {
+    kind = SV[kind] ? kind : (S.svKind || 'qira'); S.svKind = kind;
+    var d = await svLoad(c._id), ro = RO() || c.archived, K2 = SV[kind];
+    var students = c.students || [];
+    function render() {
+      var box = d[kind], res = box.res;
+      var done = students.filter(function (s) { return svSum(kind, res[s.id]).n; }).length;
+      var stat = K2.skills.map(function (x) { var y = 0, n = 0; students.forEach(function (s) { var v = res[s.id] && res[s.id].s && res[s.id].s[x.k]; if (v === 1) y++; else if (v === 0) n++; }); return { x: x, y: y, n: n, p: y + n ? Math.round(100 * y / (y + n)) : null }; });
+      var rated = stat.filter(function (t) { return t.p !== null; });
+      var best = rated.slice().sort(function (a, b) { return b.p - a.p; })[0], worst = rated.slice().sort(function (a, b) { return a.p - b.p; })[0];
+      var avg = rated.length ? Math.round(rated.reduce(function (a, t) { return a + t.p; }, 0) / rated.length) : null;
+      var html = classCrumb(c, 'المسحُ التشخيصي') + reportHead('نتيجةُ ' + K2.name + ' — ' + c.name, 'عددُ المتعلّمين ' + ar(students.length) + (box.date ? ' · ' + fmtDate(box.date) : ''));
+      html += '<div class="ttl"><div><h2>المسحُ التشخيصي</h2><p>' + esc(c.name) + ' · قُيِّم ' + ar(done) + ' من ' + ar(students.length) + '</p></div><div class="acts"><a class="btn" href="#/class/' + c._id + '">المتابعةُ اليومية</a><button class="btn" id="svPrint">طباعة / PDF</button>' + (ro ? '' : '<button class="btn p" id="svQuick"><svg viewBox="0 0 24 24"><path d="M13 3L5 14h6l-1 7 8-11h-6z"/></svg>التقييمُ السريع</button>') + '</div></div>';
+      html += '<div class="sv-top"><div class="seg sv-kind" id="svKind"><button data-k="imla" aria-pressed="' + (kind === 'imla') + '">المسحُ الإملائي</button><button data-k="qira" aria-pressed="' + (kind === 'qira') + '">المسحُ القرائي</button></div>'
+        + (ro ? '' : '<label class="sv-date">تاريخُ المسح <input type="date" id="svDate" value="' + esc(box.date || '') + '"></label>') + '</div>';
+      html += '<div class="tiles sv-tiles"><div class="tile hero"><div class="l">نسبةُ الإتقانِ العامّة</div><div class="v">' + (avg === null ? '—' : ar(avg) + '<small>٪</small>') + '</div><div class="s">متوسّطُ المهاراتِ الثماني</div></div>'
+        + '<div class="tile" style="--tc:var(--green)"><div class="l"><i></i>قُيِّم</div><div class="v">' + ar(done) + '<small>/' + ar(students.length) + '</small></div><div class="s">متعلّماً</div></div>'
+        + '<div class="tile" style="--tc:var(--c-wc)"><div class="l"><i></i>أقوى مهارة</div><div class="v sv-tv">' + (best ? esc(best.x.s) : '—') + '</div><div class="s">' + (best ? ar(best.p) + '٪' : '') + '</div></div>'
+        + '<div class="tile" style="--tc:var(--c-absent)"><div class="l"><i></i>أضعفُ مهارة</div><div class="v sv-tv">' + (worst ? esc(worst.x.s) : '—') + '</div><div class="s">' + (worst ? ar(worst.p) + '٪' : '') + '</div></div></div>';
+      /* جدولُ نتيجةِ الفصل — على نسقِ ورقةِ «نتيجة المسح التشخيصي» */
+      html += '<div class="panel"><h3>نتيجةُ الفصلِ بالمهارة</h3><div class="hint">عددُ من أصاب ومن أخطأ في كلِّ مهارة، ونسبةُ الإتقان — وما دون ٥٠٪ يحتاجُ علاجاً جماعيّاً</div><table class="log sv-res"><thead><tr><th>المهارة</th><th>' + K2.yes + '</th><th>' + K2.no + '</th><th>الإتقان</th><th>الملاحظات</th></tr></thead><tbody>'
+        + stat.map(function (t) { var w = t.p === null ? 0 : t.p; var note = t.p === null ? '' : t.p < 50 ? 'علاجٌ جماعيّ' : t.p < 75 ? 'علاجٌ فرديّ لـ' + ar(t.n) : 'متمكّنون'; return '<tr><td>' + esc(t.x.t) + '</td><td class="num">' + ar(t.y) + '</td><td class="num">' + ar(t.n) + '</td><td><div class="sv-bar"><i style="width:' + w + '%;background:' + (t.p === null ? 'transparent' : t.p < 50 ? 'var(--c-absent)' : t.p < 75 ? 'var(--gold)' : 'var(--c-wc)') + '"></i><b class="num">' + (t.p === null ? '—' : ar(t.p) + '٪') + '</b></div></td><td class="sv-note">' + note + '</td></tr>'; }).join('')
+        + '</tbody></table></div>';
+      /* مصفوفةُ الطلاب */
+      var q = (S.svQ || '').trim();
+      html += '<div class="panel"><h3>المتعلّمون</h3><div class="hint">' + (ro ? '' : 'انقرِ الخانةَ لتبدّلَها: ' + K2.yes + ' ← ' + K2.no + ' ← فارغة · انقرِ الاسمَ لفتحِ بطاقتِه السريعة') + '</div>'
+        + '<div class="searchbar"><input id="svQ" placeholder="ابحثْ باسمٍ أو حرف…" value="' + esc(q) + '"></div>'
+        + '<div class="sv-scroll"><table class="sv-mx"><thead><tr><th class="nm">المتعلّم</th>' + K2.skills.map(function (x) { return '<th title="' + esc(x.t) + '"><span>' + esc(x.s) + '</span></th>'; }).join('') + '<th>المستوى</th></tr></thead><tbody>'
+        + students.map(function (s, i) {
+          if (q && s.name.indexOf(q) < 0) return '';
+          var r = res[s.id], st = (r && r.s) || {}, sm = svSum(kind, r);
+          return '<tr data-sid="' + s.id + '"><td class="nm"><button class="sv-open" data-sid="' + s.id + '"><span class="num">' + ar(i + 1) + '</span>' + esc(s.name) + (r && r.n ? ' <em title="' + esc(r.n) + '">✎</em>' : '') + '</button></td>'
+            + K2.skills.map(function (x) { var v = st[x.k]; return '<td><button class="sv-c ' + (v === 1 ? 'y' : v === 0 ? 'n' : '') + '" data-k="' + x.k + '"' + (ro ? ' disabled' : '') + ' aria-label="' + esc(x.t) + '">' + (v === 1 ? '✓' : v === 0 ? '✗' : '') + '</button></td>'; }).join('')
+            + '<td>' + svLevelHTML(sm) + '</td></tr>';
+        }).join('') + '</tbody></table></div></div>';
+      html += '<details class="panel sv-text noprint"><summary><b>نصُّ المسح</b> — إصلاحُ البيئةِ الاجتماعية (' + (kind === 'imla' ? 'يُملى على المتعلّمين' : 'يقرؤه المتعلّمُ جهراً') + ')</summary><div class="sv-passage">' + SV_TEXT + '</div></details>';
+      view.innerHTML = html;
+      $('svPrint').onclick = function () { window.print(); };
+      $('svKind').onclick = function (e) { var b = e.target.closest('button'); if (!b) return; kind = b.dataset.k; S.svKind = kind; K2 = SV[kind]; render(); };
+      $('svQ').oninput = function () { S.svQ = this.value; var pos = this.selectionStart; render(); var i = $('svQ'); i.focus(); i.setSelectionRange(pos, pos); };
+      view.querySelectorAll('.sv-open').forEach(function (b) { b.onclick = function () { svFocus(c, kind, b.dataset.sid, render); }; });
+      if (ro) return;
+      $('svDate').onchange = function () { box.date = this.value; svSave(c._id); };
+      $('svQuick').onclick = function () { var first = students.filter(function (s) { return !svSum(kind, res[s.id]).full; })[0] || students[0]; if (first) svFocus(c, kind, first.id, render); };
+      view.querySelector('.sv-mx').addEventListener('click', function (e) {
+        var b = e.target.closest('.sv-c'); if (!b) return;
+        var sid = b.closest('tr').dataset.sid, k = b.dataset.k;
+        var r = res[sid] = res[sid] || { s: {} }; r.s = r.s || {};
+        var v = r.s[k]; if (v === 1) r.s[k] = 0; else if (v === 0) delete r.s[k]; else r.s[k] = 1;
+        if (!box.date) box.date = today();
+        svSave(c._id); render();
+      });
+    }
+    render();
+  }
+
+  /* بطاقةُ التقييمِ السريع: طالبٌ واحدٌ بأزرارٍ كبيرة، وخلاصةُ قوّتِه وضعفِه فوراً */
+  function svFocus(c, kind, sid, after) {
+    var d = S.sv[c._id], K2 = SV[kind], students = c.students || [], ro = RO() || c.archived;
+    var ov = document.createElement('div'); ov.className = 'sv-focus'; document.body.appendChild(ov);
+    document.body.classList.add('sv-lock');
+    function close() { svSave(c._id, true); ov.remove(); document.body.classList.remove('sv-lock'); document.removeEventListener('keydown', onKey); if (after) after(); }
+    function go(delta) { var i = students.findIndex(function (s) { return s.id === sid; }); var j = i + delta; if (j < 0 || j >= students.length) return; sid = students[j].id; draw(); }
+    function nextOpen() { var i = students.findIndex(function (s) { return s.id === sid; }); for (var j = 1; j <= students.length; j++) { var s = students[(i + j) % students.length]; if (!svSum(kind, d[kind].res[s.id]).full) { sid = s.id; draw(); return; } } toast('قُيِّم الجميع ✓'); close(); }
+    function onKey(e) { if (e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return; if (e.key === 'Escape') close(); if (e.key === 'ArrowLeft') go(1); if (e.key === 'ArrowRight') go(-1); }
+    document.addEventListener('keydown', onKey);
+    function draw() {
+      var box = d[kind], res = box.res, i = students.findIndex(function (s) { return s.id === sid; }), s = students[i];
+      var r = res[sid] || { s: {} }, st = r.s || {}, sm = svSum(kind, r);
+      var done = students.filter(function (x) { return svSum(kind, res[x.id]).full; }).length;
+      ov.innerHTML = '<div class="svf-in">'
+        + '<div class="svf-hd"><button class="icon-btn" data-a="close" title="إغلاق"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'
+        + '<div class="svf-k">' + K2.name + ' · ' + esc(c.name) + '<small>اكتمل ' + ar(done) + ' من ' + ar(students.length) + '</small></div>'
+        + '<select id="svfPick">' + students.map(function (x, j) { var f = svSum(kind, res[x.id]); return '<option value="' + x.id + '"' + (x.id === sid ? ' selected' : '') + '>' + (f.full ? '✓ ' : f.n ? '◐ ' : '') + ar(j + 1) + '. ' + esc(x.name) + '</option>'; }).join('') + '</select></div>'
+        + '<div class="svf-who"><button class="icon-btn" data-a="prev" title="السابق"' + (i <= 0 ? ' disabled' : '') + '><svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg></button><div><h2>' + esc(s.name) + '</h2>' + svLevelHTML(sm) + '</div><button class="icon-btn" data-a="next" title="التالي"' + (i >= students.length - 1 ? ' disabled' : '') + '><svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg></button></div>'
+        + '<div class="svf-sk">' + K2.skills.map(function (x) { var v = st[x.k]; return '<div class="svf-row"><span>' + esc(x.t) + '</span><div class="svf-bt"><button class="y' + (v === 1 ? ' on' : '') + '" data-k="' + x.k + '" data-v="1"' + (ro ? ' disabled' : '') + '>✓ ' + K2.yes + '</button><button class="n' + (v === 0 ? ' on' : '') + '" data-k="' + x.k + '" data-v="0"' + (ro ? ' disabled' : '') + '>✗ ' + K2.no + '</button></div></div>'; }).join('') + '</div>'
+        + (ro ? '' : '<div class="svf-q"><button class="btn s" data-a="allY">الكلُّ ' + K2.yes + '</button><button class="btn s" data-a="clear">مسحُ البطاقة</button></div>')
+        + '<div class="svf-sum"><div><b class="y">نقاطُ القوّة</b>' + (svChips(sm.yes, 'y') || '<span class="svf-none">—</span>') + '</div><div><b class="n">نقاطُ الضعف</b>' + (svChips(sm.no, 'n') || '<span class="svf-none">—</span>') + '</div></div>'
+        + '<textarea id="svfNote" placeholder="ملاحظةٌ على ' + (kind === 'qira' ? 'قراءتِه' : 'إملائِه') + ' (اختياريّة)"' + (ro ? ' readonly' : '') + '>' + esc(r.n || '') + '</textarea>'
+        + '<div class="svf-ft"><button class="btn" data-a="close">إنهاء</button>' + (ro ? '' : '<button class="btn p" data-a="nextOpen">حفظٌ والتالي ←</button>') + '</div></div>';
+      ov.querySelector('#svfPick').onchange = function () { sid = this.value; draw(); };
+      var nt = ov.querySelector('#svfNote'); if (!ro) nt.oninput = function () { var rr = res[sid] = res[sid] || { s: {} }; rr.n = nt.value.trim(); if (!rr.n) delete rr.n; svSave(c._id); };
+    }
+    ov.addEventListener('click', function (e) {
+      var b = e.target.closest('button'); if (!b || b.disabled) return;
+      var box = d[kind], res = box.res;
+      if (b.dataset.k) {
+        var r = res[sid] = res[sid] || { s: {} }; r.s = r.s || {};
+        var v = +b.dataset.v; if (r.s[b.dataset.k] === v) delete r.s[b.dataset.k]; else r.s[b.dataset.k] = v;
+        if (!box.date) box.date = today(); svSave(c._id); draw(); return;
+      }
+      var a = b.dataset.a;
+      if (a === 'close') close(); else if (a === 'prev') go(-1); else if (a === 'next') go(1); else if (a === 'nextOpen') { svSave(c._id, true); nextOpen(); }
+      else if (a === 'allY') { var rr = res[sid] = res[sid] || { s: {} }; rr.s = rr.s || {}; K2.skills.forEach(function (x) { if (rr.s[x.k] === undefined) rr.s[x.k] = 1; }); if (!box.date) box.date = today(); svSave(c._id); draw(); }
+      else if (a === 'clear') { if (res[sid]) { delete res[sid].s; res[sid].s = {}; } svSave(c._id); draw(); }
+    });
+    draw();
+  }
+
+  /* لوحةُ المسحِ في صفحةِ المتعلّم */
+  function svStudentPanel(c, s) {
+    var d = S.sv && S.sv[c._id]; if (!d) return '';
+    var cols = ['imla', 'qira'].map(function (k) {
+      var r = d[k].res[s.id], sm = svSum(k, r);
+      return '<div class="sv-stu"><div class="sv-stu-h"><b>' + SV[k].name + '</b>' + svLevelHTML(sm) + '</div>'
+        + (sm.n ? '<div class="sv-stu-l"><small class="y">القوّة</small>' + (svChips(sm.yes, 'y') || '—') + '</div><div class="sv-stu-l"><small class="n">الضعف</small>' + (svChips(sm.no, 'n') || '—') + '</div>' + (r && r.n ? '<div class="sv-stu-note">' + esc(r.n) + '</div>' : '') : '<div class="hint" style="margin:0">لم يُقيَّمْ بعد</div>') + '</div>';
+    }).join('');
+    return '<div class="panel sv-panel"><h3>المسحُ التشخيصي</h3><div class="hint">' + (RO() || c.archived ? '' : '<a href="#/class/' + c._id + '/survey" class="sv-link">فتحُ المسح ←</a>') + '</div><div class="sv-stu-g">' + cols + '</div></div>';
   }
 
   /* ---------------- تقريرُ الفصل ---------------- */
