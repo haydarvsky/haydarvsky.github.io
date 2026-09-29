@@ -379,10 +379,73 @@ section.sec{padding:64px 0 10px}
   section.sec{padding-top:46px}
   .sh .no{width:44px;height:44px;font-size:21px;border-radius:13px}
   .card,.game,.tq{padding:16px}
-  .sky{height:300px}
+  .sky{height:390px}.sky .card2 .ee{font-size:16px}.sky .card2{padding:8px 14px}
   .sky .card2 .vv{font-size:28px}
 }
 @media print{.top,.rain,.end input{display:none}.exi .x{grid-template-rows:1fr}}
+
+/* ===================== وضعُ الشرائح ===================== */
+html{scroll-behavior:auto}
+body{padding-bottom:66px}
+section.sec{padding:0}
+.slide{display:none;flex-direction:column;justify-content:center;min-height:calc(100svh - var(--hvnav,0px) - 130px);padding:22px 0 30px}
+.slide.on{display:flex;animation:sin .55s var(--e-out)}
+.slide.on.bk{animation-name:sinb}
+@keyframes sin{from{opacity:0;transform:translateX(-50px)}}
+@keyframes sinb{from{opacity:0;transform:translateX(50px)}}
+.hero.slide,.end.slide{margin:0;padding:50px 0}
+.end.slide{text-align:center}
+.slide .sh{margin-bottom:18px}
+.slk{display:inline-flex;align-self:flex-start;gap:6px;font-size:15px;color:var(--amber);font-weight:700;margin-bottom:10px;border:1px solid rgba(194,120,10,.3);border-radius:100px;padding:0 12px}
+.step{opacity:0;visibility:hidden;transform:translateY(16px);transition:opacity .45s var(--e-out),transform .45s var(--e-out),visibility .45s}
+.step.in{opacity:1;visibility:visible;transform:none}
+.step.in.now{animation:hilite 1.4s var(--e-out)}
+@keyframes hilite{0%{box-shadow:0 0 0 0 rgba(217,164,65,.7)}100%{box-shadow:0 0 0 14px rgba(217,164,65,0)}}
+.pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(360px,100%),1fr));gap:14px;margin-bottom:16px}
+.pc{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px 22px;text-align:center;box-shadow:var(--sh)}
+.pc small{color:var(--muted);font-size:15px}
+.big{font-family:'Sakkal Saad Poster',serif;font-size:clamp(34px,5vw,58px);line-height:1.45}
+.hl{color:var(--k)}
+.big2{font-size:clamp(22px,2.6vw,28px);margin:6px 0}
+.disc{background:linear-gradient(135deg,#0F4C3A,#0A3428);color:var(--cream);border-radius:22px;padding:14px 22px 16px;margin:0 0 14px;box-shadow:var(--sh)}
+.disc .dh{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.disc .di{font-size:22px;line-height:1}
+.disc .dh b{font-family:'Sakkal Saad Poster',serif;font-size:23px;color:var(--gold)}
+.disc .tps{font-size:14px;opacity:.7}
+.tmr{margin-inline-start:auto;border:1px solid rgba(217,164,65,.5);background:rgba(217,164,65,.12);color:var(--gold);border-radius:100px;padding:2px 14px;font-weight:700;font-size:15px;min-width:92px;transition:all .2s}
+.tmr.run{background:var(--gold);color:var(--green-ink)}
+.tmr.over{background:var(--k);color:#fff;border-color:var(--k);animation:pop .5s}
+.disc .dq{margin:8px 0 0;font-size:clamp(20px,2.4vw,27px);line-height:1.75}
+.disc ol.dq{padding-inline-start:30px;list-style:arabic-indic}
+.disc.mini{margin-top:14px;margin-bottom:0}
+.ans{border-inline-start:5px solid var(--s);background:var(--s-bg);border-radius:0 16px 16px 0;padding:12px 18px;font-size:clamp(19px,2.2vw,23px);margin-top:10px}
+.ans b{color:var(--s)}
+.tools{margin-top:12px;display:flex;gap:8px;flex-wrap:wrap}
+.slide .exi .t{font-size:clamp(22px,2.7vw,29px)}
+.slide .item .txt{font-size:clamp(23px,2.9vw,32px)}
+.slide .tq{margin-bottom:0}
+.slide .item{border-top:0;padding-top:4px}
+.slide .card{font-size:inherit}
+.dnav{position:fixed;bottom:0;inset-inline:0;z-index:60;height:62px;background:rgba(10,52,40,.97);backdrop-filter:blur(8px);color:var(--cream);display:flex;align-items:center;gap:10px;padding:0 max(14px,calc(50% - 540px));box-shadow:0 -10px 24px -18px #000}
+.dn{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(232,223,204,.25);background:transparent;color:var(--cream);border-radius:100px;padding:6px 18px;font-weight:700;font-size:17px;transition:all .2s}
+.dn:hover{background:rgba(232,223,204,.1)}
+.dn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.dn.next{background:var(--gold);color:var(--green-ink);border-color:var(--gold)}
+.dn.next:hover{background:#E8B656}
+.dn.next.more{background:transparent;color:var(--gold)}
+.dn:disabled{opacity:.3;cursor:default}
+.dn.full{padding:6px 10px}
+.dmid{flex:1;text-align:center;line-height:1.3;min-width:0}
+.dmid b{display:block;font-size:15px;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dmid span{font-size:13px;opacity:.7}
+.tadmap{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:10px}
+.tadmap button{text-align:start;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:10px 16px;font-size:17px;display:flex;gap:12px;align-items:center;transition:all .2s}
+.tadmap button:hover{border-color:var(--gold);transform:translateY(-2px)}
+.tadmap button b{flex:0 0 auto;background:var(--green);color:var(--gold);border-radius:10px;min-width:34px;height:34px;display:grid;place-items:center;font-family:'Sakkal Saad Poster',serif}
+.tadmap button small{color:var(--muted);margin-inline-start:auto;white-space:nowrap}
+.tq .qn{font-size:14px;color:var(--muted);font-weight:400}
+@media(max-width:720px){.dn span{display:none}.dnav{gap:6px}.slide{padding:22px 0 28px}}
+@media print{.slide{display:flex!important;min-height:0}.step{opacity:1;visibility:visible;transform:none}.dnav{display:none}}
 </style>
 </head>
 <body>
@@ -398,50 +461,76 @@ section.sec{padding:64px 0 10px}
   <div class="prog"><i id="prog"></i></div>
 </header>
 
-<!-- ============ البطل ============ -->
-<div class="hero">
+<!-- ============ الغلاف ============ -->
+<div class="hero slide" data-sec="intro" data-t="البداية">
   <div class="wrap">
     <span class="kick">الأفعالُ الناسخة · الصفُّ العاشر · الفصلُ الأوّل</span>
     <h1>كانَ <em>وأخواتُها</em></h1>
-    <p class="lead">معانيها، وعملُها، وصورُ خبرِها — فعلٌ صغيرٌ يدخلُ على الجملةِ الاسميّة، فيتركُ المبتدأَ على رفعِه، ويقلبُ الخبرَ منصوباً.</p>
+    <p class="lead">معانيها، وعملُها، وصورُ خبرِها</p>
     <div class="morph" aria-live="polite">
       <div class="row"><span class="slot" id="mSlot"></span><span class="m">الجوُّ</span><span class="kk" id="mK">جميل<span class="end">ٌ</span></span></div>
       <div class="cap" id="mCap"><span>المعنى: <b id="mMean">جملةٌ اسميّةٌ: مبتدأٌ وخبرٌ مرفوعان</b></span></div>
       <div class="legend"><span><i style="background:#F4C766"></i>الفعلُ الناسخ</span><span><i style="background:#9FE0B8"></i>اسمُه (مرفوع)</span><span><i style="background:#F5AE9E"></i>خبرُه (منصوب)</span></div>
     </div>
-    <div class="meta"><span>قواعدُ النحوِ والصرف — ص ٢٢–٢٦</span><span>١٠ محطّات · ٣ ألعاب · تدريباتُ الكتاب</span></div>
+    <div class="meta"><span>قواعدُ النحوِ والصرف — ص ٢٢–٢٦</span><span>للتنقّل: ← التالي · → السابق · أو الأزرارُ في الأسفل</span></div>
   </div>
 </div>
 
 <main class="wrap">
 
+<!-- ============ ٠. الانطلاقة ============ -->
+<section class="sec" id="go" data-t="الانطلاقة">
+  <div class="slide">
+    <div class="sh"><div class="no">٠</div><div><h2>قبلَ أن نبدأ… لاحِظْ</h2><p>جملتانِ بينهما كلمةٌ واحدة.</p></div></div>
+    <div class="pair">
+      <div class="pc"><small>الجملةُ الأولى</small><div class="big">الطالبُ مجتهدٌ</div></div>
+      <div class="pc step"><small>الجملةُ الثانية</small><div class="big"><span class="rv">أصبحَ</span> الطالبُ مجتهد<span class="hl">اً</span></div></div>
+    </div>
+    <div class="disc step"><div class="dh"><span class="di">💬</span><b>ناقشْ مع زميلِك</b><span class="tps">فكّرْ · زاوِجْ · شارِكْ</span><button class="tmr" data-t="60">⏱ دقيقة</button></div>
+      <ol class="dq"><li>ما الكلمةُ التي دخلتْ على الجملة؟</li><li>أيُّ الكلمتَين تغيّرَ آخرُها؟ وأيُّهما بقيتْ كما هي؟</li><li>هل تغيّرَ المعنى؟ كيف؟</li></ol></div>
+    <div class="ans step"><b>نكتشفُ معاً:</b> دخلَ فعلٌ (أصبحَ) على جملةٍ اسميّة، فبقيَ المبتدأُ مرفوعاً (الطالبُ) ونُصِبَ الخبرُ (مجتهداً)، وصار المعنى: اتّصفَ الطالبُ بالاجتهادِ في وقتِ الصباح. هذا الفعلُ وإخوتُه هم درسُنا اليوم.</div>
+  </div>
+</section>
+
 <!-- ============ ١. مختبرُ النسخ ============ -->
 <section class="sec" id="lab" data-t="المختبر">
-  <div class="sh"><div class="no">١</div><div><h2>مختبرُ النسخ</h2><p>جرِّبْ بيدِك قبلَ أن تحفظ: اخترْ جملةً اسميّة، ثمّ أدخلْ عليها أيَّ فعلٍ ناسخ، وراقبْ ما يتغيّر… وما لا يتغيّر.</p></div></div>
-  <div class="lab">
-    <div><span class="lbl">١) الجملةُ الاسميّة</span><div class="pick" id="labS"></div></div>
-    <div><span class="lbl">٢) الفعلُ الناسخ — <span style="color:#6B4FA0">البنفسجيُّ يحتاجُ نفياً أو «ما»</span></span><div class="pick vb" id="labV"></div></div>
-    <div class="stage" id="labStage"></div>
+  <div class="slide">
+    <div class="sh"><div class="no">١</div><div><h2>مختبرُ النسخ</h2><p>اخترْ جملةً، ثمّ أدخلْ عليها فعلاً ناسخاً، وراقبْ ما يتغيّر… وما لا يتغيّر.</p></div></div>
+    <div class="lab">
+      <div><span class="lbl">١) الجملةُ الاسميّة</span><div class="pick" id="labS"></div></div>
+      <div><span class="lbl">٢) الفعلُ الناسخ — <span style="color:#6B4FA0">البنفسجيُّ يحتاجُ نفياً أو «ما»</span></span><div class="pick vb" id="labV"></div></div>
+      <div class="stage" id="labStage"></div>
+    </div>
+    <div class="disc mini step"><div class="dh"><span class="di">💬</span><b>تحدٍّ للفصل</b><button class="tmr" data-t="45">⏱ ٤٥ث</button></div><p class="dq">جرّبوا جملةَ «الطالبان» ثمّ «المؤمنات»: هل يُنصبُ الخبرُ دائماً بالفتحة؟ ما العلامةُ في كلٍّ منهما؟</p></div>
   </div>
 </section>
 
 <!-- ============ ٢. الشواهد ============ -->
 <section class="sec" id="shw" data-t="الشواهد">
-  <div class="sh"><div class="no">٢</div><div><h2>الشواهدُ والأمثلة</h2><p>من الكتاب كما هي. انقرْ كلَّ مثالٍ لتنكشفَ أدوارُ كلماتِه ومعنى فعلِه.</p></div></div>
-  <div class="grp"><b>(أ)</b><span>أفعالٌ تعملُ بلا شرط</span></div>
-  <div class="ex" id="exA"></div>
-  <div class="grp"><b>(ب)</b><span>أفعالٌ تعملُ بشرط</span></div>
-  <div class="ex" id="exB"></div>
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn ghost" id="openAll">اكشفِ الكلّ</button><button class="btn ghost" id="closeAll">أخفِ الكلّ</button></div>
+  <div class="slide">
+    <div class="sh"><div class="no">٢</div><div><h2>الشواهدُ والأمثلة (أ)</h2><p>أفعالٌ تعملُ بلا شرط — تظهرُ الأمثلةُ واحداً واحداً. قبلَ النقر: حدِّدوا الفعلَ واسمَه وخبرَه.</p></div></div>
+    <div class="ex" id="exA"></div>
+  </div>
+  <div class="slide">
+    <div class="sh"><div class="no">٢</div><div><h2>الشواهدُ والأمثلة (أ) — تتمّة</h2><p>بقيّةُ الأفعالِ التي تعملُ بلا شرط.</p></div></div>
+    <div class="ex" id="exA2"></div>
+    <div class="disc mini step"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="30">⏱ ٣٠ث</button></div><p class="dq">في «صارَ الهواءُ نسيمُه معتدلٌ»: الخبرُ ليس كلمةً واحدة — ما هو؟</p></div>
+  </div>
+  <div class="slide">
+    <div class="sh"><div class="no">٢</div><div><h2>الشواهدُ والأمثلة (ب)</h2><p>أفعالٌ تعملُ بشرط. انظرْ إلى أوّلِ كلِّ مثال.</p></div></div>
+    <div class="ex" id="exB"></div>
+    <div class="disc step"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="45">⏱ ٤٥ث</button></div><p class="dq">ما الذي تشتركُ فيه أفعالُ المجموعة (ب) ولا نجدُه في المجموعة (أ)؟</p></div>
+    <div class="ans step"><b>الجواب:</b> كلُّها مسبوقةٌ بـ«ما» — وهي في الأربعةِ الأولى نفيٌ، وفي «ما دام» مصدريّةٌ ظرفيّة. سنعرفُ السرَّ بعد قليل.</div>
+    <div class="tools"><button class="btn ghost" id="openAll">اكشفِ الأدوارَ كلَّها</button><button class="btn ghost" id="closeAll">أخفِها</button></div>
+  </div>
 </section>
 
-<!-- ============ ٣. لماذا ناسخة؟ ============ -->
+<!-- ============ ٣. التسمية ============ -->
 <section class="sec why" id="why" data-t="التسمية">
-  <div class="sh"><div class="no">٣</div><div><h2>لماذا «ناسخة»؟ ولماذا «ناقصة»؟</h2><p>اسمانِ لكلِّ واحدٍ منهما سبب — اضغطْ لترى السببَ يحدثُ أمامك.</p></div></div>
-  <div class="grid2">
-    <div class="card">
-      <h3>ناسخة… لأنّها تنسخُ الحكم</h3>
-      <p style="margin:0">تدخلُ على الجملةِ الاسميّة فتُغيِّرُ حكمَها من جهتَين: <b>التسمية</b> (المبتدأُ يصيرُ اسمَها، والخبرُ خبرَها) و<b>الإعراب</b> (الخبرُ يُنصَب).</p>
+  <div class="slide">
+    <div class="sh"><div class="no">٣</div><div><h2>لماذا سُمّيت «ناسخة»؟</h2><p>النسخُ في اللغة: الإزالةُ والتغيير.</p></div></div>
+    <div class="disc"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="30">⏱ ٣٠ث</button></div><p class="dq">في «كان النّاسُ أمّةً»: ماذا كنّا نسمّي (النّاس) و(أمّة) قبلَ دخولِ (كان)؟ وماذا نسمّيهما بعدَه؟</p></div>
+    <div class="card step">
       <div class="swap" id="swap">
         <div class="cell"><span class="vbx">كانَ</span><div class="lbs" style="width:60px"></div></div>
         <div class="cell"><span>النّاسُ</span><div class="lbs"><span class="b">مبتدأ</span><span class="a" style="background:var(--s-bg);color:var(--s)">اسمُ كان</span></div></div>
@@ -449,129 +538,174 @@ section.sec{padding:64px 0 10px}
       </div>
       <div style="text-align:center"><button class="btn gold" id="swBtn">أدخِلْ «كان»</button></div>
     </div>
-    <div class="card">
-      <h3>ناقصة… لأنّها لا تكتفي بمرفوعِها</h3>
-      <p style="margin:0">«كانَ النّاسُ» كلامٌ ناقصٌ لا يُفيد؛ لا بدَّ من المنصوبِ الذي هو خبرُها. وقيل: لأنّ دلالتَها اقتصرتْ على <b>الزمن</b> دونَ <b>الحدث</b>.</p>
-      <div class="incomplete">كانَ النّاسُ <span class="gap" id="gap">؟</span></div>
-      <div style="text-align:center;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="btn gold" id="gapBtn">أكمِلِ الفائدة</button></div>
-      <p class="tip" style="text-align:center;margin:10px 0 0">قارنْ: «نامَ الطفلُ» كلامٌ تامٌّ — فعلٌ وفاعلٌ وحدثٌ وزمن.</p>
+    <div class="ans step"><b>القاعدة:</b> سُمّيت ناسخةً لأنّها تنسخُ حكمَ الجملةِ الاسميّةِ من جهتَين: <b>التسمية</b> (المبتدأُ ← اسمُها، والخبرُ ← خبرُها) و<b>الإعراب</b> (الخبرُ يُنصَب).</div>
+  </div>
+  <div class="slide">
+    <div class="sh"><div class="no">٣</div><div><h2>ولماذا «ناقصة»؟</h2><p>قارنْ بين فعلَين.</p></div></div>
+    <div class="pair">
+      <div class="pc"><small>فعلٌ تامّ</small><div class="big">نامَ الطفلُ.</div></div>
+      <div class="pc"><small>فعلٌ ناسخ</small><div class="big incomplete" style="margin:0">كانَ النّاسُ <span class="gap" id="gap">؟</span></div></div>
+    </div>
+    <div class="disc"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="30">⏱ ٣٠ث</button></div><p class="dq">أيُّ الجملتَين تامّةُ المعنى؟ ولماذا تبدو الثانيةُ ناقصة؟</p></div>
+    <div class="step" style="text-align:center"><button class="btn gold" id="gapBtn">أكمِلِ الفائدة</button></div>
+    <div class="ans step"><b>القاعدة:</b> سُمّيت ناقصةً لأنّها لا تكتفي بمرفوعِها، بل تحتاجُ إلى خبرٍ منصوبٍ تتمُّ به الفائدة. وقيل: لأنّها تدلُّ على <b>الزمن</b> وحدَه لا على <b>الحدث</b>؛ فـ(نام) فيها حدثُ النوم وزمنُه، و(كان) فيها زمنٌ فقط.</div>
+  </div>
+</section>
+
+<!-- ============ ٤. المعاني ============ -->
+<section class="sec" id="sky" data-t="المعاني">
+  <div class="slide">
+    <div class="sh"><div class="no">٤</div><div><h2>ساعةُ المعاني</h2><p>خمسةُ أفعالٍ «مواقيت»: تربطُ اتّصافَ الاسمِ بالخبرِ بوقتٍ من اليوم. انقرِ الأوقات.</p></div></div>
+    <div class="sky" id="skyBox">
+      <svg viewBox="0 0 1000 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <g class="stars2" id="skyStars" opacity="0"></g>
+        <path d="M90 300 A410 300 0 0 1 910 300" fill="none" stroke="rgba(10,52,40,.18)" stroke-width="2" stroke-dasharray="4 8"/>
+        <g class="body" id="skyBody"><circle r="34" id="skyDisc" fill="#FFD66B"/><circle r="52" fill="#FFD66B" opacity=".18" id="skyHalo"/></g>
+        <path d="M0 300 Q 160 270 320 296 T 640 290 T 1000 296 V340 H0Z" fill="#0F4C3A" opacity=".85"/>
+        <path d="M0 316 Q 220 292 470 314 T 1000 310 V340 H0Z" fill="#0A3428"/>
+      </svg>
+      <div class="card2"><span class="vv" id="skyV">أصبحَ</span><span class="mm" id="skyM">اتّصافُ الاسمِ بالخبرِ في وقتِ الصباح</span><span class="ee" id="skyE"></span></div>
+    </div>
+    <div class="skybtns" id="skyBtns"></div>
+    <div class="disc mini step"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="30">⏱ ٣٠ث</button></div><p class="dq">«أمسى المسافرُ مرهَقاً» — متى كان مرهَقاً؟ ولو قلنا «باتَ المسافرُ مرهَقاً» فما الفرق؟</p></div>
+  </div>
+  <div class="slide">
+    <div class="sh"><div class="no">٤</div><div><h2>كانَ · صارَ · ليسَ</h2><p>ثلاثةُ معانٍ لا علاقةَ لها بأوقاتِ اليوم.</p></div></div>
+    <div class="disc"><div class="dh"><span class="di">💬</span><b>خمّنْ قبلَ الكشف</b><button class="tmr" data-t="45">⏱ ٤٥ث</button></div><p class="dq">ماذا يضيفُ كلُّ فعلٍ إلى جملة «الثمرُ ناضجٌ»؟ — كانَ الثمرُ… · صارَ الثمرُ… · ليسَ الثمرُ…</p></div>
+    <div class="grid3 trio">
+      <div class="card kan step"><div class="lab2">الزمنُ الماضي</div><h3>كانَ</h3><div class="scene"><span>كانَ النّاسُ أمّةً</span></div><p class="tip" style="margin:0">اتّصافُ اسمِها بخبرِها في الزمنِ الماضي.</p></div>
+      <div class="card sar step"><div class="lab2">التحوّل</div><h3>صارَ</h3><div class="scene"><span class="a1">حارٌّ</span><span class="ar"></span><span class="a2">معتدلٌ</span></div><p class="tip" style="margin:0">انتقالٌ من حالٍ إلى حال. ومثلُها: عادَ وارتدَّ — «عادَ المريضُ سليماً».</p></div>
+      <div class="card lays step"><div class="lab2">النفي</div><h3>ليسَ</h3><div class="scene"><span>الثمرُ ناضجٌ</span></div><p class="tip" style="margin:0">نفيُ اتّصافِ اسمِها بخبرِها في الزمنِ الحالي.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ============ ٤. ساعةُ المعاني ============ -->
-<section class="sec" id="sky" data-t="المعاني">
-  <div class="sh"><div class="no">٤</div><div><h2>ساعةُ المعاني</h2><p>خمسةٌ من الأخواتِ «مواقيت»: كلُّ فعلٍ يربطُ اتّصافَ الاسمِ بالخبرِ بوقتٍ من اليوم. حرِّكِ الشمس.</p></div></div>
-  <div class="sky" id="skyBox">
-    <svg viewBox="0 0 1000 340" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <g class="stars2" id="skyStars" opacity="0"></g>
-      <path d="M90 300 A410 300 0 0 1 910 300" fill="none" stroke="rgba(10,52,40,.18)" stroke-width="2" stroke-dasharray="4 8"/>
-      <g class="body" id="skyBody"><circle r="34" id="skyDisc" fill="#FFD66B"/><circle r="52" fill="#FFD66B" opacity=".18" id="skyHalo"/></g>
-      <path d="M0 300 Q 160 270 320 296 T 640 290 T 1000 296 V340 H0Z" fill="#0F4C3A" opacity=".85"/>
-      <path d="M0 316 Q 220 292 470 314 T 1000 310 V340 H0Z" fill="#0A3428"/>
-    </svg>
-    <div class="card2"><span class="vv" id="skyV">أصبحَ</span><span class="mm" id="skyM">اتّصافُ الاسمِ بالخبرِ في وقتِ الصباح</span><span class="ee" id="skyE"></span></div>
-  </div>
-  <div class="skybtns" id="skyBtns"></div>
-  <div class="grid3 trio">
-    <div class="card kan"><div class="lab2">الزمنُ الماضي</div><h3>كانَ</h3><div class="scene"><span>كانَ النّاسُ أمّةً</span></div><p class="tip" style="margin:0">اتّصافُ اسمِها بخبرِها في الزمنِ الماضي: كان النّاسُ أمّةً واحدةً ثمّ اختلفوا.</p></div>
-    <div class="card sar"><div class="lab2">التحوّل</div><h3>صارَ</h3><div class="scene"><span class="a1">حارٌّ</span><span class="ar"></span><span class="a2">معتدلٌ</span></div><p class="tip" style="margin:0">انتقالٌ من حالٍ إلى حال. ومثلُها في المعنى: عادَ وارتدَّ — «عادَ المريضُ سليماً».</p></div>
-    <div class="card lays"><div class="lab2">النفي</div><h3>ليسَ</h3><div class="scene"><span>الثمرُ ناضجٌ</span></div><p class="tip" style="margin:0">نفيُ اتّصافِ اسمِها بخبرِها في الزمنِ الحالي: ليس الثمرُ ناضجاً (الآن).</p></div>
-  </div>
-</section>
-
-<!-- ============ ٥. مفتاحُ «ما» ============ -->
+<!-- ============ ٥. المجموعة ب ============ -->
 <section class="sec" id="ma" data-t="المجموعة ب">
-  <div class="sh"><div class="no">٥</div><div><h2>أفعالٌ بقفل… ومفتاحُها «ما»</h2><p>أفعالُ المجموعة (ب) لا تعملُ عملَ كان إلّا بشرط. انقرِ القفلَ لتضعَ المفتاح، وانظرْ كيف يتغيّرُ المعنى.</p></div></div>
-  <div class="keys" id="keys"></div>
-  <div class="note" style="margin-top:14px"><b>الشرط:</b> تُسبَقُ (زال، فتئ، انفكّ، برح) بنفيٍ — بـ«ما» أو «لا» أو «لن» — أو بشبهِ النفي (النهي والدعاء)، فتدلُّ على <b>الاستمرار</b> إلى وقتِ الكلام. مثالُ «لا»: ﴿<span class="ayah">وَلَا يَزَالُونَ مُخْتَلِفِينَ</span>﴾ <span class="src">هود: ١١٨</span> · النهي: «لا تزلْ بعيداً عن الضلال» · الدعاء: «لا زالَ الغيثُ منهلّاً على أرضِكم».</div>
-  <div class="card masdar">
-    <h3 style="font-size:24px;color:var(--green)">«ما دامَ» — مفتاحُها «ما» من نوعٍ آخر</h3>
-    <p style="margin:4px 0 0">لا تُسبَقُ بنفي، بل بـ«ما» <b>المصدريّة الظرفيّة</b>: تُؤوَّلُ مع الفعلِ بمصدرٍ، وتدلُّ على مدّة.</p>
-    <div class="eq"><span>﴿<span class="ayah">وَأَوْصَانِي بِالصَّلَاةِ وَالزَّكَاةِ مَا دُمْتُ حَيًّا</span>﴾</span><span class="arr">⟵</span><span style="color:var(--s)">مدّةَ دوامي حيّاً</span></div>
-    <p class="tip" style="text-align:center;margin:0">مريم: ٣١ — (ما دام) فعلٌ جامد؛ لا يأتي منه مضارعٌ ولا أمر.</p>
+  <div class="slide">
+    <div class="sh"><div class="no">٥</div><div><h2>أفعالٌ بقفل… ومفتاحُها «ما»</h2><p>انقرِ القفلَ لتضعَ المفتاح، وانظرْ كيف يتغيّرُ الفعلُ ومعناه.</p></div></div>
+    <div class="disc"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="45">⏱ ٤٥ث</button></div><p class="dq">ما الفرقُ في المعنى بين: «زالَ الخطرُ» و«ما زالَ الخطرُ قائماً»؟</p></div>
+    <div class="keys step" id="keys"></div>
+  </div>
+  <div class="slide">
+    <div class="sh"><div class="no">٥</div><div><h2>شرطُ عملِها</h2><p>متى تعملُ هذه الأفعالُ عملَ «كان»؟</p></div></div>
+    <div class="note"><b>النفي:</b> تُسبَقُ (زال، فتئ، انفكّ، برح) بـ«ما» أو «لا» أو «لن»، فتدلُّ على <b>الاستمرار</b> إلى وقتِ الكلام.<br>مثالُ «لا»: ﴿<span class="ayah">وَلَا يَزَالُونَ مُخْتَلِفِينَ</span>﴾ <span class="src">هود: ١١٨</span></div>
+    <div class="note step" style="margin-top:10px"><b>شبهُ النفي:</b> النهي: «لا تزلْ بعيداً عن الضلال» · الدعاء: «لا زالَ الغيثُ منهلّاً على أرضِكم».</div>
+    <div class="card masdar step">
+      <h3 style="font-size:24px;color:var(--green)">«ما دامَ» — مفتاحُها «ما» من نوعٍ آخر</h3>
+      <p style="margin:4px 0 0">لا تُسبَقُ بنفي، بل بـ«ما» <b>المصدريّة الظرفيّة</b>: تُؤوَّلُ مع الفعلِ بمصدرٍ وتدلُّ على مدّة.</p>
+      <div class="eq"><span>﴿<span class="ayah">وَأَوْصَانِي بِالصَّلَاةِ وَالزَّكَاةِ مَا دُمْتُ حَيًّا</span>﴾</span><span class="arr">⟵</span><span style="color:var(--s)">مدّةَ دوامي حيّاً</span></div>
+      <p class="tip" style="text-align:center;margin:0">مريم: ٣١</p>
+    </div>
   </div>
 </section>
 
 <!-- ============ ٦. التصرّف ============ -->
 <section class="sec tas" id="tas" data-t="التصرّف">
-  <div class="sh"><div class="no">٦</div><div><h2>مَن يتصرّف؟ ومَن جامد؟</h2><p>الأخواتُ لسنَ سواءً في تصريفاتِها — وكلُّ تصريفٍ يعملُ عملَ الماضي.</p></div></div>
-  <div class="grid3">
-    <div class="col"><h3>تامّةُ التصرّف</h3><div class="meter"><i style="width:100%"></i></div><div class="vbs">كان · أصبح · أضحى · أمسى · ظلّ · بات · صار</div><div class="forms"><span>ماضٍ: كانَ</span><span>مضارع: يكونُ</span><span>أمر: كُنْ</span><span>اسم فاعل: كائنٌ</span><span>مصدر: كَوْنٌ</span></div></div>
-    <div class="col"><h3>ناقصةُ التصرّف</h3><div class="meter"><i style="width:60%"></i></div><div class="vbs">ما زال · ما فتئ · ما انفكّ · ما برح</div><div class="forms"><span>ماضٍ: ما زالَ</span><span>مضارع: لا يزالُ</span><span>اسم فاعل: زائلٌ</span><span class="no">أمر</span><span class="no">مصدر</span></div></div>
-    <div class="col"><h3>جامدة</h3><div class="meter"><i style="width:20%"></i></div><div class="vbs">ليس · ما دام</div><div class="forms"><span>الماضي وحدَه</span><span class="no">مضارع</span><span class="no">أمر</span><span class="no">مصدر</span></div></div>
+  <div class="slide">
+    <div class="sh"><div class="no">٦</div><div><h2>مَن يتصرّف؟ ومَن جامد؟</h2><p>ليست الأخواتُ سواءً في تصريفاتِها.</p></div></div>
+    <div class="disc"><div class="dh"><span class="di">💬</span><b>جرّبوا بألسنتِكم</b><button class="tmr" data-t="45">⏱ ٤٥ث</button></div><p class="dq">نقول: «كُنْ صادقاً» — فهل نقول: «لِسْ صادقاً»؟ وهل نقول: «يزالُ»؟ ماذا تستنتجون؟</p></div>
+    <div class="grid3">
+      <div class="col step"><h3>تامّةُ التصرّف</h3><div class="meter"><i style="width:100%"></i></div><div class="vbs">كان · أصبح · أضحى · أمسى · ظلّ · بات · صار</div><div class="forms"><span>ماضٍ: كانَ</span><span>مضارع: يكونُ</span><span>أمر: كُنْ</span><span>اسم فاعل: كائنٌ</span><span>مصدر: كَوْنٌ</span></div></div>
+      <div class="col step"><h3>ناقصةُ التصرّف</h3><div class="meter"><i style="width:60%"></i></div><div class="vbs">ما زال · ما فتئ · ما انفكّ · ما برح</div><div class="forms"><span>ماضٍ: ما زالَ</span><span>مضارع: لا يزالُ</span><span>اسم فاعل: زائلٌ</span><span class="no">أمر</span><span class="no">مصدر</span></div></div>
+      <div class="col step"><h3>جامدة</h3><div class="meter"><i style="width:20%"></i></div><div class="vbs">ليس · ما دام</div><div class="forms"><span>الماضي وحدَه</span><span class="no">مضارع</span><span class="no">أمر</span><span class="no">مصدر</span></div></div>
+    </div>
   </div>
-  <div class="grid2" style="margin-top:16px">
-    <div class="card"><b style="color:var(--amber)">اسمُ الفاعلِ يعمل:</b><div style="font-size:23px;margin:6px 0">زيدٌ <span class="rv">كائنٌ</span> <span class="rk">صديقاً</span> لك في السفر.</div><p class="tip" style="margin:0">اسمُ (كائن) ضميرٌ مستترٌ يعودُ على (زيد)، وخبرُه (صديقاً).</p></div>
-    <div class="card"><b style="color:var(--amber)">والمصدرُ يعمل:</b><div style="font-size:23px;margin:6px 0">عجبتُ مِن <span class="rv">كونِ</span><span class="rs">كَ</span> <span class="rk">نائماً</span> في النهار.</div><p class="tip" style="margin:0">(كون) مجرورٌ بـ«مِن»، واسمُه الكافُ في محلِّ جرٍّ بالإضافةِ لفظاً، و(نائماً) خبرُه منصوب.</p></div>
+  <div class="slide">
+    <div class="sh"><div class="no">٦</div><div><h2>كلُّ تصريفٍ يعملُ عملَ الماضي</h2><p>حتى اسمُ الفاعلِ والمصدر.</p></div></div>
+    <div class="disc"><div class="dh"><span class="di">💬</span><b>ابحثْ عن الاسمِ والخبر</b><button class="tmr" data-t="45">⏱ ٤٥ث</button></div><p class="dq">في «زيدٌ كائنٌ صديقاً لك» و«عجبتُ من كونِك نائماً»: أين اسمُ (كائن) و(كون)؟ وأين خبرُهما؟</p></div>
+    <div class="grid2">
+      <div class="card step"><b style="color:var(--amber)">اسمُ الفاعلِ يعمل:</b><div class="big2">زيدٌ <span class="rv">كائنٌ</span> <span class="rk">صديقاً</span> لك في السفر.</div><p class="tip" style="margin:0">اسمُ (كائن) ضميرٌ مستترٌ يعودُ على (زيد)، وخبرُه (صديقاً).</p></div>
+      <div class="card step"><b style="color:var(--amber)">والمصدرُ يعمل:</b><div class="big2">عجبتُ مِن <span class="rv">كونِ</span><span class="rs">كَ</span> <span class="rk">نائماً</span> في النهار.</div><p class="tip" style="margin:0">اسمُه الكافُ في محلِّ جرٍّ بالإضافةِ لفظاً، و(نائماً) خبرُه منصوب.</p></div>
+    </div>
   </div>
-  <div class="card nun">
-    <h3 style="font-size:24px;color:var(--green)">سرٌّ تختصُّ به «كان»: حذفُ النون</h3>
-    <p style="margin:4px 0">﴿<span class="ayah">قَالُوا لَمْ نَكُ مِنَ الْمُصَلِّينَ</span>﴾ <span class="src">المدثر: ٤٣</span> — الأصل: (لم نكنْ)، حُذفت النونُ تخفيفاً لكثرةِ الاستعمال. ويجوزُ بثلاثةِ شروطٍ مجتمعة:</p>
-    <div class="conds" id="conds"><span data-c="0">① أن يكونَ مضارعاً</span><span data-c="1">② مجزوماً</span><span data-c="2">③ بعدَه حرفٌ متحرّك</span></div>
-    <p class="tip" style="margin:0 0 8px">تحدٍّ سريع: هل يجوزُ حذفُ النون؟ أجبْ، ثمّ ستضيءُ الشروط.</p>
-    <div class="nunq" id="nunq"></div>
+  <div class="slide">
+    <div class="sh"><div class="no">٦</div><div><h2>سرٌّ تختصُّ به «كان»: حذفُ النون</h2><p>﴿<span class="ayah">قَالُوا لَمْ نَكُ مِنَ الْمُصَلِّينَ</span>﴾ <span class="src">المدثر: ٤٣</span> — والأصل: لم نكنْ.</p></div></div>
+    <div class="card nun">
+      <div class="disc mini" style="margin-bottom:10px"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="30">⏱ ٣٠ث</button></div><p class="dq">لماذا حُذفت النون؟ وهل نستطيعُ حذفَها في «كنتُ مسافراً»؟</p></div>
+      <div class="step"><p style="margin:0">حُذفت تخفيفاً لكثرةِ الاستعمال، ويجوزُ بثلاثةِ شروطٍ مجتمعة:</p>
+      <div class="conds" id="conds"><span data-c="0">① أن يكونَ مضارعاً</span><span data-c="1">② مجزوماً</span><span data-c="2">③ بعدَه حرفٌ متحرّك</span></div></div>
+      <div class="step"><p class="tip" style="margin:0 0 8px">تحدٍّ سريع: هل يجوزُ حذفُ النون؟ أجبْ، ثمّ ستضيءُ الشروط.</p><div class="nunq" id="nunq"></div></div>
+    </div>
   </div>
 </section>
 
-<!-- ============ ٧. صورُ الخبر ============ -->
+<!-- ============ ٧. صور الخبر ============ -->
 <section class="sec forms3" id="kh" data-t="صور الخبر">
-  <div class="sh"><div class="no">٧</div><div><h2>ثلاثُ صورٍ للخبر</h2><p>الخبرُ ليس كلمةً واحدةً دائماً — قد يكونُ جملة، أو شبهَ جملة.</p></div></div>
-  <div class="grid3">
-    <div class="card"><span class="tag">مفرد</span><div class="sent">كانَ النّاسُ <span class="rk">أمّةً</span></div><div class="sent">أصبحَ ماؤكم <span class="rk">غوراً</span></div><div class="sent">أضحى المطرُ <span class="rk">منهلّاً</span></div><div class="sub">المفرد: ما ليس جملةً ولا شبهَ جملة — ولو كان مثنّى أو جمعاً.</div></div>
-    <div class="card"><span class="tag">جملة</span><div class="sent">ما فتئَ المؤمنُ <span class="rk">يستغفرُ ربَّه</span></div><div class="sub" style="margin-bottom:6px">جملةٌ فعليّةٌ في محلِّ نصبِ خبرِ (ما فتئ)</div><div class="sent">صارَ الهواءُ <span class="rk">نسيمُه معتدلٌ</span></div><div class="sub">جملةٌ اسميّةٌ في محلِّ نصبِ خبرِ (صار)</div></div>
-    <div class="card"><span class="tag">شبه جملة</span><div class="sent">مازالَ المصلّي <span class="rk">في المسجد</span></div><div class="sub">جارٌّ ومجرور</div><div class="sent">﴿لَمْ نَكُ <span class="rk">مِنَ الْمُصَلِّينَ</span>﴾</div><div class="sub">ويكونُ ظرفاً كذلك: كان الطلّابُ <span class="rk">أمامَ المكتبة</span>.</div></div>
+  <div class="slide">
+    <div class="sh"><div class="no">٧</div><div><h2>ثلاثُ صورٍ للخبر</h2><p>الخبرُ ليس كلمةً واحدةً دائماً.</p></div></div>
+    <div class="disc"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="45">⏱ ٤٥ث</button></div><p class="dq">في «ما فتئَ المؤمنُ يستغفرُ ربَّه»: ما خبرُ (ما فتئ)؟ هل هو كلمةٌ واحدة؟</p></div>
+    <div class="grid3">
+      <div class="card step"><span class="tag">مفرد</span><div class="sent">كانَ النّاسُ <span class="rk">أمّةً</span></div><div class="sent">أصبحَ ماؤكم <span class="rk">غوراً</span></div><div class="sub">ما ليس جملةً ولا شبهَ جملة — ولو كان مثنّى أو جمعاً.</div></div>
+      <div class="card step"><span class="tag">جملة</span><div class="sent">ما فتئَ المؤمنُ <span class="rk">يستغفرُ ربَّه</span></div><div class="sub" style="margin-bottom:6px">جملةٌ فعليّةٌ في محلِّ نصب</div><div class="sent">صارَ الهواءُ <span class="rk">نسيمُه معتدلٌ</span></div><div class="sub">جملةٌ اسميّةٌ في محلِّ نصب</div></div>
+      <div class="card step"><span class="tag">شبه جملة</span><div class="sent">مازالَ المصلّي <span class="rk">في المسجد</span></div><div class="sub">جارٌّ ومجرور</div><div class="sent">كان الطلّابُ <span class="rk">أمامَ المكتبة</span></div><div class="sub">ظرف</div></div>
+    </div>
   </div>
-  <div class="link" id="link">
-    <svg class="arc" id="arcSvg"><path id="arcPath" d=""/></svg>
-    <div class="ln2"><span>صارَ</span><span id="lA" style="color:#9FE0B8">الهواءُ</span><span style="color:#F5AE9E">نسيمُ<span class="hh" id="lB">ه</span> معتدلٌ</span></div>
-    <p>إذا جاء الخبرُ جملةً فلا بدَّ من <b style="color:var(--gold)">ضميرٍ رابط</b> يعودُ على اسمِ الفعلِ الناسخ: الهاءُ في (نسيمُه) تربطُ (الهواء) بجملةِ خبرِه.</p>
+  <div class="slide">
+    <div class="sh"><div class="no">٧</div><div><h2>الضميرُ الرابط</h2><p>إذا جاء الخبرُ جملة.</p></div></div>
+    <div class="disc"><div class="dh"><span class="di">💬</span><b>ناقشْ</b><button class="tmr" data-t="30">⏱ ٣٠ث</button></div><p class="dq">لو قلنا «صار الهواءُ النسيمُ معتدلٌ» — هل يستقيمُ المعنى؟ ما الذي نقص؟</p></div>
+    <div class="link step" id="link">
+      <svg class="arc" id="arcSvg"><path id="arcPath" d=""/></svg>
+      <div class="ln2"><span>صارَ</span><span id="lA" style="color:#9FE0B8">الهواءُ</span><span style="color:#F5AE9E">نسيمُ<span class="hh" id="lB">ه</span> معتدلٌ</span></div>
+      <p>لا بدَّ من <b style="color:var(--gold)">ضميرٍ رابط</b> يعودُ على اسمِ الفعلِ الناسخ: الهاءُ في (نسيمُه) تربطُ (الهواء) بجملةِ خبرِه.</p>
+    </div>
   </div>
 </section>
 
 <!-- ============ ٨. الخلاصة ============ -->
 <section class="sec" id="sum" data-t="الخلاصة">
-  <div class="sh"><div class="no">٨</div><div><h2>الخلاصة</h2><p>كما في الكتاب — أربعُ قواعدَ تحملُ الدرسَ كلَّه.</p></div></div>
-  <div class="sum">
-    <div class="it"><h4><b class="n">١</b>التسمية</h4>سُمّيت <b>ناسخة</b> لأنّها تنسخُ حكمَ الابتداءِ في الجملةِ الاسميّةِ وتغيّرُه، و<b>ناقصة</b> لأنّها لا تكتفي بمرفوعِها وحدَه ولا بدّ من خبرِها المنصوب — وقيل: لأنّها تدلُّ على الزمنِ فقط لا على الحدثِ والزمن.</div>
-    <div class="it"><h4><b class="n">٢</b>العمل والقسمان</h4>تدخلُ على الجملةِ الاسميّة فترفعُ المبتدأَ ويُسمّى اسمَها، وتنصبُ الخبرَ ويُسمّى خبرَها، وهي قسمان:<ul><li>تعملُ بلا شرط: كان، أصبح، أضحى، أمسى، ظلّ، بات، صار، ليس.</li><li>تعملُ بشرط: أن تُسبَقَ بنفيٍ أو شبهِه (ما زال، ما فتئ، ما انفكّ، ما برح)، أو بـ«ما» المصدريّة الظرفيّة (ما دام).</li></ul></div>
-    <div class="it"><h4><b class="n">٣</b>صورُ الخبر</h4><ul><li>مفرد، أو جملة، أو شبه جملة (ظرف أو جارّ ومجرور).</li><li>إذا جاء الخبرُ جملةً فلا بدّ من ضميرٍ رابطٍ يربطُها باسمِ الفعلِ الناسخ.</li></ul></div>
-    <div class="it"><h4><b class="n">٤</b>التصرّف</h4><ul><li>تامّةُ التصرّف: كان، أصبح، أضحى، أمسى، ظلّ، بات، صار.</li><li>ناقصةُ التصرّف: ما زال، ما فتئ، ما انفكّ، ما برح.</li><li>جامدة: ليس، ما دام.</li></ul></div>
+  <div class="slide">
+    <div class="sh"><div class="no">٨</div><div><h2>الخلاصة</h2><p>اطلبْ من طالبٍ أن يقولَ كلَّ قاعدةٍ بلسانِه قبلَ كشفِها.</p></div></div>
+    <div class="sum">
+      <div class="it step"><h4><b class="n">١</b>التسمية</h4>سُمّيت <b>ناسخة</b> لأنّها تنسخُ حكمَ الابتداءِ في الجملةِ الاسميّةِ وتغيّرُه، و<b>ناقصة</b> لأنّها لا تكتفي بمرفوعِها وحدَه ولا بدّ من خبرِها المنصوب — وقيل: لأنّها تدلُّ على الزمنِ فقط لا على الحدثِ والزمن.</div>
+      <div class="it step"><h4><b class="n">٢</b>العمل والقسمان</h4>تدخلُ على الجملةِ الاسميّة فترفعُ المبتدأَ ويُسمّى اسمَها، وتنصبُ الخبرَ ويُسمّى خبرَها، وهي قسمان:<ul><li>تعملُ بلا شرط: كان، أصبح، أضحى، أمسى، ظلّ، بات، صار، ليس.</li><li>تعملُ بشرط: أن تُسبَقَ بنفيٍ أو شبهِه (ما زال، ما فتئ، ما انفكّ، ما برح)، أو بـ«ما» المصدريّة الظرفيّة (ما دام).</li></ul></div>
+      <div class="it step"><h4><b class="n">٣</b>صورُ الخبر</h4><ul><li>مفرد، أو جملة، أو شبه جملة (ظرف أو جارّ ومجرور).</li><li>إذا جاء الخبرُ جملةً فلا بدّ من ضميرٍ رابطٍ يربطُها باسمِ الفعلِ الناسخ.</li></ul></div>
+      <div class="it step"><h4><b class="n">٤</b>التصرّف</h4><ul><li>تامّةُ التصرّف: كان، أصبح، أضحى، أمسى، ظلّ، بات، صار.</li><li>ناقصةُ التصرّف: ما زال، ما فتئ، ما انفكّ، ما برح.</li><li>جامدة: ليس، ما دام.</li></ul></div>
+    </div>
   </div>
 </section>
 
-<!-- ============ ٩. ساحةُ الألعاب ============ -->
+<!-- ============ ٩. الألعاب ============ -->
 <section class="sec" id="games" data-t="الألعاب">
-  <div class="sh"><div class="no">٩</div><div><h2>ساحةُ التحدّي</h2><p>ثلاثُ ألعابٍ من الأسهلِ إلى الأصعب. كلُّ إجابةٍ صحيحةٍ من أوّلِ مرّةٍ نجمة.</p></div></div>
-  <div class="games">
+  <div class="slide">
+    <div class="sh"><div class="no">٩</div><div><h2>لعبة ١: مطرُ النواسخ</h2><p>التقطِ الأفعالَ الناسخةَ فقط، واحذرِ المتنكّرة (نامَ، زالَ، دامَ بلا «ما»…). ٤٥ ثانية.</p></div></div>
     <div class="game" id="gRain">
-      <div class="gh"><div class="gi">☔</div><h3>مطرُ النواسخ</h3><div class="sc"><span>النقاط: <b id="rScore">٠</b></span><span>الأخطاء: <b id="rMiss">٠</b></span></div><p>كلماتٌ تتساقط… التقطِ الأفعالَ الناسخةَ فقط، واحذرِ الأفعالَ التامّةَ المتنكّرة (نامَ، زالَ، دامَ بلا «ما»…). ٤٥ ثانية.</p></div>
-      <div class="rain" id="rain"><div class="timer" id="rTimer"></div><div class="fb" id="rFb"></div><div class="ov" id="rOv"><div><h4>مستعدّ؟</h4><p>انقرِ الناسخَ قبلَ أن يسقط. الفخُّ يخصمُ نقطة.</p><button class="btn gold" id="rGo">ابدأِ المطر</button></div></div></div>
+      <div class="gh"><div class="gi">☔</div><h3>مطرُ النواسخ</h3><div class="sc"><span>النقاط: <b id="rScore">٠</b></span><span>الأخطاء: <b id="rMiss">٠</b></span></div></div>
+      <div class="rain" id="rain"><div class="timer" id="rTimer"></div><div class="fb" id="rFb"></div><div class="ov" id="rOv"><div><h4>مستعدّ؟</h4><p>انقرِ الناسخَ قبلَ أن يسقط. الفخُّ يخصمُ نقطة.<br><small>فكرة: طالبٌ من كلِّ فريقٍ على السبّورة</small></p><button class="btn gold" id="rGo">ابدأِ المطر</button></div></div></div>
     </div>
+  </div>
+  <div class="slide">
+    <div class="sh"><div class="no">٩</div><div><h2>لعبة ٢: فرّازُ الخبر</h2><p>انقرِ البطاقةَ ثمّ صندوقَ صورتِها. ليدافعْ كلُّ فريقٍ عن اختيارِه قبلَ «تحقّق».</p></div></div>
     <div class="game" id="gSort">
-      <div class="gh"><div class="gi">⧉</div><h3>فرّازُ الخبر</h3><div class="sc"><span>الصحيح: <b id="sOk">٠</b> / <b id="sAll">٠</b></span></div><p>كلُّ بطاقةٍ خبرٌ من شواهدِ الدرس. انقرِ البطاقةَ ثمّ انقرْ صندوقَ صورتِه. (في البطاقة ما بين القوسين هو الفعلُ واسمُه)</p></div>
+      <div class="gh"><div class="gi">⧉</div><h3>فرّازُ الخبر</h3><div class="sc"><span>الصحيح: <b id="sOk">٠</b> / <b id="sAll">٠</b></span></div></div>
       <div class="pool" id="sPool"></div>
       <div class="bins" id="sBins"></div>
       <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="sCheck">تحقّق</button><button class="btn ghost" id="sReset">من جديد</button></div>
       <div class="why" id="sWhy" style="margin-top:10px"></div>
     </div>
+  </div>
+  <div class="slide">
+    <div class="sh"><div class="no">٩</div><div><h2>لعبة ٣: الخبرُ الصحيح… بسرعة!</h2><p>عشرُ جولاتٍ، عشرُ ثوانٍ لكلٍّ منها: اخترِ الخبرَ المنصوبَ بعلامتِه الصحيحة.</p></div></div>
     <div class="game qf" id="gQuick">
-      <div class="gh"><div class="gi">⚡</div><h3>الخبرُ الصحيح… بسرعة!</h3><div class="sc"><span>الجولة: <b id="qR">١</b>/<b id="qN">١٠</b></span><span>النقاط: <b id="qS">٠</b></span></div><p>عشرُ جولاتٍ بعشرِ ثوانٍ لكلٍّ منها: اخترِ الخبرَ المنصوبَ بعلامتِه الصحيحة.</p></div>
+      <div class="gh"><div class="gi">⚡</div><h3>السباق</h3><div class="sc"><span>الجولة: <b id="qR">١</b>/<b id="qN">١٠</b></span><span>النقاط: <b id="qS">٠</b></span></div></div>
       <div id="qBody"><div style="text-align:center;padding:20px"><button class="btn gold" id="qGo">ابدأِ السباق</button></div></div>
     </div>
   </div>
 </section>
 
-<!-- ============ ١٠. تدريباتُ الكتاب ============ -->
+<!-- ============ ١٠. التدريبات ============ -->
 <section class="sec" id="tad" data-t="التدريبات">
-  <div class="sh"><div class="no">١٠</div><div><h2>تدريباتُ الكتاب</h2><p>أسئلةُ الكتابِ (ص ٣١–٣٦) بنصوصِها، محوّلةً إلى تحدّياتٍ تفاعليّةٍ بتغذيةٍ راجعةٍ فوريّة.</p></div></div>
+  <div class="slide">
+    <div class="sh"><div class="no">١٠</div><div><h2>تدريباتُ الكتاب</h2><p>ص ٣١–٣٦ — سؤالٌ واحدٌ في كلِّ شريحة. يجيبُ الطالبُ ويعلّلُ قبلَ النقر.</p></div></div>
+    <div class="tadmap" id="tadMap"></div>
+  </div>
   <div id="tadBox"></div>
 </section>
 
 </main>
 
 <!-- ============ الختام ============ -->
-<div class="end" id="end">
+<div class="end slide" id="end" data-sec="end" data-t="الختام">
   <div class="wrap">
     <div class="medal"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="54" fill="none" stroke="#D9A441" stroke-width="3" stroke-dasharray="6 5"/><circle cx="60" cy="60" r="44" fill="#0F4C3A" stroke="#D9A441" stroke-width="2"/><path d="m60 30 8.4 17.1 18.9 2.7-13.7 13.3 3.2 18.8L60 73.1l-16.9 8.9 3.2-18.8L32.7 49.8l18.9-2.7z" fill="#D9A441"/></svg></div>
     <h2>أتقنتَ «كان وأخواتها»</h2>
@@ -582,6 +716,14 @@ section.sec{padding:64px 0 10px}
     <div class="sig"><img src="/img/logo-cream.svg" alt=""><span>إعدادُ أ. حيدر المعاتيق · @haydar.almaateeq</span></div>
   </div>
 </div>
+
+<nav class="dnav" id="dnav" aria-label="التنقّل بين الشرائح">
+  <button class="dn prev" id="dPrev" title="السابق (→)"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span>السابق</span></button>
+  <div class="dmid"><b id="dSec"></b><span id="dCnt"></span></div>
+  <button class="dn full" id="dFull" title="ملءُ الشاشة (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+  <button class="dn next" id="dNext" title="التالي (← أو المسافة)"><span>التالي</span><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
+</nav>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -610,22 +752,7 @@ var Z = LS.get(KEY + '_z', 1);
 function setZ(z){ Z = Math.max(.85, Math.min(1.5, z)); document.documentElement.style.setProperty('--z', Z); LS.set(KEY + '_z', Z); }
 setZ(Z); $('zUp').onclick = function(){ setZ(Z + .1); }; $('zDn').onclick = function(){ setZ(Z - .1); };
 
-/* ===== شريطُ الأقسام والتقدّم ===== */
-var secs = [].slice.call(document.querySelectorAll('section.sec'));
-$('chips').innerHTML = secs.map(function(s, i){ return '<a href="#' + s.id + '" data-s="' + s.id + '">' + AR(i + 1) + '. ' + s.dataset.t + '</a>'; }).join('');
-function onScroll(){
-  var h = document.documentElement, p = h.scrollTop / Math.max(1, h.scrollHeight - h.clientHeight);
-  $('prog').style.width = (p * 100).toFixed(1) + '%';
-  var cur = null, y = innerHeight * .35;
-  secs.forEach(function(s){ if (s.getBoundingClientRect().top < y) cur = s.id; });
-  document.querySelectorAll('.chips a').forEach(function(a){
-    var on = a.dataset.s === cur;
-    // تمريرٌ أفقيٌّ لشريطِ الأقسامِ وحدَه — scrollIntoView كان يسحبُ الصفحةَ كلَّها إلى الأعلى
-    if (on && !a.classList.contains('on')){ var cb = $('chips'), cr = cb.getBoundingClientRect(), ar = a.getBoundingClientRect(); cb.scrollBy({ left: (ar.left + ar.width / 2) - (cr.left + cr.width / 2), behavior: 'smooth' }); }
-    a.classList.toggle('on', on);
-  });
-}
-addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
 
 /* ======================================================
    بياناتُ الأفعال
@@ -723,13 +850,13 @@ var EX_B = [
   { t:'﴿<span class="ayah">وَأَوْصَانِي بِالصَّلَاةِ وَالزَّكَاةِ [v:مَا دُمْتُ] [k:حَيًّا]</span>﴾', src:'مريم: ٣١', v:'ما دام', m:'مدّةَ دوامي حيّاً — «ما» مصدريّة ظرفيّة', s:'التاءُ في (دُمْتُ) ضميرٌ متّصل', k:'حيّاً (مفرد)' }
 ];
 function roles(t){ return t.replace(/\[(v|s|k):([^\]]+)\]/g, function(_, r, w){ return '<span data-r="' + r + '"' + (r === 'v' ? ' class="fv"' : '') + '>' + w + '</span>'; }); }
-function exHTML(list){
+function exHTML(list, off){
   return list.map(function(e, i){
-    return '<div class="exi" tabindex="0"><span class="n">' + AR(i + 1) + '</span><div class="t">' + roles(e.t) + (e.src ? ' <span class="src">(' + e.src + ')</span>' : '')
+    return '<div class="exi step" tabindex="0"><span class="n">' + AR(i + 1 + (off || 0)) + '</span><div class="t">' + roles(e.t) + (e.src ? ' <span class="src">(' + e.src + ')</span>' : '')
       + '<div class="x"><div><div class="inf"><span class="rv">' + e.v + '</span><span class="rs">اسمُه: ' + e.s + '</span><span class="rk">خبرُه: ' + e.k + '</span><span class="pill">المعنى: ' + e.m + '</span></div></div></div></div><span class="hint">انقرْ</span></div>';
   }).join('');
 }
-$('exA').innerHTML = exHTML(EX_A); $('exB').innerHTML = exHTML(EX_B);
+$('exA').innerHTML = exHTML(EX_A.slice(0, 4)); $('exA2').innerHTML = exHTML(EX_A.slice(4), 4); $('exB').innerHTML = exHTML(EX_B);
 var opened = {};
 document.querySelectorAll('.exi').forEach(function(el, i){
   function t(){ el.classList.toggle('open'); if (el.classList.contains('open')){ opened[i] = 1; if (Object.keys(opened).length === 13 && star('shw13', 2)) toast('اكتشفتَ الشواهدَ كلَّها — نجمتان ⭐'); } }
@@ -1269,6 +1396,113 @@ $('endName').value = LS.get(KEY + '_name', '');
 function who(){ var n = $('endName').value.trim(); $('endWho').textContent = n ? 'البطل: ' + n : ''; LS.set(KEY + '_name', n); }
 $('endName').oninput = who; who();
 $('endReset').onclick = function(){ if (!confirm('تصفيرُ النجومِ وكلِّ الإجاباتِ في هذا الجهاز؟')) return; LS.set(KEY, { stars: 0, done: {} }); LS.set(KEY + '_wr', ''); location.hash = ''; location.reload(); };
+
+/* ======================================================
+   محرّكُ الشرائح — فكرةٌ واحدةٌ في كلِّ شريحة، وكشفٌ تدريجيٌّ بـ.step
+   ← أو المسافة: التالي (يكشفُ الخطوةَ التاليةَ أوّلاً) · →: السابق (يُخفي آخرَ خطوةٍ أوّلاً)
+   ====================================================== */
+/* التدريباتُ: كلُّ سؤالٍ شريحة، وفوقَه عنوانُ التدريب */
+(function(){
+  var sec = $('tad'), box = $('tadBox'), map = [];
+  [].slice.call(box.querySelectorAll('.tq')).forEach(function(tq){
+    var h3 = tq.querySelector('h3'), items = [].slice.call(tq.querySelectorAll('.item')), cnt = h3.querySelector('.cnt');
+    if (cnt) cnt.remove();
+    var no = h3.querySelector('.b').textContent, title = h3.querySelector('span:not(.b)').textContent;
+    items.forEach(function(it, i){
+      var sl = document.createElement('div'); sl.className = 'slide'; sl.dataset.tq = no;
+      var t = document.createElement('div'); t.className = 'tq';
+      var h = h3.cloneNode(true); if (items.length > 1) h.insertAdjacentHTML('beforeend', '<span class="cnt qn">' + AR(i + 1) + ' من ' + AR(items.length) + '</span>');
+      t.appendChild(h); t.appendChild(it); sl.appendChild(t); sec.insertBefore(sl, box);
+      if (!i) map.push({ no: no, title: title, n: items.length, el: sl });
+    });
+  });
+  box.remove();
+  $('tadMap').innerHTML = map.map(function(m, i){ return '<button data-i="' + i + '"><b>' + m.no + '</b><span>' + esc(m.title.replace(/[:：]\s*$/, '')).slice(0, 70) + '</span><small>' + AR(m.n) + (m.n > 1 ? ' أسئلة' : ' سؤال') + '</small></button>'; }).join('');
+  $('tadMap').onclick = function(e){ var b = e.target.closest('button'); if (b) D.goEl(map[+b.dataset.i].el); };
+})();
+
+var D = (function(){
+  var SL = [].slice.call(document.querySelectorAll('.slide')), cur = -1;
+  function secOf(sl){ var s = sl.closest('section.sec'); return s ? { id: s.id, t: s.dataset.t } : { id: sl.dataset.sec, t: sl.dataset.t }; }
+  // عنوانُ القسمِ الصغيرُ فوقَ الشرائحِ التي لا ترويسةَ لها
+  var SECS = [];
+  SL.forEach(function(sl){
+    var s = secOf(sl); if (!SECS.length || SECS[SECS.length - 1].id !== s.id) SECS.push({ id: s.id, t: s.t, first: SL.indexOf(sl) });
+    if (sl.dataset.tq){ var k = document.createElement('div'); k.className = 'slk'; k.textContent = '١٠ · التدريبات'; sl.insertBefore(k, sl.firstChild); }
+  });
+  $('chips').innerHTML = SECS.map(function(s, i){ return '<a href="#" data-i="' + s.first + '" data-s="' + s.id + '">' + s.t + '</a>'; }).join('');
+  $('chips').onclick = function(e){ var a = e.target.closest('a'); if (!a) return; e.preventDefault(); go(+a.dataset.i); };
+  function steps(sl){ return [].slice.call(sl.querySelectorAll('.step')); }
+  function paintNav(){
+    var sl = SL[cur], s = secOf(sl), left = steps(sl).filter(function(x){ return !x.classList.contains('in'); }).length;
+    $('dSec').textContent = s.t; $('dCnt').textContent = AR(cur + 1) + ' / ' + AR(SL.length) + (left ? ' · بقي ' + AR(left) + ' للكشف' : '');
+    $('dPrev').disabled = cur === 0 && !steps(sl).some(function(x){ return x.classList.contains('in'); });
+    var nx = $('dNext'); nx.disabled = cur === SL.length - 1 && !left; nx.classList.toggle('more', !!left);
+    nx.querySelector('span').textContent = left ? 'اكشف' : 'التالي';
+    $('prog').style.width = ((cur + 1) / SL.length * 100).toFixed(1) + '%';
+    document.querySelectorAll('#chips a').forEach(function(a){
+      var on = a.dataset.s === s.id;
+      if (on && !a.classList.contains('on')){ var cb = $('chips'), cr = cb.getBoundingClientRect(), ar = a.getBoundingClientRect(); cb.scrollBy({ left: (ar.left + ar.width / 2) - (cr.left + cr.width / 2), behavior: 'smooth' }); }
+      a.classList.toggle('on', on);
+    });
+  }
+  function go(i, back){
+    i = Math.max(0, Math.min(SL.length - 1, i)); if (i === cur) return;
+    var dirBack = back != null ? back : i < cur;
+    if (cur >= 0) SL[cur].classList.remove('on', 'bk');
+    cur = i; var sl = SL[cur];
+    // دخولٌ للأمام: الخطواتُ مخفيّة — ورجوعٌ: مكشوفةٌ كلُّها
+    steps(sl).forEach(function(x){ x.classList.toggle('in', !!dirBack); x.classList.remove('now'); });
+    sl.classList.toggle('bk', !!dirBack); sl.classList.add('on');
+    scrollTo(0, 0);
+    try { history.replaceState(null, '', '#s' + (cur + 1)); } catch(e){}
+    if (sl.querySelector('#link')) setTimeout(drawArc, 60);
+    paintNav();
+  }
+  function next(){
+    var st = steps(SL[cur]).filter(function(x){ return !x.classList.contains('in'); })[0];
+    if (st){
+      st.classList.add('in', 'now'); setTimeout(function(){ st.classList.remove('now'); }, 1500);
+      if (st.querySelector('#link') || st.id === 'link') setTimeout(drawArc, 80);
+      var r = st.getBoundingClientRect(); if (r.bottom > innerHeight - 70) scrollBy({ top: r.bottom - innerHeight + 90, behavior: 'smooth' });
+      paintNav(); return;
+    }
+    go(cur + 1, false);
+  }
+  function prev(){
+    var shown = steps(SL[cur]).filter(function(x){ return x.classList.contains('in'); });
+    if (shown.length && cur > 0 || shown.length && cur === 0){ shown[shown.length - 1].classList.remove('in'); paintNav(); return; }
+    go(cur - 1, true);
+  }
+  $('dNext').onclick = next; $('dPrev').onclick = prev;
+  $('dFull').onclick = function(){ if (document.fullscreenElement) document.exitFullscreen(); else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen(); };
+  addEventListener('keydown', function(e){
+    var t = e.target; if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    if (e.key === 'ArrowLeft' || e.key === 'PageDown' || e.code === 'Space'){ e.preventDefault(); if (t && t.blur) t.blur(); next(); }
+    else if (e.key === 'ArrowRight' || e.key === 'PageUp'){ e.preventDefault(); prev(); }
+    else if (e.key === 'Home'){ go(0); } else if (e.key === 'End'){ go(SL.length - 1); }
+    else if (e.key === 'f' || e.key === 'F'){ $('dFull').click(); }
+  });
+  // السحبُ على الجوال — إلا فوقَ الألعابِ والسماء
+  var tx = null, ty = null;
+  addEventListener('touchstart', function(e){ if (e.target.closest('.rain,.sky,.bins,.pool,.stage,textarea')){ tx = null; return; } tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+  addEventListener('touchend', function(e){ if (tx == null) return; var dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty; tx = null; if (Math.abs(dx) > 70 && Math.abs(dy) < 60){ if (dx > 0) next(); else prev(); } }, { passive: true });
+  var m = /^#s(\d+)$/.exec(location.hash); go(m ? +m[1] - 1 : 0, false);
+  return { go: go, goEl: function(el){ go(SL.indexOf(el), false); } };
+})();
+
+/* ===== مؤقّتُ النقاش: فكّر ← زاوج ← شارك ===== */
+document.addEventListener('click', function(e){
+  var b = e.target.closest('.tmr'); if (!b) return;
+  if (b._iv){ clearInterval(b._iv); b._iv = null; b.classList.remove('run', 'over'); b.textContent = b._lbl; return; }
+  b._lbl = b._lbl || b.textContent; var total = +b.dataset.t, t0 = Date.now(), tps = b.parentNode.querySelector('.tps');
+  b.classList.add('run'); b.classList.remove('over');
+  b._iv = setInterval(function(){
+    var left = Math.max(0, total - Math.floor((Date.now() - t0) / 1000)), ph = left > total * 2 / 3 ? 'فكّرْ وحدَك' : left > total / 3 ? 'زاوِجْ زميلَك' : 'شارِكْ الفصل';
+    b.textContent = '⏱ ' + AR(left) + 'ث · ' + ph;
+    if (!left){ clearInterval(b._iv); b._iv = null; b.classList.remove('run'); b.classList.add('over'); b.textContent = '⏰ انتهى الوقت — شارِكوا'; setTimeout(function(){ if (!b._iv){ b.classList.remove('over'); b.textContent = b._lbl; } }, 6000); }
+  }, 250);
+});
 })();
 </script>
 </body>
