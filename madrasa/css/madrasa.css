@@ -523,6 +523,8 @@ table.tt tr.mark td{background:rgba(232,223,204,.35)}
 table.tt tr.mark .pn{color:var(--amber)}
 
 /* ===== تنزيلُ العرضِ في قائمةِ التحضيرات ===== */
+.lesson .deck.live{background:var(--gold);color:var(--green-ink)}
+.lesson .deck.live:hover{background:#E8B656;color:var(--green-ink)}
 .lesson .deck.dl{background:transparent;color:var(--green);cursor:pointer;font:inherit;font-size:14px;font-weight:700}
 .lesson .deck.dl:hover{background:var(--cream);color:var(--green-deep)}
 .lesson .deck.dl:disabled{opacity:.6;cursor:progress}

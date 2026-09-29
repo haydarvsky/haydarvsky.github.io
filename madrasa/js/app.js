@@ -579,6 +579,7 @@
       html += '<div class="lesson"><a class="go" href="lesson.html?id=' + encodeURIComponent(l.id) + '"><span class="n">' + ar(i + 1) + '</span>'
         + '<span class="t"><b>' + esc(lessonTitle(l)) + '</b><small>' + esc(l.sub || '') + '</small></span></a>'
         + (l.kind ? '<span class="k">' + esc(l.kind) + '</span>' : '')
+        + (l.html ? '<a class="deck live" href="' + esc(l.html) + '" title="الدرسُ التفاعليُّ بالألعاب — يُعرَضُ على السبّورة أو يفتحُه الطالب"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.4 4.9 5.4.8-3.9 3.8.9 5.4L12 15.9l-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"/></svg><span>الدرسُ التفاعلي</span></a>' : '')
         + (l.deck ? '<a class="deck" href="deck.html?id=' + encodeURIComponent(l.id) + '" title="العرضُ التقديميُّ للطلبة"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><span>العرض</span></a>'
           + '<button class="deck dl" data-dl="' + esc(l.id) + '" title="تنزيلُ العرضِ ملفَّ HTML يعملُ بلا إنترنت"><svg viewBox="0 0 24 24"><path d="M12 3.5v11"/><path d="m7.5 10 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg><span>تنزيل</span></button>' : '')
         + '</div>';
