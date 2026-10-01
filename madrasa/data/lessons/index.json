@@ -91,7 +91,8 @@
           "title": "التعبيرُ الكتابي / كتابةُ القصة",
           "sub": "التعبيرُ الكتابيّ ١",
           "kind": "تعبير",
-          "deck": true
+          "deck": true,
+          "html": "dars/g10-taabir-qissa.html"
         },
         {
           "id": "g10-taabir-2",
