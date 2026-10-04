@@ -189,6 +189,19 @@ input.ltr:not(:placeholder-shown){text-align:left}
 .sum b{color:var(--orange);font-weight:500}
 .sum .row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(251,244,230,.18)}
 .sum .row:last-child{border:0}
+/* ── الشروط والأحكام ── */
+.terms{max-height:340px;overflow-y:auto;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;font-size:15px;line-height:1.85;color:var(--ink-2)}
+.terms h3{font-size:16px;font-weight:700;color:var(--navy);line-height:1.6;margin-bottom:10px}
+.terms ol{list-style:arabic-indic;padding-inline-start:26px;display:grid;gap:8px}
+.terms li::marker{color:var(--teal-d);font-weight:700}
+.terms strong{color:var(--navy);font-weight:700}
+.agree{position:relative;display:flex;align-items:flex-start;gap:12px;margin-top:16px;font-size:16px;font-weight:500;cursor:pointer;line-height:1.7}
+.agree input{position:absolute;opacity:0;pointer-events:none}
+.a-box{flex:none;margin-top:3px;width:26px;height:26px;border-radius:8px;border:2px solid var(--line);background:#fff;position:relative;transition:.2s}
+.agree input:checked+.a-box{background:var(--teal);border-color:var(--teal)}
+.agree input:checked+.a-box::after{content:"";position:absolute;inset:3px 7px 7px;border:solid #fff;border-width:0 3px 3px 0;transform:rotate(45deg)}
+.agree input:focus-visible+.a-box{outline:3px solid var(--teal);outline-offset:3px}
+.block.bad .a-box{border-color:var(--err)}
 .privacy{font-size:13px;color:var(--ink-2);margin-top:16px}
 
 /* النافذة */

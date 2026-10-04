@@ -54,6 +54,7 @@
   const phoneVal = () => toEn($('#phone').value).replace(/[^\d+]/g, '');
   const phoneOk = () => { const d = phoneVal().replace(/\D/g, ''); return d.length >= 8 && d.length <= 15; };
   $('#phone').addEventListener('input', refresh);
+  $('#agree').addEventListener('change', () => refresh());
 
   // ── خانات الصور ──
   $$('.slot').forEach(slot => {
@@ -94,7 +95,8 @@
     nameOk,
     () => !!(files.child1 && files.child2),
     () => !parentsOn() || !!(files.father || files.mother),
-    phoneOk
+    phoneOk,
+    () => $('#agree').checked
   ];
   let tried = false;
   function refresh() {
@@ -175,9 +177,12 @@
       `الاسم: <b>${esc(nameVal())}</b>`,
       `واتساب: ${esc(phoneVal())}`,
       `صور الوالدين: ${parentsOn() ? [files.father && 'الأب', files.mother && 'الأم'].filter(Boolean).join(' و') : 'لا'}`,
-      `عدد الصور: ${photoCount()}`
+      `عدد الصور: ${photoCount()}`,
+      `موافقة وليّ الأمر على الشروط: نعم — ${consentTime()}`
     ].join('\n');
   }
+
+  const consentTime = () => new Date().toLocaleString('en-GB', { timeZone: 'Asia/Kuwait' });
 
   let lastId = null;
   async function send() {
@@ -247,7 +252,7 @@
     $('#waBtn').classList.toggle('btn-lantern', viaWa);
     $('#waBtn').classList.toggle('btn-ghost', !viaWa);
     const parents = parentsOn() ? [files.father && 'الأب', files.mother && 'الأم'].filter(Boolean).join(' و') : 'لا';
-    const msg = `السلام عليكم، أرغب بطلب قصة مخصّصة\nرقم الطلب: ${id}\nالقصة: ${story().title}\nالبطل: ${gender() === 'girl' ? 'بنت' : 'ولد'}\nالاسم: ${nameVal()}\nصور الوالدين: ${parents}\nواتساب: ${phoneVal()}\n\n(أرفق الصور بعد هذه الرسالة)`;
+    const msg = `السلام عليكم، أرغب بطلب قصة مخصّصة\nرقم الطلب: ${id}\nالقصة: ${story().title}\nالبطل: ${gender() === 'girl' ? 'بنت' : 'ولد'}\nالاسم: ${nameVal()}\nصور الوالدين: ${parents}\nواتساب: ${phoneVal()}\nموافقة وليّ الأمر على الشروط: نعم — ${consentTime()}\n\n(أرفق الصور بعد هذه الرسالة)`;
     $('#waBtn').href = `https://wa.me/${C.WHATSAPP}?text=${encodeURIComponent(msg)}`;
   }
 
