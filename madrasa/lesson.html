@@ -194,6 +194,8 @@ table.ord th:last-child{border-radius:9px 0 0 0}
 table.ord td{background:var(--card);border-bottom:1px solid var(--line);padding:5px 12px;vertical-align:top}
 table.ord th.ac,table.ord td.ac{text-align:center;width:96px}
 table.ord td.ac{font-weight:700;color:var(--green);background:rgba(232,223,204,.4)}
+/* أعمدةُ إجابةٍ طويلة: تأخذُ عرضَها ولا تنضغطُ في ٩٦px */
+table.ord.wa th.ac,table.ord.wa td.ac{width:auto;text-align:start}table.ord.wa td.ac{font-weight:600}
 table.ord tr:last-child td{border-bottom:none}
 body.noans table.ord td.ac{color:transparent}
 
@@ -433,7 +435,7 @@ function renderTable(t){
   var A=t.ans||[];
   var ac=function(i){return A.indexOf(i)>=0?' class="ac"':''};
   return (t.caption!=null?'<div class="tcap" contenteditable data-k="cap">'+esc(t.caption)+'</div>':'')
-    +'<table class="ord" data-k="table" data-ans="'+A.join(',')+'"><thead><tr>'
+    +'<table class="ord'+(t.rows.some(function(r){return A.some(function(i){return String(r[i]==null?'':r[i]).length>18})})?' wa':'')+'" data-k="table" data-ans="'+A.join(',')+'"><thead><tr>'
     +t.head.map(function(h,i){return '<th'+ac(i)+' contenteditable>'+esc(h)+'</th>'}).join('')
     +'</tr></thead><tbody>'
     +t.rows.map(function(r){return '<tr>'+t.head.map(function(_,i){return '<td'+ac(i)+' contenteditable>'+nl(r[i]==null?'':r[i])+'</td>'}).join('')+'</tr>'}).join('')

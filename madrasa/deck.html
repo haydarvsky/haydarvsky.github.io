@@ -525,7 +525,7 @@ table.t.grid td.fx{font-weight:700;color:#fff}
 .cut .row.in .cw.x{opacity:.35;text-decoration:line-through;text-decoration-color:#E0604D;text-decoration-thickness:3px;background:none}
 .cut .row.in .cw.g:not(.x){box-shadow:0 0 0 2px #E0604D;text-decoration:none;background:none}
 .cut .res{color:var(--gold);font-family:'Sakkal Saad Poster',serif;font-size:calc(var(--tx)*1.15);transition:opacity .45s}
-.cut .res::before{content:'← البليغ: ';font-family:'Sakkal Saad',sans-serif;font-size:var(--sm);color:var(--dim)}
+.cut .res::before{content:'← ' attr(data-l) ': ';font-family:'Sakkal Saad',sans-serif;font-size:var(--sm);color:var(--dim)}
 .cut .row:not(.in) .res{opacity:0}
 
 /* ===== ظهورُ الخطوات ===== */
@@ -617,7 +617,20 @@ var ART={
    +'<g class="c"><path class="draw" d="M96 150c30 12 60 14 90 12 40-3 70-14 118-10"/><path class="draw" d="M104 178c30 10 60 12 90 10 40-3 70-12 110-8"/><path class="draw" d="M120 122c26 9 52 11 80 10 34-2 62-10 100-6"/></g>'
    +'<g class="g"><path class="draw" d="M304 150l14-6-6 14M326 172l14-6-6 14"/></g></svg>',
   eye:'<svg viewBox="0 0 400 300"><path class="g draw" d="M60 150c50-70 230-70 280 0-50 70-230 70-280 0z"/><circle class="g draw" cx="200" cy="150" r="34"/><circle class="f" cx="200" cy="150" r="16"/>'
-   +'<g class="w"><path class="draw" d="M0 250c40-10 80-10 120 0s80 10 120 0 80-10 120 0 30-4 40-2"/></g><g class="c"><path class="draw" d="M330 60l14 14M340 46l10 10M354 66l-10-10"/></g></svg>'
+   +'<g class="w"><path class="draw" d="M0 250c40-10 80-10 120 0s80 10 120 0 80-10 120 0 30-4 40-2"/></g><g class="c"><path class="draw" d="M330 60l14 14M340 46l10 10M354 66l-10-10"/></g></svg>',
+  /* المجدُ لمن يُغامر: قمّةٌ ورايةٌ وطريقٌ متعرّج */
+  peak:'<svg viewBox="0 0 400 300"><path class="f" d="M30 250L170 70l60 80 40-40 100 140z"/><g class="g"><path class="draw" d="M30 250L170 70l60 80 40-40 100 140z"/><path class="draw" d="M170 70V30l34 12-34 12"/></g>'
+   +'<g class="c"><path class="draw" d="M110 250c24-18 4-38 34-56s8-40 26-64"/><path class="draw" d="M20 260h360"/></g><g class="w"><path class="draw" d="M60 60l8 8M68 60l-8 8M320 48l8 8M328 48l-8 8M290 90l6 6M296 90l-6 6"/></g></svg>',
+  /* لا بُدَّ للشَّهدِ من نحلٍ يُمنِّعُه */
+  hive:'<svg viewBox="0 0 400 300"><path class="f" d="M150 150l15-26h30l15 26-15 26h-30z"/><g class="g"><path class="draw" d="M120 150l15-26h30l15 26-15 26h-30z"/><path class="draw" d="M165 176l15-26h30l15 26-15 26h-30z"/><path class="draw" d="M165 124l15-26h30l15 26-15 26h-30z"/><path class="draw" d="M210 150l15-26h30l15 26-15 26h-30z"/>'
+   +'<path class="draw" d="M195 202c0 14-8 20-8 28a8 8 0 0 0 16 0c0-8-8-14-8-28"/></g><g class="float"><ellipse class="f" cx="312" cy="82" rx="16" ry="10"/><ellipse class="g draw" cx="312" cy="82" rx="16" ry="10"/><path class="c draw" d="M306 74c-6-14 4-20 10-8M316 72c4-14 16-10 8 2M304 82v0M312 74v16M320 75v14"/></g>'
+   +'<path class="w draw" d="M290 92c-30 20-40 50-80 52" stroke-dasharray="4 6"/></svg>',
+  /* بائعةُ الكبريت: عودُ ثقابٍ مشتعلٌ وسطَ الثلج */
+  flame:'<svg viewBox="0 0 400 300"><g class="c"><path class="draw" d="M150 250l90-118"/></g><path class="f" d="M248 120c-20-10-26-40-6-70 4 22 22 26 22 48 0 14-6 20-16 22z"/><path class="g draw" d="M248 120c-20-10-26-40-6-70 4 22 22 26 22 48 0 14-6 20-16 22z"/><circle class="g draw" cx="243" cy="127" r="8"/>'
+   +'<g class="c float"><path class="draw" d="M208 64c12-8 26-8 38 0M196 44c20-12 42-12 62 0"/></g><g class="w"><path class="draw" d="M80 70v30M65 85h30M70 75l20 20M90 75l-20 20"/><path class="draw" d="M330 190v24M318 202h24M322 194l16 16M338 194l-16 16"/><path class="draw" d="M100 200v18M91 209h18M300 60v14M293 67h14"/></g></svg>',
+  /* نصفُ يوم: بوّابةُ المدرسةِ وساعتُها */
+  school:'<svg viewBox="0 0 400 300"><path class="f" d="M170 250v-60a30 30 0 0 1 60 0v60z"/><g class="g"><path class="draw" d="M60 250V130l140-60 140 60v120"/><path class="draw" d="M170 250v-60a30 30 0 0 1 60 0v60"/><circle class="draw" cx="200" cy="122" r="22"/><path class="draw" d="M200 108v14l10 6"/></g>'
+   +'<g class="c"><path class="draw" d="M88 160h40v30H88zM272 160h40v30h-40z"/><path class="draw" d="M30 250h340"/><path class="draw" d="M200 190v60"/></g><g class="w float"><path class="draw" d="M40 60c20-8 40-8 60 0M300 50c20-8 40-8 60 0"/></g></svg>'
 };
 
 /* ============ بناءُ الشرائح ============ */
@@ -776,7 +789,7 @@ var B={
     return head(s.title||'مقصُّ الحذف')+(s.q?'<div class="gq">'+nl(s.q)+'</div>':'')
       +'<div class="cut">'+s.rows.map(function(r,k){
         return '<div class="row step keep" data-s="'+k+'"><span class="l">'+nl(r.l||ar(k+1))+'</span><div class="ws">'+r.words.map(function(w){var o=typeof w==='string'?{w:w}:w;
-          return '<span class="cw'+(o.x?' x':'')+'">'+nl(o.w)+'</span>'}).join('')+'</div><div class="res">'+nl(r.res)+'</div></div>'}).join('')+'</div>';
+          return '<span class="cw'+(o.x?' x':'')+'">'+nl(o.w)+'</span>'}).join('')+'</div><div class="res" data-l="'+esc(s.resLabel||'البليغ')+'">'+nl(r.res)+'</div></div>'}).join('')+'</div>';
   },
   points:function(s){
     return head(s.title||'الخلاصة')
