@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>قصةٌ بطلُها طفلك — رواق للنشر</title>
+<meta name="description" content="اختر الحكاية، وأرسل صورتين لطفلك، ونرسمه بطلاً لقصته باسمه ووجهه — رواق للنشر.">
+<meta name="theme-color" content="#1A164C">
+<meta property="og:title" content="قصةٌ بطلُها طفلك — رواق للنشر">
+<meta property="og:description" content="اختر الحكاية، وأرسل صورتين لطفلك، ونرسمه بطلاً لقصته باسمه ووجهه.">
+<meta property="og:image" content="https://haydarvsky.github.io/rowaq/img/ayna-hadiyati.jpg">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="img/favicon-192.png">
+<link rel="preload" href="fonts/din-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/din-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a href="#" class="brand" aria-label="رواق للنشر"><img src="img/logo.svg" alt="رواق للنشر"></a>
+    <a href="#order" class="top-cta">اطلب قصتك</a>
+  </div>
+</header>
+
+<!-- ═════════ الواجهة ═════════ -->
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-text">
+      <span class="eyebrow">قصصٌ مخصّصة · لكل حكاية .. مكان</span>
+      <h1>قصةٌ<br>بطلُها <em>طفلُك</em></h1>
+      <p>اختر الحكاية، وأرسل صورتين لطفلك، فنرسمه داخل الكتاب باسمه ووجهه، ونُخرج له قصةً لا يملكها أحدٌ غيره.</p>
+      <a href="#order" class="btn btn-lantern">ابدأ الطلب</a>
+    </div>
+    <div class="hero-arch" aria-hidden="true">
+      <div class="arch arch-hero"><img src="img/ayna-hadiyati.jpg" alt=""></div>
+      <span class="lamp"></span>
+    </div>
+  </div>
+  <ol class="wrap steps">
+    <li><b>١</b><span><strong>اختر الحكاية</strong>ونوع البطل واسمه</span></li>
+    <li><b>٢</b><span><strong>أرفق الصور</strong>صورتين للطفل، وللوالدين إن شئت</span></li>
+    <li><b>٣</b><span><strong>ادفع</strong>ونبدأ رسم قصته</span></li>
+  </ol>
+</section>
+
+<!-- ═════════ نموذج الطلب ═════════ -->
+<main id="order" class="order">
+  <form class="wrap form" id="form" novalidate>
+
+    <!-- ١ القصة -->
+    <fieldset class="block">
+      <legend><span class="num">١</span>اختر القصة</legend>
+      <div class="stories" id="stories"></div>
+    </fieldset>
+
+    <!-- ٢ البطل -->
+    <fieldset class="block">
+      <legend><span class="num">٢</span>البطل</legend>
+      <div class="gender" role="radiogroup">
+        <label class="g-card g-boy">
+          <input type="radio" name="gender" value="boy" required>
+          <span class="g-arch"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9"/><path d="M8 44c0-9 7-15 16-15s16 6 16 15"/></svg></span>
+          <span class="g-label">ولد</span>
+        </label>
+        <label class="g-card g-girl">
+          <input type="radio" name="gender" value="girl" required>
+          <span class="g-arch"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="18" r="9"/><path d="M15 22c-3 6-3 10 0 12M33 22c3 6 3 10 0 12"/><path d="M8 44c0-9 7-15 16-15s16 6 16 15"/></svg></span>
+          <span class="g-label">بنت</span>
+        </label>
+      </div>
+      <p class="err" data-for="gender">اختر ولد أو بنت</p>
+    </fieldset>
+
+    <!-- ٣ الاسم -->
+    <fieldset class="block">
+      <legend><span class="num">٣</span><span id="nameLegend">اسم البطل</span> <small>بالعربية</small></legend>
+      <input class="field" type="text" id="childName" name="childName" placeholder="مثال: يوسف" autocomplete="off" maxlength="24" required>
+      <p class="hint">يُكتب الاسم كما تريده أن يظهر في القصة.</p>
+      <p class="err" data-for="childName">اكتب الاسم بحروفٍ عربية</p>
+      <div class="preview" aria-live="polite">
+        <div class="pv-book">
+          <div class="pv-arch"><img id="pvImg" src="img/ayna-hadiyati.jpg" alt=""></div>
+          <div class="pv-title" id="pvTitle">أين هديتي؟</div>
+          <div class="pv-hero">قصةُ <b id="pvName">بطلنا</b></div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- ٤ صور الطفل -->
+    <fieldset class="block">
+      <legend><span class="num">٤</span><span>صورتان <span id="photoWho">للطفل</span></span></legend>
+      <ul class="tips">
+        <li>وجهٌ واضح من الأمام، في ضوء النهار</li>
+        <li>بلا نظارة شمسية ولا قبعة تغطي الملامح</li>
+        <li>صورة ثانية بزاوية أخرى أو بابتسامة</li>
+      </ul>
+      <div class="slots">
+        <label class="slot" data-key="child1">
+          <input type="file" accept="image/*" name="child1">
+          <span class="slot-frame"><span class="slot-empty"><i>+</i>الصورة الأولى</span></span>
+          <button type="button" class="slot-x" aria-label="حذف الصورة">×</button>
+        </label>
+        <label class="slot" data-key="child2">
+          <input type="file" accept="image/*" name="child2">
+          <span class="slot-frame"><span class="slot-empty"><i>+</i>الصورة الثانية</span></span>
+          <button type="button" class="slot-x" aria-label="حذف الصورة">×</button>
+        </label>
+      </div>
+      <p class="err" data-for="child">أرفق صورتين</p>
+    </fieldset>
+
+    <!-- ٥ الوالدان -->
+    <fieldset class="block">
+      <legend><span class="num">٥</span>الوالدان في القصة <small>اختياري</small></legend>
+      <label class="switch">
+        <input type="checkbox" id="parentsToggle">
+        <span class="sw"></span>
+        <span>أضيف صور الوالدين ليظهرا بملامحهما في القصة</span>
+      </label>
+      <div class="parents" id="parents" hidden>
+        <div class="slots">
+          <label class="slot" data-key="father">
+            <input type="file" accept="image/*" name="father">
+            <span class="slot-frame"><span class="slot-empty"><i>+</i>صورة الأب</span></span>
+            <button type="button" class="slot-x" aria-label="حذف الصورة">×</button>
+          </label>
+          <label class="slot" data-key="mother">
+            <input type="file" accept="image/*" name="mother">
+            <span class="slot-frame"><span class="slot-empty"><i>+</i>صورة الأم</span></span>
+            <button type="button" class="slot-x" aria-label="حذف الصورة">×</button>
+          </label>
+        </div>
+        <p class="hint">من لم تُرفق صورته يُرسم بشخصية القصة المعتادة.</p>
+        <p class="err" data-for="parents">أرفق صورة الأب أو الأم على الأقل، أو ألغِ هذا الخيار</p>
+      </div>
+    </fieldset>
+
+    <!-- ٦ التواصل -->
+    <fieldset class="block">
+      <legend><span class="num">٦</span>رقم الواتساب</legend>
+      <input class="field ltr" type="tel" id="phone" name="phone" placeholder="5xxx xxxx" inputmode="tel" autocomplete="tel" required>
+      <p class="hint">نرسل عليه تأكيد الطلب ومسودّة القصة قبل الطباعة.</p>
+      <p class="err" data-for="phone">اكتب رقماً صحيحاً</p>
+    </fieldset>
+
+    <div class="submit">
+      <div class="sum" id="sum"></div>
+      <button type="submit" class="btn btn-lantern btn-wide" id="sendBtn">أرسل الطلب وانتقل للدفع</button>
+      <p class="privacy">صورُ طفلك تُستعمل لرسم قصته فقط، ولا تُنشر في أي مكان.</p>
+    </div>
+  </form>
+</main>
+
+<!-- ═════════ الإرسال والنجاح ═════════ -->
+<div class="overlay" id="overlay" hidden>
+  <div class="panel" id="panelSending">
+    <div class="spin" aria-hidden="true"></div>
+    <h2>نُرسل طلبك…</h2>
+    <p id="progressText">نجهّز الصور</p>
+    <div class="bar"><span id="bar"></span></div>
+  </div>
+  <div class="panel" id="panelDone" hidden>
+    <img src="img/mark.svg" alt="" class="done-mark">
+    <h2>وصلنا طلبك</h2>
+    <p>رقم الطلب</p>
+    <div class="order-id ltr" id="orderId"></div>
+    <p class="small">احتفظ بالرقم، واذكره إن تواصلت معنا.</p>
+    <a class="btn btn-lantern btn-wide" id="payBtn" target="_blank" rel="noopener">ادفع الآن</a>
+    <p class="small" id="payNote" hidden>سنرسل لك رابط الدفع على الواتساب.</p>
+  </div>
+  <div class="panel" id="panelFail" hidden>
+    <h2 id="failTitle">تعذّر الإرسال</h2>
+    <p id="failText">تحقّق من الإنترنت ثم أعد المحاولة، أو راسلنا على الواتساب.</p>
+    <button type="button" class="btn btn-lantern btn-wide" id="retryBtn">أعد المحاولة</button>
+    <a class="btn btn-ghost btn-wide" id="waBtn" target="_blank" rel="noopener">راسلنا على الواتساب</a>
+    <button type="button" class="link-back" id="backBtn">رجوع إلى الطلب</button>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <img src="img/logo-reverse.svg" alt="رواق للنشر" class="foot-logo">
+    <div class="foot-links">
+      <a href="https://wa.me/96551529728" target="_blank" rel="noopener"><span class="ltr">+965 5152 9728</span></a>
+      <a href="https://instagram.com/rowaq.creative" target="_blank" rel="noopener"><span class="ltr">@rowaq.creative</span></a>
+    </div>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
