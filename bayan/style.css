@@ -119,7 +119,7 @@ a { color: inherit; text-decoration: none; }
 .steps b { flex: none; width: 36px; height: 36px; display: grid; place-items: center; border-radius: 11px; background: var(--sun); color: var(--ink); font-size: 17px; }
 .steps strong { display: block; color: #fff; font-size: 17px; line-height: 1.25; }
 
-/* ── شعار «اللعب عن طريق التعلّم» ── */
+/* ── شعار «التعلّم عن طريق اللعب» ── */
 .motto { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; font-weight: 800; font-size: 18px; color: var(--sun); }
 .motto::before { content: ""; width: 28px; height: 3px; border-radius: 2px; background: var(--orange); }
 .g-src { text-align: center; margin-top: 10px; font-size: 12px; font-weight: 700; color: var(--orange-t); }
