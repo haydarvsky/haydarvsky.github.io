@@ -1,4 +1,4 @@
-// ═══════════ إعدادات صفحة «بيان للألعاب التعليمية» — GoCode ═══════════
+// ═══════════ إعدادات صفحة «بيان من GoCode» ═══════════
 const BY_CONFIG = {
   // سعر المادة الواحدة، وسعر الباقة الكاملة (المواد الست)
   PRICE_EACH: 40,
@@ -26,11 +26,11 @@ const BY_CONFIG = {
   ],
 
   SUBJECTS: [
-    { id: "ar",  name: "اللغة العربية",    icon: "ar",  tint: "#E8435A" },
-    { id: "en",  name: "اللغة الإنجليزية", icon: "en",  tint: "#F4762C" },
-    { id: "sci", name: "العلوم",           icon: "sci", tint: "#F2A23A" },
-    { id: "math",name: "الرياضيات",        icon: "math",tint: "#E8435A" },
-    { id: "soc", name: "الاجتماعيات",      icon: "soc", tint: "#F4762C" },
-    { id: "isl", name: "التربية الإسلامية", icon: "isl", tint: "#F2A23A" }
+    { id: "ar",  name: "اللغة العربية",    icon: "ar",  tint: "#F25F1C" },
+    { id: "en",  name: "اللغة الإنجليزية", icon: "en",  tint: "#1593B5" },
+    { id: "sci", name: "العلوم",           icon: "sci", tint: "#E9A21C" },
+    { id: "math",name: "الرياضيات",        icon: "math",tint: "#1593B5" },
+    { id: "soc", name: "الاجتماعيات",      icon: "soc", tint: "#E9A21C" },
+    { id: "isl", name: "التربية الإسلامية", icon: "isl", tint: "#F25F1C" }
   ]
 };
