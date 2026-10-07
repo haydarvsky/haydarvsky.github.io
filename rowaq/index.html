@@ -113,7 +113,7 @@
 
     <!-- ٥ الوالدان -->
     <fieldset class="block">
-      <legend><span class="num">٥</span>الوالدان في القصة <small>اختياري</small></legend>
+      <legend><span class="num">٥</span>الوالدان والجدّة في القصة <small>اختياري</small></legend>
       <label class="switch">
         <input type="checkbox" id="parentsToggle">
         <span class="sw"></span>
@@ -135,6 +135,21 @@
         <p class="hint">من لم تُرفق صورته يُرسم بشخصية القصة المعتادة.</p>
         <p class="err" data-for="parents">أرفق صورة الأب أو الأم على الأقل، أو ألغِ هذا الخيار</p>
       </div>
+      <label class="switch" style="margin-top:14px">
+        <input type="checkbox" id="grandToggle">
+        <span class="sw"></span>
+        <span>أضيف صورة الجدّة لتظهر بملامحها في القصة <b id="grandPrice"></b></span>
+      </label>
+      <div class="parents" id="grand" hidden>
+        <div class="slots">
+          <label class="slot" data-key="grandma">
+            <input type="file" accept="image/*" name="grandma">
+            <span class="slot-frame"><span class="slot-empty"><i>+</i>صورة الجدّة</span></span>
+            <button type="button" class="slot-x" aria-label="حذف الصورة">×</button>
+          </label>
+        </div>
+        <p class="err" data-for="grand">أرفق صورة الجدّة، أو ألغِ هذا الخيار</p>
+      </div>
     </fieldset>
 
     <!-- ٦ التواصل -->
@@ -153,10 +168,11 @@
         <ol>
           <li><strong>الغرض الوحيد:</strong> نستخدم صور الطفل واسمه، وصور والديه إن أُرفقت، لغرضٍ واحد هو رسم قصته المخصّصة وإخراجها، ولا نستخدمها في غيرها.</li>
           <li><strong>لا قصةَ أخرى ولا نشر:</strong> لا نستخدم الصور ولا الرسوم المأخوذة منها في قصةٍ أو منتجٍ آخر، ولا ننشرها في أي منصة، ولا نبيعها ولا نشاركها مع أحد.</li>
-          <li><strong>المواد الإعلانية:</strong> لا نستخدم صور الطفل ولا اسمه ولا رسومه ولا صفحاتٍ من قصته في أي مادةٍ إعلانية أو ترويجية، ولا نعرضها نموذجاً لأعمالنا، إلا بموافقةٍ مباشرة من وليّ الأمر نطلبها منه مستقلّةً عن هذه الموافقة، وله أن يرفضها دون أن يتأثّر طلبه.</li>
+          <li><strong>المواد الإعلانية (اختياري):</strong> لا نستخدم صور الطفل ولا اسمه ولا رسومه ولا صفحاتٍ من قصته في أي مادةٍ إعلانية أو ترويجية، ولا نعرضها نموذجاً لأعمالنا، إلا إذا فعّل وليّ الأمر خيار الموافقة الاختياري أسفل الشروط. ولوليّ الأمر أن يرفضه دون أن يتأثّر طلبه، وأن يسحب موافقته فيه متى شاء.</li>
           <li><strong>أدوات الرسم:</strong> نستعين بأدوات تصميمٍ وذكاءٍ اصطناعي لرسم الطفل ووالديه شخصياتٍ داخل القصة، في حدود إخراج قصته فقط.</li>
           <li><strong>شخصيته له وحده:</strong> الشخصية المرسومة على ملامح الطفل لا تظهر في قصةٍ أخرى، ولا نعيد استخدامها لطفلٍ آخر.</li>
           <li><strong>صور الوالدين:</strong> لا نرسم الأب أو الأم بملامحهما إلا من صورٍ أرفقها وليّ الأمر بنفسه، ومن لم تُرفق صورته يُرسم بشخصية القصة المعتادة.</li>
+          <li><strong>مدة التوصيل:</strong> أربعة (٤) أيام من تاريخ الدفع.</li>
           <li><strong>المسودّة والنسخ:</strong> نرسل مسودّة القصة إلى وليّ الأمر وحده على الواتساب قبل الطباعة، ولا نطبع منها إلا النسخ التي طلبها.</li>
           <li><strong>الحفظ والحذف:</strong> نحفظ الصور الأصلية وملفات القصة في مكانٍ آمن لا يصل إليه إلا فريق الإخراج، ونحذفها متى طلب وليّ الأمر ذلك.</li>
           <li><strong>سحب الموافقة:</strong> لوليّ الأمر أن يسحب موافقته متى شاء بمراسلتنا، فنحذف صور الطفل ووالديه؛ وإن كان ذلك قبل التسليم فقد يتعذّر إكمال القصة بملامحهم.</li>
@@ -169,12 +185,19 @@
         <span>أُقرّ بأنني وليّ أمر الطفل، وقرأتُ الشروط والأحكام، وأوافق على استخدام صوره، وصور والديه إن أرفقتها، في رسم قصته فقط وفق هذه الشروط.</span>
       </label>
       <p class="err" data-for="agree">الموافقة على الشروط مطلوبة لإتمام الطلب</p>
+      <label class="agree agree-opt">
+        <input type="checkbox" id="adsOk">
+        <span class="a-box" aria-hidden="true"></span>
+        <span><em class="opt">اختياري</em> أوافق على استخدام قصة ابني (اسمه ورسومه وصفحات من قصته) في حسابات التواصل الاجتماعي والدعاية والإعلان عن المنتج.</span>
+      </label>
+      <p class="hint">هذه الموافقة اختيارية، ولا يتأثّر طلبك إن تركتها فارغة.</p>
     </fieldset>
 
     <div class="submit">
       <div class="sum" id="sum"></div>
       <button type="submit" class="btn btn-lantern btn-wide" id="sendBtn">أرسل الطلب وانتقل للدفع</button>
-      <p class="privacy">صورُ طفلك تُستعمل لرسم قصته فقط، ولا تظهر في أي إعلانٍ إلا بموافقتك المباشرة.</p>
+      <p class="delivery">🚚 مدة التوصيل <strong>٤ أيام</strong> من تاريخ الدفع.</p>
+      <p class="privacy">صورُ طفلك تُستعمل لرسم قصته فقط، ولا تظهر في أي إعلانٍ إلا بموافقتك الاختيارية أعلاه.</p>
     </div>
   </form>
 </main>
@@ -194,6 +217,7 @@
     <div class="order-id ltr" id="orderId"></div>
     <p class="small">احتفظ بالرقم، واذكره إن تواصلت معنا.</p>
     <a class="btn btn-lantern btn-wide" id="payBtn" target="_blank" rel="noopener">ادفع الآن</a>
+    <p class="small">مدة التوصيل ٤ أيام من تاريخ الدفع.</p>
     <p class="small" id="payNote" hidden>سنرسل لك رابط الدفع على الواتساب.</p>
   </div>
   <div class="panel" id="panelFail" hidden>

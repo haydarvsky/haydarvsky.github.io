@@ -87,6 +87,12 @@
   const parentsOn = () => $('#parentsToggle').checked;
   $('#parentsToggle').addEventListener('change', () => { $('#parents').hidden = !parentsOn(); refresh(); });
 
+  // ── الجدّة (إضافة مدفوعة) ──
+  const grandOn = () => $('#grandToggle').checked;
+  const GKD = C.GRANDMA_KD || 0;
+  $('#grandPrice').textContent = GKD ? `(+${toAr(GKD)} د.ك)` : '';
+  $('#grandToggle').addEventListener('change', () => { $('#grand').hidden = !grandOn(); refresh(); });
+
   // ── التحقق ──
   const blocks = $$('.block');
   const checks = [
@@ -94,7 +100,7 @@
     () => !!gender(),
     nameOk,
     () => !!(files.child1 && files.child2),
-    () => !parentsOn() || !!(files.father || files.mother),
+    () => (!parentsOn() || !!(files.father || files.mother)) && (!grandOn() || !!files.grandma),
     phoneOk,
     () => $('#agree').checked
   ];
@@ -102,20 +108,24 @@
   function refresh() {
     blocks.forEach((b, i) => {
       const ok = checks[i]();
-      b.classList.toggle('ok', ok && (i !== 4 || parentsOn()));
+      b.classList.toggle('ok', ok && (i !== 4 || parentsOn() || grandOn()));
       if (tried) {
         b.classList.toggle('bad', !ok);
-        $$('.err', b).forEach(e => e.classList.toggle('on', !ok));
+        $$('.err', b).forEach(e => {
+          const f = e.dataset.for;
+          const bad = i === 4 ? (f === 'grand' ? grandOn() && !files.grandma : parentsOn() && !(files.father || files.mother)) : !ok;
+          e.classList.toggle('on', bad);
+        });
       }
     });
     renderSum();
   }
 
-  function photoCount() { return Object.keys(files).filter(k => parentsOn() || k.startsWith('child')).length; }
+  function photoCount() { return Object.keys(files).filter(k => k.startsWith('child') || (k === 'grandma' ? grandOn() : parentsOn())).length; }
 
   function renderSum() {
     const sum = $('#sum');
-    const any = gender() || nameVal() || Object.keys(files).length;
+    const any = gender() || nameVal() || grandOn() || Object.keys(files).length;
     sum.classList.toggle('on', !!any);
     if (!any) return;
     const rows = [
@@ -125,6 +135,8 @@
       ['الصور', toAr(photoCount())]
     ];
     if (C.PRICE) rows.push(['السعر', esc(C.PRICE)]);
+    if (grandOn()) rows.push(['إضافة صورة الجدّة', `+${toAr(GKD)} د.ك`]);
+    if (C.BASE_KD) rows.push(['الإجمالي', `${toAr(C.BASE_KD + (grandOn() ? GKD : 0))} د.ك`]);
     sum.innerHTML = rows.map(([k, v]) => `<div class="row"><span>${k}</span><b>${v}</b></div>`).join('');
   }
 
@@ -153,7 +165,7 @@
 
   // ── الإرسال إلى بوت تلقرام ──
   const tg = m => `https://api.telegram.org/bot${C.TG_TOKEN}/${m}`;
-  const LABELS = { child1: 'صورة البطل ١', child2: 'صورة البطل ٢', father: 'صورة الأب', mother: 'صورة الأم' };
+  const LABELS = { child1: 'صورة البطل ١', child2: 'صورة البطل ٢', father: 'صورة الأب', mother: 'صورة الأم', grandma: 'صورة الجدّة' };
 
   function upload(fd, onProgress) {
     return new Promise((res, rej) => {
@@ -177,11 +189,14 @@
       `الاسم: <b>${esc(nameVal())}</b>`,
       `واتساب: ${esc(phoneVal())}`,
       `صور الوالدين: ${parentsOn() ? [files.father && 'الأب', files.mother && 'الأم'].filter(Boolean).join(' و') : 'لا'}`,
+      `صورة الجدّة: ${grandOn() ? 'نعم (+' + GKD + ' د.ك)' : 'لا'}`,
       `عدد الصور: ${photoCount()}`,
-      `موافقة وليّ الأمر على الشروط: نعم — ${consentTime()}`
+      `موافقة وليّ الأمر على الشروط: نعم — ${consentTime()}`,
+      `الموافقة على استخدام القصة في السوشيال والإعلان (اختياري): ${adsText()}`
     ].join('\n');
   }
 
+  const adsText = () => $('#adsOk').checked ? 'نعم' : 'لا';
   const consentTime = () => new Date().toLocaleString('en-GB', { timeZone: 'Asia/Kuwait' });
 
   let lastId = null;
@@ -197,7 +212,7 @@
     try {
       if (!C.TG_TOKEN || !C.TG_CHAT) return fail(id, true);
       txt.textContent = 'نجهّز الصور';
-      const keys = ['child1', 'child2'].concat(parentsOn() ? ['father', 'mother'] : []).filter(k => files[k]);
+      const keys = ['child1', 'child2'].concat(parentsOn() ? ['father', 'mother'] : []).concat(grandOn() ? ['grandma'] : []).filter(k => files[k]);
       const fd = new FormData();
       fd.append('chat_id', C.TG_CHAT);
       const media = [];
@@ -252,7 +267,7 @@
     $('#waBtn').classList.toggle('btn-lantern', viaWa);
     $('#waBtn').classList.toggle('btn-ghost', !viaWa);
     const parents = parentsOn() ? [files.father && 'الأب', files.mother && 'الأم'].filter(Boolean).join(' و') : 'لا';
-    const msg = `السلام عليكم، أرغب بطلب قصة مخصّصة\nرقم الطلب: ${id}\nالقصة: ${story().title}\nالبطل: ${gender() === 'girl' ? 'بنت' : 'ولد'}\nالاسم: ${nameVal()}\nصور الوالدين: ${parents}\nواتساب: ${phoneVal()}\nموافقة وليّ الأمر على الشروط: نعم — ${consentTime()}\n\n(أرفق الصور بعد هذه الرسالة)`;
+    const msg = `السلام عليكم، أرغب بطلب قصة مخصّصة\nرقم الطلب: ${id}\nالقصة: ${story().title}\nالبطل: ${gender() === 'girl' ? 'بنت' : 'ولد'}\nالاسم: ${nameVal()}\nصور الوالدين: ${parents}\nصورة الجدّة: ${grandOn() ? 'نعم (+' + GKD + ' د.ك)' : 'لا'}\nواتساب: ${phoneVal()}\nموافقة وليّ الأمر على الشروط: نعم — ${consentTime()}\nالموافقة على استخدام القصة في السوشيال والإعلان (اختياري): ${adsText()}\n\n(أرفق الصور بعد هذه الرسالة)`;
     $('#waBtn').href = `https://wa.me/${C.WHATSAPP}?text=${encodeURIComponent(msg)}`;
   }
 

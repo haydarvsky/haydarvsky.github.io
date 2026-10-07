@@ -259,3 +259,8 @@ input.ltr:not(:placeholder-shown){text-align:left}
   .foot-in{justify-content:center;text-align:center}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+
+.agree-opt{margin-top:12px;font-size:15px}
+.opt{font-style:normal;font-size:12px;font-weight:700;color:var(--teal-d);background:var(--paper);border:1px solid var(--line);border-radius:99px;padding:1px 9px;margin-inline-end:6px}
+.delivery{text-align:center;font-size:15px;color:var(--ink-2);margin:10px 0 0}
+.delivery strong{color:var(--navy)}
