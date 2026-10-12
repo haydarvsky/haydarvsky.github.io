@@ -149,16 +149,18 @@
         {
           "id": "g10-tamthili-1",
           "title": "فنونُ البلاغة — التشبيهُ التمثيلي",
-          "sub": "تشبيهُ صورةٍ بصورة",
+          "sub": "تشبيهُ صورةٍ بصورة — درسٌ تفاعليٌّ بالصورِ والألعاب",
           "kind": "بلاغة",
-          "deck": true
+          "deck": true,
+          "html": "dars/g10-tamthili.html"
         },
         {
           "id": "g10-tamthili-2",
           "title": "التشبيهُ التمثيلي (تدريب)",
           "sub": "جولاتُ تدريباتِ الكتاب",
           "kind": "بلاغة",
-          "deck": true
+          "deck": true,
+          "html": "dars/g10-tamthili.html#s19"
         },
         {
           "id": "g10-muqaraba-1",
