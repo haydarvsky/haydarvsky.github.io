@@ -1001,6 +1001,18 @@ function chooseClass(id){
   return FB.DB.get('sc_days'+WSX(), id+'_'+todayISO()).then(function(d){ ((d&&d.ev)||[]).forEach(function(e){ if(e.type==='absent') RS.absent[e.sid]=1; }); }).catch(function(){});
 }
 function paintPill(){ $('clsPill').textContent=RS.cls?RS.cls.name:''; }
+/* عشوائيّةٌ حقيقيّة: مولِّدُ التشفيرِ في المتصفّح، وكيسُ خلطٍ لكلِّ دورةٍ (Fisher–Yates) يُخلَطُ من جديدٍ كلَّ دورة،
+   ولا يبدأُ الدورُ الجديدُ بآخرِ من اختِير — فلا ترتيبَ يتكرّرُ بين الحصص */
+function rndInt(n){ try{ var a=new Uint32Array(1), lim=4294967296-(4294967296%n); do{ crypto.getRandomValues(a); }while(a[0]>=lim); return a[0]%n; }catch(e){ return Math.floor(Math.random()*n); } }
+function bagKey(){ return askedKey()+'_bag'; }
+function bagNext(P){
+  var ids=P.map(function(s){return s.id}), bag=[];
+  try{ bag=JSON.parse(localStorage.getItem(bagKey())||'[]').filter(function(id){return ids.indexOf(id)>=0}); }catch(e){}
+  ids.forEach(function(id){ if(bag.indexOf(id)<0) bag.splice(rndInt(bag.length+1),0,id); });   /* من لم يكن في الكيسِ يدخلُه في موضعٍ عشوائيّ */
+  if(bag.length===ids.length && RS.prev && bag.length>1 && bag[0]===RS.prev){ var j=1+rndInt(bag.length-1), t=bag[0]; bag[0]=bag[j]; bag[j]=t; }
+  var id=bag.shift(); try{ localStorage.setItem(bagKey(), JSON.stringify(bag)); }catch(e){}
+  RS.prev=id; return P.filter(function(s){return s.id===id})[0]||P[rndInt(P.length)];
+}
 function pool(){ return (RS.cls?RS.cls.students||[]:[]).filter(function(st){return !RS.absent[st.id]&&RS.asked.indexOf(st.id)<0}); }
 function rndOpen(mode){ RS.mode=mode||'pick'; $('rnd').classList.add('on'); rndPaint(); }
 function rndClose(){ $('rnd').classList.remove('on'); }
@@ -1031,7 +1043,7 @@ $('rndBox').addEventListener('click',function(e){
   if(b.dataset.c!==undefined){ chooseClass(b.dataset.c).then(function(){ RS.mode='pick'; rndPick(); }); return; }
   if(b.id==='rAgain') rndPick();
   else if(b.id==='rAbs'&&RS.last){ RS.absent[RS.last.id]=1; RS.asked=RS.asked.filter(function(x){return x!==RS.last.id}); saveAsked(); rndPick(); }
-  else if(b.id==='rReset'){ RS.asked=[]; saveAsked(); rndPaint(); }
+  else if(b.id==='rReset'){ RS.asked=[]; saveAsked(); try{localStorage.removeItem(bagKey())}catch(e){} rndPaint(); }
   else if(b.id==='rCls'){ loadClasses().then(function(){ RS.mode='cls'; rndPaint(); }); }
   else if(b.id==='rClose') rndClose();
 });
@@ -1039,20 +1051,20 @@ function saveAsked(){ try{localStorage.setItem(askedKey(),JSON.stringify(RS.aske
 function rndPick(){
   RS.mode='pick'; $('rnd').classList.add('on');
   if(!RS.cls){ /* أرقام */
-    RS.last=null; rndPaint(); var n=$('rndN'), k=0, target=1+Math.floor(Math.random()*RN); n.classList.add('spin');
+    RS.last=null; rndPaint(); var n=$('rndN'), k=0, target=1+rndInt(RN); n.classList.add('spin');
     $('rnd').classList.add('rolling'); $('rndBox').classList.remove('land');
-    (function tick(){ n.textContent=ar(1+Math.floor(Math.random()*RN)); k++; if(k<14) setTimeout(tick,40+k*k*1.4);
+    (function tick(){ n.textContent=ar(1+rndInt(RN)); k++; if(k<14) setTimeout(tick,40+k*k*1.4);
       else { n.classList.remove('spin'); $('rnd').classList.remove('rolling'); n.textContent=ar(target); $('rndBox').classList.add('land'); } })();
     return;
   }
   var P=pool();
   if(!P.length){ if(!(RS.cls.students||[]).length){ RS.last=null; rndPaint(); $('rndN').textContent='لا متعلّمينَ في هذا الفصل'; return; }
-    RS.asked=[]; saveAsked(); P=pool(); if(!P.length){ RS.last=null; rndPaint(); $('rndN').textContent='الكلُّ غائب!'; return; } }
-  var target=P[Math.floor(Math.random()*P.length)];
+    RS.asked=[]; saveAsked(); try{localStorage.removeItem(bagKey())}catch(e){} P=pool(); if(!P.length){ RS.last=null; rndPaint(); $('rndN').textContent='الكلُّ غائب!'; return; } }
+  var target=bagNext(P);
   RS.last=target; RS.asked.push(target.id); saveAsked(); rndPaint();
   var n=$('rndN'), av=$('rndAv'), box=$('rndBox'), k=0, all=(RS.cls.students||[]).filter(function(st){return !RS.absent[st.id]});
   n.classList.add('spin'); $('rnd').classList.add('rolling'); box.classList.remove('land');
-  (function tick(){ var r=all[Math.floor(Math.random()*all.length)]; n.textContent=r.name; av.textContent=String(r.name).trim().charAt(0);
+  (function tick(){ var r=all[rndInt(all.length)]; n.textContent=r.name; av.textContent=String(r.name).trim().charAt(0);
     k++; if(k<14) setTimeout(tick,40+k*k*1.4);
     else { n.classList.remove('spin'); $('rnd').classList.remove('rolling'); n.textContent=target.name; av.textContent=String(target.name).trim().charAt(0); box.classList.add('land'); } })();
 }
