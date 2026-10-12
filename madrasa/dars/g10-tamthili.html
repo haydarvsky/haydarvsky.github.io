@@ -556,6 +556,77 @@ body.pk-on .hero.slide.on,body.pk-on .end.slide.on{padding-top:calc(var(--pkH,10
 .mcol button small{display:block;font-size:14px;color:var(--muted)}
 .game .why{display:none;font-size:18px;color:#4A3A2A;background:#FBF3E1;border-radius:12px;padding:8px 14px}
 .game .why.on{display:block;animation:fade .4s}
+/* ===== اللوحتان المدمَجتان ===== */
+.dg{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:16px;align-items:center;margin-top:12px}
+.dg .roles{margin-top:0}
+.dg .role{font-size:clamp(16.5px,1.8vw,20px)}
+@media(max-width:860px){.dg{grid-template-columns:1fr}}
+.duo{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:46px}
+.duo .pn{position:relative;border-radius:18px;overflow:hidden;box-shadow:0 14px 30px -18px rgba(6,34,25,.6);background:#0A3428;transition:transform 1.1s var(--e-out),box-shadow .6s}
+.duo .pn svg{display:block;width:100%;height:auto;transition:filter .8s}
+.duo .pn .tg{position:absolute;top:8px;right:8px;font-size:13.5px;font-weight:700;color:#fff;border-radius:100px;padding:0 10px;box-shadow:0 4px 10px -4px #000;transition:opacity .4s}
+.duo .pn.m .tg{background:var(--m)}.duo .pn.b .tg{background:var(--b)}
+.duo .pn .cp{position:absolute;bottom:0;inset-inline:0;padding:18px 10px 6px;font-size:14.5px;line-height:1.45;color:#fff;text-align:center;background:linear-gradient(transparent,rgba(0,0,0,.62));transition:opacity .4s}
+.duo .sk{position:absolute;top:0;left:calc(25% + 3.5px);width:calc(50% - 7px);height:auto;pointer-events:none;opacity:0;z-index:2;transform:scale(1.14);transition:opacity .5s .7s;filter:drop-shadow(0 0 5px rgba(255,205,100,.95))}
+.duo .sk *{fill:none;stroke:#FFE08A;stroke-width:3.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s var(--e-out) 1s}
+.duo .sk .d{fill:#FFE9A8;stroke:none;opacity:0;transition:opacity .5s 2.2s}
+.duo .sk .dz{stroke-dasharray:.035 .03;stroke-dashoffset:0;opacity:0;transition:opacity .6s 1.8s}
+.duo .mb{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:4;border:2px solid var(--gold);background:var(--green-deep);color:var(--gold);border-radius:100px;padding:5px 14px;font-weight:700;font-size:15px;box-shadow:0 8px 20px -8px #000;transition:all .6s var(--e-out);white-space:nowrap}
+.duo .mb:hover{background:var(--gold);color:var(--green-ink)}
+.duo .wcap{position:absolute;top:calc(100% + 8px);left:50%;transform:translate(-50%,-10px);opacity:0;z-index:3;width:max-content;max-width:min(92%,560px);text-align:center;background:linear-gradient(135deg,#4E3A7E,#33255A);color:#fff;border-radius:16px;padding:4px 14px 6px;font-weight:700;font-size:clamp(14px,1.5vw,17px);line-height:1.5;box-shadow:0 10px 24px -10px #000;transition:all .6s var(--e-out) 2s;pointer-events:none}
+.duo .wcap small{font-size:13px;font-weight:400;opacity:.8;margin-inline-end:4px}
+.duo.single .wcap{background:linear-gradient(135deg,#5E5246,#3E352C)}
+/* الدمج: تنزلقُ اللوحتان إلى الوسط وتتراكبان، والثانيةُ تتنفّسُ فوقَ الأولى */
+.duo.mg .pn.m{transform:translateX(calc(-50% - 7px)) scale(1.14)}
+.duo.mg .pn.b{transform:translateX(calc(50% + 7px)) scale(1.14);animation:duoBreath 3.4s ease-in-out 1.2s infinite alternate;box-shadow:none}
+@keyframes duoBreath{from{opacity:.82}to{opacity:.12}}
+.duo.mg .pn svg{filter:brightness(.78) saturate(.9)}
+.duo.mg .pn .tg,.duo.mg .pn .cp{opacity:0}
+.duo.mg .sk{opacity:1}
+.duo.mg .sk *{stroke-dashoffset:0}
+.duo.mg .sk .d,.duo.mg .sk .dz{opacity:1}
+.duo.mg .wcap{opacity:1;transform:translate(-50%,0)}
+.duo.mg .pn.m,.duo.mg .pn.b{z-index:1}
+.duo.mg .mb{top:8px;left:calc(25% + 12px);transform:none;font-size:13px;padding:2px 12px}
+.duo.single.mg .pn.b{animation-duration:2.6s}
+.vwhy .dg{margin-top:0}
+.tc2{position:relative}
+.tc2>.tmr{position:absolute;top:10px;left:12px}
+/* حركاتُ داخلِ اللوحات */
+.duo .fx-drift{animation:fxDrift 3.4s linear infinite}
+@keyframes fxDrift{0%{transform:translate(0,0);opacity:0}12%{opacity:1}100%{transform:translate(-70px,-16px);opacity:0}}
+.duo .fx-flap{transform-box:fill-box;transform-origin:50% 90%;animation:fxFlap 1.5s ease-in-out infinite alternate}
+@keyframes fxFlap{to{transform:scaleY(.72) rotate(0)}}
+.duo .fx-fall{animation:fxFall 2.6s ease-in infinite}
+@keyframes fxFall{0%{transform:translate(18px,-30px);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translate(-14px,24px);opacity:0}}
+.duo .fx-tw{animation:fxTw 2.2s ease-in-out infinite alternate}
+@keyframes fxTw{from{opacity:.25}to{opacity:1}}
+.duo .fx-tw2{animation:fxTw2 2s ease-in-out infinite alternate}
+@keyframes fxTw2{from{opacity:.55}to{opacity:1}}
+.duo .fx-rip{transform-box:fill-box;transform-origin:center;animation:fxRip 2.4s ease-out infinite}
+@keyframes fxRip{from{transform:scale(.35);opacity:1}to{transform:scale(1.15);opacity:0}}
+.duo .fx-sway{transform-box:fill-box;transform-origin:50% 100%;animation:fxSway 2.6s ease-in-out infinite alternate}
+@keyframes fxSway{from{transform:rotate(-13deg)}to{transform:rotate(13deg)}}
+.duo .fx-bob{animation:fxBob 1.1s ease-in-out infinite alternate}
+@keyframes fxBob{to{transform:translateY(-3px)}}
+.duo .fx-rain{animation:fxRain .9s linear infinite}
+@keyframes fxRain{from{transform:translateY(-14px);opacity:0}30%{opacity:1}to{transform:translateY(16px);opacity:0}}
+.duo .fx-wind{animation:fxWind 2.8s ease-in-out infinite}
+@keyframes fxWind{0%{transform:translateX(30px);opacity:0}30%{opacity:1}100%{transform:translateX(-40px);opacity:0}}
+.duo .fx-pulse{transform-box:fill-box;transform-origin:center;animation:fxPulse 2.4s ease-in-out infinite alternate}
+@keyframes fxPulse{from{opacity:.5;transform:scale(.94)}to{opacity:1;transform:scale(1.06)}}
+.duo .fx-cloud{animation:fxCloud 6s ease-in-out infinite}
+@keyframes fxCloud{0%,15%{transform:translateX(0)}50%,70%{transform:translateX(118px);opacity:.85}100%{transform:translateX(0)}}
+.duo .fx-seq{animation:fxSeq 6s ease-in-out infinite;opacity:0}
+@keyframes fxSeq{0%{opacity:0}10%,80%{opacity:1}100%{opacity:0}}
+.duo .fx-paw{transform-box:fill-box;transform-origin:50% 0;animation:fxPaw 2.2s ease-in-out infinite}
+@keyframes fxPaw{0%,100%{transform:translateY(-6px) rotate(-18deg)}50%{transform:translateY(0) rotate(0)}}
+@media(max-width:560px){.duo{gap:8px}.duo .pn .cp{font-size:12px;padding:12px 6px 4px}.duo .wcap{max-width:calc(50% - 6px);font-size:12.5px}.duo.mg .pn.m{transform:translateX(calc(-50% - 4px))}.duo.mg .pn.b{transform:translateX(calc(50% + 4px))}.duo .sk{left:calc(25% + 2px);width:calc(50% - 4px)}}
+.tq .txtc{padding:10px 18px}
+.tq .bayt{font-size:clamp(21px,2.3vw,29px);line-height:1.55}
+.tq .ay,.tq .ay.long{font-size:clamp(19px,2.1vw,26px);line-height:1.85}
+.tq .hd2{font-size:clamp(19px,2.1vw,25px);line-height:1.8}
+.tq .who2{font-size:14.5px}
 </style>
 </head>
 <body>
@@ -655,16 +726,13 @@ body.pk-on .hero.slide.on,body.pk-on .end.slide.on{padding-top:calc(var(--pkH,10
 <section class="sec" id="amth" data-t="الأمثلة">
   <div class="slide">
     <div class="sh"><div class="no">٣</div><div><h2>المثالُ الأوّل</h2><p>قبلَ الكشف: ما الصورةُ الأولى؟ وما الصورةُ الثانية؟</p></div></div>
-    <div class="exg">
-      <div>
-        <div class="txtc"><span class="who2">قال تعالى:</span><div class="ay">﴿مَثَلُ الَّذِينَ كَفَرُوا بِرَبِّهِمْ ۖ أَعْمَالُهُمْ كَرَمَادٍ اشْتَدَّتْ بِهِ الرِّيحُ فِي يَوْمٍ عَاصِفٍ ۖ لَّا يَقْدِرُونَ مِمَّا كَسَبُوا عَلَىٰ شَيْءٍ ۚ ذَٰلِكَ هُوَ الضَّلَالُ الْبَعِيدُ﴾ <span class="src">(إبراهيم: ١٨)</span></div></div>
-        <div class="roles">
-          <div class="role m step"><b>المشبَّه:</b> صورةُ أعمالِ الكفّارِ في عدمِ جدواها، وعدمِ الحصولِ على ثوابِها.</div>
-          <div class="role b step"><b>المشبَّهُ به:</b> صورةُ رمادٍ أصابته الريحُ الشديدةُ في يومٍ عاصف، فتبعثرَ وتطاير ولم يبقَ منه شيء.<div class="parts"><i>رماد</i><i>ريحٌ شديدة</i><i>يومٌ عاصف</i><i>تبعثرٌ وتطاير</i></div></div>
-          <div class="role w step"><b>وجهُ الشبه:</b> الخيبةُ والخذلانُ حينَ اعتقادِ الفوزِ والنجاح — منتزَعٌ من متعدّد.</div>
-        </div>
+    <div class="txtc"><span class="who2">قال تعالى:</span><div class="ay">﴿مَثَلُ الَّذِينَ كَفَرُوا بِرَبِّهِمْ ۖ أَعْمَالُهُمْ كَرَمَادٍ اشْتَدَّتْ بِهِ الرِّيحُ فِي يَوْمٍ عَاصِفٍ ۖ لَّا يَقْدِرُونَ مِمَّا كَسَبُوا عَلَىٰ شَيْءٍ ۚ ذَٰلِكَ هُوَ الضَّلَالُ الْبَعِيدُ﴾ <span class="src">(إبراهيم: ١٨)</span></div></div>
+    <div class="dg"><div class="duo" data-art="ramad"></div>
+      <div class="roles">
+      <div class="role m step"><b>المشبَّه:</b> صورةُ أعمالِ الكفّارِ في عدمِ جدواها، وعدمِ الحصولِ على ثوابِها.</div>
+      <div class="role b step"><b>المشبَّهُ به:</b> صورةُ رمادٍ أصابته الريحُ الشديدةُ في يومٍ عاصف، فتبعثرَ وتطاير ولم يبقَ منه شيء.</div>
+      <div class="role w step" data-merge><b>وجهُ الشبه:</b> الخيبةُ والخذلانُ حينَ اعتقادِ الفوزِ والنجاح — منتزَعٌ من متعدّد.</div>
       </div>
-      <figure class="fig"><img src="img/tamthili/ramad.jpg" alt="رمادٌ تذروه ريحٌ عاصفة" loading="lazy"><figcaption>رمادٌ اشتدّت به الريحُ في يومٍ عاصف</figcaption></figure>
     </div>
   </div>
   <div class="slide">
@@ -680,40 +748,36 @@ body.pk-on .hero.slide.on,body.pk-on .end.slide.on{padding-top:calc(var(--pkH,10
   </div>
   <div class="slide">
     <div class="sh"><div class="no">٣</div><div><h2>المثالُ الثاني</h2><p>صورةٌ من الحديثِ الشريف: ماذا يقابلُ «الصلواتِ الخمس»؟</p></div></div>
-    <div class="exg">
-      <div>
-        <div class="txtc"><span class="who2">قال النبيُّ ﷺ:</span><div class="hd2">«مَثَلُ الصلواتِ الخمسِ كمَثَلِ نهرٍ جارٍ عذبٍ على بابِ أحدِكم، يغتسلُ فيه كلَّ يومٍ خمسَ مرّاتٍ، فما يبقى من دَرَنِه شيءٌ». <span class="src">رواه مسلم</span></div></div>
-        <div class="roles">
-          <div class="role m step"><b>المشبَّه:</b> صورةُ مَن يصلّي الصلواتِ الخمسَ فتُمحى ذنوبُه.</div>
-          <div class="role b step"><b>المشبَّهُ به:</b> صورةُ الذي يغتسلُ في اليومِ خمسَ مرّاتٍ من نهرٍ عذبٍ على بابِه، فلا يبقى من دَرَنِه شيء.<div class="parts"><i>نهرٌ جارٍ عذب</i><i>على البابِ قريب</i><i>خمسُ مرّاتٍ كلَّ يوم</i><i>لا يبقى درن</i></div></div>
-          <div class="role w step"><b>وجهُ الشبه:</b> صورةٌ مأخوذةٌ من أمورٍ متعدّدة: العملُ النافعُ المستمرّ، ولا يبقى معه ما يضرّ.</div>
-        </div>
+    <div class="txtc"><span class="who2">قال النبيُّ ﷺ:</span><div class="hd2">«مَثَلُ الصلواتِ الخمسِ كمَثَلِ نهرٍ جارٍ عذبٍ على بابِ أحدِكم، يغتسلُ فيه كلَّ يومٍ خمسَ مرّاتٍ، فما يبقى من دَرَنِه شيءٌ». <span class="src">رواه مسلم</span></div></div>
+    <div class="dg"><div class="duo" data-art="nahr"></div>
+      <div class="roles">
+      <div class="role m step"><b>المشبَّه:</b> صورةُ مَن يصلّي الصلواتِ الخمسَ فتُمحى ذنوبُه.</div>
+      <div class="role b step"><b>المشبَّهُ به:</b> صورةُ الذي يغتسلُ في اليومِ خمسَ مرّاتٍ من نهرٍ عذبٍ على بابِه، فلا يبقى من دَرَنِه شيء.</div>
+      <div class="role w step" data-merge><b>وجهُ الشبه:</b> صورةٌ مأخوذةٌ من أمورٍ متعدّدة: العملُ النافعُ المستمرّ، ولا يبقى معه ما يضرّ.</div>
       </div>
-      <figure class="fig"><img src="img/tamthili/nahr.jpg" alt="نهرٌ عذبٌ يجري على بابِ بيت" loading="lazy"><figcaption>نهرٌ جارٍ عذبٌ على بابِ أحدِكم</figcaption></figure>
     </div>
   </div>
   <div class="slide">
     <div class="sh"><div class="no">٣</div><div><h2>المثالُ الثالث</h2><p>شوقي يرثي عمرَ المختار — كيف صارَ الأسيرُ المقيَّدُ مهيباً؟</p></div></div>
-    <div class="exg">
-      <div>
-        <div class="txtc"><span class="who2">قال أحمد شوقي في رثاءِ عمرَ المختار:</span><div class="bayt"><span>وأتى الأسيرُ يجرُّ ثِقلَ حديدِه</span><span>أسدٌ يُجرِّرُ حيّةً رقطاءَ</span></div></div>
-        <div class="roles">
-          <div class="role m step"><b>المشبَّه:</b> صورةُ الأسيرِ عمرَ المختار مكبَّلاً بالقيود، يجرُّها — على ثقلِها وغلظتِها — مستهيناً بها.</div>
-          <div class="role b step"><b>المشبَّهُ به:</b> صورةُ الأسدِ الذي يجرِّرُ وراءَه حيّةً رقطاء.<div class="parts"><i>أسير ↔ أسد</i><i>القيود ↔ الحيّة الرقطاء</i><i>يجرُّ مستهيناً ↔ يجرّرُ غيرَ مبالٍ</i></div></div>
-          <div class="role w step"><b>وجهُ الشبه:</b> القوّةُ والثباتُ وهوانُ العظيمِ في كفِّ الأعظمِ في كلٍّ من الصورتَين.</div>
-        </div>
+    <div class="txtc"><span class="who2">قال أحمد شوقي في رثاءِ عمرَ المختار:</span><div class="bayt"><span>وأتى الأسيرُ يجرُّ ثِقلَ حديدِه</span><span>أسدٌ يُجرِّرُ حيّةً رقطاءَ</span></div></div>
+    <div class="dg"><div class="duo" data-art="asad"></div>
+      <div class="roles">
+      <div class="role m step"><b>المشبَّه:</b> صورةُ الأسيرِ عمرَ المختار مكبَّلاً بالقيود، يجرُّها — على ثقلِها وغلظتِها — مستهيناً بها.</div>
+      <div class="role b step"><b>المشبَّهُ به:</b> صورةُ الأسدِ الذي يجرِّرُ وراءَه حيّةً رقطاء.</div>
+      <div class="role w step" data-merge><b>وجهُ الشبه:</b> القوّةُ والثباتُ وهوانُ العظيمِ في كفِّ الأعظمِ في كلٍّ من الصورتَين.</div>
       </div>
-      <figure class="fig"><img src="img/tamthili/asad.jpg" alt="أسدٌ يجرُّ حيّةً رقطاء" loading="lazy"><figcaption>أسدٌ يُجرِّرُ حيّةً رقطاء</figcaption></figure>
     </div>
     <div class="note step" style="margin-top:12px"><b>لاحظْ:</b> لا أداةَ في البيت! فالتمثيليُّ لا يُعرَفُ بالأداة، بل بأنّ وجهَ الشبهِ <b>هيئةٌ منتزَعةٌ من متعدّد</b>.</div>
   </div>
   <div class="slide">
     <div class="sh"><div class="no">٣</div><div><h2>المثالُ الرابع</h2><p>عُدْنا إلى صورةِ التمهيد — صوغوا أركانَها بأنفسِكم.</p></div></div>
     <div class="txtc"><div class="big2" style="font-family:'Sakkal Saad Poster',serif;font-size:clamp(27px,3.4vw,40px);line-height:1.6;text-align:center">في الصباحِ ينطلقُ الطلّابُ إلى مدارسِهم كانطلاقِ النحلِ إلى الحدائق.</div></div>
+    <div class="dg"><div class="duo" data-art="nahl"></div>
     <div class="roles">
       <div class="role m step"><b>المشبَّه:</b> انطلاقُ الطلّابِ إلى مدارسِهم — وهي هيئةُ المشبَّه.</div>
       <div class="role b step"><b>المشبَّهُ به:</b> انطلاقُ النحلِ إلى الحدائق — وهي هيئةُ المشبَّهِ به.</div>
-      <div class="role w step"><b>وجهُ الشبه:</b> هيئةٌ منتزَعةٌ من متعدّد — كما يُفهَمُ من المتشابهَين: <b>الانطلاقُ الجماعيُّ الجادُّ إلى ما ينفع</b>.</div>
+      <div class="role w step" data-merge><b>وجهُ الشبه:</b> هيئةٌ منتزَعةٌ من متعدّد — كما يُفهَمُ من المتشابهَين: <b>الانطلاقُ الجماعيُّ الجادُّ إلى ما ينفع</b>.</div>
+    </div>
     </div>
   </div>
 </section>
@@ -1141,71 +1205,425 @@ var PAIRS = [
 })();
 
 /* ======================================================
+   اللوحتان المدمَجتان — يُرسَمُ طرفا كلِّ تشبيهٍ بالكود في لوحتين متقابلتَي التكوين،
+   ثمّ تنزلقان فتندمجان في صورةٍ واحدة، ويُرسَمُ فوقَها وجهُ الشبهِ خطّاً ذهبيّاً
+   ====================================================== */
+var DUO = (function(){
+  var UID = 0;
+  function rnd(seed){ var s = (seed * 9301 + 49297) % 233280; return function(){ s = (s * 9301 + 49297) % 233280; return s / 233280; }; }
+  function T(x, y, s, f, inner){ return '<g transform="translate(' + x + ' ' + y + ') scale(' + (f ? -s : s) + ' ' + s + ')">' + inner + '</g>'; }
+  function FX(cls, inner, delay){ return '<g class="' + cls + '"' + (delay != null ? ' style="animation-delay:' + delay.toFixed(2) + 's"' : '') + '>' + inner + '</g>'; }
+  var SKY = { day:['#BFDDE3','#F5EEDC'], dawn:['#8FBACB','#F6D3A0'], dusk:['#3B4C57','#D49A62'], night:['#07111B','#22374C'], storm:['#1F2826','#5D6761'],
+    blue:['#123A60','#2D6B9C'], indoor:['#F1E4CB','#E6D3AF'], paper:['#F5EDDF','#EADDC5'], hot:['#EBD49E','#F8ECD2'], sea:['#BFDDE3','#EAF2EC'] };
+  var GRD = { sand:['#E2CC98','#CBAE74'], grass:['#9CC27A','#6A9A53'], soil:['#6E4E33','#46301F'], night:['#17232D','#0C151C'], storm:['#4D463A','#36312A'],
+    dusk:['#6F5B43','#4E3F2C'], floor:['#D3B98A','#BFA06F'], dry:['#CDAA74','#AE8B57'], green2:['#7FAE63','#557F42'] };
+
+  function mk(uid){
+    var n = 0, P = {};
+    function gid(){ return uid + 'x' + (n++); }
+    function lin(stops, horiz){ var id = gid(); return { id:id, d:'<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="' + (horiz ? 1 : 0) + '" y2="' + (horiz ? 0 : 1) + '">' + stops.map(function(c, i){ var p = c.split('@'); return '<stop offset="' + (i / (stops.length - 1)) + '" stop-color="' + p[0] + '"' + (p[1] ? ' stop-opacity="' + p[1] + '"' : '') + '/>'; }).join('') + '</linearGradient></defs>' }; }
+    function rad(c){ var id = gid(); return { id:id, d:'<defs><radialGradient id="' + id + '"><stop offset="0" stop-color="' + c + '" stop-opacity=".9"/><stop offset=".45" stop-color="' + c + '" stop-opacity=".35"/><stop offset="1" stop-color="' + c + '" stop-opacity="0"/></radialGradient></defs>' }; }
+    P.T = T; P.FX = FX;
+    /* الخلفية: سماءٌ وأرض */
+    P.bg = function(sky, grd, gy){
+      gy = gy == null ? 205 : gy; var s = lin(SKY[sky]), h = s.d + '<rect width="400" height="260" fill="url(#' + s.id + ')"/>';
+      if (grd && GRD[grd]){ var g = lin(GRD[grd]); h += g.d + '<path d="M0 ' + gy + ' Q100 ' + (gy - 8) + ' 200 ' + (gy - 1) + ' T400 ' + (gy - 3) + ' V260 H0Z" fill="url(#' + g.id + ')"/><path d="M0 ' + (gy + 14) + ' Q120 ' + (gy + 8) + ' 240 ' + (gy + 16) + ' T400 ' + (gy + 12) + '" stroke="rgba(0,0,0,.07)" stroke-width="3" fill="none"/>'; }
+      return h;
+    };
+    P.glow = function(x, y, r, c){ var g = rad(c || '#FFE2A0'); return g.d + '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="url(#' + g.id + ')"/>'; };
+    P.sh = function(x, y, w){ return '<ellipse cx="' + x + '" cy="' + (y + 1) + '" rx="' + w + '" ry="' + (w * .16).toFixed(1) + '" fill="rgba(0,0,0,.2)"/>'; };
+    P.divider = function(xs){ return xs.map(function(x){ return '<line x1="' + x + '" y1="14" x2="' + x + '" y2="246" stroke="rgba(255,255,255,.55)" stroke-width="1.5" stroke-dasharray="4 5"/>'; }).join(''); };
+    P.sun = function(x, y, r, rays){ var h = P.glow(x, y, r * 3.2, '#FFD47A') + '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#FFD36E"/><circle cx="' + (x - r * .3) + '" cy="' + (y - r * .3) + '" r="' + (r * .45) + '" fill="#FFE7A8"/>';
+      if (rays){ var R = ''; for (var i = 0; i < 12; i++){ var a = i * Math.PI / 6; R += '<line x1="' + (x + Math.cos(a) * r * 1.35).toFixed(1) + '" y1="' + (y + Math.sin(a) * r * 1.35).toFixed(1) + '" x2="' + (x + Math.cos(a) * r * 1.9).toFixed(1) + '" y2="' + (y + Math.sin(a) * r * 1.9).toFixed(1) + '" stroke="#FFD36E" stroke-width="3" stroke-linecap="round"/>'; } h += FX('fx-pulse', R); }
+      return h; };
+    /* القمر: full · half · cres — والهلالُ يُفتَحُ نحوَ (dx,dy) */
+    P.moon = function(x, y, r, ph, dx, dy, c){
+      c = c || '#F4EEDC'; var g = P.glow(x, y, r * 2.6, '#E8E4D0');
+      if (ph === 'full') return g + '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + c + '"/><circle cx="' + (x - r * .3) + '" cy="' + (y + r * .15) + '" r="' + (r * .18) + '" fill="rgba(0,0,0,.07)"/><circle cx="' + (x + r * .25) + '" cy="' + (y - r * .3) + '" r="' + (r * .12) + '" fill="rgba(0,0,0,.06)"/>';
+      var id = gid(), k = ph === 'half' ? 1 : .42; dx = dx == null ? 1 : dx; dy = dy || 0;
+      return g + '<defs><mask id="' + id + '"><rect x="0" y="0" width="400" height="260" fill="#fff"/><circle cx="' + (x + dx * r * k) + '" cy="' + (y + dy * r * k) + '" r="' + r + '" fill="#000"/></mask></defs><circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + c + '" mask="url(#' + id + ')"/>';
+    };
+    P.stars = function(n, seed, y1, c){ var R = rnd(seed), h = ''; for (var i = 0; i < n; i++){ var x = (R() * 392 + 4).toFixed(0), y = (R() * (y1 || 140) + 6).toFixed(0), r = (R() * 1.3 + .6).toFixed(1); h += FX('fx-tw', '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="' + (c || '#FFF6D8') + '"/>', R() * 2.2); } return h; };
+    P.star4 = function(x, y, r, c){ return '<path d="M' + x + ' ' + (y - r) + ' Q' + x + ' ' + y + ' ' + (x + r) + ' ' + y + ' Q' + x + ' ' + y + ' ' + x + ' ' + (y + r) + ' Q' + x + ' ' + y + ' ' + (x - r) + ' ' + y + ' Q' + x + ' ' + y + ' ' + x + ' ' + (y - r) + 'Z" fill="' + (c || '#FFF3C4') + '"/>'; };
+    /* شهابٌ أو سيفٌ لامعٌ يهوي */
+    P.streak = function(x1, y1, x2, y2, c, d){ var g = lin([(c || '#FFF3C4') + '@0', (c || '#FFF3C4') + '@1'], true), ang = Math.atan2(y2 - y1, x2 - x1), len = Math.hypot(x2 - x1, y2 - y1);
+      return FX('fx-fall', g.d + '<g transform="translate(' + x1 + ' ' + y1 + ') rotate(' + (ang * 180 / Math.PI).toFixed(1) + ')"><rect x="0" y="-2" width="' + len.toFixed(0) + '" height="4" rx="2" fill="url(#' + g.id + ')"/><circle cx="' + len.toFixed(0) + '" cy="0" r="4.5" fill="#FFFBEA"/></g>' + P.glow(x2, y2, 16, '#FFF0B0'), d); };
+    P.cloud = function(x, y, s, c){ return T(x, y, s, 0, '<g fill="' + (c || '#FFFFFF') + '"><circle cx="-26" cy="0" r="16"/><circle cx="0" cy="-10" r="22"/><circle cx="26" cy="-2" r="17"/><rect x="-42" y="0" width="84" height="15" rx="7.5"/></g>'); };
+    P.rain = function(x1, x2, y1, y2, seed, c){ var R = rnd(seed), h = ''; for (var i = 0; i < 26; i++){ var x = x1 + R() * (x2 - x1), y = y1 + R() * (y2 - y1); h += FX('fx-rain', '<line x1="' + x.toFixed(0) + '" y1="' + y.toFixed(0) + '" x2="' + (x - 4).toFixed(0) + '" y2="' + (y + 12).toFixed(0) + '" stroke="' + (c || '#9FC7E0') + '" stroke-width="2" stroke-linecap="round"/>', R() * 1.2); } return h; };
+    P.wind = function(n, y1, y2, seed, c){ var R = rnd(seed), h = ''; for (var i = 0; i < n; i++){ var x = 60 + R() * 300, y = y1 + R() * (y2 - y1), w = 40 + R() * 50; h += FX('fx-wind', '<path d="M' + x.toFixed(0) + ' ' + y.toFixed(0) + ' q' + (-w / 2).toFixed(0) + ' -8 ' + (-w).toFixed(0) + ' 0 q-10 3 -6 9" stroke="' + (c || 'rgba(255,255,255,.55)') + '" stroke-width="2.4" fill="none" stroke-linecap="round"/>', R() * 2.4); } return h; };
+    P.particles = function(x, y, n, c, seed, sx, sy){ var R = rnd(seed), h = ''; for (var i = 0; i < n; i++){ var px = x - R() * (sx || 200), py = y - R() * (sy || 80) + (x - px) * -.12, r = (R() * 2.2 + 1).toFixed(1); h += FX('fx-drift', '<circle cx="' + px.toFixed(0) + '" cy="' + py.toFixed(0) + '" r="' + r + '" fill="' + c + '"/>', R() * 3.2); } return h; };
+    P.dust = function(x, y, s, c){ return T(x, y, s, 0, '<g fill="' + (c || 'rgba(120,100,80,.55)') + '"><circle cx="-40" cy="0" r="30"/><circle cx="0" cy="-16" r="38"/><circle cx="44" cy="-4" r="32"/><circle cx="10" cy="14" r="30"/></g>'); };
+    /* الناس */
+    P.person = function(x, y, o){
+      o = o || {}; var s = (o.s || 1) * (o.kid ? .68 : 1), c = o.c || '#2F6E5A', sk = o.pale ? '#D8CCBB' : (o.skin || '#C69468'), arm = o.arm || 'down', h = '';
+      if (o.old) h += '<g transform="rotate(10 0 -2)">';
+      if (o.walk) h += '<path d="M-4 -8 L-10 0 M4 -8 L10 0" stroke="#3A2A1A" stroke-width="3.4" stroke-linecap="round"/>';
+      if (o.acc === 'sack') h += '<path d="M-10 -52 Q-36 -50 -32 -22 Q-20 -14 -9 -26Z" fill="#B08C58"/><path d="M-30 -40 Q-22 -36 -12 -40" stroke="#8A6A3E" stroke-width="2" fill="none"/>';
+      if (o.acc === 'bag') h += '<rect x="-21" y="-50" width="11" height="19" rx="3" fill="#C2780A"/>';
+      if (o.acc === 'scrolls') h += '<g transform="translate(-8 -64)"><rect x="-26" y="-12" width="44" height="13" rx="6" fill="#E8D7AE" stroke="#A3865A"/><rect x="-22" y="-25" width="36" height="13" rx="6" fill="#F0E2BE" stroke="#A3865A"/><rect x="-16" y="-37" width="28" height="12" rx="6" fill="#E8D7AE" stroke="#A3865A"/></g>';
+      if (o.knife) h += '<g transform="translate(-14 -30) rotate(-30)"><rect x="-2" y="0" width="5" height="9" fill="#5A3B24"/><path d="M-1.5 0 L-1.5 -18 Q2 -20 3.5 0Z" fill="#C9D2D6"/></g>';
+      h += '<path d="M-10 -52 Q-15 -24 -15 -2 Q0 2 15 -2 Q15 -24 10 -52 Q0 -57 -10 -52Z" fill="' + c + '"/><path d="M0 -52 L0 -3" stroke="rgba(0,0,0,.12)" stroke-width="2"/>';
+      if (o.dark) h += '<circle cx="4" cy="-38" r="6" fill="#2A1E16" opacity=".85"/>';
+      if (o.glow) h = P.glow(0, -40, 46, '#FFE7A0') + h;
+      var AR = { down:'M-9 -48 Q-14 -34 -12 -22 M9 -48 Q14 -34 12 -22', fwd:'M-9 -48 Q-13 -34 -11 -24 M9 -48 Q20 -44 30 -44', up:'M-9 -48 Q-14 -34 -12 -22 M9 -48 Q16 -62 17 -76',
+        give:'M-9 -48 Q-13 -34 -11 -24 M9 -48 Q18 -36 30 -34', both:'M-9 -48 Q-20 -40 -27 -36 M9 -48 Q20 -40 27 -36', back:'M-9 -48 Q-20 -36 -28 -30 M9 -48 Q14 -34 12 -22', pray:'M-9 -48 Q-6 -38 2 -38 M9 -48 Q10 -40 4 -38', throw:'M-9 -48 Q-13 -34 -11 -24 M9 -48 Q22 -52 30 -62' };
+      h += '<path d="' + AR[arm] + '" stroke="' + c + '" stroke-width="6.5" stroke-linecap="round" fill="none"/>';
+      if (o.steth) h += '<path d="M-6 -52 Q-4 -40 4 -36 Q10 -38 7 -52" stroke="#30475A" stroke-width="2" fill="none"/><circle cx="4" cy="-35" r="2.4" fill="#30475A"/>';
+      if (o.acc === 'book') h += '<rect x="25" y="-50" width="12" height="15" rx="1.5" fill="#1E6B52" stroke="#D9A441" stroke-width="1.5"/>' + P.glow(31, -43, 16, '#FFE7A0');
+      if (o.acc === 'gift') h += '<rect x="26" y="-44" width="14" height="12" rx="1.5" fill="#B5523B"/><path d="M33 -44 V-32 M26 -38 H40" stroke="#F2C14E" stroke-width="2"/>';
+      if (o.acc === 'cup') h += '<path d="M27 -44 L39 -44 L37 -32 L29 -32Z" fill="#CFE6EE" stroke="#7FAFC4"/>';
+      if (o.acc === 'grass') h += '<path d="M28 -40 l-2 -12 M31 -40 l1 -13 M34 -40 l4 -11" stroke="#5E9B45" stroke-width="2.4" stroke-linecap="round"/>';
+      if (o.acc === 'cane') h += '<path d="M14 -24 L20 0 M14 -24 q-1 -6 4 -6" stroke="#6B4A2A" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+      if (o.acc === 'sword') h += '<path d="M17 -76 L40 -118" stroke="#E8EEF2" stroke-width="3.2" stroke-linecap="round"/>' + P.glow(40, -118, 18, '#FFF6D0');
+      h += '<circle cx="0" cy="-62" r="8" fill="' + sk + '"/>';
+      if (o.back) h += '<path d="M-10 -61 Q-11 -75 0 -75 Q11 -75 10 -61 L12 -48 Q0 -52 -12 -48Z" fill="#FBF8F1"/>';
+      else {
+        h += '<circle cx="4" cy="-63" r="1.2" fill="#2A1A0F"/>';
+        if (o.face === 'frown') h += '<path d="M1 -56.5 Q4 -59 7 -56.5" stroke="#2A1A0F" stroke-width="1.2" fill="none"/>';
+        else if (o.face === 'smile') h += '<path d="M1 -58 Q4 -55 7 -58" stroke="#2A1A0F" stroke-width="1.2" fill="none"/>';
+        if (o.crown) h += '<path d="M-9 -68 L-9 -79 L-4 -73 L0 -82 L4 -73 L9 -79 L9 -68Z" fill="#D9A441"/>';
+        else if (o.kid) h += '<path d="M-8 -66 Q0 -74 8 -66" stroke="#3A2A1A" stroke-width="4" fill="none"/>';
+        else if (o.g !== false) h += '<path d="M-10 -61 Q-11 -75 0 -75 Q11 -75 10 -61 L13 -46 Q8 -51 7 -58 Q0 -66 -7 -58 Q-8 -51 -13 -46Z" fill="#FBF8F1"/><path d="M-9 -69.5 Q0 -73.5 9 -69.5" stroke="#1E1E1E" stroke-width="2.4" fill="none"/>';
+        if (o.band) h += '<path d="M-9 -66 L9 -68" stroke="#FFFFFF" stroke-width="3"/><circle cx="-6" cy="-58" r="2.2" fill="#E9A0A0" opacity=".7"/>';
+      }
+      if (o.old) h += '</g>';
+      return (o.noShadow ? '' : P.sh(x, y, 16 * s)) + T(x, y, s, o.f, o.bob ? FX('fx-bob', h) : h);
+    };
+    P.bed = function(x, y, o){ o = o || {}; var c = o.pale ? '#D8CCBB' : '#C69468';
+      return P.sh(x, y, 60) + T(x, y, o.s || 1, o.f, '<rect x="-58" y="-26" width="116" height="10" rx="4" fill="#8A5A34"/><rect x="-58" y="-16" width="6" height="16" fill="#6F4527"/><rect x="52" y="-16" width="6" height="16" fill="#6F4527"/><rect x="-60" y="-50" width="8" height="34" rx="3" fill="#8A5A34"/>'
+        + '<rect x="-52" y="-36" width="22" height="11" rx="5" fill="#FFFFFF"/><circle cx="-40" cy="-42" r="8.5" fill="' + c + '"/><path d="M-48 -44 Q-40 -56 -32 -44" fill="#FBF8F1"/><path d="M-30 -36 Q0 -48 52 -32 L52 -26 L-30 -26Z" fill="' + (o.blanket || '#6C8FB3') + '"/>'
+        + (o.face === 'frown' ? '<path d="M-44 -38 Q-41 -40 -38 -38" stroke="#2A1A0F" stroke-width="1.2" fill="none"/>' : '') + (o.thermo ? '<rect x="-36" y="-44" width="10" height="2" rx="1" fill="#D04A3A"/>' : ''));
+    };
+    P.hourglass = function(x, y, s){ return T(x, y, s, 0, '<rect x="-24" y="-92" width="48" height="7" rx="3" fill="#8A6A3E"/><rect x="-24" y="-7" width="48" height="7" rx="3" fill="#8A6A3E"/><path d="M-18 -85 Q-18 -60 0 -46 Q18 -60 18 -85Z M-18 -7 Q-18 -32 0 -46 Q18 -32 18 -7Z" fill="rgba(220,235,240,.55)" stroke="#CBB78F" stroke-width="2"/><path d="M-10 -72 Q0 -62 10 -72Z M-14 -7 Q0 -24 14 -7Z" fill="#D9B46A"/>' + FX('fx-rain', '<line x1="0" y1="-46" x2="0" y2="-30" stroke="#D9B46A" stroke-width="2"/>')); };
+    P.thief = function(x, y, s){ return P.sh(x, y, 18) + T(x, y, s, 0, '<path d="M-4 -8 L-12 0 M4 -8 L12 0" stroke="#111" stroke-width="3.4" stroke-linecap="round"/><path d="M-11 -52 Q-16 -24 -15 -4 Q0 0 15 -4 Q16 -24 11 -52 Q0 -57 -11 -52Z" fill="#1E2328"/><path d="M-30 -46 Q-44 -30 -32 -16 Q-20 -16 -16 -30Z" fill="#3A332B"/><circle cx="0" cy="-62" r="9" fill="#1E2328"/><rect x="-9" y="-66" width="18" height="5" fill="#C94F3B"/><circle cx="4" cy="-63.5" r="1.3" fill="#fff"/><path d="M9 -48 Q20 -40 22 -30" stroke="#1E2328" stroke-width="6" stroke-linecap="round" fill="none"/>'); };
+    /* الحيوانات */
+    P.lion = function(x, y, s, f, o){ o = o || {};
+      var paw = o.paw ? '<g class="fx-paw"><path d="M28 -30 Q36 -16 34 -6" stroke="#C08A36" stroke-width="10" stroke-linecap="round" fill="none"/></g>' : '<rect x="26" y="-26" width="10" height="26" rx="4" fill="#B98530"/>';
+      return P.sh(x, y, 50 * s) + T(x, y, s, f, '<path d="M-44 -40 Q-66 -62 -62 -30" stroke="#B98530" stroke-width="4.5" fill="none" stroke-linecap="round"/><circle cx="-62" cy="-28" r="6" fill="#7A4A1C"/>'
+        + '<rect x="-38" y="-26" width="10" height="26" rx="4" fill="#B98530"/><rect x="-24" y="-26" width="10" height="26" rx="4" fill="#A97826"/><rect x="14" y="-26" width="10" height="26" rx="4" fill="#A97826"/>' + paw
+        + '<ellipse cx="-2" cy="-38" rx="46" ry="20" fill="#CF9C45"/><path d="M-40 -32 Q-2 -22 40 -32" stroke="rgba(0,0,0,.08)" stroke-width="4" fill="none"/>'
+        + '<g fill="#8A5622"><circle cx="40" cy="-54" r="26"/><path d="M14 -60 l-10 -6 12 -2Z M20 -76 l-6 -10 12 4Z M40 -82 l2 -12 8 10Z M60 -74 l10 -6 -2 12Z"/></g>'
+        + '<circle cx="48" cy="-52" r="14" fill="#DDAA54"/><circle cx="53" cy="-56" r="1.8" fill="#1A1008"/><path d="M58 -48 Q62 -46 61 -43" stroke="#5A3412" stroke-width="2" fill="none"/><path d="M54 -46 Q58 -42 62 -44" stroke="#5A3412" stroke-width="1.4" fill="none"/>');
+    };
+    P.snake = function(x1, y1, x2, y2){ var mx = (x1 + x2) / 2, d = 'M' + x1 + ' ' + y1 + ' C' + (x1 - 30) + ' ' + (y1 + 14) + ' ' + (mx + 20) + ' ' + (y2 - 18) + ' ' + mx + ' ' + (y2 - 4) + ' S' + (x2 + 30) + ' ' + (y2 + 6) + ' ' + x2 + ' ' + y2;
+      return '<path d="' + d + '" stroke="#5F6E2F" stroke-width="9" fill="none" stroke-linecap="round"/><path d="' + d + '" stroke="#D9C46A" stroke-width="3.5" stroke-dasharray="3 9" fill="none" stroke-linecap="round"/><circle cx="' + x2 + '" cy="' + y2 + '" r="5" fill="#5F6E2F"/>'; };
+    P.eagle = function(x, y, s){
+      var wing = '<path d="M0 0 Q-50 -62 -150 -46 L-142 -34 L-132 -38 L-124 -24 L-112 -30 L-102 -16 L-90 -22 L-78 -8 L-64 -14 L-50 2 L-36 -2 Q-18 8 0 12Z" fill="#7A5226"/><path d="M-20 -14 Q-60 -40 -130 -40" stroke="#A9773C" stroke-width="3" fill="none"/><path d="M-30 -2 Q-70 -20 -110 -22" stroke="#A9773C" stroke-width="2.4" fill="none"/>';
+      return T(x, y, s, 0, '<g class="fx-flap">' + wing + '</g><g class="fx-flap"><g transform="scale(-1 1)">' + wing + '</g></g>'
+        + '<path d="M-12 30 L0 56 L12 30Z" fill="#6A4620"/><ellipse cx="0" cy="8" rx="17" ry="30" fill="#6A4620"/><circle cx="0" cy="-26" r="13" fill="#F4EEDC"/><path d="M-4 -22 Q0 -12 6 -20 Z" fill="#E3A324"/><circle cx="-5" cy="-29" r="1.8" fill="#1A1008"/><circle cx="5" cy="-29" r="1.8" fill="#1A1008"/>');
+    };
+    P.horse = function(x, y, s, f, c){ c = c || '#6F4A2E';
+      return P.sh(x, y, 32 * s) + T(x, y, s, f, '<path d="M-30 -40 Q-46 -36 -44 -16" stroke="' + c + '" stroke-width="4" fill="none" stroke-linecap="round"/><g stroke="' + c + '" stroke-width="4.4" stroke-linecap="round"><path d="M-22 -26 L-25 0 M-12 -26 L-10 0 M14 -26 L17 0 M23 -26 L21 0"/></g><path d="M-31 -32 Q-33 -48 -12 -47 L14 -47 Q24 -49 30 -62 L37 -72 Q44 -75 47 -68 L45 -59 Q41 -51 35 -45 L31 -32 Q28 -23 19 -23 L-22 -23 Q-31 -23 -31 -32Z" fill="' + c + '"/><circle cx="40" cy="-66" r="1.6" fill="#140C06"/>'); };
+    P.rider = function(x, y, s, f, o){ o = o || {}; return P.horse(x, y, s, f, o.hc) + P.person(x + (f ? -2 : 2) * s, y - 40 * s, { s: s * .62, f: f, c: o.c || '#3E5F55', arm: o.arm || 'fwd', acc: o.acc, noShadow: 1 }); };
+    P.donkey = function(x, y, s, f){ var c = '#8E8A86';
+      return P.sh(x, y, 30 * s) + T(x, y, s, f, '<path d="M-28 -36 Q-40 -32 -38 -18" stroke="' + c + '" stroke-width="3.5" fill="none"/><g stroke="' + c + '" stroke-width="4.4" stroke-linecap="round"><path d="M-20 -22 L-22 0 M-10 -22 L-9 0 M12 -22 L14 0 M20 -22 L19 0"/></g><path d="M-29 -28 Q-31 -42 -12 -42 L12 -42 Q20 -44 25 -54 L30 -60 Q37 -62 40 -56 L38 -48 Q35 -42 30 -38 L28 -28 Q25 -20 17 -20 L-20 -20 Q-29 -20 -29 -28Z" fill="' + c + '"/><path d="M28 -59 L24 -76 L32 -62Z M32 -60 L33 -78 L37 -61Z" fill="#7A7672"/><circle cx="35" cy="-55" r="1.5" fill="#140C06"/>'
+        + '<g transform="translate(-4 -42)"><rect x="-22" y="-10" width="40" height="10" rx="1.5" fill="#B5523B"/><rect x="-18" y="-20" width="34" height="10" rx="1.5" fill="#1E6B52"/><rect x="-20" y="-30" width="36" height="10" rx="1.5" fill="#C2780A"/><rect x="-14" y="-39" width="26" height="9" rx="1.5" fill="#5A6B7A"/><path d="M-22 -5 H18 M-18 -15 H16" stroke="rgba(255,255,255,.35)"/></g>'); };
+    P.bee = function(x, y, s, d){ return FX('fx-bob', T(x, y, s || 1, 1, '<ellipse cx="-2" cy="-7" rx="5" ry="7" fill="rgba(255,255,255,.75)" transform="rotate(-20)"/><ellipse cx="4" cy="-7" rx="5" ry="7" fill="rgba(255,255,255,.6)" transform="rotate(20)"/><ellipse cx="0" cy="0" rx="9" ry="6" fill="#F2B630"/><path d="M-3 -5.5 V5.5 M3 -5 V5" stroke="#2A1A0F" stroke-width="2.4"/><circle cx="9" cy="-1" r="3" fill="#2A1A0F"/>'), d); };
+    P.ant = function(x, y, s, f, load){ return P.sh(x, y, 24 * s) + T(x, y, s, f, '<g stroke="#2A1A0F" stroke-width="2" fill="none"><path d="M-14 -10 L-22 0 M-8 -10 L-10 0 M0 -10 L4 0 M6 -10 L14 0 M-4 -12 L-20 2 M2 -12 L18 1"/><path d="M20 -20 Q26 -32 32 -30 M18 -20 Q20 -34 26 -36"/></g><ellipse cx="-16" cy="-12" rx="11" ry="8" fill="#3B2416"/><ellipse cx="0" cy="-13" rx="7" ry="5.5" fill="#3B2416"/><circle cx="14" cy="-17" r="8" fill="#3B2416"/><circle cx="17" cy="-19" r="1.6" fill="#fff"/>'
+        + (load ? '<ellipse cx="2" cy="-30" rx="12" ry="7" fill="#E8C267" stroke="#B68A2E"/>' : '')); };
+    P.bird = function(x, y, s, f, peck){ return T(x, y, s, f, '<ellipse cx="0" cy="-8" rx="10" ry="7" fill="#8C6A4A"/><circle cx="' + (peck ? 9 : 8) + '" cy="' + (peck ? -4 : -14) + '" r="5" fill="#8C6A4A"/><path d="M' + (peck ? 13 : 12) + ' ' + (peck ? -3 : -14) + ' l5 1 -5 2Z" fill="#E3A324"/><path d="M-10 -8 l-8 -3 2 6Z" fill="#6D5038"/><path d="M-2 -1 L-3 4 M2 -1 L3 4" stroke="#6D5038" stroke-width="1.5"/>'); };
+    P.sheep = function(x, y, s, f){ return P.sh(x, y, 22 * s) + T(x, y, s, f, '<g stroke="#4A3A2A" stroke-width="3"><path d="M-12 -12 V0 M-4 -12 V0 M8 -12 V0 M14 -12 V0"/></g><g fill="#FBF6EA"><circle cx="-14" cy="-22" r="10"/><circle cx="-2" cy="-26" r="12"/><circle cx="10" cy="-22" r="10"/><circle cx="-6" cy="-14" r="9"/><circle cx="8" cy="-14" r="9"/></g><ellipse cx="22" cy="-22" rx="7" ry="9" fill="#4A3A2A"/><circle cx="24" cy="-24" r="1.3" fill="#fff"/>'); };
+    /* النبات */
+    P.plant = function(x, y, st, s){ s = s || 1; var c = st === 'yellow' ? '#C9A13C' : '#4C9A5B', c2 = st === 'yellow' ? '#B08A2C' : '#3A7F47';
+      if (st === 'broken') return T(x, y, s, 0, '<g stroke="#A88A52" stroke-width="2.4" stroke-linecap="round"><path d="M-6 0 L-2 -14 M4 0 L10 -9 M-12 0 L-20 -5"/></g><g fill="#C8AE72"><ellipse cx="-24" cy="-26" rx="4" ry="1.6" transform="rotate(-20 -24 -26)"/><ellipse cx="-34" cy="-40" rx="3.5" ry="1.4"/><ellipse cx="-14" cy="-44" rx="3" ry="1.2"/></g>');
+      var bend = st === 'yellow' ? 8 : 0;
+      return T(x, y, s, 0, '<path d="M0 0 Q' + (bend / 2) + ' -22 ' + bend + ' -44" stroke="' + c2 + '" stroke-width="2.6" fill="none"/><path d="M1 -14 Q-14 -22 -18 -' + (st === 'yellow' ? 8 : 30) + ' Q-6 -26 1 -14Z M2 -26 Q16 -34 20 -' + (st === 'yellow' ? 18 : 44) + ' Q8 -38 2 -26Z M' + (bend * .8) + ' -36 Q-8 -46 -6 -' + (st === 'yellow' ? 34 : 58) + ' Q4 -50 ' + (bend * .8) + ' -36Z" fill="' + c + '"/>'); };
+    P.flowers = function(x, y, w, seed){ var R = rnd(seed), h = '', C = ['#C4553D','#E08A9B','#F2C14E','#FFFFFF','#B36BA8']; for (var i = 0; i < 9; i++){ var fx = x - w / 2 + R() * w, fh = 14 + R() * 26, c = C[Math.floor(R() * C.length)];
+        h += '<path d="M' + fx.toFixed(0) + ' ' + y + ' q' + (R() * 6 - 3).toFixed(0) + ' ' + (-fh / 2).toFixed(0) + ' 0 ' + (-fh).toFixed(0) + '" stroke="#4C8A4B" stroke-width="2" fill="none"/>' + [0,72,144,216,288].map(function(a){ var r = a * Math.PI / 180; return '<circle cx="' + (fx + Math.cos(r) * 4).toFixed(1) + '" cy="' + (y - fh + Math.sin(r) * 4).toFixed(1) + '" r="3.4" fill="' + c + '"/>'; }).join('') + '<circle cx="' + fx.toFixed(0) + '" cy="' + (y - fh).toFixed(0) + '" r="2.2" fill="#E3A324"/>'; }
+      return '<ellipse cx="' + x + '" cy="' + (y + 2) + '" rx="' + (w / 2 + 8) + '" ry="8" fill="#5E9B45"/>' + h; };
+    P.tree = function(x, y, s, c){ return P.sh(x, y, 22 * s) + T(x, y, s, 0, '<path d="M-4 0 L-3 -40 L3 -40 L4 0Z" fill="#6B4A2A"/><g fill="' + (c || '#4C8A4B') + '"><circle cx="0" cy="-52" r="20"/><circle cx="-16" cy="-42" r="14"/><circle cx="16" cy="-42" r="14"/></g>'); };
+    /* السنبلةُ ذاتُ السبعِ — والأطرافُ تتشكّلُ بحسبِ fn */
+    P.seven = function(x, y, tip){ var TP = [[-90,-135],[-60,-160],[-30,-175],[0,-180],[30,-175],[60,-160],[90,-135]], h = '<path d="M' + x + ' ' + y + ' L' + x + ' ' + (y - 60) + '" stroke="#7A8E3A" stroke-width="4"/>';
+      TP.forEach(function(t, i){ var tx = x + t[0], ty = y + t[1]; h += '<path d="M' + x + ' ' + (y - 60) + ' Q' + (x + t[0] * .25) + ' ' + (y - 100) + ' ' + tx + ' ' + ty + '" stroke="#7A8E3A" stroke-width="2.6" fill="none"/>' + FX('fx-tw2', tip(tx, ty, Math.atan2(ty - (y - 60), tx - x) * 180 / Math.PI + 90), i * .25); });
+      return h; };
+    P.ear = function(x, y, rot){ var g = ''; for (var i = 0; i < 6; i++){ g += '<ellipse cx="-3.5" cy="' + (-i * 6) + '" rx="3.4" ry="5" fill="#E3B54A"/><ellipse cx="3.5" cy="' + (-i * 6 - 3) + '" rx="3.4" ry="5" fill="#D9A441"/>'; } return '<g transform="translate(' + x + ' ' + y + ') rotate(' + rot.toFixed(0) + ')">' + g + '<path d="M0 -34 L0 -46 M-3 -34 L-6 -44 M3 -34 L6 -44" stroke="#C99A3A" stroke-width="1"/></g>'; };
+    P.coins = function(x, y){ var h = P.glow(x, y, 20, '#FFE7A0'); [[0,0],[-7,-6],[7,-6],[-4,-13],[4,-13]].forEach(function(p){ h += '<circle cx="' + (x + p[0]) + '" cy="' + (y + p[1]) + '" r="5" fill="#F2C14E" stroke="#B68A2E" stroke-width="1.2"/>'; }); return h; };
+    P.rock = function(x, y, w){ return P.sh(x, y, w * .6) + '<path d="M' + (x - w / 2) + ' ' + y + ' L' + (x - w * .38) + ' ' + (y - 26) + ' L' + (x - w * .1) + ' ' + (y - 36) + ' L' + (x + w * .22) + ' ' + (y - 30) + ' L' + (x + w / 2) + ' ' + y + 'Z" fill="#8E8A82"/><path d="M' + (x - w * .3) + ' ' + (y - 22) + ' L' + (x - w * .1) + ' ' + (y - 30) + ' L' + (x + w * .12) + ' ' + (y - 24) + '" stroke="#B9B4AA" stroke-width="3" fill="none"/><path d="M' + (x - w * .05) + ' ' + (y - 14) + ' l10 6 M' + (x + w * .15) + ' ' + (y - 10) + ' l-6 6" stroke="#6E6A63" stroke-width="1.5"/>'; };
+    P.ash = function(x, y, s){ var g = lin(['#BDB8AE','#6E6A63']); return g.d + T(x, y, s, 0, '<path d="M-70 0 Q-40 -8 -18 -42 Q0 -58 18 -42 Q40 -8 70 0Z" fill="url(#' + g.id + ')"/><g fill="rgba(255,255,255,.25)"><circle cx="-20" cy="-20" r="1.6"/><circle cx="6" cy="-34" r="1.4"/><circle cx="24" cy="-14" r="1.8"/><circle cx="-36" cy="-8" r="1.4"/></g>'); };
+    P.blocks = function(x, y){ var h = '', B = [[-30,-12],[-6,-12],[18,-12],[-18,-24],[6,-24],[-6,-36]]; B.forEach(function(b, i){ h += '<rect x="' + (x + b[0]) + '" y="' + (y + b[1]) + '" width="22" height="11" rx="1.5" fill="' + (i % 2 ? '#E3B54A' : '#D9A441') + '" stroke="#A67C2A"/>'; }); return h + P.glow(x, y - 20, 50, '#FFE2A0'); };
+    P.mirage = function(x, y, w){ return '<ellipse cx="' + x + '" cy="' + y + '" rx="' + w + '" ry="' + (w * .16) + '" fill="#9FD0E0" opacity=".75"/>' + FX('fx-tw', '<path d="M' + (x - w * .7) + ' ' + (y - 3) + ' h' + (w * .5) + ' M' + (x - w * .1) + ' ' + (y + 3) + ' h' + (w * .6) + ' M' + (x - w * .5) + ' ' + (y + 7) + ' h' + (w * .4) + '" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"/>') + T(x + w * .55, y - 3, .5, 0, '<path d="M0 0 L1 -34" stroke="#6B4A2A" stroke-width="3"/><path d="M1 -34 q-14 -2 -20 8 M1 -34 q14 -4 20 6 M1 -34 q-6 -12 -16 -14 M1 -34 q8 -12 18 -10" stroke="#3E7A3E" stroke-width="4" fill="none" stroke-linecap="round"/>'); };
+    P.house = function(x, y, s){ return P.sh(x, y, 44 * s) + T(x, y, s, 0, '<rect x="-44" y="-62" width="88" height="62" fill="#D8B98A"/><rect x="-48" y="-68" width="96" height="8" fill="#C4A170"/><path d="M-14 0 V-30 Q0 -44 14 -30 V0Z" fill="#7A4E2D"/><circle cx="8" cy="-16" r="1.8" fill="#D9A441"/><rect x="22" y="-46" width="14" height="14" rx="2" fill="#5B3A22"/><path d="M-36 -46 h12 v14 h-12z" fill="#5B3A22"/>'); };
+    P.school = function(x, y, s){ return P.sh(x, y, 56 * s) + T(x, y, s, 0, '<rect x="-56" y="-58" width="112" height="58" fill="#E9DCC0"/><rect x="-60" y="-64" width="120" height="8" fill="#C9B48A"/><path d="M-16 0 V-26 Q0 -40 16 -26 V0Z" fill="#1E6B52"/>' + [-44,-30,22,36].map(function(a){ return '<path d="M' + a + ' -20 V-38 Q' + (a + 4) + ' -44 ' + (a + 8) + ' -38 V-20Z" fill="#5A6B7A"/>'; }).join('') + '<circle cx="0" cy="-48" r="6" fill="#D9A441"/>'); };
+    P.mihrab = function(x, y, s){ return T(x, y, s, 0, '<path d="M-38 0 V-78 Q0 -122 38 -78 V0Z" fill="#E7D7B4" stroke="#C9A86A" stroke-width="3"/><path d="M-24 0 V-70 Q0 -100 24 -70 V0Z" fill="#1E5A48"/><path d="M-24 -70 Q0 -100 24 -70" stroke="#D9A441" stroke-width="2" fill="none"/><line x1="0" y1="-96" x2="0" y2="-62" stroke="#B68A2E"/><path d="M-6 -62 h12 l-3 8 h-6z" fill="#F2C14E"/>' + P.glow(0, -56, 20, '#FFE7A0')); };
+    P.mushaf = function(x, y, s, r){ return T(x, y, s, 0, '<g transform="rotate(' + (r || 0) + ')"><rect x="-14" y="-18" width="28" height="36" rx="2" fill="#1E6B52"/><rect x="-10" y="-14" width="20" height="28" rx="1" fill="none" stroke="#D9A441" stroke-width="1.6"/><circle cx="0" cy="0" r="5" fill="#D9A441"/></g>'); };
+    P.lamp = function(x, y, s){ return P.glow(x, y - 20 * s, 60 * s, '#FFE29A') + T(x, y, s, 0, '<path d="M-22 0 Q0 10 22 0 Q14 -10 0 -10 Q-14 -10 -22 0Z" fill="#D9A441"/><path d="M18 -3 Q30 -6 30 -12" stroke="#B68A2E" stroke-width="3" fill="none"/><path d="M-22 -2 Q-30 -6 -28 -12 Q-24 -24 -24 -12" fill="#FFB43A"/>') + '<path d="M-22 -20 Q-24 -40 -22 -48" stroke="none"/>'.replace(/.*/, ''); };
+    P.bread = function(x, y, r, ghost){ var h = ''; if (ghost) [r * .3, r * .6].forEach(function(gr){ h += '<circle cx="' + x + '" cy="' + y + '" r="' + gr + '" fill="none" stroke="rgba(217,167,95,.6)" stroke-width="2" stroke-dasharray="4 4"/>'; });
+      return h + '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#E3B572" stroke="#C48E45" stroke-width="3"/><g fill="#B57A38">' + [[-.4,-.2],[.3,-.4],[.1,.3],[-.2,.5],[.5,.2],[-.5,.3]].map(function(p){ return '<circle cx="' + (x + p[0] * r) + '" cy="' + (y + p[1] * r) + '" r="' + (r * .07) + '"/>'; }).join('') + '</g>'; };
+    P.ripples = function(x, y, rs, c){ return rs.map(function(r, i){ return FX('fx-rip', '<ellipse cx="' + x + '" cy="' + y + '" rx="' + r + '" ry="' + r + '" fill="none" stroke="' + (c || '#FFFFFF') + '" stroke-width="2.4"/>', i * .7); }).join(''); };
+    P.chain = function(d){ return '<path d="' + d + '" stroke="#555" stroke-width="6" stroke-dasharray="8 3" fill="none"/><path d="' + d + '" stroke="#9A9A9A" stroke-width="2" stroke-dasharray="8 3" fill="none"/>'; };
+    P.ball = function(x, y, r){ var g = rad('#777'); return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#3A3A3A"/><circle cx="' + (x - r * .35) + '" cy="' + (y - r * .35) + '" r="' + (r * .3) + '" fill="#777"/>'; };
+    P.sword = function(x1, y1, x2, y2){ return '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="#EEF3F5" stroke-width="3.4" stroke-linecap="round"/>' + P.glow(x2, y2, 14, '#FFF6D0'); };
+    P.net = function(x, y, w, h){ var id = gid(), m = ''; for (var i = -w; i <= w; i += 10) m += '<line x1="' + (x + i) + '" y1="' + (y - h) + '" x2="' + (x + i + h) + '" y2="' + y + '"/><line x1="' + (x + i) + '" y1="' + (y - h) + '" x2="' + (x + i - h) + '" y2="' + y + '"/>';
+      return '<defs><clipPath id="' + id + '"><path d="M' + (x - w) + ' ' + y + ' Q' + x + ' ' + (y - h * 2) + ' ' + (x + w) + ' ' + y + 'Z"/></clipPath></defs><g clip-path="url(#' + id + ')" stroke="rgba(60,45,30,.45)" stroke-width="1.2">' + m + '</g><path d="M' + (x - w) + ' ' + y + ' Q' + x + ' ' + (y - h * 2) + ' ' + (x + w) + ' ' + y + '" stroke="rgba(60,45,30,.5)" stroke-width="2" fill="none" stroke-dasharray="5 4"/>'; };
+    P.grains = function(x1, y1, x2, y2, n, seed){ var R = rnd(seed), h = ''; for (var i = 0; i < n; i++){ var t = R(), x = x1 + (x2 - x1) * t + R() * 10 - 5, y = y1 + (y2 - y1) * t - Math.sin(t * Math.PI) * 30 + R() * 8; h += FX('fx-tw2', '<ellipse cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" rx="2.4" ry="1.6" fill="#E3B54A"/>', R() * 2); } return h; };
+    P.jar = function(x, y, s){ return P.sh(x, y, 20 * s) + T(x, y, s, 0, '<path d="M-14 0 Q-24 -24 -12 -40 L-10 -48 L10 -48 L12 -40 Q24 -24 14 0Z" fill="#B5714A"/><rect x="-12" y="-52" width="24" height="6" rx="2" fill="#8E5634"/><path d="M-16 -22 H16" stroke="#8E5634" stroke-width="2"/>'); };
+    P.anthill = function(x, y, s){ return T(x, y, s, 0, '<path d="M-44 0 Q-20 -36 0 -38 Q20 -36 44 0Z" fill="#B08C58"/><ellipse cx="0" cy="-30" rx="7" ry="4" fill="#3B2416"/><g fill="#9C7A48"><circle cx="-20" cy="-10" r="2"/><circle cx="14" cy="-16" r="2"/><circle cx="24" cy="-6" r="1.6"/></g>'); };
+    P.snow = function(x, y, r){ return '<g stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" opacity=".85">' + [0,60,120].map(function(a){ var t = a * Math.PI / 180; return '<line x1="' + (x - Math.cos(t) * r).toFixed(1) + '" y1="' + (y - Math.sin(t) * r).toFixed(1) + '" x2="' + (x + Math.cos(t) * r).toFixed(1) + '" y2="' + (y + Math.sin(t) * r).toFixed(1) + '"/>'; }).join('') + '</g>'; };
+    P.cracks = function(x1, x2, y){ var h = ''; for (var x = x1; x < x2; x += 34) h += '<path d="M' + x + ' ' + (y + 8) + ' l8 10 l-6 12 M' + (x + 8) + ' ' + (y + 18) + ' l12 4" stroke="#8A6A3E" stroke-width="1.6" fill="none"/>'; return h; };
+    P.water = function(c1, c2){ var g = lin([c1 || '#5FA8BE', c2 || '#2E7A93']); return g.d + '<rect width="400" height="260" fill="url(#' + g.id + ')"/>' + FX('fx-tw', '<path d="M20 40 q20 -6 40 0 M300 60 q20 -6 40 0 M80 200 q20 -6 40 0 M260 220 q20 -6 40 0 M30 140 q20 -6 40 0 M330 160 q20 -6 40 0" stroke="rgba(255,255,255,.45)" stroke-width="2" fill="none" stroke-linecap="round"/>'); };
+    P.river = function(y, h, c){ return '<path d="M0 ' + y + ' Q100 ' + (y - 6) + ' 200 ' + y + ' T400 ' + y + ' V' + (y + h) + ' H0Z" fill="' + (c || '#6FB3C8') + '"/>' + FX('fx-wind', '<path d="M60 ' + (y + h * .4) + ' h40 M200 ' + (y + h * .6) + ' h50 M300 ' + (y + h * .3) + ' h30" stroke="rgba(255,255,255,.7)" stroke-width="2.4" stroke-linecap="round"/>'); };
+    P.hill = function(x1, x2, top, c){ return '<path d="M' + x1 + ' 205 Q' + ((x1 + x2) / 2) + ' ' + (top * 2 - 205) + ' ' + x2 + ' 205Z" fill="' + (c || '#8A9B5A') + '"/>'; };
+    P.podium = function(x, y, w){ return '<rect x="' + (x - w / 2) + '" y="' + (y - 18) + '" width="' + w + '" height="18" fill="#7A4E2D"/><rect x="' + (x - w / 2 - 6) + '" y="' + (y - 22) + '" width="' + (w + 12) + '" height="6" fill="#9A6A40"/>'; };
+    P.heads = function(x1, x2, y, n, c){ var h = ''; for (var i = 0; i < n; i++){ var x = x1 + (x2 - x1) * i / (n - 1); h += '<circle cx="' + x.toFixed(0) + '" cy="' + y + '" r="11" fill="' + (c || '#2A1E16') + '"/><path d="M' + (x - 16).toFixed(0) + ' ' + (y + 30) + ' Q' + x.toFixed(0) + ' ' + (y + 4) + ' ' + (x + 16).toFixed(0) + ' ' + (y + 30) + 'Z" fill="' + (c || '#2A1E16') + '"/>'; } return h; };
+    P.feather = function(x, y, s){ return T(x, y, s, 0, FX('fx-sway', '<path d="M0 0 Q-16 -40 0 -86 Q16 -40 0 0Z" fill="#F7F1E4" stroke="#C9B898" stroke-width="1.4"/><path d="M0 4 L0 -84" stroke="#B5A07A" stroke-width="1.6"/>' + [-70,-56,-42,-28,-14].map(function(v){ return '<path d="M0 ' + v + ' l-9 -6 M0 ' + v + ' l9 -6" stroke="#D8C9AA" stroke-width="1"/>'; }).join(''))); };
+    P.sign = function(x, y, dir, c){ return '<line x1="' + x + '" y1="' + y + '" x2="' + x + '" y2="' + (y - 70) + '" stroke="#6B4A2A" stroke-width="4"/><path d="M' + x + ' ' + (y - 66) + ' h' + (dir * 38) + ' l' + (dir * 10) + ' 8 l' + (-dir * 10) + ' 8 h' + (-dir * 38) + 'Z" fill="' + (c || '#C2780A') + '"/>'; };
+    P.arrow = function(x1, y1, x2, y2, c, w){ var a = Math.atan2(y2 - y1, x2 - x1), L = 9; return '<g stroke="' + (c || '#C94F3B') + '" stroke-width="' + (w || 2.6) + '" stroke-linecap="round" fill="none"><line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/><path d="M' + (x2 - L * Math.cos(a - .5)).toFixed(1) + ' ' + (y2 - L * Math.sin(a - .5)).toFixed(1) + ' L' + x2 + ' ' + y2 + ' L' + (x2 - L * Math.cos(a + .5)).toFixed(1) + ' ' + (y2 - L * Math.sin(a + .5)).toFixed(1) + '"/></g>'; };
+    P.zzz = function(x, y){ return FX('fx-bob', '<text x="' + x + '" y="' + y + '" font-family="Georgia,serif" font-size="16" font-weight="700" fill="#E8E4D0">z</text><text x="' + (x + 10) + '" y="' + (y - 12) + '" font-family="Georgia,serif" font-size="20" font-weight="700" fill="#E8E4D0">z</text><text x="' + (x + 24) + '" y="' + (y - 28) + '" font-family="Georgia,serif" font-size="25" font-weight="700" fill="#E8E4D0">z</text>'); };
+    P.speech = function(x1, y1, x2, y2, c, seed){ var R = rnd(seed || 3), h = ''; for (var i = 0; i < 7; i++){ var t = (i + .5) / 7, x = x1 + (x2 - x1) * t, y = y1 + (y2 - y1) * t - Math.sin(t * Math.PI) * 18; h += FX('fx-tw2', '<circle cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" r="' + (3 + R() * 2).toFixed(1) + '" fill="' + (c || '#F2C14E') + '"/>', i * .2); } return h; };
+    P.gem = function(x, y, r){ return P.glow(x, y, r * 3, '#BFF0FF') + '<path d="M' + (x - r) + ' ' + (y - r * .3) + ' L' + (x - r * .5) + ' ' + (y - r) + ' L' + (x + r * .5) + ' ' + (y - r) + ' L' + (x + r) + ' ' + (y - r * .3) + ' L' + x + ' ' + (y + r) + 'Z" fill="#7FD3E8" stroke="#E6FAFF" stroke-width="1.5"/>'; };
+    P.toy = function(x, y, c){ return '<circle cx="' + x + '" cy="' + (y - 7) + '" r="7" fill="' + (c || '#C4553D') + '"/><path d="M' + (x - 7) + ' ' + (y - 7) + ' h14" stroke="#fff" stroke-width="1.6"/>'; };
+    P.crossX = function(x, y, r){ return '<path d="M' + (x - r) + ' ' + (y - r) + ' L' + (x + r) + ' ' + (y + r) + ' M' + (x + r) + ' ' + (y - r) + ' L' + (x - r) + ' ' + (y + r) + '" stroke="#C94F3B" stroke-width="3.4" stroke-linecap="round"/>'; };
+    return P;
+  }
+
+  /* ===== اللوحات: m المشبَّه · b المشبَّهُ به · sk هيكلُ وجهِ الشبه (ذهبيّ) ===== */
+  var A = {};
+  /* — الأمثلة — */
+  A.ramad = { w:'جهدٌ متراكمٌ يتبدّدُ فلا يبقى منه شيء', mc:'أعمالُ الكفّار: يحسبونها شيئاً… فتذهبُ هباءً', bc:'رمادٌ اشتدّت به الريحُ في يومٍ عاصف',
+    m:function(P){ return P.bg('dusk','dusk') + P.wind(7, 30, 150, 11) + P.blocks(225, 205) + P.particles(220, 180, 40, '#E8C267', 5) + P.person(320, 205, { c:'#5B4A3A', arm:'fwd', f:1 }); },
+    b:function(P){ return P.bg('storm','storm') + P.cloud(90, 50, 1.2, '#3A4441') + P.cloud(300, 40, 1, '#454F4B') + P.wind(9, 30, 160, 7) + P.ash(225, 205, 1) + P.particles(220, 180, 46, '#C9C3B8', 9); },
+    sk:'<path d="M150 205 Q225 128 300 205"/><path d="M210 160 Q150 128 60 136"/><path d="M205 176 Q140 166 40 176"/><path d="M218 150 Q170 100 92 92"/><circle class="d" cx="60" cy="136" r="4"/><circle class="d" cx="40" cy="176" r="4"/><circle class="d" cx="92" cy="92" r="4"/>' };
+  A.nahr = { w:'تطهيرٌ متكرّرٌ قريبٌ لا يُبقي أثراً', mc:'خمسُ صلواتٍ تمحو الذنوب', bc:'نهرٌ عذبٌ على البابِ: خمسُ غسلاتٍ كلَّ يوم',
+    m:function(P){ var h = P.bg('indoor', 'floor') + P.mihrab(330, 205, 1); [120,170,220,270,320].forEach(function(x, i){ h += P.lamp(x - 0, [62,44,38,44,62][i], .38); }); h += P.person(210, 205, { c:'#F4EEE2', arm:'pray' }) + P.particles(200, 170, 12, '#3A2A1E', 4, 90, 60); return h; },
+    b:function(P){ var h = P.bg('day', 'sand') + P.house(330, 205, .9) + P.river(186, 74, '#7DBFD2'); [120,170,220,270,320].forEach(function(x, i){ h += '<path d="M' + x + ' ' + ([62,44,38,44,62][i] - 8) + ' q-7 10 0 14 q7 -4 0 -14Z" fill="#7DC3DA"/>'; }); h += P.person(210, 216, { c:'#E8F0F2', arm:'up', noShadow:1 }) + P.ripples(210, 220, [14, 26]) + P.particles(200, 170, 12, '#7A5A3A', 4, 90, 60); return h; },
+    sk:'<circle class="d" cx="120" cy="58" r="5"/><circle class="d" cx="170" cy="40" r="5"/><circle class="d" cx="220" cy="34" r="5"/><circle class="d" cx="270" cy="40" r="5"/><circle class="d" cx="320" cy="58" r="5"/><path d="M120 58 Q220 10 320 58"/><circle cx="210" cy="166" r="48"/><path d="M168 130 L140 100 M252 130 L280 100 M210 116 L210 84"/>' };
+  A.asad = { w:'قويٌّ يجرُّ ما يُفترَضُ أن يقهرَه مستهيناً به', mc:'الأسيرُ يجرُّ قيودَه مستهيناً بها', bc:'أسدٌ يجرّرُ حيّةً رقطاء',
+    m:function(P){ return P.bg('day','sand') + P.chain('M262 172 Q200 200 128 196') + P.ball(118, 192, 13) + P.person(275, 205, { c:'#8A7D6A', arm:'back', walk:1, s:1.45 }) + '<rect x="250" y="160" width="10" height="6" rx="2" fill="#555"/>'; },
+    b:function(P){ return P.bg('day','sand') + P.snake(240, 176, 118, 196) + P.lion(262, 205, 1.05, 0); },
+    sk:'<circle cx="268" cy="150" r="54"/><path d="M232 182 Q190 204 112 196"/><path d="M330 120 L362 120 M352 111 L362 120 L352 129"/><circle class="d" cx="112" cy="196" r="5"/>' };
+  A.nahl = { w:'انطلاقٌ جماعيٌّ جادٌّ إلى ما ينفع', mc:'الطلّابُ ينطلقون صباحاً إلى مدارسِهم', bc:'النحلُ ينطلقُ إلى الحدائق',
+    m:function(P){ var h = P.bg('dawn','sand') + P.sun(340, 70, 18) + P.school(70, 205, .9); [175,220,265,310].forEach(function(x, i){ h += P.person(x, 205 - i * 2, { kid:1, s:1.05, acc:'bag', walk:1, f:1, c:['#F4EEE2','#E8F0F2','#F4EEE2','#EDE6D8'][i] }); }); return h; },
+    b:function(P){ var h = P.bg('dawn','grass') + P.sun(340, 70, 18) + P.flowers(70, 200, 90, 3); [175,220,265,310].forEach(function(x, i){ h += P.bee(x, 168 + (i % 2) * 8, 1.5, i * .2); }); return h + '<path d="M320 172 Q240 150 160 170" stroke="rgba(42,26,15,.25)" stroke-width="1.6" stroke-dasharray="3 5" fill="none"/>'; },
+    sk:'<circle cx="340" cy="70" r="24"/><path d="M325 172 Q240 152 112 168"/><circle class="d" cx="175" cy="166" r="4.5"/><circle class="d" cx="220" cy="162" r="4.5"/><circle class="d" cx="265" cy="164" r="4.5"/><circle class="d" cx="310" cy="168" r="4.5"/><circle cx="72" cy="172" r="36"/>' };
+  /* — أولاً — */
+  A.himar = { w:'يحملُ النافعَ الشريفَ ولا ينتفعُ به', mc:'حُمِّلوا التوراةَ ثمّ لم يعملوا بها', bc:'الحمارُ يحملُ أسفاراً',
+    m:function(P){ return P.bg('day','sand') + P.person(215, 205, { c:'#7A6A58', acc:'scrolls', walk:1, s:1.35, old:1 }) + P.crossX(262, 104, 7) + '<path d="M232 104 L256 104" stroke="#C94F3B" stroke-width="2" stroke-dasharray="3 3"/>'; },
+    b:function(P){ return P.bg('day','sand') + P.donkey(205, 205, 1.6) + P.crossX(262, 104, 7) + '<path d="M232 104 L256 104" stroke="#C94F3B" stroke-width="2" stroke-dasharray="3 3"/>'; },
+    sk:'<ellipse cx="210" cy="172" rx="62" ry="30"/><rect x="176" y="96" width="64" height="40" rx="6"/><path class="dz" d="M244 108 L282 108"/><path d="M276 100 L292 116 M292 100 L276 116"/>' };
+  A.dunya = { w:'بهجةٌ سريعةٌ ثمّ ذبولٌ ثمّ فناء', mc:'الدنيا: زينةٌ ← ذبولٌ ← زوال', bc:'غيثٌ ← نباتٌ أخضر ← مصفرٌّ ← هشيم',
+    m:function(P){ return P.bg('day','sand') + P.divider([133, 266]) + P.glow(333, 150, 60, '#FFE7A0') + P.person(333, 205, { c:'#1E7A46', face:'smile', acc:'gift', s:1.15 }) + P.coins(300, 196) + P.flowers(360, 204, 30, 8)
+      + P.person(200, 205, { c:'#9A8A70', old:1, acc:'cane', s:1.1 }) + P.wind(4, 120, 190, 5, 'rgba(120,100,70,.5)').replace(/M(\d+)/g, function(m, a){ return 'M' + (a % 120 + 10); }) + '<path d="M40 205 Q66 172 92 205" fill="none" stroke="#9A8A70" stroke-width="2" stroke-dasharray="4 4"/>' + P.particles(90, 180, 14, '#B5A27A', 2, 80, 40); },
+    b:function(P){ var h = P.bg('day','sand') + P.divider([133, 266]) + P.cloud(333, 52, .9, '#7E8E98') + P.rain(290, 380, 64, 150, 4); [305,333,361].forEach(function(x){ h += P.plant(x, 205, 'green', 1.1); }); h += P.sun(200, 50, 14); [172,200,228].forEach(function(x){ h += P.plant(x, 205, 'yellow', 1.1); }); [40,66,92].forEach(function(x){ h += P.plant(x, 205, 'broken', 1.1); }); return h + P.wind(4, 120, 180, 9, 'rgba(120,100,70,.5)').replace(/M(\d+)/g, function(m, a){ return 'M' + (a % 120 + 10); }) + P.particles(90, 180, 14, '#C8AE72', 2, 80, 40); },
+    sk:'<path d="M380 196 Q340 70 300 104 Q240 150 200 150 Q150 150 120 180 Q80 214 20 150"/><circle class="d" cx="333" cy="96" r="5"/><circle class="d" cx="200" cy="150" r="5"/><circle class="d" cx="66" cy="182" r="5"/>' };
+  A.habba = { w:'القليلُ يتضاعفُ أضعافاً كثيرة', mc:'نفقةٌ في سبيلِ اللهِ يضاعفُها', bc:'حبّةٌ أنبتَت سبعَ سنابل',
+    m:function(P){ return P.bg('dawn','soil', 214) + P.glow(200, 214, 30, '#FFE7A0') + '<circle cx="200" cy="216" r="7" fill="#F2C14E" stroke="#B68A2E" stroke-width="1.5"/>' + P.seven(200, 214, function(x, y){ return P.coins(x, y); }).replace(/#7A8E3A/g, '#C9A13C'); },
+    b:function(P){ return P.bg('dawn','soil', 214) + '<ellipse cx="200" cy="217" rx="6" ry="4" fill="#E3B54A"/>' + P.seven(200, 214, function(x, y, r){ return P.ear(x, y, r); }); },
+    sk:'<path d="M200 214 L200 154"/><path d="M200 154 Q177 114 110 79"/><path d="M200 154 Q185 114 140 54"/><path d="M200 154 Q192 114 170 39"/><path d="M200 154 L200 34"/><path d="M200 154 Q207 114 230 39"/><path d="M200 154 Q215 114 260 54"/><path d="M200 154 Q222 114 290 79"/><circle class="d" cx="200" cy="214" r="6"/>' };
+  A.naqa = { w:'ظلامٌ تلمعُ فيه أجسامٌ مضيئةٌ متساقطة', mc:'غبارُ المعركةِ وسيوفٌ تلمعُ وتهوي', bc:'ليلٌ تتهاوى كواكبُه',
+    m:function(P){ var h = P.bg('storm','storm') + P.dust(110, 70, 1.3, 'rgba(70,60,48,.75)') + P.dust(300, 60, 1.4, 'rgba(80,68,52,.75)') + P.dust(210, 110, 1.1, 'rgba(90,78,60,.6)');
+      [[300,40,250,120],[230,30,185,110],[160,50,120,125],[345,90,305,160],[100,30,62,100]].forEach(function(s, i){ h += P.streak(s[0], s[1], s[2], s[3], '#E9F1F4', i * .45); });
+      return h + P.rider(110, 205, .8, 0, { c:'#3A3530', hc:'#2E2620' }) + P.rider(290, 205, .8, 1, { c:'#3A3530', hc:'#2E2620' }); },
+    b:function(P){ var h = P.bg('night','night') + P.stars(40, 4, 150); [[300,40,250,120],[230,30,185,110],[160,50,120,125],[345,90,305,160],[100,30,62,100]].forEach(function(s, i){ h += P.streak(s[0], s[1], s[2], s[3], '#FFF3C4', i * .45); }); return h; },
+    sk:'<path d="M300 40 L250 120"/><path d="M230 30 L185 110"/><path d="M160 50 L120 125"/><path d="M345 90 L305 160"/><path d="M100 30 L62 100"/><circle class="d" cx="250" cy="120" r="5"/><circle class="d" cx="185" cy="110" r="5"/><circle class="d" cx="120" cy="125" r="5"/><circle class="d" cx="305" cy="160" r="5"/><circle class="d" cx="62" cy="100" r="5"/>' };
+  A.ghamama = { w:'تعلّقٌ بأملٍ يتلاشى كلّما اقترب', mc:'يرجو وصلَ عزّة… فيضمحلُّ أملُه', bc:'يرجو ظلَّ الغمامة… فتضمحلّ',
+    m:function(P){ return P.bg('dusk','dry') + P.glow(115, 120, 50, '#FFB0A0') + '<path d="M115 140 C85 115 92 92 115 108 C138 92 145 115 115 140Z" fill="none" stroke="#F3B3A6" stroke-width="3" stroke-dasharray="5 5"/>' + P.person(300, 205, { c:'#5B6E7A', arm:'fwd', walk:1, f:1, s:1.2 }); },
+    b:function(P){ return P.bg('hot','sand') + P.sun(350, 40, 14) + '<g opacity=".55">' + P.cloud(115, 92, 1, '#FFFFFF') + '</g><ellipse cx="115" cy="206" rx="46" ry="7" fill="rgba(60,40,20,.18)" stroke="rgba(60,40,20,.4)" stroke-dasharray="5 5"/>' + P.person(300, 205, { c:'#7A6A58', arm:'fwd', walk:1, f:1, s:1.2 }); },
+    sk:'<circle cx="300" cy="160" r="40"/><path d="M262 140 Q200 108 155 116"/><circle class="dz" cx="115" cy="120" r="36"/><path d="M100 105 L130 135 M130 105 L100 135"/>' };
+  A.layl = { w:'إحاطةٌ تامّةٌ لا مهربَ منها', mc:'سلطانُ النعمان يدركُ الشاعرَ أينما فرّ', bc:'الليلُ يدركُ كلَّ مكان',
+    m:function(P){ return P.bg('dusk','dusk') + '<path d="M0 205 Q200 -70 400 205Z" fill="rgba(120,70,150,.28)"/><path d="M8 205 Q200 -54 392 205" fill="none" stroke="rgba(230,190,255,.55)" stroke-width="2" stroke-dasharray="6 6"/>' + P.person(330, 205, { c:'#7A2E3A', crown:1, s:1.55 }) + P.person(58, 205, { c:'#4A5A66', walk:1, f:1, arm:'back', s:.95 }); },
+    b:function(P){ return P.bg('night','night') + P.stars(46, 9, 190) + P.moon(330, 70, 18, 'cres', 1, -.2) + P.person(58, 205, { c:'#4A5A66', walk:1, f:1, arm:'back', s:.95 }); },
+    sk:'<path d="M8 205 Q200 -54 392 205"/><circle cx="60" cy="172" r="26"/><path d="M40 170 L14 170 M22 162 L14 170 L22 178"/>' };
+  A.tabib = { w:'يدعو غيرَه إلى ما هو أحوجُ الناسِ إليه', mc:'يأمرُ الناسَ بالتقوى وهو لا يتّقي', bc:'طبيبٌ يداوي الناسَ وهو سقيم',
+    m:function(P){ return P.bg('indoor','floor') + P.person(80, 205, { c:'#5A6B7A', f:0 }) + P.person(125, 205, { c:'#8A6A4A', f:0 }) + P.person(330, 205, { c:'#6E5A86', f:1 }) + P.speech(230, 140, 100, 150) + P.speech(250, 140, 320, 150, null, 5) + P.person(240, 205, { c:'#2F4F44', arm:'up', dark:1, s:1.3 }); },
+    b:function(P){ return P.bg('indoor','floor') + P.person(80, 205, { c:'#5A6B7A' }) + P.person(125, 205, { c:'#8A6A4A' }) + P.person(330, 205, { c:'#6E5A86', f:1 }) + P.speech(230, 140, 100, 150, '#E07A6A') + P.speech(250, 140, 320, 150, '#E07A6A', 5) + P.person(240, 205, { c:'#F4F6F7', arm:'give', acc:'cup', steth:1, pale:1, band:1, face:'frown', s:1.3 }); },
+    sk:'<circle cx="240" cy="150" r="46"/><path d="M196 140 Q150 120 104 140"/><path d="M284 140 Q305 128 322 140"/><circle class="dz" cx="244" cy="152" r="12"/><path d="M238 146 L250 158 M250 146 L238 158"/>' };
+  A.uqab = { w:'قوّةٌ تتحرّكُ بجناحَين حولَ مركزٍ يقودُهما', mc:'جيشٌ بميمنةٍ وميسرةٍ حولَ قائدِه', bc:'عُقابٌ تنفضُ جناحَيها',
+    m:function(P){ var h = P.bg('dawn','sand'); [[60,128],[92,140],[124,152],[156,164]].forEach(function(p, i){ h += FX('fx-bob', P.rider(p[0], p[1] + 40, .55, 0, { c:'#3E5F55' }), i * .2) + FX('fx-bob', P.rider(400 - p[0], p[1] + 40, .55, 1, { c:'#3E5F55' }), i * .2); }); return h + P.rider(200, 205, .9, 0, { c:'#7A2E3A', acc:'sword', arm:'up' }); },
+    b:function(P){ return P.bg('dawn','sand') + P.eagle(200, 150, 1.12); },
+    sk:'<circle cx="200" cy="160" r="26"/><path d="M178 154 Q120 100 40 116"/><path d="M222 154 Q280 100 360 116"/><path d="M60 92 Q50 104 60 116 M340 92 Q350 104 340 116"/>' };
+  A.silah = { w:'مواجهةُ الخطرِ بلا عُدّةٍ تحمي', mc:'مَن لا أخَ له يواجهُ الشدائدَ وحدَه', bc:'ساعٍ إلى الهيجا بغيرِ سلاح',
+    m:function(P){ return P.bg('storm','storm') + P.wind(6, 40, 160, 4) + P.arrow(30, 110, 205, 132) + P.arrow(20, 160, 200, 158) + P.arrow(40, 196, 196, 182) + '<g opacity=".35">' + P.person(300, 205, { c:'#AAB4BC', s:1.3, noShadow:1 }) + '</g><path d="M300 205" />' + P.person(250, 205, { c:'#4A5A66', arm:'both', s:1.3, f:1 }); },
+    b:function(P){ return P.bg('dusk','sand') + P.sword(40, 200, 90, 110) + P.sword(70, 205, 140, 128) + P.sword(20, 180, 60, 120) + P.dust(60, 170, .8, 'rgba(90,70,50,.45)') + '<circle cx="300" cy="150" r="26" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="2" stroke-dasharray="5 5"/>' + P.person(250, 205, { c:'#6A5A4A', arm:'both', walk:1, s:1.3, f:1 }); },
+    sk:'<circle cx="250" cy="150" r="44"/><path d="M30 120 L196 136"/><path d="M20 165 L190 160"/><circle class="dz" cx="300" cy="150" r="26"/>' };
+  A.raqaq = { w:'صغيرٌ يتّسعُ ويستديرُ بسرعةٍ خاطفة', mc:'الرُّقاقةُ: كرةٌ تصيرُ قرصاً كالقمرِ في لمحة', bc:'حجرٌ في الماء: دائرةٌ تتّسعُ في لمحة',
+    m:function(P){ return P.bg('indoor','floor', 230) + '<rect x="40" y="200" width="320" height="16" rx="4" fill="#8A5A34"/>' + P.bread(200, 140, 62, 1) + '<circle cx="200" cy="140" r="9" fill="#EBC68B"/>' + '<path d="M300 84 Q316 72 334 84 L330 98 Q316 92 304 98Z" fill="#C69468"/><path d="M66 84 Q84 72 100 84 L96 98 Q84 92 70 98Z" fill="#C69468"/>'; },
+    b:function(P){ return P.water() + '<g opacity=".9">' + P.ripples(200, 140, [20, 40, 62], '#E8F6FA') + '</g><ellipse cx="200" cy="140" rx="8" ry="6" fill="#6E6A63"/>'; },
+    sk:'<circle cx="200" cy="140" r="20"/><circle cx="200" cy="140" r="40"/><circle cx="200" cy="140" r="62"/><path d="M262 140 L292 140 M108 140 L138 140 M200 78 L200 48 M200 202 L200 230"/><circle class="d" cx="200" cy="140" r="5"/>' };
+  /* — ثانياً — */
+  A.sarab = { w:'طمعٌ في نفعٍ يتبيّنُ أنّه وهم', mc:'أعمالُهم يحسبونها نافعة… فلا يجدونها شيئاً', bc:'سرابٌ يحسبُه الظمآنُ ماءً',
+    m:function(P){ return P.bg('dusk','dry') + '<g opacity=".55">' + P.blocks(105, 200) + '</g><rect x="68" y="160" width="74" height="44" rx="6" fill="none" stroke="#F2C14E" stroke-dasharray="5 5" stroke-width="2"/>' + P.person(305, 205, { c:'#5B4A3A', arm:'fwd', walk:1, f:1, s:1.2 }); },
+    b:function(P){ return P.bg('hot','sand') + P.sun(350, 40, 14) + P.mirage(105, 190, 50) + P.cracks(200, 400, 205) + P.person(305, 205, { c:'#7A6A58', arm:'fwd', walk:1, f:1, s:1.2, face:'frown' }); },
+    sk:'<circle cx="305" cy="160" r="40"/><path d="M266 150 Q200 150 150 176"/><rect class="dz" x="60" y="160" width="90" height="44" rx="10"/><path d="M92 170 L120 196 M120 170 L92 196"/>' };
+  A.nafs = { w:'الطبعُ يتبعُ التعويد: الإهمالُ يطيلُه والحزمُ يقطعُه', mc:'النفسُ: إن أُهملت تمادت، وإن رُوِّضت انقادت', bc:'الطفلُ: إن أُهمل شبَّ على الرضاع، وإن فُطم انفطم',
+    m:function(P){ return P.bg('indoor','floor') + P.divider([200]) + P.person(300, 205, { c:'#7A4A6A', arm:'fwd', s:1.25, face:'smile' }) + '<g>' + [0,1,2,3].map(function(i){ return '<circle cx="' + (346 + (i % 2) * 14) + '" cy="' + (150 - Math.floor(i / 2) * 14) + '" r="7" fill="' + ['#C4553D','#F2C14E','#E08A9B','#B36BA8'][i] + '"/>'; }).join('') + '</g>' + P.person(100, 205, { c:'#1E6B52', arm:'down', s:1.25, acc:'book' }) + '<g opacity=".5"><circle cx="160" cy="190" r="6" fill="#C4553D"/></g>' + P.crossX(160, 190, 9); },
+    b:function(P){ return P.bg('indoor','floor') + P.divider([200]) + P.person(300, 205, { kid:1, c:'#7FA8C9', arm:'fwd', s:1.75 }) + '<g transform="translate(346 150) rotate(-30)"><rect x="-6" y="-14" width="12" height="22" rx="4" fill="#F7F7F2" stroke="#9AB"/><path d="M-4 -14 Q0 -22 4 -14" fill="#E3B572"/></g>' + P.person(100, 205, { kid:1, c:'#7FA8C9', arm:'down', s:1.75, face:'smile' }) + '<g opacity=".5"><rect x="154" y="178" width="12" height="20" rx="4" fill="#F7F7F2"/></g>' + P.crossX(160, 190, 9); },
+    sk:'<path d="M200 20 L200 240"/><path d="M300 120 Q340 80 360 130 Q370 170 330 150 Q300 130 330 110"/><path d="M100 120 L150 170"/><path d="M140 180 L180 200"/>' };
+  A.qamar = { w:'مضيءٌ يتحرّكُ في الظلامِ ومعه شيءٌ لامع', mc:'الممدوحُ يكرُّ بسيفِه في ظلامِ المعركة', bc:'قمرٌ يكرُّ ومعه كوكب',
+    m:function(P){ return P.bg('night','night') + P.dust(100, 90, 1.2, 'rgba(60,55,50,.6)') + P.dust(330, 120, 1, 'rgba(60,55,50,.5)') + P.glow(215, 150, 50, '#FFE7A0') + P.rider(215, 215, 1, 0, { c:'#F4EEE2', acc:'sword', arm:'up' }) + P.wind(5, 130, 190, 3); },
+    b:function(P){ return P.bg('night','night') + P.stars(30, 7, 200) + P.moon(215, 150, 34, 'full') + '<line x1="240" y1="128" x2="285" y2="95" stroke="rgba(255,255,255,.25)" stroke-dasharray="3 5"/>' + P.glow(290, 92, 22, '#FFF3C4') + P.star4(290, 92, 9) + P.wind(5, 130, 190, 3); },
+    sk:'<circle cx="215" cy="150" r="36"/><path d="M240 128 L285 95"/><circle class="d" cx="290" cy="92" r="6"/><path d="M160 140 L120 140 M164 160 L110 160"/>' };
+  A.mawt = { single:1, w:'صفةٌ واحدة: الخفاءُ والأخذ — مفردٌ بمفرد', mc:'الموت', bc:'سارقٌ خفيّ',
+    m:function(P){ return P.bg('dusk','dusk') + P.hourglass(200, 205, 1.3); },
+    b:function(P){ return P.bg('night','night') + P.stars(20, 3, 120) + P.thief(200, 205, 1.5); },
+    sk:'<circle cx="200" cy="130" r="40"/><circle class="d" cx="200" cy="130" r="7"/>' };
+  A.aasi = { w:'وضعُ اليدِ على الشيءِ برفقٍ وتؤدة', mc:'أسدٌ يطأُ الثرى مترفّقاً', bc:'طبيبٌ يجسُّ عليلاً برفق',
+    m:function(P){ return P.bg('day','sand') + P.lion(200, 205, 1.05, 0, { paw:1 }) + '<path d="M238 196 q6 -4 12 0 M232 202 q-4 -6 0 -10" stroke="rgba(120,90,50,.5)" stroke-width="2" fill="none"/>'; },
+    b:function(P){ return P.bg('indoor','floor') + P.bed(160, 215, { s:1.1, pale:1 }) + P.person(270, 215, { c:'#F4F6F7', steth:1, arm:'give', f:1, s:1.25 }); },
+    sk:'<path d="M262 116 Q252 160 236 196"/><circle class="d" cx="236" cy="196" r="6"/><path d="M222 206 Q236 196 250 206"/><path class="dz" d="M216 214 Q236 200 256 214"/>' };
+  A.aish = { single:1, w:'تشبيهاتٌ بليغة: العيشُ نوم، والمنيّةُ يقظة — مفردٌ بمفرد', mc:'العيش', bc:'نوم',
+    m:function(P){ return P.bg('day','grass') + P.sun(320, 60, 18) + P.person(200, 205, { c:'#1E6B52', walk:1, s:1.4 }); },
+    b:function(P){ return P.bg('night','night') + P.moon(320, 60, 18, 'cres') + P.stars(16, 2, 120) + P.bed(200, 210, { s:1.3 }) + P.zzz(180, 130); },
+    sk:'<circle cx="200" cy="150" r="44"/><circle class="d" cx="200" cy="150" r="7"/>' };
+  A.hilal = { w:'قوسٌ أبيضُ لامعٌ على صفحةٍ زرقاء', mc:'هلالٌ أبيضُ في سماءٍ زرقاء', bc:'نونٌ من فضّةٍ في صحيفةٍ زرقاء',
+    m:function(P){ return P.bg('blue') + P.stars(28, 5, 250) + P.moon(200, 108, 56, 'cres', 0, -1); },
+    b:function(P){ return P.bg('blue') + '<rect x="24" y="16" width="352" height="228" rx="10" fill="none" stroke="rgba(217,164,65,.7)" stroke-width="3"/><rect x="34" y="26" width="332" height="208" rx="6" fill="none" stroke="rgba(217,164,65,.35)"/>' + P.glow(200, 130, 90, '#DDE8F0') + '<path d="M140 92 Q140 172 200 172 Q260 172 260 92" stroke="#E6ECF0" stroke-width="22" fill="none" stroke-linecap="round"/><circle cx="200" cy="66" r="11" fill="#E6ECF0"/>'; },
+    sk:'<path d="M142 96 Q144 168 200 168 Q256 168 258 96"/><circle class="d" cx="200" cy="66" r="7"/>' };
+  A.rubaa = { w:'ثباتٌ ورسوخٌ في موضعٍ عالٍ', mc:'الصحابةُ ثابتون على ظهورِ الخيل', bc:'نبتٌ راسخٌ فوقَ الرُّبا',
+    m:function(P){ return P.bg('dawn') + P.hill(20, 380, 110, '#A3906A') + P.rider(150, 132, .7, 0, { c:'#F4EEE2' }) + P.rider(200, 118, .7, 0, { c:'#F4EEE2' }) + P.rider(250, 132, .7, 0, { c:'#F4EEE2' }); },
+    b:function(P){ var h = P.bg('dawn') + P.hill(20, 380, 110, '#8A9B5A'); [[150,132],[200,118],[250,132]].forEach(function(p){ h += '<path d="M' + p[0] + ' ' + p[1] + ' l-8 14 M' + p[0] + ' ' + p[1] + ' l8 14 M' + p[0] + ' ' + p[1] + ' l0 16" stroke="#5A4A2A" stroke-width="1.8"/>' + P.plant(p[0], p[1], 'green', 1.2); }); return h; },
+    sk:'<path d="M20 205 Q200 15 380 205"/><path d="M150 132 L150 92 M200 118 L200 78 M250 132 L250 92"/><path d="M150 132 l-8 14 M150 132 l8 14 M200 118 l-8 14 M200 118 l8 14 M250 132 l-8 14 M250 132 l8 14"/>' };
+  A.milh = { w:'الطيّبُ يفسدُ بمخالطةِ الفاسد', mc:'الصالحُ يفسدُ بصحبةِ الفاسد', bc:'نهرٌ عذبٌ يملحُ إذا خالطَ البحر',
+    m:function(P){ var g = '<defs><linearGradient id="mg1" x1="1" x2="0"><stop offset="0" stop-color="#1E7A46"/><stop offset="1" stop-color="#3A3530"/></linearGradient></defs>'; return P.bg('day','sand') + P.glow(290, 150, 50, '#BFF0C8') + P.person(290, 205, { c:'#1E7A46', s:1.35, face:'smile', f:1 }) + P.person(120, 205, { c:'#2A2420', s:1.35, face:'frown' }) + P.arrow(250, 150, 170, 150, '#7A5A3A') + P.particles(190, 150, 12, '#3A3530', 6, 60, 30); },
+    b:function(P){ return P.bg('sea') + '<rect x="0" y="150" width="400" height="110" fill="#2C5F6E"/><path d="M400 150 L400 260 L210 260 Q190 200 230 150Z" fill="#8FD0E2"/><path d="M230 150 Q190 200 210 260" stroke="#5FA3B5" stroke-width="10" fill="none" opacity=".6"/>' + P.ripples(140, 200, [14, 28], 'rgba(255,255,255,.4)') + '<path d="M300 200 h40 M270 230 h30" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"/>'; },
+    sk:'<circle cx="290" cy="160" r="40"/><circle cx="120" cy="160" r="44"/><path d="M250 156 L170 156"/><path class="dz" d="M206 120 L206 200"/>' };
+  A.habb = { w:'نفعٌ ظاهرٌ تحتَه مصلحةٌ خفيّة', mc:'معروفٌ لعاجلِ الجزاء', bc:'مُلقي الحَبِّ للطيرِ ليصيدَها',
+    m:function(P){ return P.bg('day','sand') + P.person(305, 205, { c:'#5A4A6A', arm:'give', acc:'gift', f:1, face:'smile', s:1.25 }) + P.person(120, 205, { c:'#6A8A7A', s:1.1 }) + P.net(120, 205, 60, 46) + '<path d="M326 160 q8 6 4 14 q-6 4 -8 -2" stroke="#8A8F94" stroke-width="2.4" fill="none"/>'; },
+    b:function(P){ return P.bg('day','sand') + P.person(305, 205, { c:'#6A5A4A', arm:'throw', f:1, s:1.25 }) + P.grains(286, 132, 120, 200, 18, 4) + P.bird(100, 205, 1.3, 0, 1) + P.bird(140, 205, 1.3, 1, 1) + P.net(120, 205, 60, 46); },
+    sk:'<path d="M286 140 Q200 120 130 196"/><path class="dz" d="M60 205 Q120 113 180 205"/><circle cx="120" cy="190" r="20"/>' };
+  /* — ثالثاً — */
+  A.naml = { w:'ادّخارٌ في وقتِ القدرةِ لوقتِ الحاجة', mc:'الحازمُ يعملُ في شبابِه لكِبَرِه', bc:'النملةُ تجمعُ في الصيفِ للشتاء',
+    m:function(P){ return P.bg('hot','sand') + P.sun(340, 44, 16, 1) + P.jar(80, 205, 1.3) + P.jar(118, 205, 1) + P.person(260, 205, { c:'#1E7A46', acc:'sack', walk:1, f:1, s:1.3 }) + '<g opacity=".6">' + P.snow(40, 60, 8) + P.snow(70, 40, 6) + '</g>'; },
+    b:function(P){ return P.bg('hot','sand') + P.sun(340, 44, 16, 1) + P.anthill(95, 205, 1.1) + P.ant(260, 205, 2, 1, 1) + '<g opacity=".6">' + P.snow(40, 60, 8) + P.snow(70, 40, 6) + '</g>'; },
+    sk:'<circle cx="260" cy="168" r="40"/><path d="M220 182 L132 182 M144 172 L132 182 L144 192"/><circle cx="96" cy="182" r="28"/><circle cx="340" cy="44" r="22"/>' };
+  A.sakhr = { w:'النافعُ يضيعُ في موضعٍ لا يقبلُه', mc:'كلمةٌ طيّبةٌ في نفسٍ خبيثة', bc:'بذرةٌ على صخرة',
+    m:function(P){ return P.bg('day','sand') + P.person(305, 205, { c:'#1E6B52', arm:'give', f:1, s:1.25, face:'smile' }) + P.speech(280, 140, 140, 160, '#E08A9B', 4) + P.person(120, 205, { c:'#3A3530', s:1.25, face:'frown', dark:1 }) + P.crossX(150, 120, 8); },
+    b:function(P){ return P.bg('day','sand') + P.person(305, 205, { c:'#6A5A4A', arm:'throw', f:1, s:1.25 }) + P.grains(290, 130, 120, 170, 14, 7) + P.rock(120, 205, 110) + P.crossX(150, 120, 8); },
+    sk:'<path d="M285 140 Q210 120 140 166"/><path d="M70 182 L170 182"/><path d="M142 112 L158 128 M158 112 L142 128"/>' };
+  A.mushaf = { w:'نفيسٌ بين يدَي مَن يجهلُ قيمتَه', mc:'عالمٌ بين مَن لا يعرفون قدرَه', bc:'مصحفٌ في يدِ طفلٍ لا يدركُ ما فيه',
+    m:function(P){ return P.bg('indoor','floor') + P.person(80, 205, { c:'#5A6B7A', back:1 }) + P.person(122, 205, { c:'#8A6A4A', f:1 }) + P.person(282, 205, { c:'#6E5A86' }) + P.person(324, 205, { c:'#7A6A58', back:1 }) + P.person(200, 205, { c:'#1E6B52', acc:'book', glow:1, s:1.25 }); },
+    b:function(P){ return P.bg('indoor','floor') + P.toy(90, 205, '#C4553D') + P.toy(120, 205, '#5A8FC4') + P.toy(290, 205, '#F2C14E') + P.toy(318, 205, '#7AB36B') + P.glow(200, 140, 40, '#FFE7A0') + P.person(200, 205, { kid:1, c:'#E8B04A', arm:'fwd', s:1.6 }) + P.mushaf(240, 132, 1, 150); },
+    sk:'<circle cx="200" cy="140" r="28"/><circle class="d" cx="200" cy="140" r="6"/><circle class="dz" cx="100" cy="170" r="30"/><circle class="dz" cx="304" cy="170" r="30"/><path d="M172 146 L134 160 M228 146 L270 160"/>' };
+  A.ghayth = { w:'حياةٌ تعودُ بعد يأسٍ وجفاف', mc:'مريضٌ يحسُّ دبيبَ العافيةِ بعد اليأس', bc:'أرضٌ ميتةٌ نزلَ عليها الغيث',
+    m:function(P){ return P.bg('indoor','floor') + '<rect x="0" y="0" width="190" height="260" fill="rgba(80,80,80,.25)"/>' + P.bed(200, 210, { s:1.4, blanket:'#7FB58A' }) + P.sun(320, 60, 14) + '<path d="M40 110 L80 110 L92 86 L108 136 L122 110 L190 110 L210 96 L230 120 L250 70 L268 110 L360 110" stroke="#2E9A56" stroke-width="3" fill="none"/>'; },
+    b:function(P){ var h = P.bg('day','dry') + P.cracks(0, 190, 205) + P.cloud(250, 56, 1.1, '#7E8E98') + P.rain(200, 300, 70, 190, 5); [240,280,320,360].forEach(function(x, i){ h += P.plant(x, 205, 'green', .8 + i * .15); }); [40,90,140].forEach(function(x){ h += P.plant(x, 205, 'broken', .9); }); return h; },
+    sk:'<path d="M40 190 Q200 190 360 80"/><path d="M344 76 L360 80 L354 96"/><circle class="d" cx="40" cy="190" r="5"/>' };
+  A.risha = { w:'اضطرابٌ وتقلّبٌ بلا ثبات', mc:'المتردّدُ بين رأيٍ ورأي', bc:'ريشةٌ في مهبِّ الريح',
+    m:function(P){ return P.bg('day','sand') + P.sign(110, 205, -1, '#C2780A') + P.sign(290, 205, 1, '#5A8FC4') + T(200, 205, 1.35, 0, FX('fx-sway', P.person(0, 0, { c:'#6E5A86', arm:'both', noShadow:1 }))) + P.arrow(170, 120, 120, 112, '#C2780A') + P.arrow(230, 120, 280, 112, '#5A8FC4'); },
+    b:function(P){ return P.bg('day','grass') + P.wind(8, 40, 180, 6, 'rgba(255,255,255,.8)') + P.feather(200, 190, 1.4) + P.arrow(170, 120, 120, 112, '#7FA8C9') + P.arrow(230, 120, 280, 112, '#7FA8C9'); },
+    sk:'<path d="M200 50 Q140 80 200 110 Q260 140 200 170 Q150 190 200 205"/><path d="M168 118 L112 110 M232 118 L288 110"/>' };
+  A.asil = { w:'سطحٌ متموّجٌ يتلألأُ بلونِ الذهب', mc:'الماءُ تحتَ أشعّةِ الأصيل', bc:'صفحةٌ من الذهبِ المذاب',
+    m:function(P){ var g = '<defs><linearGradient id="asg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D98A4A"/><stop offset="1" stop-color="#5A3A2A"/></linearGradient></defs>'; return P.bg('dusk') + P.sun(200, 118, 22) + '<rect x="0" y="125" width="400" height="135" fill="#3E5A68"/>' + FX('fx-tw', '<path d="M150 140 h100 M130 160 h140 M110 182 h180 M90 206 h220 M70 232 h260" stroke="#F2B45A" stroke-width="5" stroke-linecap="round" stroke-dasharray="20 10"/>'); },
+    b:function(P){ return P.bg('dusk') + P.glow(200, 118, 70, '#FFD47A') + '<rect x="0" y="125" width="400" height="135" fill="#B8862F"/>' + FX('fx-tw', '<path d="M150 140 h100 M130 160 h140 M110 182 h180 M90 206 h220 M70 232 h260" stroke="#FFE29A" stroke-width="5" stroke-linecap="round" stroke-dasharray="20 10"/>') + '<path d="M0 125 Q100 118 200 125 T400 125" stroke="#FFE7A8" stroke-width="3" fill="none"/>'; },
+    sk:'<path d="M150 140 L250 140"/><path d="M130 160 L270 160"/><path d="M110 182 L290 182"/><path d="M90 206 L310 206"/><circle cx="200" cy="118" r="26"/>' };
+  /* — رابعاً — */
+  A.zulal = { w:'الطيّبُ يُستمَرُّ لفسادِ مَن يتلقّاه', mc:'نصيحةٌ صادقةٌ لحاسدٍ حقود', bc:'ماءٌ زلالٌ في فمِ المريض',
+    m:function(P){ return P.bg('day','sand') + P.person(300, 205, { c:'#1E6B52', arm:'give', f:1, s:1.3, face:'smile' }) + P.speech(282, 130, 150, 140, '#7DC3DA', 2) + P.person(120, 205, { c:'#5A6A4A', s:1.3, face:'frown', pale:1, dark:1 }); },
+    b:function(P){ return P.bg('indoor','floor') + P.person(300, 205, { c:'#F4F6F7', arm:'give', acc:'cup', f:1, s:1.3 }) + P.speech(282, 130, 150, 140, '#7DC3DA', 2) + P.person(120, 205, { c:'#8AA0B0', s:1.3, face:'frown', pale:1, band:1 }); },
+    sk:'<path d="M282 132 Q216 104 150 138"/><circle cx="120" cy="140" r="30"/><path d="M110 150 Q120 142 130 150"/>' };
+  A.badr = { w:'نموٌّ تدريجيٌّ من الصِّغرِ إلى الكمال', mc:'طالبٌ صغيرٌ ينمو حتى يصيرَ عالماً', bc:'هلالٌ يكبرُ حتى يصيرَ بدراً',
+    m:function(P){ return P.bg('dawn','sand') + P.person(330, 205, { kid:1, s:1, c:'#E8B04A', acc:'bag' }) + P.person(220, 205, { c:'#5A8FC4', s:1.15, acc:'book' }) + P.person(100, 205, { c:'#1E6B52', s:1.45, acc:'book', glow:1 }); },
+    b:function(P){ return P.bg('night','night') + P.stars(30, 6, 200) + P.moon(330, 110, 14, 'cres', 1, 0) + P.moon(220, 104, 24, 'half', 1, 0) + P.moon(100, 96, 38, 'full'); },
+    sk:'<circle cx="330" cy="110" r="16"/><circle cx="220" cy="104" r="26"/><circle cx="100" cy="96" r="40"/><path d="M308 112 L250 108 M192 102 L144 98"/>' };
+  A.jazzar = { w:'إحسانٌ ظاهرٌ وراءَه نيّةُ الإيقاع', mc:'عدوٌّ يتودّدُ ويغدقُ ليوقعَ بك', bc:'جزّارٌ يُطعمُ الغنمَ ليذبحَها',
+    m:function(P){ return P.bg('day','sand') + P.person(280, 205, { c:'#4A3A5A', arm:'give', acc:'gift', f:1, s:1.35, face:'smile', knife:1 }) + P.person(140, 205, { c:'#7AA0B0', s:1.2 }); },
+    b:function(P){ return P.bg('day','grass') + P.person(280, 205, { c:'#8A3A30', arm:'give', acc:'grass', f:1, s:1.35, face:'smile', knife:1 }) + P.sheep(140, 205, 1.8, 0); },
+    sk:'<path d="M262 160 L176 168"/><circle cx="140" cy="172" r="34"/><path class="dz" d="M300 150 L318 124"/><circle class="d" cx="314" cy="132" r="5"/>' };
+  A.ghamam = { w:'مضيءٌ يخفى حيناً ثمّ يظهر', mc:'الحقُّ تحجبُه الأباطيلُ ثمّ يسطع', bc:'الشمسُ تحتجبُ بالغمامِ ثمّ تظهر',
+    m:function(P){ return P.bg('dawn','sand') + P.lamp(200, 120, 1.4) + FX('fx-cloud', P.cloud(200, 96, 1.5, 'rgba(40,40,45,.85)')) + P.mushaf(200, 196, .9); },
+    b:function(P){ return P.bg('dawn','grass') + P.sun(200, 90, 26, 1) + FX('fx-cloud', P.cloud(200, 96, 1.5, 'rgba(110,120,128,.9)')); },
+    sk:'<circle cx="200" cy="92" r="30"/><path class="dz" d="M126 110 Q200 60 274 110"/><path d="M200 40 L200 20 M150 60 L136 46 M250 60 L264 46"/>' };
+  A.jadwal = { w:'نفعٌ بلا ضجيجٍ تشهدُ له آثارُه', mc:'محسنٌ يعطي في صمتٍ وأثرُه ظاهر', bc:'جدولٌ صامتٌ وآثارُه في الرياض',
+    m:function(P){ var h = P.bg('day','sand') + '<path d="M360 160 Q280 200 200 176 T40 186" stroke="#E3B54A" stroke-width="4" fill="none" stroke-dasharray="2 8" stroke-linecap="round"/>'; [100,170,250].forEach(function(x){ h += P.flowers(x, 200, 34, x); }); return h + P.person(350, 205, { c:'#1E6B52', arm:'give', f:1, s:1.2 }) + '<circle cx="380" cy="120" r="10" fill="none" stroke="#7A6A58" stroke-width="2"/><path d="M372 128 L388 112" stroke="#7A6A58" stroke-width="2"/>'; },
+    b:function(P){ var h = P.bg('day','grass') + '<path d="M360 160 Q280 200 200 176 T40 186" stroke="#7DC3DA" stroke-width="8" fill="none" stroke-linecap="round"/>'; [100,170,250].forEach(function(x){ h += P.flowers(x, 200, 34, x) + P.tree(x + 20, 172, .6); }); return h; },
+    sk:'<path d="M360 160 Q280 200 200 176 T40 186"/><circle class="d" cx="100" cy="186" r="5"/><circle class="d" cx="170" cy="182" r="5"/><circle class="d" cx="250" cy="186" r="5"/>' };
+  A.munkhafad = { w:'الخيرُ ينحدرُ إلى المتواضعِ ويُحرَمُه المتعالي', mc:'العلمُ يأتي المتواضعَ وينفرُ من المتكبّر', bc:'الماءُ يسرعُ إلى المنخفض',
+    m:function(P){ return P.bg('day') + '<path d="M0 205 L60 205 Q100 205 160 170 L280 110 L400 90 V260 H0Z" fill="#C9B48A"/><rect x="300" y="60" width="50" height="36" fill="#8A6A3E"/>' + P.person(325, 62, { c:'#7A2E3A', s:.9, crown:1, f:1 }) + P.lamp(250, 100, .7) + P.speech(240, 110, 90, 180, '#F2C14E', 9) + P.person(70, 205, { c:'#1E6B52', s:1.1, glow:1, face:'smile' }); },
+    b:function(P){ return P.bg('day') + '<path d="M0 205 L60 205 Q100 205 160 170 L280 110 L400 90 V260 H0Z" fill="#9AB06A"/><path d="M250 112 Q200 140 160 172 Q110 200 60 202" stroke="#7DC3DA" stroke-width="7" fill="none" stroke-linecap="round"/><ellipse cx="70" cy="206" rx="54" ry="10" fill="#7DC3DA"/><rect x="300" y="60" width="50" height="36" fill="#B0905A"/>' + P.cracks(300, 350, 50) + P.plant(60, 200, 'green', 1.1) + P.plant(90, 202, 'green', .9); },
+    sk:'<path d="M250 110 L160 170 Q100 205 60 204"/><path d="M74 196 L60 204 L72 214"/><circle cx="70" cy="190" r="26"/><circle class="dz" cx="325" cy="60" r="30"/><path d="M312 46 L338 72 M338 46 L312 72"/>' };
+  A.nujum = { w:'تتابعُ ظهورِ المضيئين والعيونُ ترقبُهم', mc:'الفائقون يتقدّمون واحداً تلوَ الآخر', bc:'نجومٌ تطلعُ نجماً بعد نجم',
+    m:function(P){ var h = P.bg('indoor','floor', 215) + P.podium(200, 215, 300); [[70,150],[135,105],[200,90],[265,105],[330,150]].forEach(function(p, i){ h += FX('fx-seq', P.glow(p[0], p[1] - 10, 30, '#FFE7A0') + P.person(p[0], p[1] + 40, { c:'#1E6B52', s:.75, noShadow:1, face:'smile' }), i * .9); }); return h + P.heads(40, 360, 236, 7, '#3A2A1E'); },
+    b:function(P){ var h = P.bg('night') + P.stars(14, 3, 230); [[70,150],[135,105],[200,90],[265,105],[330,150]].forEach(function(p, i){ h += FX('fx-seq', P.glow(p[0], p[1], 30, '#FFF3C4') + P.star4(p[0], p[1], 14), i * .9); }); return h + P.heads(40, 360, 236, 7, '#0A121A'); },
+    sk:'<path d="M70 150 Q200 40 330 150"/><circle class="d" cx="70" cy="150" r="5"/><circle class="d" cx="135" cy="105" r="5"/><circle class="d" cx="200" cy="90" r="5"/><circle class="d" cx="265" cy="105" r="5"/><circle class="d" cx="330" cy="150" r="5"/>' };
+
+  function svg(fn){ var uid = 'd' + (++UID), P = mk(uid); return '<svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg" role="img">' + fn(P) + '</svg>'; }
+  function render(el){
+    var a = A[el.dataset.art]; if (!a || el._r) return; el._r = 1;
+    el.classList.toggle('single', !!a.single);
+    var sk = a.sk.replace(/<(path|line|circle|ellipse|rect|polyline)\b/g, '<$1 pathLength="1"');
+    el.innerHTML = '<div class="pn m">' + svg(a.m) + '<span class="tg">المشبَّه</span><span class="cp">' + a.mc + '</span></div>'
+      + '<div class="pn b">' + svg(a.b) + '<span class="tg">المشبَّهُ به</span><span class="cp">' + a.bc + '</span></div>'
+      + '<svg class="sk" viewBox="0 0 400 260" aria-hidden="true">' + sk + '</svg>'
+      + '<button class="mb" type="button" title="ادمجِ الصورتين">✦ <span>ادمجْ</span></button>'
+      + '<div class="wcap"><small>' + (a.single ? 'لا هيئة:' : 'وجهُ الشبه:') + '</small>' + a.w + '</div>';
+  }
+  function merge(el, on){ render(el); el.classList.toggle('mg', on); var s = el.querySelector('.mb span'); if (s) s.textContent = on ? 'افصلْ' : 'ادمجْ'; if (on && !el._st){ el._st = 1; if (window.__duoStar) window.__duoStar(el.dataset.art); } }
+  function init(root){
+    (root || document).querySelectorAll('.duo[data-art]').forEach(render);
+    document.addEventListener('click', function(e){ var b = e.target.closest('.duo .mb'); if (!b) return; var d = b.closest('.duo'); merge(d, !d.classList.contains('mg')); });
+    // الدمجُ يتبعُ الكشف: كلُّ [data-merge] حين يُكشَفُ يدمجُ لوحتَي شريحتِه، وحين يُخفى يفصلُهما
+    var mo = new MutationObserver(function(ms){ ms.forEach(function(m){ var t = m.target, on = t.classList.contains('in'), sl = t.closest('.slide'), d = t.classList.contains('duo') ? t : sl && sl.querySelector('.duo');
+      if (!d || t._was === on) return; t._was = on; clearTimeout(t._tm); t._tm = setTimeout(function(){ merge(d, on); }, on ? (t.classList.contains('duo') ? 1100 : 250) : 0); }); });
+    document.querySelectorAll('[data-merge]').forEach(function(t){ t._was = t.classList.contains('in'); mo.observe(t, { attributes:true, attributeFilter:['class'] }); });
+  }
+  return { init:init, merge:merge, has:function(k){ return !!A[k]; } };
+})();
+
+/* ======================================================
    ٧. تدريباتُ الكتاب — كلُّ سؤالٍ شريحة
    ====================================================== */
 var TAD = [
   { no:'أولاً', t:'حدِّدِ المشبَّه، والمشبَّهَ به، وبيِّنْ وجهَ الشبهِ فيما يأتي:', type:'rk', items:[
-    { ay:'﴿مَثَلُ الَّذِينَ حُمِّلُوا التَّوْرَاةَ ثُمَّ لَمْ يَحْمِلُوهَا كَمَثَلِ الْحِمَارِ يَحْمِلُ أَسْفَارًا﴾', src:'الجمعة: ٥',
+    { art:'himar', ay:'﴿مَثَلُ الَّذِينَ حُمِّلُوا التَّوْرَاةَ ثُمَّ لَمْ يَحْمِلُوهَا كَمَثَلِ الْحِمَارِ يَحْمِلُ أَسْفَارًا﴾', src:'الجمعة: ٥',
       m:'صورةُ الذين حُمِّلوا التوراةَ ثمّ لم يعملوا بما فيها.', b:'صورةُ الحمارِ يحملُ أسفاراً — كتباً نافعة — دونَ أن ينتفعَ بها.', w:'هيئةُ مَن يحملُ الشيءَ النافعَ الشريفَ دونَ أن يستفيدَ منه.' },
-    { ay:'﴿وَاضْرِبْ لَهُم مَّثَلَ الْحَيَاةِ الدُّنْيَا كَمَاءٍ أَنزَلْنَاهُ مِنَ السَّمَاءِ فَاخْتَلَطَ بِهِ نَبَاتُ الْأَرْضِ فَأَصْبَحَ هَشِيمًا تَذْرُوهُ الرِّيَاحُ ۗ وَكَانَ اللَّهُ عَلَىٰ كُلِّ شَيْءٍ مُّقْتَدِرًا﴾', src:'الكهف: ٤٥', img:'dunya',
+    { art:'dunya', ay:'﴿وَاضْرِبْ لَهُم مَّثَلَ الْحَيَاةِ الدُّنْيَا كَمَاءٍ أَنزَلْنَاهُ مِنَ السَّمَاءِ فَاخْتَلَطَ بِهِ نَبَاتُ الْأَرْضِ فَأَصْبَحَ هَشِيمًا تَذْرُوهُ الرِّيَاحُ ۗ وَكَانَ اللَّهُ عَلَىٰ كُلِّ شَيْءٍ مُّقْتَدِرًا﴾', src:'الكهف: ٤٥', img:'dunya',
       m:'صورةُ الحياةِ الدنيا وزينتِها ونضارتِها ثمّ زوالِها السريع.', b:'صورةُ النباتِ يرتوي بالمطرِ فيخضرُّ ثمّ يجفُّ ويتفتّتُ هشيماً تذروه الرياح.', w:'هيئةُ شيءٍ ينمو ويزهو سريعاً ثمّ يذبلُ ويزولُ في وقتٍ قصير.' },
-    { ay:'﴿مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ فِي كُلِّ سُنبُلَةٍ مِّائَةُ حَبَّةٍ ۗ وَاللَّهُ يُضَاعِفُ لِمَن يَشَاءُ ۗ وَاللَّهُ وَاسِعٌ عَلِيمٌ﴾', src:'البقرة: ٢٦١', img:'habba',
+    { art:'habba', ay:'﴿مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ فِي كُلِّ سُنبُلَةٍ مِّائَةُ حَبَّةٍ ۗ وَاللَّهُ يُضَاعِفُ لِمَن يَشَاءُ ۗ وَاللَّهُ وَاسِعٌ عَلِيمٌ﴾', src:'البقرة: ٢٦١', img:'habba',
       m:'صورةُ أموالِ المنفقين في سبيلِ الله وكيف يتضاعفُ أجرُها.', b:'صورةُ الحبّةِ التي أنبتَت سبعَ سنابلَ في كلِّ سنبلةٍ مئةُ حبّة.', w:'هيئةُ العملِ القليلِ النافعِ الذي يُثمرُ ويُجازى عليه بأضعافٍ كثيرة.' },
-    { who:'قال الشاعرُ بشّار بن بُرد:', bt:['كأنَّ مُثارَ النَّقعِ فوقَ رؤوسِنا','وأسيافَنا ليلٌ تهاوى كواكبُه'], img:'naqa',
+    { art:'naqa', who:'قال الشاعرُ بشّار بن بُرد:', bt:['كأنَّ مُثارَ النَّقعِ فوقَ رؤوسِنا','وأسيافَنا ليلٌ تهاوى كواكبُه'], img:'naqa',
       m:'الغبارُ الذي يثيرُه الجنودُ في المعركة، والسيوفُ اللامعةُ في أيديهم تهوي على رقابِ الأعداء.', b:'ليلٌ شديدُ الظلامِ تتهاوى فيه كواكبُ لامعةٌ تخطفُ الأبصار.', w:'هيئةُ ظلامٍ تلمعُ وسطَه أجسامٌ مضيئةٌ متساقطة.' },
-    { who:'قال كُثيِّرُ عزّة:', bt:['وإنّي وتَهيامي بعَزّةَ بعدما','تخلّيتُ عمّا بينَنا وتخلَّتِ','لَكالمُرتجي ظِلَّ الغَمامةِ كلّما','تبوّأَ منها للمَقيلِ اضمحلَّتِ'],
+    { art:'ghamama', who:'قال كُثيِّرُ عزّة:', bt:['وإنّي وتَهيامي بعَزّةَ بعدما','تخلّيتُ عمّا بينَنا وتخلَّتِ','لَكالمُرتجي ظِلَّ الغَمامةِ كلّما','تبوّأَ منها للمَقيلِ اضمحلَّتِ'],
       m:'صورةُ الشاعرِ في تعلّقِه بعزّةَ وأملِه فيها بعد الفراق، ثمّ ضياعِ أملِه.', b:'صورةُ مَن يرجو ظلَّ السحابةِ ليستريحَ تحتَه، فكلّما نزلَ تحتَها تلاشت.', w:'هيئةُ التعلّقِ بشيءٍ زائلٍ طمعاً في نفعِه، ثمّ خيبةُ الأملِ فيه.' },
-    { who:'قال النابغةُ الذُّبيانيّ يصوّرُ سلطانَ النعمانِ بنِ المنذر:', bt:['فإنّكَ كالليلِ الذي هو مُدركي','وإنْ خِلتُ أنَّ المُنتأى عنكَ واسعُ'], note:'المُنتأى: المكانُ البعيد.',
+    { art:'layl', who:'قال النابغةُ الذُّبيانيّ يصوّرُ سلطانَ النعمانِ بنِ المنذر:', bt:['فإنّكَ كالليلِ الذي هو مُدركي','وإنْ خِلتُ أنَّ المُنتأى عنكَ واسعُ'], note:'المُنتأى: المكانُ البعيد.',
       m:'صورةُ النعمانِ وسلطانِه يدركُ الشاعرَ أينما فرَّ مهما ظنَّ المكانَ بعيداً.', b:'صورةُ الليلِ الذي يعمُّ الأرضَ فيدركُ كلَّ مكانٍ ولا يُفلتُ منه أحد.', w:'هيئةُ شيءٍ يحيطُ بغيرِه ويدركُه حيثما ذهب، فلا مهربَ منه.' },
-    { who:'قال الشاعر:', bt:['وغيرُ تقيٍّ يأمرُ الناسَ بالتُّقى','طبيبٌ يداوي الناسَ وهو سقيمُ'],
+    { art:'tabib', who:'قال الشاعر:', bt:['وغيرُ تقيٍّ يأمرُ الناسَ بالتُّقى','طبيبٌ يداوي الناسَ وهو سقيمُ'],
       m:'صورةُ غيرِ التقيِّ يأمرُ الناسَ بالتقوى وهو لا يعملُ بها.', b:'صورةُ الطبيبِ يداوي الناسَ وهو نفسُه مريض.', w:'هيئةُ مَن يدعو غيرَه إلى الصلاحِ وهو أحوجُ الناسِ إليه.' },
-    { who:'قال المتنبّي يصفُ سيفَ الدولةِ وجيشَه:', bt:['يهزُّ الجيشُ حولَكَ جانبَيه','كما نفضَت جناحَيها العُقابُ'], img:'uqab',
+    { art:'uqab', who:'قال المتنبّي يصفُ سيفَ الدولةِ وجيشَه:', bt:['يهزُّ الجيشُ حولَكَ جانبَيه','كما نفضَت جناحَيها العُقابُ'], img:'uqab',
       m:'الجيشُ بميمنتِه وميسرتِه يتحرّكانِ على جانبَي سيفِ الدولةِ وفقَ أمرِه.', b:'العُقابُ تنفضُ جناحَيها القويَّين يمنةً ويسرة.', w:'هيئةُ القوّةِ والعظمةِ والقدرةِ على التحكّمِ في جانبَين يتحرّكانِ حولَ مركز.' },
-    { who:'قال مسكينٌ الدارميّ:', bt:['أخاكَ أخاكَ، إنَّ مَن لا أخا لهُ','كساعٍ إلى الهيجا بغيرِ سلاحِ'],
+    { art:'silah', who:'قال مسكينٌ الدارميّ:', bt:['أخاكَ أخاكَ، إنَّ مَن لا أخا لهُ','كساعٍ إلى الهيجا بغيرِ سلاحِ'],
       m:'صورةُ مَن لا أخَ له يواجهُ شدائدَ الحياةِ وحدَه بلا نصير.', b:'صورةُ مَن يسعى إلى المعركةِ بغيرِ سلاح.', w:'هيئةُ مَن يقتحمُ الأخطارَ بلا عُدّةٍ تحميه، فيكونُ عُرضةً للهلاك.' },
-    { who:'قال ابنُ الروميّ:', bt:['ما أنسَ لا أنسَ خبّازاً مررتُ به','يدحو الرُّقاقةَ وَشْكَ اللمحِ بالبصرِ','ما بينَ رؤيتِها في كفِّه كُرةً','وبينَ رؤيتِها قَوراءَ كالقمرِ','إلّا بمقدارِ ما تنداحُ دائرةٌ','في صفحةِ الماءِ تُرمى فيه بالحجرِ'],
+    { art:'raqaq', who:'قال ابنُ الروميّ:', bt:['ما أنسَ لا أنسَ خبّازاً مررتُ به','يدحو الرُّقاقةَ وَشْكَ اللمحِ بالبصرِ','ما بينَ رؤيتِها في كفِّه كُرةً','وبينَ رؤيتِها قَوراءَ كالقمرِ','إلّا بمقدارِ ما تنداحُ دائرةٌ','في صفحةِ الماءِ تُرمى فيه بالحجرِ'],
       m:'صورةُ الرُّقاقةِ تتحوّلُ في كفِّ الخبّازِ من كرةٍ صغيرةٍ إلى قرصٍ مستديرٍ كالقمرِ في لمحِ البصر.', b:'صورةُ الدائرةِ تتّسعُ على صفحةِ الماءِ حين يُرمى فيه حجر.', w:'هيئةُ شيءٍ صغيرٍ يتّسعُ ويستديرُ بسرعةٍ خاطفة.' }
   ]},
   { no:'ثانياً', t:'ميِّزْ تشبيهَ التمثيلِ من غيرِه فيما يأتي:', type:'vt', items:[
-    { ay:'﴿وَالَّذِينَ كَفَرُوا أَعْمَالُهُمْ كَسَرَابٍ بِقِيعَةٍ يَحْسَبُهُ الظَّمْآنُ مَاءً حَتَّىٰ إِذَا جَاءَهُ لَمْ يَجِدْهُ شَيْئًا وَوَجَدَ اللَّهَ عِندَهُ فَوَفَّاهُ حِسَابَهُ ۗ وَاللَّهُ سَرِيعُ الْحِسَابِ﴾', src:'النور: ٣٩', img:'sarab', a:1,
+    { art:'sarab', ay:'﴿وَالَّذِينَ كَفَرُوا أَعْمَالُهُمْ كَسَرَابٍ بِقِيعَةٍ يَحْسَبُهُ الظَّمْآنُ مَاءً حَتَّىٰ إِذَا جَاءَهُ لَمْ يَجِدْهُ شَيْئًا وَوَجَدَ اللَّهَ عِندَهُ فَوَفَّاهُ حِسَابَهُ ۗ وَاللَّهُ سَرِيعُ الْحِسَابِ﴾', src:'النور: ٣٩', img:'sarab', a:1,
       why:'صورةُ أعمالِ الكفّارِ يظنّونها نافعةً ثمّ لا يجدون منها شيئاً ← صورةُ السرابِ يحسبُه الظمآنُ ماءً فإذا جاءه لم يجدْه شيئاً. وجهُ الشبه: الطمعُ في نفعِ شيءٍ ثمّ الخيبةُ عند الحاجةِ إليه.' },
-    { ay:'﴿اعْلَمُوا أَنَّمَا الْحَيَاةُ الدُّنْيَا لَعِبٌ وَلَهْوٌ وَزِينَةٌ وَتَفَاخُرٌ بَيْنَكُمْ وَتَكَاثُرٌ فِي الْأَمْوَالِ وَالْأَوْلَادِ ۖ كَمَثَلِ غَيْثٍ أَعْجَبَ الْكُفَّارَ نَبَاتُهُ ثُمَّ يَهِيجُ فَتَرَاهُ مُصْفَرًّا ثُمَّ يَكُونُ حُطَامًا ۖ وَفِي الْآخِرَةِ عَذَابٌ شَدِيدٌ وَمَغْفِرَةٌ مِّنَ اللَّهِ وَرِضْوَانٌ ۚ وَمَا الْحَيَاةُ الدُّنْيَا إِلَّا مَتَاعُ الْغُرُورِ﴾', src:'الحديد: ٢٠', img:'dunya', a:1,
+    { art:'dunya', ay:'﴿اعْلَمُوا أَنَّمَا الْحَيَاةُ الدُّنْيَا لَعِبٌ وَلَهْوٌ وَزِينَةٌ وَتَفَاخُرٌ بَيْنَكُمْ وَتَكَاثُرٌ فِي الْأَمْوَالِ وَالْأَوْلَادِ ۖ كَمَثَلِ غَيْثٍ أَعْجَبَ الْكُفَّارَ نَبَاتُهُ ثُمَّ يَهِيجُ فَتَرَاهُ مُصْفَرًّا ثُمَّ يَكُونُ حُطَامًا ۖ وَفِي الْآخِرَةِ عَذَابٌ شَدِيدٌ وَمَغْفِرَةٌ مِّنَ اللَّهِ وَرِضْوَانٌ ۚ وَمَا الْحَيَاةُ الدُّنْيَا إِلَّا مَتَاعُ الْغُرُورِ﴾', src:'الحديد: ٢٠', img:'dunya', a:1,
       why:'صورةُ الدنيا في بهجتِها ثمّ زوالِها ← صورةُ نباتٍ يُعجبُ الزرّاعَ ثمّ يصفرُّ ثمّ يصيرُ حطاماً. وجهُ الشبه: شيءٌ يُبهجُ زمناً ثمّ يذبلُ ويفنى.' },
-    { who:'قال البوصيريّ:', bt:['والنفسُ كالطفلِ إنْ تُهملْه شبَّ على','حُبِّ الرضاعِ وإنْ تفطمْه ينفطمِ'], a:1,
+    { art:'nafs', who:'قال البوصيريّ:', bt:['والنفسُ كالطفلِ إنْ تُهملْه شبَّ على','حُبِّ الرضاعِ وإنْ تفطمْه ينفطمِ'], a:1,
       why:'صورةُ النفسِ تتمادى في شهواتِها إن أُهملت وتنقادُ إن رُوِّضت ← صورةُ الطفلِ يشبُّ على حبِّ الرضاعِ إن أُهمل وينفطمُ إن فُطم. (وهو مجملٌ أيضاً لحذفِ وجهِ الشبه؛ فالتمثيليُّ قد يكونُ مجملاً.)' },
-    { who:'قال الشاعر:', bt:['وتراهُ في ظُلَمِ الوغى فتخالُه','قمراً يكرُّ على الرجالِ بكوكبِ'], a:1,
+    { art:'qamar', who:'قال الشاعر:', bt:['وتراهُ في ظُلَمِ الوغى فتخالُه','قمراً يكرُّ على الرجالِ بكوكبِ'], a:1,
       why:'صورةُ الممدوحِ يلمعُ سيفُه في ظلامِ المعركةِ وهو يكرُّ على الأعداء ← صورةُ قمرٍ يكرُّ ومعه كوكب. وجهُ الشبه: جسمٌ مضيءٌ يتحرّكُ في الظلامِ ومعه شيءٌ لامع.' },
-    { who:'قال المتنبّي في الرثاء:', bt:['وما الموتُ إلّا سارقٌ دقَّ شخصُه','يصولُ بلا كفٍّ ويسعى بلا رِجلِ'], a:0,
+    { art:'mawt', who:'قال المتنبّي في الرثاء:', bt:['وما الموتُ إلّا سارقٌ دقَّ شخصُه','يصولُ بلا كفٍّ ويسعى بلا رِجلِ'], a:0,
       why:'شبّه <b>الموتَ</b> بـ<b>سارقٍ</b> خفيِّ الشخص: مفردٌ بمفرد بلا أداة — تشبيهٌ بليغ، لا تمثيليّ.' },
-    { who:'قال المتنبّي في وصفِ أسد:', bt:['يطأُ الثرى مترفّقاً من تيهِه','فكأنّه آسٍ يجسُّ عليلا'], note:'الثرى: التراب — التيه: الكبرياء — الآسي: الطبيب.', a:1,
+    { art:'aasi', who:'قال المتنبّي في وصفِ أسد:', bt:['يطأُ الثرى مترفّقاً من تيهِه','فكأنّه آسٍ يجسُّ عليلا'], note:'الثرى: التراب — التيه: الكبرياء — الآسي: الطبيب.', a:1,
       why:'صورةُ الأسدِ يضعُ قدمَه على الأرضِ برفقٍ متكبّراً ← صورةُ الطبيبِ يجسُّ المريضَ برفق. وجهُ الشبه: هيئةُ مَن يضعُ يدَه على الشيءِ برفقٍ وتؤدة.' },
-    { who:'قال التِّهاميّ:', bt:['فالعيشُ نومٌ والمنيّةُ يقظةٌ','والمرءُ بينهما خيالٌ سارِ'], a:0,
+    { art:'aish', who:'قال التِّهاميّ:', bt:['فالعيشُ نومٌ والمنيّةُ يقظةٌ','والمرءُ بينهما خيالٌ سارِ'], a:0,
       why:'العيشُ ← نوم، والمنيّةُ ← يقظة، والمرءُ ← خيال: تشبيهاتٌ بليغة، كلٌّ منها مفردٌ بمفرد.' },
-    { who:'قال السَّريُّ الرفّاء:', bt:['وكأنَّ الهلالَ نونُ لُجينٍ','غرقَت في صحيفةٍ زرقاءِ'], note:'اللُّجين: الفضّة.', a:1,
+    { art:'hilal', who:'قال السَّريُّ الرفّاء:', bt:['وكأنَّ الهلالَ نونُ لُجينٍ','غرقَت في صحيفةٍ زرقاءِ'], note:'اللُّجين: الفضّة.', a:1,
       why:'صورةُ الهلالِ الأبيضِ المقوّسِ في السماءِ الزرقاء ← صورةُ نونٍ من فضّةٍ غارقةٍ في صحيفةٍ زرقاء. وجهُ الشبه: شيءٌ أبيضُ لامعٌ مقوّسٌ على سطحٍ أزرق.' },
-    { who:'قال البوصيريّ في وصفِ الصحابة رضوانُ الله عليهم:', bt:['كأنّهم في ظهورِ الخيلِ نبتُ رُبا','مِن شدّةِ الحزمِ لا مِن شدّةِ الحُزُمِ'], note:'أي: ثباتُهم فوقَ خيولِهم من قوّةِ عزمِهم، لا من إحكامِ أحزمةِ السروج.', a:1,
+    { art:'rubaa', who:'قال البوصيريّ في وصفِ الصحابة رضوانُ الله عليهم:', bt:['كأنّهم في ظهورِ الخيلِ نبتُ رُبا','مِن شدّةِ الحزمِ لا مِن شدّةِ الحُزُمِ'], note:'أي: ثباتُهم فوقَ خيولِهم من قوّةِ عزمِهم، لا من إحكامِ أحزمةِ السروج.', a:1,
       why:'صورةُ الصحابةِ ثابتين على ظهورِ الخيل ← صورةُ نباتٍ راسخٍ فوقَ الرُّبا. وجهُ الشبه: هيئةُ الثباتِ والرسوخِ في موضعٍ عالٍ.' },
-    { who:'قال صاحبُ كليلةَ ودمنة:', q:'«يبقى الصالحُ صالحاً حتى يُصاحبَ فاسداً، فإذا صاحبَه فسد، مثلَ مياهِ الأنهارِ تكونُ عذبةً حتى تُخالطَ ماءَ البحر، فإذا خالطَته ملحت».', a:1, sub:'(أ)',
+    { art:'milh', who:'قال صاحبُ كليلةَ ودمنة:', q:'«يبقى الصالحُ صالحاً حتى يُصاحبَ فاسداً، فإذا صاحبَه فسد، مثلَ مياهِ الأنهارِ تكونُ عذبةً حتى تُخالطَ ماءَ البحر، فإذا خالطَته ملحت».', a:1, sub:'(أ)',
       why:'صورةُ الصالحِ يفسدُ بمصاحبةِ الفاسد ← صورةُ ماءِ النهرِ العذبِ يملحُ إذا خالطَ ماءَ البحر. وجهُ الشبه: الطيّبُ يفسدُ بمخالطةِ الفاسد.' },
-    { who:'وقال صاحبُ كليلةَ ودمنة:', q:'«مَن صنعَ معروفاً لعاجلِ الجزاءِ فهو كمُلقي الحبِّ للطيرِ لا لينفعَها بل ليصيدَها».', a:1, sub:'(ب)',
+    { art:'habb', who:'وقال صاحبُ كليلةَ ودمنة:', q:'«مَن صنعَ معروفاً لعاجلِ الجزاءِ فهو كمُلقي الحبِّ للطيرِ لا لينفعَها بل ليصيدَها».', a:1, sub:'(ب)',
       why:'صورةُ مَن يصنعُ المعروفَ طمعاً في الجزاءِ العاجل ← صورةُ مَن يُلقي الحَبَّ للطيرِ ليصيدَها. وجهُ الشبه: إظهارُ النفعِ وإرادةُ المصلحة.' }
   ]},
   { no:'ثالثاً', t:'اجعلْ كلّاً ممّا يأتي مشبَّهاً في تشبيهِ تمثيل:', type:'wr', role:'m', items:[
-    { p:'الحازمُ يعملُ في شبابِه لكِبَرِه.', a:'الحازمُ يعملُ في شبابِه لكِبَرِه كالنملةِ تجمعُ طعامَها في الصيفِ لتخزنَه للشتاء.' },
-    { p:'الكلمةُ الطيّبةُ لا تُثمرُ في النفوسِ الخبيثة.', a:'الكلمةُ الطيّبةُ لا تُثمرُ في النفوسِ الخبيثةِ كالبذرةِ يُلقيها المزارعُ في أرضٍ صخريّةٍ فلا تُنبتُ شيئاً.' },
-    { p:'الرجلُ العالمُ بين مَن لا يعرفون قدرَه.', a:'الرجلُ العالمُ بين مَن لا يعرفون قدرَه كالمصحفِ الشريفِ بين يدَي طفلٍ لا يدركُ ما فيه.' },
-    { p:'المريضُ وقد أحسَّ دبيبَ العافيةِ بعد اليأس.', a:'المريضُ وقد أحسَّ دبيبَ العافيةِ بعد اليأسِ كالأرضِ الميتةِ نزلَ عليها الغيثُ فاهتزّت وربَت وأنبتَت.' },
-    { p:'المتردّدُ في الأمورِ يجذبُه رأيٌ هنا ورأيٌ هناك.', a:'المتردّدُ في الأمورِ يجذبُه رأيٌ هنا ورأيٌ هناك كالريشةِ في مهبِّ الريحِ تتقاذفُها يمنةً ويسرة.' },
-    { p:'الماءُ وقد سطعت فوقَه أشعّةُ الشمسِ وقتَ الأصيل.', a:'الماءُ وقد سطعت فوقَه أشعّةُ الشمسِ وقتَ الأصيلِ صفحةٌ من الذهبِ المذابِ تتموّجُ وتتلألأ.' }
+    { art:'naml', p:'الحازمُ يعملُ في شبابِه لكِبَرِه.', a:'الحازمُ يعملُ في شبابِه لكِبَرِه كالنملةِ تجمعُ طعامَها في الصيفِ لتخزنَه للشتاء.' },
+    { art:'sakhr', p:'الكلمةُ الطيّبةُ لا تُثمرُ في النفوسِ الخبيثة.', a:'الكلمةُ الطيّبةُ لا تُثمرُ في النفوسِ الخبيثةِ كالبذرةِ يُلقيها المزارعُ في أرضٍ صخريّةٍ فلا تُنبتُ شيئاً.' },
+    { art:'mushaf', p:'الرجلُ العالمُ بين مَن لا يعرفون قدرَه.', a:'الرجلُ العالمُ بين مَن لا يعرفون قدرَه كالمصحفِ الشريفِ بين يدَي طفلٍ لا يدركُ ما فيه.' },
+    { art:'ghayth', p:'المريضُ وقد أحسَّ دبيبَ العافيةِ بعد اليأس.', a:'المريضُ وقد أحسَّ دبيبَ العافيةِ بعد اليأسِ كالأرضِ الميتةِ نزلَ عليها الغيثُ فاهتزّت وربَت وأنبتَت.' },
+    { art:'risha', p:'المتردّدُ في الأمورِ يجذبُه رأيٌ هنا ورأيٌ هناك.', a:'المتردّدُ في الأمورِ يجذبُه رأيٌ هنا ورأيٌ هناك كالريشةِ في مهبِّ الريحِ تتقاذفُها يمنةً ويسرة.' },
+    { art:'asil', p:'الماءُ وقد سطعت فوقَه أشعّةُ الشمسِ وقتَ الأصيل.', a:'الماءُ وقد سطعت فوقَه أشعّةُ الشمسِ وقتَ الأصيلِ صفحةٌ من الذهبِ المذابِ تتموّجُ وتتلألأ.' }
   ]},
   { no:'رابعاً', t:'اجعلْ كلّاً ممّا يأتي مشبَّهاً به في تشبيهِ تمثيل:', type:'wr', role:'b', items:[
-    { p:'الماءُ الزلالُ في فمِ المريض.', a:'النصيحةُ الصادقةُ في نفسِ الحاقدِ الحسودِ كالماءِ الزلالِ في فمِ المريضِ يجدُه مُرّاً.' },
-    { p:'القمرُ يبدو صغيراً ثمّ يصيرُ بدراً.', a:'ينمو الطالبُ الصغيرُ في العلمِ شيئاً فشيئاً حتى يصبحَ عالماً، كالقمرِ يبدو صغيراً ثمّ يصيرُ بدراً.' },
-    { p:'الجزّارُ يُطعمُ الغنمَ ليذبحَها.', a:'العدوُّ الماكرُ يتودّدُ إليك ويغدقُ عليك ليوقعَ بك، كالجزّارِ يُطعمُ الغنمَ ليذبحَها.' },
-    { p:'الشمسُ تحتجبُ بالغمامِ ثمّ تظهر.', a:'الحقُّ تحجبُه الأباطيلُ حيناً ثمّ يسطع، كالشمسِ تحتجبُ بالغمامِ ثمّ تظهر.' },
-    { p:'الجدولُ لا تسمعُ له خريراً وآثارُه ظاهرةٌ في الرياض.', a:'المحسنُ يعطي في صمتٍ وأثرُ إحسانِه ظاهرٌ في الناس، كالجدولِ لا تسمعُ له خريراً وآثارُه ظاهرةٌ في الرياض.' },
-    { p:'الماءُ يُسرعُ إلى الأماكنِ المنخفضةِ ولا يصلُ إلى الأماكنِ المرتفعة.', a:'العلمُ يأتي المتواضعين وينفرُ من المتكبّرين، كالماءِ يُسرعُ إلى الأماكنِ المنخفضةِ ولا يصلُ إلى الأماكنِ المرتفعة.' },
-    { role:'free', p:'صِفْ بإيجازٍ حالَ قومٍ اجتمعوا في حفلٍ لتكريمِ الفائقين، مضمِّناً وصفَك تشبيهَ التمثيل.', a:'امتلأت القاعةُ بالآباءِ والمعلّمين، فلمّا نُوديَ على أسماءِ الفائقين تقدّموا إلى المنصّةِ واحداً تلوَ الآخر والعيونُ ترقبُهم بإعجاب، <b>فكانوا كالنجومِ تطلعُ في سماءٍ صافيةٍ نجماً بعد نجم، والناظرون إليها مبهورون بضيائها</b>.' }
+    { art:'zulal', p:'الماءُ الزلالُ في فمِ المريض.', a:'النصيحةُ الصادقةُ في نفسِ الحاقدِ الحسودِ كالماءِ الزلالِ في فمِ المريضِ يجدُه مُرّاً.' },
+    { art:'badr', p:'القمرُ يبدو صغيراً ثمّ يصيرُ بدراً.', a:'ينمو الطالبُ الصغيرُ في العلمِ شيئاً فشيئاً حتى يصبحَ عالماً، كالقمرِ يبدو صغيراً ثمّ يصيرُ بدراً.' },
+    { art:'jazzar', p:'الجزّارُ يُطعمُ الغنمَ ليذبحَها.', a:'العدوُّ الماكرُ يتودّدُ إليك ويغدقُ عليك ليوقعَ بك، كالجزّارِ يُطعمُ الغنمَ ليذبحَها.' },
+    { art:'ghamam', p:'الشمسُ تحتجبُ بالغمامِ ثمّ تظهر.', a:'الحقُّ تحجبُه الأباطيلُ حيناً ثمّ يسطع، كالشمسِ تحتجبُ بالغمامِ ثمّ تظهر.' },
+    { art:'jadwal', p:'الجدولُ لا تسمعُ له خريراً وآثارُه ظاهرةٌ في الرياض.', a:'المحسنُ يعطي في صمتٍ وأثرُ إحسانِه ظاهرٌ في الناس، كالجدولِ لا تسمعُ له خريراً وآثارُه ظاهرةٌ في الرياض.' },
+    { art:'munkhafad', p:'الماءُ يُسرعُ إلى الأماكنِ المنخفضةِ ولا يصلُ إلى الأماكنِ المرتفعة.', a:'العلمُ يأتي المتواضعين وينفرُ من المتكبّرين، كالماءِ يُسرعُ إلى الأماكنِ المنخفضةِ ولا يصلُ إلى الأماكنِ المرتفعة.' },
+    { art:'nujum', role:'free', p:'صِفْ بإيجازٍ حالَ قومٍ اجتمعوا في حفلٍ لتكريمِ الفائقين، مضمِّناً وصفَك تشبيهَ التمثيل.', a:'امتلأت القاعةُ بالآباءِ والمعلّمين، فلمّا نُوديَ على أسماءِ الفائقين تقدّموا إلى المنصّةِ واحداً تلوَ الآخر والعيونُ ترقبُهم بإعجاب، <b>فكانوا كالنجومِ تطلعُ في سماءٍ صافيةٍ نجماً بعد نجم، والناظرون إليها مبهورون بضيائها</b>.' }
   ]}
 ];
 
@@ -1224,21 +1642,19 @@ function srcHTML(it){
       var cnt = g.items.length > 1 ? '<span class="cnt qn">' + AR(i + 1) + (it.sub ? ' ' + it.sub : '') + ' من ' + AR(g.items.length) + '</span>' : '';
       var h = '<div class="tq"><h3><span class="b">' + g.no + '</span><span>' + g.t + '</span>' + cnt + '</h3>';
       if (g.type === 'rk'){
-        var body = '<div class="txtc">' + srcHTML(it) + '</div>'
-          + '<div class="disc mini step"><div class="dh"><span class="di">💬</span><b>حدِّدوا الأركان</b><span class="tps">فكّرْ · زاوِجْ · شارِكْ</span><button class="tmr" data-t="60">⏱ دقيقة</button></div></div>'
-          + '<div class="roles"><div class="role m step"><b>المشبَّه:</b> ' + it.m + '</div><div class="role b step"><b>المشبَّهُ به:</b> ' + it.b + '</div><div class="role w step"><b>وجهُ الشبه:</b> ' + it.w + '</div></div>';
-        h += it.img ? '<div class="exg"><div>' + body + '</div><figure class="fig"><img src="' + IMG(it.img) + '" alt="" loading="lazy"></figure></div>' : body;
+        h += '<div class="txtc tc2">' + srcHTML(it) + '<button class="tmr" data-t="60">⏱ دقيقة</button></div>'
+          + '<div class="dg"><div class="duo" data-art="' + it.art + '"></div><div class="roles"><div class="role m step"><b>المشبَّه:</b> ' + it.m + '</div><div class="role b step"><b>المشبَّهُ به:</b> ' + it.b + '</div><div class="role w step" data-merge><b>وجهُ الشبه:</b> ' + it.w + '</div></div></div>';
       } else if (g.type === 'vt'){
-        var body2 = '<div class="txtc">' + srcHTML(it) + '</div>'
+        h += '<div class="txtc">' + srcHTML(it) + '</div>'
           + '<div class="vt" data-a="' + it.a + '" data-k="v' + i + '"><button data-v="1">تشبيهٌ تمثيليّ</button><button data-v="0">ليس تمثيليّاً</button></div>'
-          + '<div class="ans vwhy"><b>' + (it.a ? 'تمثيليّ ✓' : 'ليس تمثيليّاً') + ':</b> ' + it.why + '</div>';
-        h += it.img ? '<div class="exg"><div>' + body2 + '</div><figure class="fig"><img src="' + IMG(it.img) + '" alt="" loading="lazy"></figure></div>' : body2;
+          + '<div class="vwhy"><div class="dg"><div class="duo" data-art="' + it.art + '"></div><div class="ans" style="margin-top:0"><b>' + (it.a ? 'تمثيليّ ✓' : 'ليس تمثيليّاً') + ':</b> ' + it.why + '</div></div></div>';
       } else {
         var role = it.role || g.role;
         var lbl = role === 'm' ? '<span class="rm">المشبَّه</span>' : role === 'b' ? '<span class="rb">المشبَّهُ به</span>' : '';
         h += '<div class="txtc"><div class="big2" style="font-family:\'Sakkal Saad Poster\',serif;font-size:clamp(26px,3.3vw,38px);line-height:1.6">' + (lbl ? lbl + ' ' : '') + it.p + '</div></div>'
           + '<div class="wbox" style="margin-top:12px"><textarea placeholder="' + (role === 'm' ? 'ابدأْ بالجملةِ ثمّ أكملْها بمشبَّهٍ به مركَّب: … كـ…' : role === 'b' ? 'ابدأْ بمشبَّهٍ مركَّبٍ من عندك ثمّ: … كـ' + it.p.replace(/\.$/, '') : 'اكتبْ هنا…') + '"></textarea><div class="wchk"><span data-c="adat">أداةُ تشبيه (كـ / مثل / كأنّ)</span><span data-c="len">صورةٌ مركّبةٌ (جملةٌ طويلة)</span></div></div>'
-          + '<div class="ans step"><b>إجابةٌ نموذجيّة:</b> ' + it.a + '</div>';
+          + '<div class="ans step"><b>إجابةٌ نموذجيّة:</b> ' + it.a + '</div>'
+          + '<div class="duo step" data-merge data-art="' + it.art + '" style="margin-top:12px"></div>';
       }
       h += '</div>';
       sl.innerHTML = h; sec.insertBefore(sl, box);
@@ -1251,11 +1667,13 @@ function srcHTML(it){
   // التصويت: تمثيليٌّ أم لا
   sec.addEventListener('click', function(e){
     var b = e.target.closest('.vt button'); if (!b) return;
-    var vt = b.parentNode, ok = b.dataset.v === vt.dataset.a, why = vt.parentNode.querySelector('.vwhy');
+    var vt = b.parentNode, ok = b.dataset.v === vt.dataset.a, why = vt.closest('.tq').querySelector('.vwhy');
     vt.querySelectorAll('button').forEach(function(x){ x.classList.remove('ok', 'bad'); });
-    if (ok){ b.classList.add('ok'); why.classList.add('on'); var n = vt.closest('.slide'), idx = [].indexOf.call(sec.querySelectorAll('.vt'), vt); if (star('vt' + idx)) toast('أصبت ⭐'); }
+    if (ok){ b.classList.add('ok'); why.classList.add('on'); var dd = why.querySelector('.duo'); if (dd) setTimeout(function(){ DUO.merge(dd, true); }, 900); var n = vt.closest('.slide'), idx = [].indexOf.call(sec.querySelectorAll('.vt'), vt); if (star('vt' + idx)) toast('أصبت ⭐'); }
     else { void b.offsetWidth; b.classList.add('bad'); toast('راجعْ: هل وجهُ الشبهِ هيئةٌ أم صفةٌ واحدة؟'); }
   });
+  window.__duoStar = function(k){ if (star('duo_' + k)) toast('اندمجت الصورتان ✦ ⭐'); };
+  DUO.init();
   // مدقّقٌ بسيطٌ للكتابة
   sec.addEventListener('input', function(e){
     var ta = e.target; if (ta.tagName !== 'TEXTAREA') return;
