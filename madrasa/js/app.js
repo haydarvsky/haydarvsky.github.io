@@ -295,7 +295,7 @@
     var prepM = await loadPrep().catch(function () { return { items: [] }; });
     var alerts = collectAlerts();
     var html = '<div class="ttl"><div><h2>' + DAYS[dow] + '</h2><p>' + esc(hijri(d)) + ' — ' + ar(d.getDate()) + ' ' + MONTHS[d.getMonth()] + ' ' + ar(d.getFullYear()) + '</p></div>'
-      + '<div class="acts"><a class="btn" href="#/overview">مقارنةُ الفصول</a>' + (RO() ? '' : '<a class="btn" href="#/schedule">تعديلُ الجدول</a>') + '</div></div>';
+      + '<div class="acts"><a class="btn p" href="sabbura.html" title="لوحةُ عرضٍ تسمعُ شرحَك وترتّبُه إنفوجرافيكاً متحرّكاً"><svg viewBox="0 0 24 24"><path d="M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3z"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg>السبّورةُ الناطقة</a><a class="btn" href="#/overview">مقارنةُ الفصول</a>' + (RO() ? '' : '<a class="btn" href="#/schedule">تعديلُ الجدول</a>') + '</div></div>';
     html += '<div class="today"><div>';
     if (dow === 5 || dow === 6) html += '<div class="empty"><b>عطلةُ نهايةِ الأسبوع</b>استرحْ يا أستاذ</div>';
     else if (!S.classes.length) html += '<div class="empty"><b>لا فصولَ بعد</b>أضفْ فصولَك أوّلاً من «متابعةُ المتعلّمين»</div>';
