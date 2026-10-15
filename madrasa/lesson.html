@@ -368,6 +368,8 @@ body.edit .addrow{display:flex}
     <button class="tb" id="bSave"><svg viewBox="0 0 24 24"><path d="M5 4.5h11L19.5 8v11.5H5z"/><path d="M8.5 4.5v5h7v-5M8.5 19.5v-6h7v6"/></svg><i>حفظٌ ونشرٌ إلى الموقع</i></button>
     <button class="tb" id="bDeck"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5v3M8.5 19.5h7"/></svg><i>العرضُ التقديمي</i></button>
     <button class="tb" id="bDeckDl" hidden><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="11" rx="2"/><path d="M12 11v9"/><path d="m8.5 16.5 3.5 3.5 3.5-3.5"/></svg><i>تنزيلُ العرضِ التقديميّ (HTML)</i></button>
+    <button class="tb" id="bPack" hidden><svg viewBox="0 0 24 24"><path d="M4 8.5h16v11H4z"/><path d="M9 8.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v2.5M4 13h16"/></svg><i>حقيبةُ الدرس على السبّورةِ الناطقة</i></button>
+    <button class="tb" id="bBook" hidden><svg viewBox="0 0 24 24"><path d="M4 5.5h5.5A2.5 2.5 0 0 1 12 8v11a2 2 0 0 0-2-2H4z"/><path d="M20 5.5h-5.5A2.5 2.5 0 0 0 12 8v11a2 2 0 0 1 2-2h6z"/></svg><i>صفحاتُ الدرسِ في الكتاب</i></button>
     <button class="tb" id="bFsDn"><svg viewBox="0 0 24 24"><path d="M3 19 8 6l5 13M4.9 14.5h6.2"/><path d="M15.5 12.5h6"/></svg><i>تصغيرُ الخط</i></button>
     <button class="tb" id="bFsUp"><svg viewBox="0 0 24 24"><path d="M3 19 8 6l5 13M4.9 14.5h6.2"/><path d="M15.5 12.5h6M18.5 9.5v6"/></svg><i>تكبيرُ الخط</i></button>
     <button class="tb" id="bJson"><svg viewBox="0 0 24 24"><path d="M12 3.5v12"/><path d="m7.5 11 4.5 4.5 4.5-4.5"/><path d="M4.5 19.5h15"/></svg><i>تنزيلُ ملفِّ البيانات</i></button>
@@ -717,6 +719,9 @@ function chrome(topic,idx){
   var c=$('crumb'), pg=$('pager');
   var cur=topic&&topic.lessons[idx];
   $('bDeckDl').hidden=!(cur&&cur.deck&&window.DeckExport);
+  $('bPack').hidden=!(cur&&cur.pack); $('bPack').onclick=function(){ location.href='sabbura.html?lesson='+encodeURIComponent(cur.id); };
+  $('bBook').hidden=!(cur&&cur.book&&cur.bp); $('bBook').onclick=function(){ location.href='book.html?id='+encodeURIComponent(cur.book)+'&p='+cur.bp[0]+'&t='+encodeURIComponent(cur.title||''); };
+  if(cur&&cur.bpr) $('bBook').querySelector('i').textContent='صفحاتُ الدرسِ في الكتاب (ص '+cur.bpr+')';
   var h='<a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a>';
   if(topic){
     h+='<span class="sep">›</span><a href="'+APP+'prep/'+topic.grade+'">'+esc(GRADES[topic.grade]||'')+'</a>'
@@ -781,14 +786,14 @@ function boot(){
 }
 /* الموقعُ خاصٌّ بمعلّمَيه: بلا دخولٍ لا تُعرَضُ الورقة */
 function gate(){
-  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono','bDeckDl','bFsDn','bFsUp','bWord'].forEach(function(k){var b=$(k);if(b)b.hidden=true});
+  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono','bDeckDl','bPack','bBook','bFsDn','bFsUp','bWord'].forEach(function(k){var b=$(k);if(b)b.hidden=true});
   $('pager').hidden=true;
   $('app').innerHTML='<div class="idx" style="text-align:center;padding-top:40px"><img src="/img/logo-dark.svg" alt="" style="height:64px;margin:0 auto 14px">'
     +'<h2>هذه الصفحةُ لمعلّمَي مدرستي</h2><p style="color:var(--muted);margin:6px 0 18px">ادخلْ بحسابِك ثمّ عُدْ إلى هذا الرابط</p>'
     +'<a class="btn p" href="index.html#/" style="display:inline-flex;align-items:center;gap:8px;padding:9px 22px;border-radius:100px;background:var(--green);color:#fff;font-weight:700">الدخولُ إلى مدرستي</a></div>';
 }
 function renderIndex(){
-  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono','bDeckDl','bFsDn','bFsUp','bWord'].forEach(function(k){$(k).hidden=true});
+  ['bEdit','bAns','bSave','bJson','bPrint','bDeck','bMono','bDeckDl','bPack','bBook','bFsDn','bFsUp','bWord'].forEach(function(k){$(k).hidden=true});
   $('crumb').innerHTML='<a href="https://haydarvsky.github.io/">الرئيسة</a><span class="sep">›</span><a href="'+APP+'">مدرستي</a><span class="sep">›</span><a href="'+APP+'prep">التحضيرات</a><span class="sep">›</span><b>التحضيراتُ التفاعلية</b>';
   fetch('data/lessons/index.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){
     var h='<div class="idx">';

@@ -116,35 +116,70 @@
           "title": "البناءُ الفكريّ ١",
           "sub": "العناوين، شروطُ المجد، صفاتُ العاقل",
           "kind": "الفهم والاستيعاب",
-          "deck": true
+          "deck": true,
+          "book": "g10-arabi",
+          "bp": [
+            41,
+            43
+          ],
+          "bpr": "٤٠–٤٢",
+          "pack": true
         },
         {
           "id": "g10-majd-fikri-2",
           "title": "البناءُ الفكريّ ٢",
           "sub": "الفكرةُ ودليلُها، قيدُ الإقدام، عثرةُ الرأي",
           "kind": "الفهم والاستيعاب",
-          "deck": true
+          "deck": true,
+          "book": "g10-arabi",
+          "bp": [
+            44,
+            46
+          ],
+          "bpr": "٤٣–٤٥",
+          "pack": true
         },
         {
           "id": "g10-majd-mujam",
           "title": "المعجمُ اللغويُّ والدلالة",
           "sub": "الحقولُ الدلاليّة، التلازمُ اللفظي، الفروقُ الدقيقة",
           "kind": "الثروة اللغوية",
-          "deck": true
+          "deck": true,
+          "book": "g10-arabi",
+          "bp": [
+            47,
+            48
+          ],
+          "bpr": "٤٦–٤٧",
+          "pack": true
         },
         {
           "id": "g10-majd-lughawi",
           "title": "البناءُ اللغويُّ وجمالياتُ النص",
           "sub": "المبنيُّ للمجهول، الشرط، الصورُ والمحسّنات",
           "kind": "لغة",
-          "deck": true
+          "deck": true,
+          "book": "g10-arabi",
+          "bp": [
+            49,
+            50
+          ],
+          "bpr": "٤٨–٤٩",
+          "pack": true
         },
         {
           "id": "g10-majd-tadrib",
           "title": "التدريب — نصُّ عنترة",
           "sub": "موازنةٌ بين الحلّي وعنترةَ بنِ شدّاد",
           "kind": "تدريب",
-          "deck": true
+          "deck": true,
+          "book": "g10-arabi",
+          "bp": [
+            51,
+            52
+          ],
+          "bpr": "٥٠–٥١",
+          "pack": true
         },
         {
           "id": "g10-tamthili-1",
@@ -152,7 +187,14 @@
           "sub": "تشبيهُ صورةٍ بصورة — درسٌ تفاعليٌّ بالصورِ والألعاب",
           "kind": "بلاغة",
           "deck": true,
-          "html": "dars/g10-tamthili.html"
+          "html": "dars/g10-tamthili.html",
+          "book": "g10-balagha",
+          "bp": [
+            33,
+            34
+          ],
+          "bpr": "٣٢–٣٣",
+          "pack": true
         },
         {
           "id": "g10-tamthili-2",
@@ -160,42 +202,84 @@
           "sub": "جولاتُ تدريباتِ الكتاب",
           "kind": "بلاغة",
           "deck": true,
-          "html": "dars/g10-tamthili.html#s19"
+          "html": "dars/g10-tamthili.html#s19",
+          "book": "g10-balagha",
+          "bp": [
+            35,
+            39
+          ],
+          "bpr": "٣٤–٣٨",
+          "pack": true
         },
         {
           "id": "g10-muqaraba-1",
           "title": "أفعالُ المقاربةِ والرجاءِ والشروع ١",
           "sub": "معانيها، وعملُها، وصورُ خبرِها",
           "kind": "نحو",
-          "deck": true
+          "deck": true,
+          "book": "g10-nahw",
+          "bp": [
+            40,
+            43
+          ],
+          "bpr": "٣٩–٤٢",
+          "pack": true
         },
         {
           "id": "g10-muqaraba-2",
           "title": "أفعالُ المقاربةِ والرجاءِ والشروع ٢",
           "sub": "اقترانُ الخبرِ بـ(أن)، التصرّف، التمام",
           "kind": "نحو",
-          "deck": true
+          "deck": true,
+          "book": "g10-nahw",
+          "bp": [
+            44,
+            49
+          ],
+          "bpr": "٤٣–٤٨",
+          "pack": true
         },
         {
           "id": "g10-muqaraba-3",
           "title": "أفعالُ المقاربةِ والرجاءِ والشروع ٣",
           "sub": "حصّةٌ تقويميّة",
           "kind": "نحو",
-          "deck": true
+          "deck": true,
+          "book": "g10-nahw",
+          "bp": [
+            50,
+            55
+          ],
+          "bpr": "٤٩–٥٤",
+          "pack": true
         },
         {
           "id": "g10-qissa-qasira-1",
           "title": "فنُّ كتابةِ القصّةِ القصيرة ١",
           "sub": "الحصّةُ التدريبيّة — «نصفُ يوم»",
           "kind": "تعبير",
-          "deck": true
+          "deck": true,
+          "book": "g10-arabi",
+          "bp": [
+            53,
+            56
+          ],
+          "bpr": "٥٢–٥٥",
+          "pack": true
         },
         {
           "id": "g10-qissa-qasira-2",
           "title": "فنُّ كتابةِ القصّةِ القصيرة ٢",
           "sub": "الحصّةُ التطبيقيّة — «بائعةُ الكبريت»",
           "kind": "تعبير",
-          "deck": true
+          "deck": true,
+          "book": "g10-arabi",
+          "bp": [
+            57,
+            59
+          ],
+          "bpr": "٥٦–٥٨",
+          "pack": true
         }
       ]
     }

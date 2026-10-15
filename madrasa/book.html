@@ -307,9 +307,10 @@ function openBook(b){
       ready=true; $('msg').hidden=true;
       build(); layout();
       $('pages').addEventListener('scroll',onScroll,{passive:true});
-      var start=Math.max(1,Math.min(N,+P.p||1));
+      var QP=+Q.get('p')||0, start=Math.max(1,Math.min(N,QP||+P.p||1));   /* ?p= صفحةُ الدرس من التحضيرات */
       goPage(start,true); paintPage();
-      if(start>1) toast('عُدنا بك إلى الصفحة <b>'+ar(start)+'</b> <button id="tgo">البداية</button>',5000);
+      if(QP) toast('صفحةُ الدرس'+(Q.get('t')?': <b>'+esc(Q.get('t'))+'</b>':'')+' <button id="tgo">البداية</button>',5000);
+      else if(start>1) toast('عُدنا بك إلى الصفحة <b>'+ar(start)+'</b> <button id="tgo">البداية</button>',5000);
       var g=$('tgo'); if(g) g.onclick=function(){ goPage(1); $('toast').classList.remove('on'); };
       markRecent(B,start,N);
     });
@@ -321,7 +322,7 @@ function fallback(url,P){
   ['bPrev','bNext','bZo','bZi','bFit','bRot','pIn'].forEach(function(k){var e=$(k);if(e){e.disabled=true;e.style.opacity=.3}});
   $('pT').textContent='';
   var f=document.createElement('iframe');
-  f.className='fb'; f.src=url+'#page='+(Math.max(1,+((P&&P.p)||1)))+'&zoom=page-width';
+  f.className='fb'; f.src=url+'#page='+(Math.max(1,+Q.get('p')||+((P&&P.p)||1)))+'&zoom=page-width';
   document.body.appendChild(f);
   $('pages').hidden=true;
   toast('عارضُ المتصفّحِ الأصليّ — زرُّ الرجوعِ فوق',3200);

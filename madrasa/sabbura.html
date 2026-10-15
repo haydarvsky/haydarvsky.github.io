@@ -551,6 +551,81 @@ dialog.dlg::backdrop{background:rgba(4,22,15,.55);backdrop-filter:blur(4px)}
   .cy-ring .rot,.em-wave i{animation:none}
 }
 
+
+/* ===== حقيبةُ الدرس: البطاقاتُ الجديدة ===== */
+.srcb{position:absolute;left:calc(var(--U)*2.2);bottom:calc(var(--U)*2.4);z-index:3;display:inline-flex;align-items:center;gap:calc(var(--U)*.5);padding:calc(var(--U)*.35) calc(var(--U)*1.1) calc(var(--U)*.45);border-radius:999px;border:1px solid var(--stroke);background:var(--hud);color:var(--fg2);font:inherit;font-size:max(12px,calc(var(--U)*1.3));cursor:pointer;transition:background .2s,color .2s}
+.srcb:hover{background:var(--card2);color:var(--fg)}
+.srcb svg{width:1.2em;height:1.2em}
+.vrs{display:flex;flex-direction:column;gap:calc(var(--u)*1.1)}
+.vr{display:grid;grid-template-columns:calc(var(--u)*3.6) minmax(0,1fr) calc(var(--u)*2.4) minmax(0,1fr);align-items:center;padding:calc(var(--u)*.7) calc(var(--u)*1.4);border-radius:calc(var(--u)*1.2);transition:background .35s,box-shadow .35s}
+.vr .vn{width:calc(var(--u)*3);height:calc(var(--u)*3);border-radius:50%;display:grid;place-items:center;border:1.5px solid var(--gold);color:var(--gold2);font-family:'Sakkal Saad Poster',serif;font-weight:700;font-size:calc(var(--u)*1.5);padding-top:calc(var(--u)*.15)}
+.vr .va,.vr .vb{font-family:'Sakkal Saad',serif;font-weight:700;font-size:calc(var(--u)*var(--fs,3));line-height:1.75;text-align:center;color:var(--fg)}
+.vr .vsep{justify-self:center;width:calc(var(--u)*.7);height:calc(var(--u)*.7);transform:rotate(45deg);background:var(--gold);opacity:.7}
+.vr.hot{background:var(--kick);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gold) 45%,transparent)}
+.vmean{margin-top:calc(var(--u)*1.8);padding:calc(var(--u)*1.1) calc(var(--u)*1.8) calc(var(--u)*1.3);border-radius:calc(var(--u)*1.2);background:var(--card);border:1px solid var(--stroke);border-inline-start:calc(var(--u)*.45) solid var(--c1);font-size:calc(var(--u)*var(--fs,2.3));line-height:1.6;color:var(--fg2)}
+.vmean b{color:var(--c1);font-weight:700;margin-inline-end:calc(var(--u)*.6)}
+.pk-tbl{width:100%;border-collapse:separate;border-spacing:0;border-radius:calc(var(--u)*1.3);overflow:hidden;border:1px solid var(--stroke);font-size:calc(var(--u)*var(--fs,2.2));line-height:1.5}
+.pk-tbl th{background:var(--kick);color:var(--gold2);font-family:'Sakkal Saad Poster',serif;font-weight:700;padding:calc(var(--u)*.8) calc(var(--u)*1.2);text-align:center}
+.pk-tbl td{padding:calc(var(--u)*.7) calc(var(--u)*1.2);border-top:1px solid var(--stroke);background:var(--card);text-align:center;vertical-align:middle}
+.pk-tbl tr.an{animation:fade .7s var(--e-out) both;animation-delay:var(--d,0ms)}
+.pk-tbl tr.hot td{background:var(--kick);color:var(--fg)}
+.pk-tbl tr.hot td:first-child{box-shadow:inset calc(var(--u)*-.45) 0 0 var(--gold)}
+.pkimg{margin:0;display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*1.2)}
+.pkimg .fr{position:relative;overflow:hidden;border-radius:calc(var(--u)*1.2);box-shadow:0 calc(var(--u)*1.6) calc(var(--u)*4) calc(var(--u)*-2) var(--shadow);background:#fff;cursor:zoom-in;max-width:100%}
+.pkimg img{display:block;max-width:100%;max-height:calc(var(--u)*36);width:auto;height:auto;transition:transform .5s var(--e-out)}
+.pkimg.page img{max-height:calc(var(--u)*41)}
+.pkimg .fr.zoom{cursor:zoom-out}
+.pkimg .fr.zoom img{transform:scale(2.2)}
+.pkimg figcaption{font-size:calc(var(--u)*1.9);color:var(--fg2);text-align:center}
+.exm{display:flex;flex-direction:column;align-items:center;text-align:center}
+.exm .kick{align-self:center}
+.exm .h{font-family:'Sakkal Saad',serif;font-weight:700;line-height:1.75;max-width:calc(var(--u)*80)}
+.exm .why{margin-top:calc(var(--u)*2.2);max-width:calc(var(--u)*76);padding:calc(var(--u)*1.1) calc(var(--u)*1.9) calc(var(--u)*1.3);border-radius:calc(var(--u)*1.2);background:var(--card);border:1px solid var(--stroke);border-inline-start:calc(var(--u)*.45) solid var(--c0);font-size:calc(var(--u)*var(--fs,2.3));line-height:1.65;color:var(--fg2);text-align:start;white-space:pre-line}
+.qopts{display:flex;flex-wrap:wrap;gap:calc(var(--u)*.9);margin-top:calc(var(--u)*2)}
+.qopts span{padding:calc(var(--u)*.5) calc(var(--u)*1.5) calc(var(--u)*.65);border-radius:999px;border:1px solid var(--stroke);background:var(--card);font-size:calc(var(--u)*2.1)}
+.think.can{cursor:pointer}
+.think.can:hover{color:var(--fg2)}
+.card.hot,.node.hot,.pt.hot,.ni.hot,.cn.hot{box-shadow:0 0 0 calc(var(--u)*.3) var(--gold),0 calc(var(--u)*1.6) calc(var(--u)*3.4) calc(var(--u)*-2.2) var(--shadow)}
+
+/* ===== حقيبةُ الدرس: الدرج ===== */
+.pkd{position:absolute;top:clamp(10px,1.4vh,16px);bottom:clamp(76px,10vh,96px);right:clamp(10px,1.2vw,18px);z-index:28;width:min(430px,calc(100% - 90px));display:flex;flex-direction:column;border-radius:20px;background:#FAF6EF;color:#2A1A0F;box-shadow:0 30px 70px -30px #000;overflow:hidden;transform:translateX(16px);opacity:0;pointer-events:none;transition:opacity .25s,transform .3s var(--e-out)}
+.pkd.open{transform:none;opacity:1;pointer-events:auto}
+.pkd header{display:flex;align-items:center;gap:8px;padding:12px 14px 10px;border-bottom:1px solid rgba(15,76,58,.12)}
+.pkd header .t{flex:1;min-width:0}
+.pkd header b{display:block;font-family:'Sakkal Saad Poster',serif;font-size:19px;color:#0F4C3A;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pkd header small{display:block;font-size:13px;color:rgba(42,26,15,.6)}
+.pkd .pkq{padding:10px 14px 0}
+.pkd .pkq input{width:100%;height:38px;border-radius:11px;border:1px solid rgba(15,76,58,.2);background:#fff;padding:0 12px;font:inherit;font-size:15.5px;outline:none}
+.pkd .pkq input:focus{border-color:#D9A441;box-shadow:0 0 0 3px rgba(217,164,65,.2)}
+.pktabs{display:flex;gap:4px;padding:10px 14px 6px}
+.pktabs button{flex:1;height:34px;border-radius:10px;font-size:14.5px;color:#0F4C3A;background:rgba(15,76,58,.06)}
+.pktabs button.on{background:#0F4C3A;color:#F4EEE1}
+.pkb{flex:1;overflow:auto;padding:4px 14px 14px;display:flex;flex-direction:column;gap:6px}
+.pkg{margin:8px 0 2px;font-size:13px;font-weight:700;color:rgba(42,26,15,.55)}
+.pkc{display:grid;grid-template-columns:30px minmax(0,1fr);gap:9px;align-items:start;text-align:start;padding:8px 10px 9px;border-radius:12px;background:#fff;border:1px solid rgba(15,76,58,.1);transition:border-color .2s,transform .15s}
+.pkc:hover{border-color:#D9A441;transform:translateY(-1px)}
+.pkc.on{border-color:#0F4C3A;box-shadow:inset 0 0 0 1px #0F4C3A}
+.pkc i{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:rgba(15,76,58,.08);color:#0F4C3A;font-style:normal}
+.pkc i svg{width:17px;height:17px}
+.pkc b{display:block;font-size:15px;line-height:1.45;color:#2A1A0F}
+.pkc small{display:block;font-size:13px;line-height:1.5;color:rgba(42,26,15,.6);overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.pkpg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pkpg button{display:flex;flex-direction:column;gap:4px;align-items:center;font-size:13px;color:#0F4C3A}
+.pkpg img{width:100%;aspect-ratio:3/4;object-fit:cover;object-position:top;border-radius:8px;border:1px solid rgba(15,76,58,.15);background:#fff}
+.pkl{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:#fff;border:1px solid rgba(15,76,58,.1);text-align:start}
+.pkl .t{flex:1;min-width:0}
+.pkl b{display:block;font-size:15px}
+.pkl small{display:block;font-size:12.5px;color:rgba(42,26,15,.6)}
+.pkl.on{border-color:#0F4C3A}
+.pkl span.go{flex:0 0 auto;font-size:13.5px;font-weight:700;color:#5B4BB5}
+.pkd footer{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid rgba(15,76,58,.12);font-size:14px}
+.pkd footer label{display:flex;align-items:center;gap:7px;flex:1;cursor:pointer}
+.pkd footer input{width:18px;height:18px;accent-color:#0F4C3A}
+.pkd footer button{color:#A63D2F;font-size:14px;padding:4px 8px;border-radius:8px}
+.pkd footer button:hover{background:rgba(166,61,47,.08)}
+.pkd .pk0{color:rgba(42,26,15,.6);text-align:center;padding:24px 10px;font-size:15px;line-height:1.7}
+.ib .bdg{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#5B4BB5;color:#fff;font-size:12px;line-height:18px;text-align:center}
+
 /* ===== الطباعة / PDF ===== */
 #print{display:none}
 @media print{
@@ -578,6 +653,7 @@ dialog.dlg::backdrop{background:rgba(4,22,15,.55);backdrop-filter:blur(4px)}
     <button class="ib" id="bUndo" type="button" title="تراجع (Ctrl+Z)"><svg class="i" viewBox="0 0 24 24"><path d="M15 7H9a5 5 0 0 0 0 10h7"/><path d="M12 4l3 3-3 3"/></svg><span class="tx">تراجع</span></button>
     <button class="ib" id="bNew" type="button" title="اجعلْ كلامَك القادمَ مشهداً جديداً (N)"><svg class="i" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M12 9v6M9 12h6"/></svg><span class="tx">مشهدٌ جديد</span></button>
     <button class="ib" id="bLsn" type="button" title="التحضير: حمّلْ درساً فتظهرُ شريحتُه حين تتكلّمُ عنها (G)"><svg class="i" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5V20M8.5 20h7"/><path d="M7.5 9h9M7.5 12.5h5.5"/></svg><span class="tx">التحضير</span></button>
+    <button class="ib" id="bPack" type="button" title="حقيبةُ الدرس: بطاقاتُ الكتابِ وصفحاتُه، تظهرُ حين تتكلّمُ عنها (K)"><svg class="i" viewBox="0 0 24 24"><path d="M4 8.5h16v11H4z"/><path d="M9 8.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v2.5M4 13h16"/></svg><span class="tx">الحقيبة</span><span class="bdg" id="pkBdg" hidden></span></button>
     <span class="vsep opt"></span>
     <button class="ib opt" id="bLog" type="button" title="نصُّ ما قلتَه"><svg class="i" viewBox="0 0 24 24"><path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M9 11h7M9 14.5h7M9 18h4"/></svg><span class="tx">النص</span></button>
     <button class="ib opt" id="bPrint" type="button" title="طباعةُ المشاهد أو حفظُها PDF"><svg class="i" viewBox="0 0 24 24"><path d="M7 9V3.5h10V9M7 17H4.5V9.5h15V17H17"/><path d="M7 14h10v6.5H7z"/></svg><span class="tx">PDF</span></button>
@@ -605,6 +681,13 @@ dialog.dlg::backdrop{background:rgba(4,22,15,.55);backdrop-filter:blur(4px)}
     </div>
   </div>
 
+  <aside class="pkd" id="pkD" aria-label="حقيبةُ الدرس">
+    <header><div class="t"><b id="pkT">حقيبةُ الدرس</b><small id="pkS">بطاقاتٌ من الكتاب تظهرُ حين تتكلّمُ عنها</small></div><button class="xbtn" type="button" id="pkX" aria-label="إغلاق"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div class="pkq"><input id="pkQ" type="search" placeholder="ابحثْ في الحقيبة: كلمةٌ، بيتٌ، قاعدة…" autocomplete="off"></div>
+    <nav class="pktabs"><button type="button" data-pt="c" class="on">البطاقات</button><button type="button" data-pt="p">صفحاتُ الكتاب</button><button type="button" data-pt="l">الدروس</button></nav>
+    <div class="pkb" id="pkB"></div>
+    <footer><label><input type="checkbox" id="pkAuto"> تظهرُ البطاقةُ حين أتكلّمُ عنها</label><button type="button" id="pkOff">إغلاقُ الحقيبة</button></footer>
+  </aside>
   <canvas class="laser" id="laser"></canvas>
 
   <div class="tools" id="tools" role="toolbar" aria-label="أدواتُ الشرح">
@@ -932,7 +1015,7 @@ function upd(c, fn){
 }
 function recent(types, maxAge){
   for (var i = S.scenes.length - 1; i >= Math.max(0, S.scenes.length - 3); i--){
-    var s = S.scenes[i]; if (types.indexOf(s.type) >= 0 && RT.n - (s.lastAdd || 0) <= maxAge) return s;
+    var s = S.scenes[i]; if (!s.card && types.indexOf(s.type) >= 0 && RT.n - (s.lastAdd || 0) <= maxAge) return s;
   }
   return null;
 }
@@ -1017,6 +1100,7 @@ function apply(raw){
   x = RE.move.exec(P.m);
   if (x){ RT.forceNew = true; P = mk(after(P, x)); if (!P.c || isFiller(P.m)) return { kind:'mark' }; }
   if (RT.forceNew) c = null;
+  if (c && c.card && c.type !== 'question') c = null;   /* بطاقاتُ الكتابِ ثابتةٌ لا يُلحَقُ بها كلامٌ آخر */
 
   /* عنوان */
   var verb = false; x = RE.title1.exec(P.m); if (!x){ x = RE.title2.exec(P.m); verb = !!x; }
@@ -1056,7 +1140,7 @@ function apply(raw){
   /* جوابُ السؤالِ المعروض */
   if (c && c.type === 'question' && !c.subtitle){
     x = RE.ans.exec(P.m);
-    if (x){ t = tidy(after(P, x)); if (t) return upd(c, function(){ c.subtitle = t; }); }
+    if (x){ t = tidy(after(P, x)); if (t || c.answer) return upd(c, function(){ c.subtitle = c.answer || t; }); }
   }
   /* سؤال */
   x = RE.qpre.exec(P.m);
@@ -1196,12 +1280,17 @@ var I = {
   note:ic('<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1.1 1.3 1.1 2.2h5c0-.9.5-1.7 1.1-2.2A6 6 0 0 0 12 3z"/>'),
   word:ic('<path d="M5 6.5h14M12 6.5V19M9 19h6"/>'),
   check:ic('<path d="M5 12.5l4.5 4.5L19 7.5"/>'),
+  book:ic('<path d="M4 5.5h5.5A2.5 2.5 0 0 1 12 8v11a2 2 0 0 0-2-2H4z"/><path d="M20 5.5h-5.5A2.5 2.5 0 0 0 12 8v11a2 2 0 0 1 2-2h6z"/>'),
+  pack:ic('<path d="M4 8.5h16v11H4z"/><path d="M9 8.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v2.5M4 13h16"/>'),
+  verse:ic('<path d="M5 6h6M5 10h6M5 14h6M13 6h6M13 10h6M13 14h6M8 18h8"/>'),
+  tbl:ic('<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><path d="M3.5 9.5h17M3.5 14.5h17M10 4.5v15"/>'),
+  img:ic('<rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M20.5 16l-5-5-8 8.5"/>'),
   pin:ic('<path d="M9 4h6l-1 5 3 3H7l3-3zM12 15v6"/>'),
   slide:ic('<rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5V20M8.5 20h7"/><path d="M7.5 9h9M7.5 12.5h5.5"/>'),
   board:ic('<path d="M4 5.5h16v11H4z"/><path d="M8 20.5l2-4M16 20.5l-2-4"/><path d="M7.5 11.5c1.4-1.6 2.8-1.6 4.2 0s2.9 1.6 4.3 0"/>')
 };
-var KICK = { title:'موضوعُ الدرس', definition:'مفهوم', list:'عناصر', steps:'خطوات', cycle:'دورة', stat:'بالأرقام', compare:'مقارنة', cause:'سببٌ ونتيجة', timeline:'محطّاتٌ زمنيّة', question:'سؤال', quote:'اقتباس', alert:'انتبهوا', notes:'فكرة', word:'كلمةٌ مفتاحيّة' };
-var KICON = { title:'spark', definition:'def', list:'list', steps:'steps', cycle:'cycle', stat:'chart', compare:'cmp', cause:'cause', timeline:'time', question:'q', quote:'quote', alert:'alert', notes:'note', word:'word' };
+var KICK = { verse:'من النصّ', table:'جدولٌ من الكتاب', image:'من الكتاب', example:'مثال', title:'موضوعُ الدرس', definition:'مفهوم', list:'عناصر', steps:'خطوات', cycle:'دورة', stat:'بالأرقام', compare:'مقارنة', cause:'سببٌ ونتيجة', timeline:'محطّاتٌ زمنيّة', question:'سؤال', quote:'اقتباس', alert:'انتبهوا', notes:'فكرة', word:'كلمةٌ مفتاحيّة' };
+var KICON = { verse:'verse', table:'tbl', image:'img', example:'quote', title:'spark', definition:'def', list:'list', steps:'steps', cycle:'cycle', stat:'chart', compare:'cmp', cause:'cause', timeline:'time', question:'q', quote:'quote', alert:'alert', notes:'note', word:'word' };
 
 /* سماتُ الحركة: يُحرَّكُ الجديدُ وحدَه، ويبقى القديمُ في مكانِه */
 function isNew(ctx, it){ return ctx.all || ctx.old.indexOf(it.k) < 0; }
@@ -1342,7 +1431,8 @@ R.question = function(sc, ctx){
   return '<div class="qw"><div class="qm' + (ctx.all ? ' an' : '') + '" aria-hidden="true">؟</div><div>' + kick(sc, ctx) +
     '<h2 ' + T(ctx, 'h wipe', 220, '--fs:' + fsz(q, 5.6, 3.2, 14, 100), ctx.tNew) + '>' + tx(q) + '</h2>' +
     (a ? '<div class="ans' + (an ? ' an' : '') + '" style="--d:' + (ctx.all ? 1000 : 90) + 'ms"><span class="tg">' + I.check + 'الجواب</span><p style="--fs:' + fsz(a, 3.4, 2.4, 20, 120) + '">' + tx(a) + '</p></div>'
-       : '<div class="think' + (ctx.all ? ' an' : '') + '" style="--d:1100ms"><span class="dots"><b></b><b></b><b></b></span><span>فكّروا معي…</span></div>') +
+       : '<div class="think' + (ctx.all ? ' an' : '') + (sc.answer ? ' can' : '') + '" style="--d:1100ms"' + (sc.answer ? ' title="اكشفِ الجواب (A)"' : '') + '><span class="dots"><b></b><b></b><b></b></span><span>' + (sc.answer ? 'فكّروا معي… ثمّ قُلْ «الجواب»' : 'فكّروا معي…') + '</span></div>') +
+    (sc.items && sc.items.length ? '<div class="qopts">' + sc.items.map(function(it, i){ return '<span ' + A(ctx, it, i + 3, '') + '>' + tx(it.label) + '</span>'; }).join('') + '</div>' : '') +
   '</div></div>';
 };
 R.quote = function(sc, ctx){
@@ -1353,7 +1443,7 @@ R.quote = function(sc, ctx){
 };
 R.alert = function(sc, ctx){
   var t = sc.title;
-  var sum = sc.kick === 'الخلاصة';
+  var sum = sc.kick === 'الخلاصة' || !!sc.sum;
   return '<div class="al' + (sum ? ' sum' : '') + '"><div class="al-ic' + (ctx.all ? ' an pop' : '') + '" aria-hidden="true">' + (sum ? I.spark : '!') + '</div><div>' + kick(sc, ctx) +
     '<h2 ' + T(ctx, 'h wipe', 220, '--fs:' + fsz(t, 5.6, 3, 14, 120), ctx.tNew) + '>' + hl(t, keyword(t)) + '</h2>' +
     (sc.items.length ? '<ul>' + sc.items.map(function(it, i){ return '<li ' + A(ctx, it, i + 4, '') + '>' + tx(it.label) + '</li>'; }).join('') + '</ul>' : '') + '</div></div>';
@@ -1367,10 +1457,42 @@ R.notes = function(sc, ctx){
 R.word = function(sc, ctx){
   return '<div class="wd">' + orn(ctx) + kick(sc, ctx, sc.kick || (wc(sc.title) > 1 ? 'عبارةٌ مفتاحيّة' : KICK.word)) + '<h1 ' + T(ctx, 'h wipe', 160, '--fs:' + fsz(sc.title, 12, 6, 4, 26), ctx.tNew) + '>' + tx(sc.title) + '</h1>' + swash(ctx, 700) + '</div>';
 };
+
+/* ----- بطاقاتُ الحقيبة: أبيات، جدول، صورة/صفحة، مثال ----- */
+R.verse = function(sc, ctx){
+  var vs = sc.verses || [], n = vs.length;
+  var L = vs.reduce(function(m, v){ return Math.max(m, String(v.a || '').length, String(v.b || '').length); }, 0);
+  var fs = fsz('x'.repeat(L), n <= 1 ? 4.4 : n <= 2 ? 3.8 : n <= 4 ? 3.1 : n <= 6 ? 2.5 : 2.1, n <= 4 ? 2.4 : 1.8, 14, 46);
+  var rows = vs.map(function(v, i){
+    return '<div class="vr' + (ctx.all ? ' an' : '') + (sc.hot === i ? ' hot' : '') + '" data-hot="' + i + '" style="--d:' + (ctx.base + (i + 1) * 260) + 'ms;--fs:' + fs + '"><span class="vn">' + tx(v.n != null ? v.n : i + 1) + '</span><span class="va">' + tx(v.a) + '</span><i class="vsep"></i><span class="vb">' + tx(v.b) + '</span></div>';
+  }).join('');
+  return kick(sc, ctx, sc.title || KICK.verse) + '<div class="vrs">' + rows + '</div>'
+    + (sc.subtitle ? '<div ' + T(ctx, 'vmean', ctx.base + (n + 1) * 260, '--fs:' + fsz(sc.subtitle, 2.5, 1.9, 40, 260), ctx.all || ctx.oldSub !== sc.subtitle) + '><b>المعنى</b>' + tx(sc.subtitle) + '</div>' : '');
+};
+R.table = function(sc, ctx){
+  var head = sc.head || [], rows = sc.rows || [];
+  var n = rows.reduce(function(a, r){ return a + r.join(' ').length; }, 0) + head.join(' ').length;
+  var fs = fsz('x'.repeat(n), 2.8, 1.5, 60, 900);
+  return '<div class="lh">' + kick(sc, ctx) + (sc.title ? '<h2 ' + T(ctx, 'h wipe', 140, '--fs:' + fsz(sc.title, 4.2, 2.8, 12, 50), ctx.tNew) + '>' + tx(sc.title) + '</h2>' : '') + '</div>'
+    + '<table class="pk-tbl" style="--fs:' + fs + '"><thead><tr' + (ctx.all ? ' class="an" style="--d:320ms"' : '') + '>' + head.map(function(h){ return '<th>' + tx(h) + '</th>'; }).join('') + '</tr></thead><tbody>'
+    + rows.map(function(r, i){ return '<tr data-hot="' + i + '" class="' + (ctx.all ? 'an' : '') + (sc.hot === i ? ' hot' : '') + '" style="--d:' + (ctx.base + (i + 1) * 170) + 'ms">' + r.map(function(c){ return '<td>' + tx(c) + '</td>'; }).join('') + '</tr>'; }).join('')
+    + '</tbody></table>';
+};
+R.image = function(sc, ctx){
+  return '<figure class="pkimg' + (sc.page ? ' page' : '') + '">' + kick(sc, ctx, sc.kick || (sc.page ? 'صفحةُ الكتاب' : KICK.image))
+    + '<div class="fr' + (ctx.all ? ' an pop' : '') + '" style="--d:200ms"><img src="' + esc(sc.img) + '" alt="' + esc(sc.title || '') + '" draggable="false"></div>'
+    + (sc.title ? '<figcaption>' + tx(sc.title) + '</figcaption>' : '') + '</figure>';
+};
+R.example = function(sc, ctx){
+  return '<div class="exm">' + kick(sc, ctx, sc.kick || KICK.example)
+    + '<p ' + T(ctx, 'h wipe', 180, '--fs:' + fsz(sc.title, 4.4, 2.6, 20, 160), ctx.tNew) + '>' + tx(sc.title) + '</p>'
+    + (sc.subtitle ? '<div ' + T(ctx, 'why', 900, '--fs:' + fsz(sc.subtitle, 2.5, 1.7, 50, 420), ctx.all || ctx.oldSub !== sc.subtitle) + '>' + tx(sc.subtitle) + '</div>' : '') + '</div>';
+};
 function render(sc, ctx){
-  var fn = { title:R.title, definition:R.definition, list:R.list, steps:R.steps, cycle:R.cycle, stat:R.stat, compare:R.compare, cause:R.cause, timeline:R.timeline, question:R.question, quote:R.quote, alert:R.alert, notes:R.notes, word:R.word }[sc.type] || R.notes;
+  var fn = { verse:R.verse, table:R.table, image:R.image, example:R.example, title:R.title, definition:R.definition, list:R.list, steps:R.steps, cycle:R.cycle, stat:R.stat, compare:R.compare, cause:R.cause, timeline:R.timeline, question:R.question, quote:R.quote, alert:R.alert, notes:R.notes, word:R.word }[sc.type] || R.notes;
   var ex = sc.examples.length ? '<div class="exs">' + sc.examples.map(function(e, i){ var nw = ctx.all || i >= ctx.oldEx; return '<div class="ex' + (nw ? ' an' : '') + '" style="--d:' + (ctx.all ? 1300 + i * 160 : 90) + 'ms;--r:' + (i % 2 ? 1.4 : -1.6) + 'deg"><span>' + I.pin + 'مثال</span>' + tx(e) + '</div>'; }).join('') + '</div>' : '';
-  return '<div class="sc-main">' + fn(sc, ctx) + '</div>' + ex;
+  var srcb = sc.card && sc.card.page ? '<button type="button" class="srcb" data-pg="' + sc.card.page + '" data-bk="' + esc(sc.card.book || '') + '" title="اعرضْ صفحةَ الكتاب">' + I.book + esc(BOOKN[sc.card.book] || 'الكتاب') + ' · ص ' + dz(sc.card.page - 1) + '</button>' : '';
+  return '<div class="sc-main">' + fn(sc, ctx) + '</div>' + ex + srcb;
 }
 
 /* ================================================================
@@ -1475,6 +1597,7 @@ function handle(text, src){
   S.log.push({ t:Date.now(), s:text }); if (S.log.length > 600) S.log.splice(0, S.log.length - 600);
   if ($('logP').classList.contains('open')) renderLog();
   if (src !== 'demo' && lsnHear(text)) return;   /* جملةٌ عن شريحةٍ من التحضير: تظهرُ الشريحةُ بدلَ الرسم */
+  if (src !== 'demo' && pkHear(text)) return;    /* جملةٌ عن بطاقةٍ من حقيبةِ الدرس: تظهرُ البطاقةُ بمعلومتِها الدقيقة */
   if (SET.engine === 'ai' && SET.key && src !== 'demo') return aiPush(text);
   runLocal(text);
 }
@@ -1489,9 +1612,10 @@ function runLocal(text){
 
 /* ----- Claude ----- */
 var TYPES = ['title', 'definition', 'list', 'steps', 'cycle', 'stat', 'compare', 'cause', 'timeline', 'question', 'quote', 'alert', 'notes', 'word'];
-var SCHEMA = { type:'object', additionalProperties:false, required:['action', 'slide', 'scene'], properties:{
+var SCHEMA = { type:'object', additionalProperties:false, required:['action', 'slide', 'card', 'scene'], properties:{
   action:{ type:'string', enum:['new', 'update', 'ignore'] },
   slide:{ type:'integer' },
+  card:{ type:'integer' },
   scene:{ type:'object', additionalProperties:false, required:['type', 'title', 'subtitle', 'expected', 'sideA', 'sideB', 'items', 'examples'], properties:{
     type:{ type:'string', enum:TYPES }, title:{ type:'string' }, subtitle:{ type:'string' }, expected:{ type:'integer' }, sideA:{ type:'string' }, sideB:{ type:'string' },
     items:{ type:'array', items:{ type:'object', additionalProperties:false, required:['label', 'value', 'note', 'side'], properties:{ label:{ type:'string' }, value:{ type:'string' }, note:{ type:'string' }, side:{ type:'string', enum:['a', 'b', ''] } } } },
@@ -1520,6 +1644,7 @@ var SYS = [
   'notes: anything else. items: label=a concise idea, value=one keyword copied exactly from that label to highlight.',
   'word: a single key term said on its own. title=the term.',
   'examples (any type): short examples the teacher gives for the current scene, at most 3.',
+  'Lesson pack: when <lesson_pack> lists cards taken from the student textbook (number: [kind] text), set "card" to the number of the card the new speech is clearly about (reading that verse, explaining that word, rule, table or question) and the board will show that card exactly as the book has it; use action "ignore" then. Otherwise set card to 0, and use the pack facts to keep your own scenes accurate. Prefer a matching slide over a card.',
   'Lesson slides: when <lesson_slides> lists the teacher\'s prepared slides (number: text), set "slide" to the number of the slide the new speech is clearly explaining, reading or asking about, and the board will show that slide instead of a scene (use action "ignore" then). <slide_on_board> in the message is the slide shown now (0 = the infographic is shown); keep returning that number while the teacher is still talking about it. If the speech is not clearly about one listed slide, or no slides are given, set "slide" to 0 and build the scene as usual.',
   'Writing rules: Arabic only. Make the text board-friendly: labels of at most 7 words, definitions and notes of at most 22 words, keeping the teacher\'s own words and meaning. Fix obvious recognition errors and add hamzas or taa marbuta where clearly intended. Never add facts, names or numbers the teacher did not say. Use "" for unused text fields and 0 for expected. At most 8 items.'
 ].join('\n');
@@ -1550,7 +1675,7 @@ function aiCall(text, c){
   var recentSpeech = S.log.slice(-8, -1).map(function(l){ return l.s; }).join(' | ');
   var msg = '<current_scene>\n' + JSON.stringify(slim(c)) + '\n</current_scene>\n<recent_scene_titles>\n' + titles + '\n</recent_scene_titles>\n<recent_speech>\n' + recentSpeech + '\n</recent_speech>\n' + (LSN.slides.length && SET.lsnAuto ? '<slide_on_board>' + (LSN.show ? LSN.k + 1 : 0) + '</slide_on_board>\n' : '') + '<new_speech>\n' + text + '\n</new_speech>';
   var fb = !AI.noFb && /opus|sonnet/.test(SET.model);
-  var lb = lsnBrief(), body = { model:SET.model, max_tokens:4000, system:lb ? [{ type:'text', text:SYS }, { type:'text', text:lb, cache_control:{ type:'ephemeral' } }] : SYS, output_config:{ effort:'low', format:{ type:'json_schema', schema:SCHEMA } }, messages:[{ role:'user', content:msg }] };
+  var lb = [lsnBrief(), pkBrief()].filter(Boolean).join('\n'), body = { model:SET.model, max_tokens:4000, system:lb ? [{ type:'text', text:SYS }, { type:'text', text:lb, cache_control:{ type:'ephemeral' } }] : SYS, output_config:{ effort:'low', format:{ type:'json_schema', schema:SCHEMA } }, messages:[{ role:'user', content:msg }] };
   if (fb) body.fallbacks = 'default';
   var h = { 'content-type':'application/json', 'x-api-key':SET.key, 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' };
   if (fb) h['anthropic-beta'] = 'server-side-fallback-2026-07-01';
@@ -1585,6 +1710,7 @@ function lsnBrief(){
   return '<lesson_slides>\n' + LSN.slides.map(function(s, k){ return (k + 1) + ': ' + s.txt; }).join('\n') + '\n</lesson_slides>';
 }
 function applyAI(res){
+  if (res && res.card > 0 && PK.cards[res.card - 1] && SET.pkAuto && !(res.slide > 0)){ var cc = PK.cards[res.card - 1], c0 = cur(); if (!(c0 && c0.card && c0.card.id === cc.id)) pkShow(res.card - 1); return null; }
   if (res && res.slide > 0 && LSN.slides[res.slide - 1] && SET.lsnAuto){
     var k = res.slide - 1;
     if (!(LSN.show && k === LSN.k) && !(LSN.show && Date.now() - LSN.manualAt < 8000)) lsnShow(k, { auto:true });
@@ -2373,6 +2499,245 @@ $('lsnB').addEventListener('click', function(e){
 $('bLsn').onclick = openLsn; $('lcOpen').onclick = openLsn; $('lcView').onclick = lsnToggle;
 
 /* ================================================================
+   حقيبةُ الدرس: بطاقاتٌ من الكتاب تستدعيها الجملةُ المنطوقة
+   ================================================================ */
+var BOOKN = { 'g10-arabi':'كتابُ اللغة العربية', 'g10-nahw':'قواعدُ النحو والصرف', 'g10-balagha':'فنونُ البلاغة' };
+var BOOKF = { 'g10-arabi':'arabi', 'g10-nahw':'nahw', 'g10-balagha':'balagha' };
+var PKIND = { intro:['تمهيد', 'spark'], verse:['أبيات', 'verse'], word:['معجم', 'def'], definition:['مفهوم', 'def'], rule:['قاعدة', 'alert'], list:['قائمة', 'list'], steps:['خطوات', 'steps'], table:['جدول', 'tbl'], compare:['موازنة', 'cmp'], example:['مثال', 'quote'], question:['سؤال', 'q'], idea:['فكرة', 'note'], image:['صورة', 'img'], quote:['اقتباس', 'quote'] };
+var PKORD = ['intro', 'verse', 'word', 'definition', 'rule', 'table', 'list', 'steps', 'compare', 'example', 'image', 'idea', 'quote', 'question'];
+var PK = { id:null, data:null, cards:[], idx:[], gen:0, tab:'c', lib:null, at:0, pend:-1 };
+var PKEY = 'sabbura_pack' + ME.ws;
+if (SET.pkAuto == null) SET.pkAuto = true;
+
+function pkItems(a){ return (a || []).map(function(x){ return typeof x === 'string' ? { label:x } : { label:x.label || x.t || '', note:x.note || x.d || '', side:x.side || '' }; }); }
+function pkParts(c){
+  var P = [], add = function(t, w){ if (t) P.push([String(t), w]); };
+  add(c.title, 1.4); add(c.text, 1); add(c.note, .9); add(c.sideA, 1.2); add(c.sideB, 1.2);
+  (c.keys || []).forEach(function(k){ add(k, 1.3); });
+  pkItems(c.items).forEach(function(i){ add(i.label, 1.1); add(i.note, .8); });
+  (c.verses || []).forEach(function(v){ add(v.a, 1); add(v.b, 1); });
+  (c.head || []).forEach(function(h){ add(h, .8); });
+  (c.rows || []).forEach(function(r){ r.forEach(function(x){ add(x, 1); }); });
+  return P;
+}
+function pkTok(parts){
+  var tok = Object.create(null);
+  parts.forEach(function(p){ lWords(p[0]).forEach(function(vs){ vs.forEach(function(v){ if (!(tok[v] >= p[1])) tok[v] = p[1]; }); }); });
+  return tok;
+}
+function pkIndex(){ PK.idx = PK.cards.map(function(c){ return pkTok(pkParts(c)); }); PK.ttl = PK.cards.map(function(c){ return lWords(c.title || '').map(function(vs){ return vs[0]; }); }); }
+/* المطابقة: TF-IDF مبسّطٌ كمطابقةِ الشرائح، على بطاقاتِ الحقيبة */
+function pkMatch(text, idx, ttl){
+  if (!idx){ idx = PK.idx; ttl = PK.ttl; }
+  var W = lWords(text), N = idx.length, j; if (!W.length || !N) return null;
+  var sc = [], cv = [], hit = [], uq = [], tot = 0;
+  for (j = 0; j < N; j++){ sc[j] = 0; cv[j] = 0; hit[j] = 0; uq[j] = 0; }
+  W.forEach(function(vs){
+    var ws = [], df = 0;
+    for (j = 0; j < N; j++){ var t = idx[j], m = 0; for (var q = 0; q < vs.length; q++){ var x = t[vs[q]]; if (x > m) m = x; } ws[j] = m; if (m) df++; }
+    var idf = df ? Math.log(1 + N / df) : Math.log(1 + N) * 0.8;
+    tot += idf;
+    if (df) for (j = 0; j < N; j++) if (ws[j]){ sc[j] += idf * ws[j]; cv[j] += idf * Math.min(1, ws[j]); hit[j]++; if (df <= 2) uq[j]++; }
+  });
+  /* عنوانُ البطاقةِ إذا قيلَ أكثرُه فهو أقوى دليل */
+  var tb = [];
+  if (ttl){ var flat = Object.create(null); W.forEach(function(vs){ vs.forEach(function(v){ flat[v] = 1; }); });
+    for (j = 0; j < N; j++){ var tt = ttl[j] || [], th = tt.filter(function(v){ return flat[v]; }).length; tb[j] = tt.length >= 2 && th / tt.length >= 0.66 ? 1 : 0; if (tb[j]) sc[j] *= 1.4; } }
+  var b = -1, b2 = -1;
+  for (j = 0; j < N; j++){ if (b < 0 || sc[j] > sc[b]){ b2 = b; b = j; } else if (b2 < 0 || sc[j] > sc[b2]) b2 = j; }
+  var cov = tot ? cv[b] / tot : 0;
+  var ok = (hit[b] >= 2 && cov >= 0.45) || (hit[b] >= 3 && cov >= 0.34) || (tb[b] && hit[b] >= 2) || (hit[b] >= 1 && uq[b] >= 1 && W.length <= 2 && cov >= 0.55);
+  var amb = b2 >= 0 && sc[b2] >= sc[b] * (hit[b2] >= hit[b] ? 0.9 : 0.97);
+  /* التباسٌ بين بطاقاتٍ قيلَ عنوانُها: يُقدَّمُ التعريفُ فالقاعدةُ فالتمهيدُ فالجدول */
+  if (amb && ttl && tb[b]){
+    var pri = ['definition', 'rule', 'intro', 'table', 'list', 'compare', 'steps'], best = -1, bp = 99;
+    for (j = 0; j < N; j++) if (tb[j] && sc[j] >= sc[b] * 0.85){ var pj = pri.indexOf(PK.cards[j] && PK.cards[j].kind); if (pj < 0) pj = 50; if (pj < bp){ bp = pj; best = j; } }
+    if (best >= 0 && bp < 50){ b = best; amb = false; ok = hit[b] >= 2; cov = tot ? cv[b] / tot : 0; }
+  }
+  return { k:b, cov:cov, hits:hit[b], ok:ok && !amb, amb:amb, n:W.length, sc:sc, cv:cv, tot:tot };
+}
+function pkCardScene(c){
+  var base = { card:{ p:PK.id, id:c.id, page:c.page || 0, book:PK.data.book } };
+  switch (c.kind){
+    case 'definition': return Object.assign(base, { type:'definition', title:c.title, subtitle:c.text || '', items:pkItems(c.items) });
+    case 'word': return Object.assign(base, { type:'definition', kick:'معنى الكلمة', title:c.title, subtitle:c.text || '', items:c.note ? [{ label:c.note }] : [] });
+    case 'rule': return Object.assign(base, { type:'alert', sum:true, kick:c.title || 'القاعدة', title:c.text || c.title, items:pkItems(c.items) });
+    case 'list': return Object.assign(base, { type:'list', title:c.title, items:pkItems(c.items) });
+    case 'steps': return Object.assign(base, { type:'steps', title:c.title, items:pkItems(c.items) });
+    case 'compare': return Object.assign(base, { type:'compare', title:c.title, sideA:c.sideA || '', sideB:c.sideB || '', items:pkItems(c.items).map(function(i){ i.side = i.side || 'a'; return i; }) });
+    case 'table': return Object.assign(base, { type:'table', title:c.title, head:c.head || [], rows:c.rows || [] });
+    case 'verse': return Object.assign(base, { type:'verse', title:c.title, subtitle:c.text || '', verses:c.verses || [] });
+    case 'example': return Object.assign(base, { type:'example', kick:'مثال', title:c.text || c.title, subtitle:c.note || '' });
+    case 'question': return Object.assign(base, { type:'question', title:c.title, answer:c.text || '', items:pkItems(c.items) });
+    case 'quote': return Object.assign(base, { type:'quote', title:c.text || c.title, subtitle:c.by || c.note || '' });
+    case 'image': return Object.assign(base, { type:'image', title:c.title, img:'packs/img/crop/' + PK.id + '-' + c.id + '.jpg' });
+    default: return Object.assign(base, { type:'notes', title:c.title || (PKIND[c.kind] || ['فكرة'])[0], items:[{ label:c.text || c.title, value:keyword(c.text || '') }] });
+  }
+}
+function pkPageScene(book, page){
+  return { type:'image', page:true, kick:'صفحةُ الكتاب', title:(BOOKN[book] || 'الكتاب') + ' · ص ' + dz(page - 1), img:'packs/img/' + (BOOKF[book] || book) + '-' + ('00' + page).slice(-3) + '.jpg', card:{ p:PK.id, id:'p' + page, page:0, book:book } };
+}
+/* إظهارُ بطاقة: إن عُرضت قبلُ عُدنا إليها، وإلا صارت مشهداً جديداً */
+function pkShowScene(make, key, o){
+  o = o || {};
+  var j = -1; for (var q = S.scenes.length - 1; q >= 0; q--){ var s0 = S.scenes[q]; if (s0.card && s0.card.p === PK.id && s0.card.id === key){ j = q; break; } }
+  if (LSN.show) lsnHide();
+  if (Demo.on) Demo.stop();
+  if (j >= 0){ if (j !== S.idx) go(j, j > S.idx ? 1 : -1); else if (o.hot != null) pkHot(o.hot); }
+  else { var b = snap(); RT.n++; add(make()); UNDO.push({ k:'state', s:b }); go(S.scenes.length - 1, 1); }
+  if (o.hot != null) setTimeout(function(){ pkHot(o.hot); }, j >= 0 ? 60 : 1200);
+  PK.at = Date.now(); pkPaint(); save();
+}
+function pkShow(i, o){ var c = PK.cards[i]; if (!c) return; pkShowScene(function(){ return pkCardScene(c); }, c.id, o); }
+function pkPage(book, page){ pkShowScene(function(){ return pkPageScene(book, page); }, 'p' + page); }
+/* إبرازُ بيتٍ أو صفٍّ أو عنصرٍ في البطاقةِ المعروضة */
+function pkHot(i){
+  var sc = cur(), el = deck.querySelector('.scene.on'); if (!sc || !el) return;
+  sc.hot = i; save();
+  el.querySelectorAll('[data-hot]').forEach(function(e){ e.classList.toggle('hot', +e.dataset.hot === i); });
+  var it = sc.items && sc.items[i]; el.querySelectorAll('[data-k]').forEach(function(e){ e.classList.toggle('hot', !!it && +e.dataset.k === it.k); });
+}
+function pkSubs(sc){
+  if (sc.verses && sc.verses.length) return sc.verses.map(function(v){ return [v.a, v.b].join(' '); });
+  if (sc.rows && sc.rows.length) return sc.rows.map(function(r){ return r.join(' '); });
+  if (sc.items && sc.items.length > 1) return sc.items.map(function(i){ return [i.label, i.note].join(' '); });
+  return null;
+}
+var PKORDN = { 'الاول':1, 'الثاني':2, 'الثالث':3, 'الرابع':4, 'الخامس':5, 'السادس':6, 'السابع':7, 'الثامن':8, 'التاسع':9, 'العاشر':10, 'الحادي':11, 'الاخير':-1 };
+/* السماع: هل الجملةُ عن بطاقةٍ من الحقيبة؟ (true = استُهلكت) */
+function pkHear(text){
+  if (!PK.cards.length || !SET.pkAuto) return false;
+  var m = mt(words2num(clean(text))), x, c = cur();
+  /* «البيتُ السابع» أو «البيت رقم ٣» */
+  if ((x = /(?:^|\s)(?:ال)?بيت\s+(?:رقم\s+)?(\d{1,2}|\S+)/.exec(m))){
+    var n = /^\d+$/.test(x[1]) ? +x[1] : PKORDN[x[1]] || 0;
+    if (n){
+      for (var q = 0; q < PK.cards.length; q++){ var vs = PK.cards[q].verses || []; for (var r = 0; r < vs.length; r++) if (+vs[r].n === n){ pkShow(q, { hot:r }); return true; } }
+    }
+  }
+  var r0 = pkMatch(text), ci = -1;
+  if (c && c.card && c.card.p === PK.id) for (var u = 0; u < PK.cards.length; u++) if (PK.cards[u].id === c.card.id){ ci = u; break; }
+  /* ما زال الكلامُ داخلَ البطاقةِ المعروضة: يُبرَزُ البيتُ أو الصفُّ أو العنصرُ المقصود */
+  if (ci >= 0 && r0 && r0.tot && r0.cv[ci] / r0.tot >= 0.35 && (!r0.ok || r0.k === ci || r0.sc[ci] >= r0.sc[r0.k] * 0.8)){
+    var subs = pkSubs(c);
+    if (subs){ var hm = pkMatch(text, subs.map(function(t){ return pkTok([[t, 1]]); })); if (hm && hm.ok && hm.hits >= 2){ pkHot(hm.k); return true; } }
+    if (r0.ok && r0.k === ci) return true;
+  }
+  if (!r0 || !r0.ok) { PK.pend = -1; return false; }
+  /* لا قفزَ متلاحق: بعد بطاقةٍ ظهرت قبل ثلاثِ ثوانٍ لا تتغيّرُ إلا بجملةٍ ثانيةٍ تؤكّد */
+  if (Date.now() - PK.at < 3000 && PK.pend !== r0.k){ PK.pend = r0.k; return false; }
+  PK.pend = -1; pkShow(r0.k); return true;
+}
+function pkBrief(){
+  if (!PK.cards.length || !SET.pkAuto) return '';
+  return '<lesson_pack>\n' + PK.cards.map(function(c, k){ var t = [c.title, c.text].filter(Boolean).join(' — '); if (c.verses) t += ' ' + c.verses.map(function(v){ return v.a + ' ' + v.b; }).join(' / '); return (k + 1) + ': [' + c.kind + '] ' + clean(t).slice(0, 150); }).join('\n') + '\n</lesson_pack>';
+}
+/* ----- التحميل ----- */
+function pkLoad(id, o){
+  o = o || {};
+  var g = ++PK.gen;
+  return fetch('data/packs/' + encodeURIComponent(id) + '.json', { cache:'no-cache' }).then(function(r){ if (!r.ok) throw 0; return r.json(); }).then(function(d){
+    if (g !== PK.gen) return;
+    PK.id = id; PK.data = d; PK.cards = (d.cards || []).filter(function(c){ return c && c.kind; }); pkIndex(); PK.at = 0;
+    LS.set(PKEY, { id:id }); pkPaint();
+    if (!o.restore) toast('حقيبةُ «' + (d.title || id) + '» جاهزة: ' + dz(PK.cards.length) + ' بطاقة من ' + (BOOKN[d.book] || 'الكتاب') + ' — تكلّمْ فتظهرُ بطاقتُها', 6500);
+    return true;
+  }).catch(function(){ if (g !== PK.gen) return; if (!o.restore) toast('لا حقيبةَ لهذا الدرسِ بعد'); return false; });
+}
+function pkDrop(){ PK.gen++; PK.id = null; PK.data = null; PK.cards = []; PK.idx = []; try { localStorage.removeItem(PKEY); } catch(e){} pkPaint(); }
+function pkLib(){
+  if (PK.lib) return Promise.resolve(PK.lib);
+  return fetch('data/lessons/index.json', { cache:'no-cache' }).then(function(r){ return r.json(); }).then(function(d){
+    PK.lib = []; (d.topics || []).forEach(function(t){ (t.lessons || []).forEach(function(l){ if (l.pack) PK.lib.push({ id:l.id, title:l.title, sub:l.sub, kind:l.kind, topic:t.title, deck:l.deck, book:l.book, bpr:l.bpr }); }); });
+    return PK.lib;
+  }).catch(function(){ PK.lib = []; return PK.lib; });
+}
+/* ----- الدرج ----- */
+function pkOpen(tab){ if (tab) PK.tab = tab; else if (!PK.cards.length) PK.tab = 'l'; $('pkD').classList.add('open'); $('bPack').classList.add('on'); pkPaint(); if (PK.tab === 'c') setTimeout(function(){ $('pkQ').focus({ preventScroll:true }); }, 60); }
+function pkClose(){ $('pkD').classList.remove('open'); $('bPack').classList.toggle('on', !!PK.cards.length); }
+function pkToggle(){ $('pkD').classList.contains('open') ? pkClose() : pkOpen(); }
+function pkPaint(){
+  var b = $('pkBdg'); b.hidden = !PK.cards.length; b.textContent = dz(PK.cards.length);
+  $('bPack').classList.toggle('on', !!PK.cards.length || $('pkD').classList.contains('open'));
+  $('pkAuto').checked = !!SET.pkAuto;
+  $('pkT').textContent = PK.data ? 'حقيبةُ: ' + (PK.data.title || PK.id) : 'حقيبةُ الدرس';
+  $('pkS').textContent = PK.data ? dz(PK.cards.length) + ' بطاقة · ' + (BOOKN[PK.data.book] || '') + (PK.data.printed ? ' ص ' + PK.data.printed : '') : 'اخترْ درساً لتُحمَّلَ بطاقاتُ كتابِه';
+  $('pkOff').hidden = !PK.cards.length;
+  document.querySelectorAll('[data-pt]').forEach(function(t){ t.classList.toggle('on', t.dataset.pt === PK.tab); });
+  $('pkQ').parentNode.hidden = PK.tab !== 'c';
+  if (!$('pkD').classList.contains('open')) return;
+  var h = '', c0 = cur(), on = c0 && c0.card && c0.card.p === PK.id ? c0.card.id : '';
+  if (PK.tab === 'c'){
+    if (!PK.cards.length) h = '<div class="pk0">لا حقيبةَ محمّلة — اخترْ درساً من «الدروس».</div>';
+    else {
+      var q = lWords($('pkQ').value || ''), list = PK.cards.map(function(c, i){ return { c:c, i:i }; });
+      if (q.length){ var hits = pkMatch($('pkQ').value, PK.idx); list = list.filter(function(o){ return q.some(function(vs){ return vs.some(function(v){ return PK.idx[o.i][v]; }); }); }); }
+      PKORD.concat(Object.keys(PKIND).filter(function(k){ return PKORD.indexOf(k) < 0; })).forEach(function(kd){
+        var grp = list.filter(function(o){ return o.c.kind === kd; }); if (!grp.length) return;
+        h += '<div class="pkg">' + esc((PKIND[kd] || [kd])[0]) + ' · ' + dz(grp.length) + '</div>';
+        grp.forEach(function(o){
+          var c = o.c, sm = c.text || (c.verses ? c.verses.map(function(v){ return v.a + ' … ' + v.b; }).join(' / ') : '') || pkItems(c.items).map(function(i){ return i.label; }).join('، ') || (c.rows ? c.rows.map(function(r){ return r.join(' · '); }).join(' / ') : '');
+          h += '<button type="button" class="pkc' + (on === c.id ? ' on' : '') + '" data-pc="' + o.i + '"><i>' + I[(PKIND[c.kind] || ['', 'note'])[1]] + '</i><span><b>' + esc(c.title || (PKIND[c.kind] || [''])[0]) + '</b>' + (sm ? '<small>' + esc(sm) + '</small>' : '') + '</span></button>';
+        });
+      });
+      if (!h) h = '<div class="pk0">لا نتائج.</div>';
+    }
+  } else if (PK.tab === 'p'){
+    var pg = PK.data && PK.data.pages ? PK.data.pages : [];
+    if (!pg.length) h = '<div class="pk0">لا صفحاتَ محمّلة.</div>';
+    else {
+      var a = pg[0], z = pg[pg.length - 1], all = []; for (var k = Math.min(a, z); k <= Math.max(a, z); k++) all.push(k);
+      if (PK.data.extra) PK.data.extra.forEach(function(e){ if (all.indexOf(e) < 0) all.unshift(e); });
+      h = '<div class="pkpg">' + all.map(function(n){ return '<button type="button" data-pp="' + n + '"><img loading="lazy" src="packs/img/' + (BOOKF[PK.data.book] || '') + '-' + ('00' + n).slice(-3) + '.jpg" alt=""><span>ص ' + dz(n - 1) + '</span></button>'; }).join('') + '</div>'
+        + '<p class="pk0" style="padding:12px 4px 0">أو افتح الكتابَ كاملاً: <a href="book.html?id=' + esc(PK.data.book) + '&p=' + a + '" target="_blank" rel="noopener">عارضُ الكتب ↗</a></p>';
+    }
+  } else {
+    if (!PK.lib){ h = '<div class="pk0">أحضرُ الدروس…</div>'; pkLib().then(pkPaint); }
+    else if (!PK.lib.length) h = '<div class="pk0">لا حقائبَ بعد.</div>';
+    else {
+      var top = '';
+      PK.lib.forEach(function(l){
+        if (l.topic !== top){ top = l.topic; h += '<div class="pkg">' + esc(top) + '</div>'; }
+        h += '<button type="button" class="pkl' + (PK.id === l.id ? ' on' : '') + '" data-pl="' + esc(l.id) + '"><span class="t"><b>' + esc(l.title) + '</b><small>' + esc([l.kind, l.book ? (BOOKN[l.book] || '') + ' ص ' + (l.bpr || '') : ''].filter(Boolean).join(' · ')) + '</small></span><span class="go">' + (PK.id === l.id ? 'محمّلة' : 'حمّلْها') + '</span></button>';
+      });
+    }
+  }
+  $('pkB').innerHTML = h;
+}
+$('pkB').addEventListener('click', function(e){
+  var b = e.target.closest('button'); if (!b) return;
+  if (b.dataset.pc != null){ pkShow(+b.dataset.pc, { manual:true }); if (innerWidth < 1100) pkClose(); else pkPaint(); return; }
+  if (b.dataset.pp){ pkPage(PK.data.book, +b.dataset.pp); if (innerWidth < 1100) pkClose(); return; }
+  if (b.dataset.pl){ var id = b.dataset.pl; pkLoad(id).then(function(ok){ if (ok){ PK.tab = 'c'; pkPaint(); } }); }
+});
+document.querySelectorAll('[data-pt]').forEach(function(t){ t.onclick = function(){ PK.tab = t.dataset.pt; pkPaint(); }; });
+$('pkQ').addEventListener('input', pkPaint);
+$('pkX').onclick = pkClose;
+$('bPack').onclick = function(){ pkToggle(); };
+$('pkAuto').onchange = function(){ SET.pkAuto = this.checked; saveSet(); toast(SET.pkAuto ? 'تظهرُ بطاقاتُ الحقيبةِ حين تتكلّمُ عنها' : 'البطاقاتُ لا تظهرُ إلا بنقرِك عليها'); };
+$('pkOff').onclick = function(){ pkDrop(); pkClose(); toast('أُغلقت الحقيبة — تعودُ السبّورةُ ترسمُ كلامَك وحدَه'); };
+/* شارةُ المصدر تفتحُ صفحةَ الكتاب، وصورةُ الصفحةِ تُكبَّرُ بالنقر، و«فكّروا» تكشفُ الجوابَ المحفوظ */
+deck.addEventListener('click', function(e){
+  if (TOOL !== 'pointer') return;
+  var b = e.target.closest('.srcb'); if (b){ pkPage(b.dataset.bk, +b.dataset.pg); return; }
+  var f = e.target.closest('.pkimg .fr');
+  if (f){
+    var r = f.getBoundingClientRect(), im = f.querySelector('img');
+    if (!f.classList.contains('zoom')) im.style.transformOrigin = ((e.clientX - r.left) / r.width * 100).toFixed(1) + '% ' + ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%';
+    f.classList.toggle('zoom'); return;
+  }
+  if (e.target.closest('.think.can')) pkAnswer();
+});
+function pkAnswer(){ var c = cur(); if (!c || c.type !== 'question' || !c.answer || c.subtitle) return; var r = upd(c, function(){ c.subtitle = c.answer; }); present(r); save(); }
+/* دخولُ الصفحةِ من التحضيرات: sabbura.html?lesson=<id> */
+(function(){
+  var q = new URLSearchParams(location.search).get('lesson');
+  if (q){ pkLoad(q).then(function(ok){ if (ok) setTimeout(function(){ pkOpen('c'); }, 400); }); try { history.replaceState(null, '', location.pathname); } catch(e){} }
+  else { var o = LS.get(PKEY, null); if (o && o.id) pkLoad(o.id, { restore:true }); }
+})();
+
+
+/* ================================================================
    الأحداث
    ================================================================ */
 $('bMic').onclick = micToggle; $('orb').onclick = micToggle;
@@ -2415,7 +2780,7 @@ document.addEventListener('keydown', function(e){
   if (mod || e.altKey) return;
   var caps = function(){ SET.caps = !SET.caps; saveSet(); capSet(null, null); toast(SET.caps ? 'يظهرُ كلامُك مكتوباً أسفلَ السبّورة' : 'أُخفي الكلامُ المكتوب'); };
   var map = { KeyM:micToggle, KeyP:function(){ setTool('pen'); }, KeyL:function(){ setTool('laser'); }, KeyE:function(){ setTool('eraser'); }, KeyV:function(){ setTool('pointer'); },
-    KeyX:clearInk, KeyZ:undo, KeyN:function(){ $('bNew').click(); }, KeyB:function(){ $('tTheme').click(); }, KeyC:caps, KeyF:full, KeyT:function(){ $('typeIn').focus(); }, KeyG:openLsn, KeyS:lsnToggle };
+    KeyX:clearInk, KeyZ:undo, KeyN:function(){ $('bNew').click(); }, KeyB:function(){ $('tTheme').click(); }, KeyC:caps, KeyF:full, KeyT:function(){ $('typeIn').focus(); }, KeyG:openLsn, KeyS:lsnToggle, KeyK:pkToggle, KeyA:pkAnswer };
   var pens = { Digit1:'#15181A', Digit2:'#FFFFFF', Digit3:'#2F6BF2', Digit4:'#E5383B', Numpad1:'#15181A', Numpad2:'#FFFFFF', Numpad3:'#2F6BF2', Numpad4:'#E5383B' };
   if (k === 'ArrowLeft' || k === 'PageDown' || k === 'ArrowDown'){ e.preventDefault(); nav(1); return; }
   if (k === 'ArrowRight' || k === 'PageUp' || k === 'ArrowUp'){ e.preventDefault(); nav(-1); return; }
@@ -2454,7 +2819,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(function()
 if (!SR) $('bMic').title = 'المتصفّحُ لا يدعمُ تحويلَ الكلام — استعملْ كروم أو إيدج';
 (function(){ var st = LS.get('sabbura_stash', null); if (st && st.s){ Demo.stash = st; setTimeout(function(){ toast('سبّورتُك السابقةُ محفوظةٌ منذ الدرسِ التجريبي', 10000, 'استعادتُها', Demo.restore); }, 900); } })();
 (function(){ var o = LS.get(LKEY, null); if (o && o.src && o.src.kind) lsnLoad(o.src, { restore:true, k:o.k, show:o.show, ink:o.ink }); })();
-window.__sabbura = { apply:apply, handle:handle, S:S, prep:prep, words2num:words2num, buildPrint:buildPrint, LSN:LSN, lsnMatch:lsnMatch, lsnLoad:lsnLoad, lsnShow:lsnShow, lsnHide:lsnHide, lsnHear:lsnHear, lWords:lWords };
+window.__sabbura = { apply:apply, handle:handle, S:S, prep:prep, words2num:words2num, buildPrint:buildPrint, LSN:LSN, lsnMatch:lsnMatch, lsnLoad:lsnLoad, lsnShow:lsnShow, lsnHide:lsnHide, lsnHear:lsnHear, lWords:lWords, PK:PK, pkShow:pkShow, pkPage:pkPage, pkLoad:pkLoad, pkHear:pkHear };
 })();
 </script>
 </body>
