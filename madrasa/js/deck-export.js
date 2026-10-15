@@ -43,18 +43,22 @@
     base = base || '';
     return Promise.all([
       get(base + 'deck.html'),
+      get(base + 'js/ink.js'),
       get(base + 'data/decks/' + encodeURIComponent(id) + '.json', 'json'),
       Promise.all(FONTS.map(function (f) { return get('/fonts/' + f + '.woff2', 'buf'); })),
       get('/img/logo-cream.svg'),
       classes()
     ]).then(function (r) {
-      var html = r[0], deck = r[1], fonts = r[2], logo = r[3], cls = r[4];
+      var html = r[0], ink = r[1], deck = r[2], fonts = r[3], logo = r[4], cls = r[5];
       var me = (window.FB && FB.profile) ? FB.profile() : null;
       FONTS.forEach(function (f, i) { html = html.split("url('/fonts/" + f + ".woff2')").join("url(data:font/woff2;base64," + b64(fonts[i]) + ")"); });
       var logoURI = 'data:image/svg+xml;base64,' + b64(new TextEncoder().encode(logo));
       html = html.split('/img/logo-cream.svg').join(logoURI);
       /* لا دخولَ ولا بصمةَ في الملفِّ المنزَّل */
       html = html.replace(/<script src="js\/(fb|bio)\.js[^"]*"><\/script>\s*/g, '');
+      /* أدواتُ الشرحِ مضمَّنةٌ لتعملَ من file:// */
+      html = html.replace(/<script src="js\/ink\.js[^"]*"><\/script>/, function () { return '<script>' + ink.replace(/<\/script/gi, '<\\/script') + '</script>'; });
+      if (html.indexOf('window.HVInk') < 0) throw new Error('تعذّر تضمينُ أدواتِ الشرح');
       var env = { deck: deck, id: id, me: me ? { name: me.name, short: me.short, school: me.school } : null, classes: cls, settings: times(), at: new Date().toISOString() };
       html = html.replace('<script>\n(function(){', '<script>window.__DECK_OFFLINE__=' + js(env) + ';</script>\n<script>\n(function(){');
       if (html.indexOf('__DECK_OFFLINE__') < 0) throw new Error('بنيةُ ملفِّ العرضِ تغيّرت — تعذّر التضمين');

@@ -660,6 +660,22 @@
     };
   }
   function readB64(file) { return new Promise(function (res, rej) { var r = new FileReader(); r.onload = function () { res(String(r.result).split(',')[1]); }; r.onerror = rej; r.readAsDataURL(file); }); }
+  /* عرضُ HTML مرفوع: تُحقَنُ فيه أدواتُ الشرحِ (قلم، ليزر، ممحاة) — مرّةً واحدةً، قبلَ </body> */
+  var INK_TAG = '<script src="/madrasa/js/ink.js"></script>';
+  function withInk(html) {
+    if (/\/madrasa\/js\/ink\.js|window\.HVInk/.test(html)) return html;
+    var m = html.match(/<\/body\s*>/i) || html.match(/<\/html\s*>/i);
+    return m ? html.slice(0, m.index) + INK_TAG + '\n' + html.slice(m.index) : html + '\n' + INK_TAG + '\n';
+  }
+  function utf8B64(text) {
+    var bytes = new TextEncoder().encode(text), out = '', CH = 0x8000;
+    for (var i = 0; i < bytes.length; i += CH) out += String.fromCharCode.apply(null, bytes.subarray(i, i + CH));
+    return btoa(out);
+  }
+  async function readUpload(file) {
+    if (!isHtmlFile(file.name) && file.type !== 'text/html') return readB64(file);
+    return utf8B64(withInk(await file.text()));
+  }
   async function commitPrep(message, files, deletes, onProgress) {
     var gh = new GhApi({ owner: OWNER, repo: REPO, branch: BRANCH, token: ghToken() });
     S.prep.updated = today();
@@ -675,7 +691,7 @@
     for (var i = 0; i < list.length; i++) {
       var f = list[i], name = safeName(f.name);
       S.prep.items = S.prep.items.filter(function (x) { return !(x.grade === g && x.sem === s && x.file === name); });
-      files.push({ path: PREFIX + 'prep/' + g + '/' + s + '/' + name, base64: await readB64(f) });
+      files.push({ path: PREFIX + 'prep/' + g + '/' + s + '/' + name, base64: await readUpload(f) });
       S.prep.items.push({ id: uid('p'), grade: g, sem: s, title: name.replace(/\.(pdf|html?)$/i, ''), file: name, size: f.size, added: now, order: S.prep.items.length + 1, unit: '', lesson: '', week: '', date: '' });
       bar.style.width = (5 + 35 * (i + 1) / list.length) + '%';
     }

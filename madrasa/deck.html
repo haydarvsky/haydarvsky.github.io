@@ -10,6 +10,7 @@
 <link rel="icon" href="/img/logo-cream.svg">
 <script src="js/fb.js?v=23"></script>
 <script src="js/bio.js?v=23"></script>
+<script src="js/ink.js?v=1"></script>
 <style>
 :root{
   --green:#0F4C3A; --deep:#0A3428; --ink:#062219;
@@ -578,7 +579,7 @@ table.t.grid td.fx{font-weight:700;color:#fff}
   </div>
 </div>
 <div class="map" id="map" hidden><h3>شرائحُ العرض</h3><div class="g" id="mapG"></div></div>
-<div class="hintbar" id="hintbar">المسافةُ تكشفُ الخطوةَ التالية · انقرِ الخياراتِ للتصويت · اسحبِ الترتيبَ بالفأرة · W فكرةُ طالبٍ · R طالبٌ عشوائيّ · S النقاط · T مؤقّت · N ملاحظة · C الساعة · O تدوير · ‎+/−‎ حجمُ الخط</div>
+<div class="hintbar" id="hintbar">المسافةُ تكشفُ الخطوةَ التالية · انقرِ الخياراتِ للتصويت · اسحبِ الترتيبَ بالفأرة · W فكرةُ طالبٍ · R طالبٌ عشوائيّ · S النقاط · T مؤقّت · N ملاحظة · C الساعة · O تدوير · ‎+/−‎ حجمُ الخط · P قلم · L ليزر · E ممحاة</div>
 <div class="timer" id="timer"><svg viewBox="0 0 100 100"><circle class="bg" cx="50" cy="50" r="44"/><circle class="fg" id="tfg" cx="50" cy="50" r="44"/></svg><div class="num" id="tnum">٦٠</div><div class="lb">ثانية</div></div>
 <div class="tip" id="tip"></div>
 <div class="rnd" id="rnd"><div class="box" id="rndBox"></div></div>
@@ -599,6 +600,8 @@ var arInt=function(t){return +String(t).replace(/[٠-٩]/g,function(d){return '�
 var OFF=window.__DECK_OFFLINE__||null;
 var ID=OFF?OFF.id:(new URLSearchParams(location.search).get('id')||'');
 var D=null, S=[], i=0, step=0;
+/* أدواتُ الشرح (قلم، ليزر، ممحاة) فوقَ مساحةِ الشرائحِ وحدَها — والأزرارُ السفليّةُ تبقى في المتناول */
+if(window.HVInk) HVInk.init({host:$('wrap'),anchor:'c'});
 var ME={name:'أ. حيدر المعاتيق',short:'حيدر المعاتيق',school:'ثانوية طلحة بن عبيدالله. بنين - قسم اللغة العربية'};
 if(OFF&&OFF.me) ME=OFF.me;
 /* {{teacher}} و{{school}} تُستبدلانِ باسمِ المعلّمِ الداخلِ ومدرستِه */
@@ -825,6 +828,7 @@ function show(k,atEnd){
   });
   i=k;
   step=atEnd?total(k):0;
+  if(window.HVInk) HVInk.setKey('s'+k);   /* لكلِّ شريحةٍ رسمُها */
   paint();
   $('count').textContent=ar(k+1)+' / '+ar(S.length);
   tStop(); tipPaint();
