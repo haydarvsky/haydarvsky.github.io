@@ -626,6 +626,30 @@ dialog.dlg::backdrop{background:rgba(4,22,15,.55);backdrop-filter:blur(4px)}
 .pkd .pk0{color:rgba(42,26,15,.6);text-align:center;padding:24px 10px;font-size:15px;line-height:1.7}
 .ib .bdg{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:#5B4BB5;color:#fff;font-size:12px;line-height:18px;text-align:center}
 
+/* ===== وضعُ الحصة: شريطُ الاقتراح ===== */
+.sug{position:absolute;left:50%;bottom:clamp(78px,11vh,110px);transform:translate(-50%,10px);z-index:26;display:flex;align-items:center;gap:6px;max-width:min(980px,86%);padding:6px;border-radius:18px;background:var(--hud);border:1px solid var(--hud-line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 18px 44px -22px rgba(0,0,0,.7);opacity:0;pointer-events:none;transition:opacity .3s,transform .35s var(--e-out)}
+.sug.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+.sug .sl{flex:0 0 auto;padding:0 10px 0 6px;font-size:clamp(13.5px,1vw,16px);color:var(--fg3);white-space:nowrap}
+.sug button{display:flex;align-items:center;gap:10px;min-width:0;max-width:420px;padding:clamp(7px,.7vw,11px) 14px clamp(8px,.8vw,12px) 16px;border-radius:13px;background:var(--card);border:1px solid var(--stroke);color:var(--fg);text-align:start;transition:background .2s,border-color .2s,transform .15s}
+.sug button:hover{background:var(--card2);border-color:var(--gold);transform:translateY(-1px)}
+.sug button:first-of-type{border-color:color-mix(in srgb,var(--gold) 60%,transparent)}
+.sug kbd{flex:0 0 auto;min-width:clamp(22px,1.8vw,28px);height:clamp(22px,1.8vw,28px);border-radius:7px;display:grid;place-items:center;background:var(--gold);color:#1F1505;font:700 13px/1 inherit;padding:0 5px}
+body[data-th=paper] .sug kbd{color:#fff}
+.sug button span{min-width:0;display:flex;flex-direction:column}
+.sug button small{font-size:clamp(12px,.95vw,14.5px);color:var(--gold2);line-height:1.3}
+.sug button b{font-size:clamp(15px,1.3vw,20px);font-weight:700;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sug .sx{flex:0 0 auto;width:30px;height:30px;padding:0;border:0;background:none;justify-content:center;color:var(--fg3)}
+.sug .sx:hover{background:var(--card2);color:var(--fg)}
+.sug .sx svg{width:16px;height:16px}
+.ib.mode{gap:6px;border:1px solid rgba(232,223,204,.16)}
+.ib.mode i{width:8px;height:8px;border-radius:50%;background:#7FD0AE;box-shadow:0 0 0 3px rgba(127,208,174,.2)}
+.ib.mode.auto i{background:#F29A7E;box-shadow:0 0 0 3px rgba(242,154,126,.22)}
+.gd h3{margin:4px 0 6px;font-family:'Sakkal Saad Poster',serif;font-size:18px;color:#0F4C3A}
+.gd ol{margin:0;padding-inline-start:22px;display:flex;flex-direction:column;gap:7px;font-size:16px;line-height:1.7}
+.gd li b{color:#0F4C3A}
+.gd .tip{margin:0;padding:10px 14px;border-radius:12px;background:rgba(217,164,65,.12);font-size:15px;line-height:1.7}
+.gd kbd{display:inline-block;min-width:22px;text-align:center;padding:0 6px 2px;border-radius:6px;background:#fff;border:1px solid rgba(15,76,58,.2);border-bottom-width:2px;font-family:inherit;font-size:14px}
+
 /* ===== الطباعة / PDF ===== */
 #print{display:none}
 @media print{
@@ -652,11 +676,13 @@ dialog.dlg::backdrop{background:rgba(4,22,15,.55);backdrop-filter:blur(4px)}
     <button class="ib opt" id="bDemo" type="button" title="عرضٌ تجريبيّ يشرحُ درساً كاملاً"><svg class="i" viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg><span class="tx">تجربة</span></button>
     <button class="ib" id="bUndo" type="button" title="تراجع (Ctrl+Z)"><svg class="i" viewBox="0 0 24 24"><path d="M15 7H9a5 5 0 0 0 0 10h7"/><path d="M12 4l3 3-3 3"/></svg><span class="tx">تراجع</span></button>
     <button class="ib" id="bNew" type="button" title="اجعلْ كلامَك القادمَ مشهداً جديداً (N)"><svg class="i" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="M12 9v6M9 12h6"/></svg><span class="tx">مشهدٌ جديد</span></button>
+    <button class="ib mode" id="bMode" type="button" title="وضعُ الحصة: السبّورةُ تقترحُ ولا تقلبُ شيئاً إلا بموافقتك"><i></i><span class="tx" id="bModeT">وضعُ الحصة</span></button>
     <button class="ib" id="bLsn" type="button" title="التحضير: حمّلْ درساً فتظهرُ شريحتُه حين تتكلّمُ عنها (G)"><svg class="i" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="12" rx="2"/><path d="M12 16.5V20M8.5 20h7"/><path d="M7.5 9h9M7.5 12.5h5.5"/></svg><span class="tx">التحضير</span></button>
     <button class="ib" id="bPack" type="button" title="حقيبةُ الدرس: بطاقاتُ الكتابِ وصفحاتُه، تظهرُ حين تتكلّمُ عنها (K)"><svg class="i" viewBox="0 0 24 24"><path d="M4 8.5h16v11H4z"/><path d="M9 8.5V6a1.5 1.5 0 0 1 1.5-1.5h3A1.5 1.5 0 0 1 15 6v2.5M4 13h16"/></svg><span class="tx">الحقيبة</span><span class="bdg" id="pkBdg" hidden></span></button>
     <span class="vsep opt"></span>
     <button class="ib opt" id="bLog" type="button" title="نصُّ ما قلتَه"><svg class="i" viewBox="0 0 24 24"><path d="M6 3.5h9l3.5 3.5v13.5H6z"/><path d="M9 11h7M9 14.5h7M9 18h4"/></svg><span class="tx">النص</span></button>
     <button class="ib opt" id="bPrint" type="button" title="طباعةُ المشاهد أو حفظُها PDF"><svg class="i" viewBox="0 0 24 24"><path d="M7 9V3.5h10V9M7 17H4.5V9.5h15V17H17"/><path d="M7 14h10v6.5H7z"/></svg><span class="tx">PDF</span></button>
+    <button class="ib" id="bHelp" type="button" title="طريقةُ الحصة (H)"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 1 1 3.4 2.4c-.6.3-1 .9-1 1.6v.5M12 16.8v.3"/></svg><span class="tx">طريقةُ الحصة</span></button>
     <button class="ib" id="bSet" type="button" title="الإعدادات"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M5.6 18.4l1.8-1.8M16.6 7.4l1.8-1.8"/></svg><span class="tx">الإعدادات</span></button>
     <button class="ib" id="bFull" type="button" title="ملءُ الشاشة (F)"><svg class="i" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><span class="tx">ملءُ الشاشة</span></button>
   </nav>
@@ -688,6 +714,7 @@ dialog.dlg::backdrop{background:rgba(4,22,15,.55);backdrop-filter:blur(4px)}
     <div class="pkb" id="pkB"></div>
     <footer><label><input type="checkbox" id="pkAuto"> تظهرُ البطاقةُ حين أتكلّمُ عنها</label><button type="button" id="pkOff">إغلاقُ الحقيبة</button></footer>
   </aside>
+  <div class="sug" id="sug" role="status" aria-live="polite"></div>
   <canvas class="laser" id="laser"></canvas>
 
   <div class="tools" id="tools" role="toolbar" aria-label="أدواتُ الشرح">
@@ -791,6 +818,30 @@ dialog.dlg::backdrop{background:rgba(4,22,15,.55);backdrop-filter:blur(4px)}
   </form>
 </dialog>
 
+<dialog class="dlg" id="guideD">
+  <form method="dialog">
+    <header><h2>طريقةُ الحصّة مع السبّورةِ الناطقة</h2><button class="xbtn" value="close" aria-label="إغلاق"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
+    <div class="bd gd">
+      <h3>قبلَ الحصّة</h3>
+      <ol>
+        <li>من <b>التحضيرات</b> اضغطْ «حقيبةُ الدرس» — أو هنا زرَّ <b>الحقيبة</b> واخترِ الدرس. وإن أردتَ شرائحَ العرضِ أيضاً فاخترْها من <b>التحضير</b>.</li>
+        <li>مايكٌ قريبٌ منك (لاسلكيٌّ أو سمّاعةٌ بمايك) يرفعُ الدقّةَ كثيراً؛ مايكُ اللابتوب البعيدُ يلتقطُ ضجيجَ الفصل.</li>
+      </ol>
+      <h3>في الحصّة — «وضعُ الحصّة» (المقترَح)</h3>
+      <ol>
+        <li>اضغطْ <b>ابدأ الشرح</b> وتكلّمْ كعادتك. <b>السبّورةُ لا تقلبُ شيئاً وحدَها.</b></li>
+        <li>حين تتكلّمُ عن شريحةٍ أو بطاقةٍ من الحقيبة يظهرُ أسفلَ الشاشة <b>اقتراحٌ صغير</b>: اضغطْ <kbd>Enter</kbd> أو قلْ «اعرضْها» أو انقرْه فيظهر، أو <kbd>2</kbd> للاقتراحِ الثاني. وإن تجاهلتَه اختفى بعد لحظات.</li>
+        <li>تقلبُ الشرائحَ بنفسِك متى شئت بالأسهم أو الكليكر، أو بصوتِك: «الشريحةُ التالية»، «الشريحةُ الخامسة»، «نرجعُ إلى السبّورة».</li>
+        <li>الأبيات: قلْ «البيتُ السابع» فيظهرُ ويُضاء، وحين تقرأُ بيتاً من البطاقةِ المعروضة يُضاءُ وحدَه. السؤال: قلْ «الجواب» فيظهرُ جوابُ الكتاب.</li>
+        <li>ما يُرسَمُ من كلامِك وحدَه: التعريفاتُ والقوائمُ والخطواتُ والنِّسَبُ والمقارناتُ والسببُ والنتيجةُ والأسئلة. أمّا كلامُ إدارةِ الفصل («افتحوا الكتاب»، «أحسنت»، «اكتبوا») فلا يُرسَم.</li>
+        <li>للشرحِ بيدِك: <kbd>P</kbd> القلم و<kbd>1</kbd>–<kbd>4</kbd> ألوانُه، <kbd>L</kbd> الليزر، <kbd>E</kbd> الممحاة، <kbd>Z</kbd> تراجع.</li>
+      </ol>
+      <p class="tip"><b>الوضعُ التلقائي</b> (زرُّ الوضعِ في الأعلى): كلُّ شريحةٍ أو بطاقةٍ تُطابقُ كلامَك تظهرُ وحدَها، وكلُّ جملةٍ تُرسَم. جميلٌ للتحضيرِ والتجربةِ بلا طلاب، لكنّه في الفصلِ يقفزُ مع الضجيج.</p>
+      <div class="fld"><span>الوضعُ الآن</span><div class="seg"><label><input type="radio" name="md" value="suggest"><b>وضعُ الحصّة</b><small>يقترحُ وأنت تقرّر</small></label><label><input type="radio" name="md" value="auto"><b>تلقائيٌّ كامل</b><small>يظهرُ كلُّ شيءٍ وحدَه</small></label></div></div>
+    </div>
+    <footer><span></span><button value="close" class="btn gold">فهمت</button></footer>
+  </form>
+</dialog>
 <dialog class="dlg lsd" id="lsnD">
   <form method="dialog">
     <header><h2>التحضير على السبّورة</h2><button class="xbtn" value="close" aria-label="إغلاق"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></header>
@@ -1253,6 +1304,7 @@ function apply(raw){
   /* كلمةٌ مفتاحية */
   t = tidy(P.c);
   if (!t) return null;
+  if (RT.strict) return null;   /* وضعُ الحصة: الكلامُ العامُّ لا يُرسَم، يكفيه شريطُ الكلامِ المكتوب */
   if (wc(t) <= 3 && t.length <= 28 && !/\d/.test(t)) return add({ type:'word', title:t });
   /* فكرة */
   if (c && c.type === 'notes' && c.items.length < 4 && RT.n - c.lastAdd <= 3 && c.title !== 'مثال')
@@ -1596,8 +1648,22 @@ function handle(text, src){
   text = String(text || '').trim(); if (!text) return;
   S.log.push({ t:Date.now(), s:text }); if (S.log.length > 600) S.log.splice(0, S.log.length - 600);
   if ($('logP').classList.contains('open')) renderLog();
-  if (src !== 'demo' && lsnHear(text)) return;   /* جملةٌ عن شريحةٍ من التحضير: تظهرُ الشريحةُ بدلَ الرسم */
-  if (src !== 'demo' && pkHear(text)) return;    /* جملةٌ عن بطاقةٍ من حقيبةِ الدرس: تظهرُ البطاقةُ بمعلومتِها الدقيقة */
+  RT.strict = src !== 'demo' && SET.mode !== 'auto';
+  if (src !== 'demo'){
+    if (sugVoice(text)) return;                   /* «اعرضْها» */
+    if (pkVerseCmd(text)) return;                 /* «البيتُ السابع» */
+    if (LSN.slides.length && lsnCmd(text)) return; /* «الشريحةُ التالية/الخامسة»، «نرجعُ إلى السبّورة» */
+    if (SET.mode === 'auto'){
+      if (lsnHear(text)) return;   /* جملةٌ عن شريحةٍ من التحضير: تظهرُ الشريحةُ بدلَ الرسم */
+      if (pkHear(text)) return;    /* جملةٌ عن بطاقةٍ من حقيبةِ الدرس: تظهرُ البطاقةُ بمعلومتِها الدقيقة */
+    } else {
+      if (pkInCard(text)) return;  /* بيتٌ أو صفٌّ في البطاقةِ المعروضة يُضاء */
+      var sg = suggestFor(text);
+      if (sg.length){ sugShow(sg); return; }
+      if (isClassTalk(text)) return;
+      if (LSN.show || Date.now() < RT.hold) return;   /* شريحةٌ أو بطاقةٌ اخترتَها معروضة: لا يقطعُها الرسم */
+    }
+  }
   if (SET.engine === 'ai' && SET.key && src !== 'demo') return aiPush(text);
   runLocal(text);
 }
@@ -1710,6 +1776,9 @@ function lsnBrief(){
   return '<lesson_slides>\n' + LSN.slides.map(function(s, k){ return (k + 1) + ': ' + s.txt; }).join('\n') + '\n</lesson_slides>';
 }
 function applyAI(res){
+  if (SET.mode !== 'auto' && res && ((res.slide > 0 && LSN.slides[res.slide - 1] && SET.lsnAuto) || (res.card > 0 && PK.cards[res.card - 1] && SET.pkAuto))){
+    var L = []; if (res.slide > 0 && LSN.slides[res.slide - 1]) L.push(sugSlide(res.slide - 1)); if (res.card > 0 && PK.cards[res.card - 1]) L.push(sugCard(res.card - 1)); sugShow(L.filter(Boolean)); return null;
+  }
   if (res && res.card > 0 && PK.cards[res.card - 1] && SET.pkAuto && !(res.slide > 0)){ var cc = PK.cards[res.card - 1], c0 = cur(); if (!(c0 && c0.card && c0.card.id === cc.id)) pkShow(res.card - 1); return null; }
   if (res && res.slide > 0 && LSN.slides[res.slide - 1] && SET.lsnAuto){
     var k = res.slide - 1;
@@ -2178,7 +2247,7 @@ function lsnMatch(text){
   var b = -1, b2 = -1, adj = function(j){ return sc[j] * (LSN.k < 0 ? 1 : j === LSN.k + 1 ? 1.15 : j === LSN.k ? 1.1 : 1); };
   for (j = 0; j < N; j++){ if (b < 0 || adj(j) > adj(b)){ b2 = b; b = j; } else if (b2 < 0 || adj(j) > adj(b2)) b2 = j; }
   var cov = tot ? cv[b] / tot : 0;
-  var ok = (hit[b] >= 2 && cov >= 0.5) || (hit[b] >= 1 && uq[b] >= 1 && W.length <= 2 && cov >= 0.55);
+  var ok = hit[b] >= 2 && cov >= 0.5;
   var amb = b2 >= 0 && adj(b2) >= adj(b) * (hit[b2] >= hit[b] ? 0.85 : 0.97);
   if (ok && amb){ if (LSN.show && (b2 === LSN.k)) b = LSN.k; else ok = false; }
   return { k:b, cov:+cov.toFixed(2), hits:hit[b], ok:ok, amb:amb, n:W.length,
@@ -2546,7 +2615,7 @@ function pkMatch(text, idx, ttl){
   var b = -1, b2 = -1;
   for (j = 0; j < N; j++){ if (b < 0 || sc[j] > sc[b]){ b2 = b; b = j; } else if (b2 < 0 || sc[j] > sc[b2]) b2 = j; }
   var cov = tot ? cv[b] / tot : 0;
-  var ok = (hit[b] >= 2 && cov >= 0.45) || (hit[b] >= 3 && cov >= 0.34) || (tb[b] && hit[b] >= 2) || (hit[b] >= 1 && uq[b] >= 1 && W.length <= 2 && cov >= 0.55);
+  var ok = (hit[b] >= 2 && cov >= 0.45) || (hit[b] >= 3 && cov >= 0.34) || (tb[b] && hit[b] >= 2);
   var amb = b2 >= 0 && sc[b2] >= sc[b] * (hit[b2] >= hit[b] ? 0.9 : 0.97);
   /* التباسٌ بين بطاقاتٍ قيلَ عنوانُها: يُقدَّمُ التعريفُ فالقاعدةُ فالتمهيدُ فالجدول */
   if (amb && ttl && tb[b]){
@@ -2729,6 +2798,86 @@ deck.addEventListener('click', function(e){
   if (e.target.closest('.think.can')) pkAnswer();
 });
 function pkAnswer(){ var c = cur(); if (!c || c.type !== 'question' || !c.answer || c.subtitle) return; var r = upd(c, function(){ c.subtitle = c.answer; }); present(r); save(); }
+/* ================================================================
+   وضعُ الحصة: السبّورةُ تقترحُ والمعلّمُ يقرّر
+   ================================================================ */
+if (!SET.mode) SET.mode = 'suggest';
+RT.hold = 0;
+var SUG = { list:[], t:0 };
+var CLASSTALK = /^(?:و?(?:افتحوا|افتح|اكتبوا|اكتب|سكروا|اسكتوا|اسكت|اجلسوا|اجلس|قوموا|ارفعوا|ارفع|طلعوا|طلع|حطوا|حط|خلاص|يلا|تفضل|تفضلي|قول|قولي|صح|غلط|احسنت|احسنتم|ممتاز|برافو|شاطر|عفيه|مين|منو|عيد|اعد|كرر|الحين\s+نشوف|خلونا\s+نشوف|نشوف))(?:\s|$)/;
+function isClassTalk(text){ var m = mt(words2num(clean(text))); return CLASSTALK.test(m) && !/(?:تعريف|معني|قاعده|شروط|انواع|اقسام|الفرق)/.test(m); }
+function sugSlide(k){ var sl = LSN.slides[k]; if (!sl) return null; return { kind:'slide', k:k, tag:'شريحة ' + dz(k + 1), title:sl.title || 'شريحةٌ من التحضير' }; }
+function sugCard(i, hot){ var c = PK.cards[i]; if (!c) return null; return { kind:'card', i:i, hot:hot, tag:(PKIND[c.kind] || ['بطاقة'])[0] + ' · الحقيبة', title:c.title || (c.text || '').slice(0, 60) }; }
+function suggestFor(text){
+  var out = [], c = cur();
+  if (LSN.slides.length && SET.lsnAuto){ var m = lsnMatch(text); if (m && m.ok && !(LSN.show && m.k === LSN.k)) out.push(sugSlide(m.k)); }
+  if (PK.cards.length && SET.pkAuto){
+    var r = pkMatch(text);
+    if (r && r.ok){ var cc = PK.cards[r.k]; if (!(c && c.card && c.card.p === PK.id && c.card.id === cc.id && !LSN.show)) out.push(sugCard(r.k)); }
+  }
+  return out.filter(Boolean).slice(0, 3);
+}
+function sugPaint(){
+  var el = $('sug');
+  if (!SUG.list.length){ el.classList.remove('show'); return; }
+  el.innerHTML = '<span class="sl">تقصد؟</span>' + SUG.list.map(function(g, j){ return '<button type="button" data-sg="' + j + '"><kbd>' + (j ? dz(j + 1) : '↵') + '</kbd><span><small>' + esc(g.tag) + '</small><b>' + tx(g.title) + '</b></span></button>'; }).join('')
+    + '<button type="button" class="sx" data-sx aria-label="تجاهل"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>';
+  el.classList.add('show');
+}
+function sugShow(list){
+  SUG.list = list; sugPaint();
+  clearTimeout(SUG.t); SUG.t = setTimeout(sugHide, 14000);
+}
+function sugHide(){ SUG.list = []; clearTimeout(SUG.t); $('sug').classList.remove('show'); }
+function sugAccept(j){
+  var g = SUG.list[j || 0]; if (!g) return false;
+  sugHide(); RT.hold = Date.now() + 15000;
+  if (g.kind === 'slide') lsnShow(g.k, { manual:true });
+  else pkShow(g.i, { manual:true, hot:g.hot });
+  return true;
+}
+function sugVoice(text){
+  if (!SUG.list.length) return false;
+  var m = mt(clean(text)).trim();
+  if (wc(m) <= 4 && /^(?:و?(?:نعم|اي|ايه|ايوه)\s+)?(?:اعرضها|اعرضه|اعرض|اظهرها|اظهره|اظهر|افتحها|افتحه|هذي|هذه|هاذي|طلعها|خلها|اعرض\s+الشريحه|اعرض\s+البطاقه)(?:\s|$)/.test(m)) return sugAccept(0);
+  return false;
+}
+/* «البيتُ السابع»: أمرٌ صريحٌ فيُنفَّذُ في كلِّ الأوضاع */
+function pkVerseCmd(text){
+  if (!PK.cards.length) return false;
+  var m = mt(words2num(clean(text))), x = /(?:^|\s)(?:ال)?بيت\s+(?:رقم\s+)?(\d{1,2}|\S+)/.exec(m); if (!x) return false;
+  var n = /^\d+$/.test(x[1]) ? +x[1] : PKORDN[x[1]] || 0; if (!n) return false;
+  var c = cur();
+  if (c && c.card && c.card.p === PK.id && !LSN.show && c.verses){ for (var r0 = 0; r0 < c.verses.length; r0++) if (+c.verses[r0].n === n){ pkHot(r0); return true; } }
+  for (var q = 0; q < PK.cards.length; q++){ var vs = PK.cards[q].verses || []; for (var r = 0; r < vs.length; r++) if (+vs[r].n === n){ sugHide(); RT.hold = Date.now() + 15000; pkShow(q, { hot:r }); return true; } }
+  return false;
+}
+/* داخلَ البطاقةِ المعروضة: يُضاءُ البيتُ أو الصفُّ أو العنصرُ المقصود */
+function pkInCard(text){
+  var c = cur(); if (!PK.cards.length || LSN.show || !c || !c.card || c.card.p !== PK.id) return false;
+  var subs = pkSubs(c); if (!subs) return false;
+  var r0 = pkMatch(text), ci = -1;
+  for (var u = 0; u < PK.cards.length; u++) if (PK.cards[u].id === c.card.id){ ci = u; break; }
+  if (ci < 0 || !r0 || !r0.tot || r0.cv[ci] / r0.tot < 0.35) return false;
+  if (r0.ok && r0.k !== ci && r0.sc[ci] < r0.sc[r0.k] * 0.8) return false;
+  var hm = pkMatch(text, subs.map(function(t){ return pkTok([[t, 1]]); }));
+  if (hm && hm.ok && hm.hits >= 2){ pkHot(hm.k); return true; }
+  return false;
+}
+function modePaint(){
+  $('bMode').classList.toggle('auto', SET.mode === 'auto');
+  $('bModeT').textContent = SET.mode === 'auto' ? 'تلقائي' : 'وضعُ الحصة';
+  $('bMode').title = SET.mode === 'auto' ? 'الوضعُ التلقائي: كلُّ ما يُطابقُ كلامَك يظهرُ وحدَه — انقرْ للعودةِ إلى وضعِ الحصة' : 'وضعُ الحصة: السبّورةُ تقترحُ ولا تقلبُ شيئاً إلا بموافقتك — انقرْ للوضعِ التلقائي';
+  document.querySelectorAll('input[name=md]').forEach(function(r){ r.checked = r.value === SET.mode; });
+}
+function setMode(md){ SET.mode = md === 'auto' ? 'auto' : 'suggest'; saveSet(); modePaint(); sugHide(); toast(SET.mode === 'auto' ? 'الوضعُ التلقائي: الشرائحُ والبطاقاتُ تظهرُ وحدَها وكلُّ جملةٍ تُرسَم' : 'وضعُ الحصة: تقترحُ السبّورةُ وأنت تقرّرُ بـEnter أو «اعرضْها»', 5200); }
+$('sug').addEventListener('click', function(e){ var b = e.target.closest('button'); if (!b) return; if (b.hasAttribute('data-sx')) sugHide(); else sugAccept(+b.dataset.sg); });
+$('bMode').onclick = function(){ setMode(SET.mode === 'auto' ? 'suggest' : 'auto'); };
+$('bHelp').onclick = function(){ modePaint(); $('guideD').showModal(); };
+$('guideD').addEventListener('change', function(e){ if (e.target.name === 'md') setMode(e.target.value); });
+modePaint();
+if (!LS.get('sabbura_guided', false)) setTimeout(function(){ toast('جديد: «وضعُ الحصة» — السبّورةُ تقترحُ ولا تقلبُ شيئاً إلا بموافقتك', 9000, 'طريقةُ الحصة', function(){ $('bHelp').click(); }); LS.set('sabbura_guided', true); }, 1500);
+
 /* دخولُ الصفحةِ من التحضيرات: sabbura.html?lesson=<id> */
 (function(){
   var q = new URLSearchParams(location.search).get('lesson');
@@ -2780,13 +2929,15 @@ document.addEventListener('keydown', function(e){
   if (mod || e.altKey) return;
   var caps = function(){ SET.caps = !SET.caps; saveSet(); capSet(null, null); toast(SET.caps ? 'يظهرُ كلامُك مكتوباً أسفلَ السبّورة' : 'أُخفي الكلامُ المكتوب'); };
   var map = { KeyM:micToggle, KeyP:function(){ setTool('pen'); }, KeyL:function(){ setTool('laser'); }, KeyE:function(){ setTool('eraser'); }, KeyV:function(){ setTool('pointer'); },
-    KeyX:clearInk, KeyZ:undo, KeyN:function(){ $('bNew').click(); }, KeyB:function(){ $('tTheme').click(); }, KeyC:caps, KeyF:full, KeyT:function(){ $('typeIn').focus(); }, KeyG:openLsn, KeyS:lsnToggle, KeyK:pkToggle, KeyA:pkAnswer };
+    KeyX:clearInk, KeyZ:undo, KeyN:function(){ $('bNew').click(); }, KeyB:function(){ $('tTheme').click(); }, KeyC:caps, KeyF:full, KeyT:function(){ $('typeIn').focus(); }, KeyG:openLsn, KeyS:lsnToggle, KeyK:pkToggle, KeyH:function(){ $('bHelp').click(); }, KeyA:pkAnswer };
   var pens = { Digit1:'#15181A', Digit2:'#FFFFFF', Digit3:'#2F6BF2', Digit4:'#E5383B', Numpad1:'#15181A', Numpad2:'#FFFFFF', Numpad3:'#2F6BF2', Numpad4:'#E5383B' };
   if (k === 'ArrowLeft' || k === 'PageDown' || k === 'ArrowDown'){ e.preventDefault(); nav(1); return; }
   if (k === 'ArrowRight' || k === 'PageUp' || k === 'ArrowUp'){ e.preventDefault(); nav(-1); return; }
   if (k === 'Home'){ e.preventDefault(); if (LSN.show) lsnShow(0, { manual:true }); else if (S.scenes.length) go(0, -1); return; }
   if (k === 'End'){ e.preventDefault(); if (LSN.show) lsnShow(LSN.slides.length - 1, { manual:true }); else if (S.scenes.length) go(S.scenes.length - 1, 1); return; }
-  if (k === 'Escape'){ if (Demo.on) Demo.stop(); setTool('pointer'); return; }
+  if (k === 'Enter' && SUG.list.length){ e.preventDefault(); sugAccept(0); return; }
+  if (k === 'Escape'){ if (SUG.list.length){ sugHide(); return; } if (Demo.on) Demo.stop(); setTool('pointer'); return; }
+  if (SUG.list.length && TOOL === 'pointer' && /^(?:Digit|Numpad)[1-3]$/.test(code) && SUG.list[+code.slice(-1) - 1]){ sugAccept(+code.slice(-1) - 1); return; }
   if (pens[code]){ setPen(pens[code]); return; }
   if (k === 'Delete' && S.scenes.length && !LSN.show){ UNDO.push({ k:'state', s:snap() }); S.scenes.splice(S.idx, 1); go(Math.min(S.idx, S.scenes.length - 1), -1, { quiet:true }); toast('حُذف المشهد', 5000, 'تراجع', undo); return; }
   var f = map[code]; if (f){ e.preventDefault(); f(); }
@@ -2819,7 +2970,7 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(function()
 if (!SR) $('bMic').title = 'المتصفّحُ لا يدعمُ تحويلَ الكلام — استعملْ كروم أو إيدج';
 (function(){ var st = LS.get('sabbura_stash', null); if (st && st.s){ Demo.stash = st; setTimeout(function(){ toast('سبّورتُك السابقةُ محفوظةٌ منذ الدرسِ التجريبي', 10000, 'استعادتُها', Demo.restore); }, 900); } })();
 (function(){ var o = LS.get(LKEY, null); if (o && o.src && o.src.kind) lsnLoad(o.src, { restore:true, k:o.k, show:o.show, ink:o.ink }); })();
-window.__sabbura = { apply:apply, handle:handle, S:S, prep:prep, words2num:words2num, buildPrint:buildPrint, LSN:LSN, lsnMatch:lsnMatch, lsnLoad:lsnLoad, lsnShow:lsnShow, lsnHide:lsnHide, lsnHear:lsnHear, lWords:lWords, PK:PK, pkShow:pkShow, pkPage:pkPage, pkLoad:pkLoad, pkHear:pkHear };
+window.__sabbura = { apply:apply, handle:handle, S:S, prep:prep, words2num:words2num, buildPrint:buildPrint, LSN:LSN, lsnMatch:lsnMatch, lsnLoad:lsnLoad, lsnShow:lsnShow, lsnHide:lsnHide, lsnHear:lsnHear, lWords:lWords, PK:PK, pkShow:pkShow, pkPage:pkPage, pkLoad:pkLoad, pkHear:pkHear, SUG:SUG, suggestFor:suggestFor, sugAccept:sugAccept, setMode:setMode };
 })();
 </script>
 </body>
