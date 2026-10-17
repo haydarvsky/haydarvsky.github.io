@@ -704,7 +704,7 @@
   /* ---------------- الفصول ---------------- */
   function classCard(c) {
     return '<div class="card hov cls-card"><span class="grade-badge">' + esc(GRADES[c.grade] || '') + '</span><h3><a href="#/class/' + c._id + '">' + esc(c.name) + '</a></h3><p class="students-n">' + ar((c.students || []).length) + ' متعلّماً' + (c.archived ? ' · مؤرشف' + (c.year ? ' — ' + esc(c.year) : '') : '') + '</p>'
-      + '<div class="crow">' + (c.archived ? '' : '<a class="btn s p" href="#/class/' + c._id + '">المتابعةُ اليومية</a>') + '<a class="btn s g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a><a class="btn s" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn s" href="#/class/' + c._id + '/survey">المسحُ التشخيصي</a>'
+      + '<div class="crow">' + (c.archived ? '' : '<a class="btn s p" href="#/class/' + c._id + '">المتابعةُ اليومية</a>') + '<a class="btn s g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a><a class="btn s" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn s" href="#/class/' + c._id + '/survey">المسحُ التشخيصي</a><a class="btn s" href="#/class/' + c._id + '/grades">الدرجات</a>'
       + (RO() ? '' : '<span class="cman"><button class="icon-btn" data-cm="edit" data-id="' + c._id + '" title="تعديلُ الفصل"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.5 2.5 0 0 0-3.5-3.5L4.5 16.5z"/></svg></button><button class="icon-btn del" data-cm="del" data-id="' + c._id + '" title="حذفُ الفصل"><svg viewBox="0 0 24 24"><path d="M5 7h14M9 7V4h6v3M7 7l1 13h8l1-13"/></svg></button></span>')
       + '</div></div>';
   }
@@ -780,6 +780,7 @@
     if (p[1] === 'report') return classReport(c);
     if (p[1] === 'students') return studentsManage(c);
     if (p[1] === 'survey') return surveyView(c, p[2]);
+    if (p[1] === 'grades') return gradesView(c);
     return dailyView(c);
   }
   async function saveClass(c, what) {
@@ -862,7 +863,7 @@
     var alerts = {}; collectAlerts().forEach(function (a) { if (a.c._id === c._id) alerts[a.s.id] = 1; });
     var q = (S.stuQ || '').trim();
     var html = classCrumb(c) + '<div class="ttl"><div><h2>' + esc(c.name) + '</h2><p>' + ar(c.students.length) + ' متعلّماً · حاضرٌ ' + ar(c.students.length - absN) + (absN ? ' · غائبٌ ' + ar(absN) : '') + (taken ? ' <span class="taken">✓ تمّ التحضير</span>' : '') + '</p></div>'
-      + '<div class="acts">' + (ro ? '' : '<button class="btn p" id="rndBtn"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/></svg>اختيارٌ عشوائي</button>') + '<a class="btn" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn" href="#/class/' + c._id + '/survey">المسحُ التشخيصي</a><a class="btn g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a></div></div>';
+      + '<div class="acts">' + (ro ? '' : '<button class="btn p" id="rndBtn"><svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="8.5" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="8.5" cy="15.5" r="1.3" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.3" fill="currentColor"/></svg>اختيارٌ عشوائي</button>') + '<a class="btn" href="#/class/' + c._id + '/students">المتعلّمون</a><a class="btn" href="#/class/' + c._id + '/survey">المسحُ التشخيصي</a><a class="btn" href="#/class/' + c._id + '/grades">الدرجات</a><a class="btn g" href="#/class/' + c._id + '/report">تقريرُ الفصل</a></div></div>';
     html += '<div class="datebar"><button class="icon-btn" id="dPrev" title="اليومُ التالي"><svg viewBox="0 0 24 24"><path d="M10 6l6 6-6 6"/></svg></button>'
       + '<label class="d" style="cursor:pointer;position:relative">' + DAYS[d.getDay()] + ' ' + ar(d.getDate()) + ' ' + MONTHS[d.getMonth()] + '<small>' + esc(hijri(d)) + '</small><input type="date" id="dPick" value="' + date + '"></label>'
       + '<button class="icon-btn" id="dNext" title="اليومُ السابق"><svg viewBox="0 0 24 24"><path d="M14 6l-6 6 6 6"/></svg></button>' + (isToday ? '' : '<button class="btn s" id="dToday">اليوم</button>') + '</div>';
@@ -1109,6 +1110,7 @@
     var s = (c.students || []).filter(function (x) { return x.id === p[1]; })[0] || { id: p[1], name: 'متعلّمٌ محذوف' };
     var map = await loadDays(c._id);
     await svLoad(c._id).catch(function () { });
+    await grLoad(c._id).catch(function () { });
     function render() {
       var R = periodRange(), evs = eventsIn(map, R.from, R.to, s.id), counts = {};
       TYPES.forEach(function (t) { counts[t.key] = evs.filter(function (e) { return e.type === t.key; }).length; });
@@ -1124,6 +1126,7 @@
       html += '<div class="tile" style="--tc:var(--green)"><div class="l"><i></i>درجةُ السلوك</div><div class="v sc">' + scoreHTML(sc) + '</div><div class="s">بأوزانِ الإعدادات</div></div>';
       TYPES.filter(function (t) { return t.key !== 'note'; }).forEach(function (t) { html += '<div class="tile" style="--tc:' + t.color + '"><div class="l"><i></i>' + t.label + '</div><div class="v">' + ar(counts[t.key]) + '</div><div class="s">' + (t.key === 'absent' ? 'يومَ غياب' : 'مرّة') + '</div></div>'; });
       html += '</div>';
+      html += grStudentPanel(c, s);
       html += svStudentPanel(c, s);
       html += '<div class="panel nobrief"><h3>الإيقاعُ الأسبوعي</h3><div class="hint">عددُ التسجيلاتِ في كلِّ أسبوعٍ من المدّة، مكدَّسةً بنوعِها (الأقدمُ يميناً)</div><div class="chart" id="wk"></div>' + LEGEND + '</div>';
       var cb = catBars(evs, 'star'), bb = catBars(evs, 'bad');
@@ -1320,6 +1323,151 @@
         + (sm.n ? '<div class="sv-stu-l"><small class="y">القوّة</small>' + (svChips(sm.yes, 'y') || '—') + '</div><div class="sv-stu-l"><small class="n">الضعف</small>' + (svChips(sm.no, 'n') || '—') + '</div>' + (r && r.n ? '<div class="sv-stu-note">' + esc(r.n) + '</div>' : '') : '<div class="hint" style="margin:0">لم يُقيَّمْ بعد</div>') + '</div>';
     }).join('');
     return '<div class="panel sv-panel"><h3>المسحُ التشخيصي</h3><div class="hint">' + (RO() || c.archived ? '' : '<a href="#/class/' + c._id + '/survey" class="sv-link">فتحُ المسح ←</a>') + '</div><div class="sv-stu-g">' + cols + '</div></div>';
+  }
+
+  /* ---------------- الدرجاتُ والاختبارات ----------------
+     وثيقةٌ لكلِّ فصلٍ في مساحةِ الإعدادات (كالمسح، فلا تحتاجُ قواعدَ جديدة):
+     sc_meta/grades_<cls> = { cls, exams:[{ id, title, kind, max, date, res:{ sid:{ v:12.5, n:'الأخطاء' } } }] } */
+  var GR_KINDS = [{ k: 'quiz', t: 'اختبارٌ قصير' }, { k: 'test', t: 'اختبار' }, { k: 'hw', t: 'واجب' }, { k: 'oral', t: 'شفهي' }, { k: 'proj', t: 'نشاطٌ / مشروع' }];
+  function grKind(k) { var x = GR_KINDS.filter(function (g) { return g.k === k; })[0]; return x ? x.t : 'تقييم'; }
+  function grNum(v) { return ar(Math.round(v * 100) / 100).replace('.', '٫'); }
+  async function grLoad(cid) {
+    S.gr = S.gr || {};
+    if (S.gr[cid]) return S.gr[cid];
+    var d = null;
+    try { d = await DB.get(C('sc_meta'), 'grades_' + cid); } catch (e) { if (!FB.isNetErr(e)) throw e; d = LS.get(K('sc_gr_') + cid, null); }
+    var q = queue().filter(function (x) { return x.col === C('sc_meta') && x.id === 'grades_' + cid; })[0];
+    if (q) d = q.data;
+    d = Object.assign({ cls: cid, exams: [] }, d || {}); delete d._id; delete d._path;
+    d.exams = (d.exams || []).map(function (x) { x.res = x.res || {}; return x; });
+    S.gr[cid] = d; LS.set(K('sc_gr_') + cid, d);
+    return d;
+  }
+  var grTimer = {};
+  function grSave(cid, now) {
+    var d = S.gr[cid]; LS.set(K('sc_gr_') + cid, d);
+    clearTimeout(grTimer[cid]);
+    var go = function () { return write('set', C('sc_meta'), 'grades_' + cid, d).catch(fail); };
+    if (now) return go();
+    grTimer[cid] = setTimeout(go, 700);
+  }
+  function grSorted(d) { return d.exams.slice().sort(function (a, b) { return (a.date || '').localeCompare(b.date || ''); }); }
+  /* إحصاءُ تقييمٍ واحد: من رُصدت درجتُه فقط */
+  function grStat(x, students) {
+    var v = students.map(function (s) { var r = x.res[s.id]; return r && typeof r.v === 'number' ? r.v : null; }).filter(function (n) { return n !== null; });
+    if (!v.length) return null;
+    var sum = v.reduce(function (a, b) { return a + b; }, 0);
+    return { n: v.length, avg: sum / v.length, hi: Math.max.apply(null, v), lo: Math.min.apply(null, v), pass: v.filter(function (n) { return n >= x.max / 2; }).length };
+  }
+  function grLevel(p) { return p === null ? null : p >= 90 ? { t: 'ممتاز', c: 'lv4' } : p >= 80 ? { t: 'جيّدٌ جدّاً', c: 'lv3' } : p >= 65 ? { t: 'جيّد', c: 'lv3' } : p >= 50 ? { t: 'مقبول', c: 'lv2' } : { t: 'ضعيف', c: 'lv1' }; }
+  /* مجموعُ المتعلّمِ فيما رُصد له، ونسبتُه من مجموعِ عظماها */
+  function grTotal(exams, sid) {
+    var got = 0, of = 0;
+    exams.forEach(function (x) { var r = x.res[sid]; if (r && typeof r.v === 'number') { got += r.v; of += +x.max || 0; } });
+    return { got: got, of: of, pct: of ? Math.round(100 * got / of) : null };
+  }
+
+  async function gradesView(c) {
+    var d = await grLoad(c._id), ro = RO() || c.archived, students = c.students || [];
+    function render() {
+      var exams = grSorted(d), last = exams[exams.length - 1], st = last ? grStat(last, students) : null;
+      var html = classCrumb(c, 'الدرجات') + reportHead('كشفُ الدرجات — ' + c.name, 'عددُ المتعلّمين ' + ar(students.length) + ' · ' + ar(exams.length) + ' تقييماً');
+      html += '<div class="ttl"><div><h2>الدرجات</h2><p>' + esc(c.name) + ' · ' + ar(exams.length) + ' تقييماً</p></div><div class="acts"><a class="btn" href="#/class/' + c._id + '">المتابعةُ اليومية</a><button class="btn" id="grCsv">Excel (CSV)</button><button class="btn" id="grPrint">طباعة / PDF</button>' + (ro ? '' : '<button class="btn p" id="grAdd"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>تقييمٌ جديد</button>') + '</div></div>';
+      if (!exams.length) {
+        view.innerHTML = html + '<div class="panel"><div class="empty">لا تقييماتٍ بعد' + (ro ? '' : ' — أضفِ اختباراً قصيراً أو واجباً من «تقييمٌ جديد» ثمّ اكتبْ درجاتِ المتعلّمين') + '</div></div>';
+        bind(); return;
+      }
+      html += '<div class="tiles sv-tiles"><div class="tile hero"><div class="l">متوسّطُ آخرِ تقييم</div><div class="v">' + (st ? grNum(st.avg) + '<small>/' + grNum(last.max) + '</small>' : '—') + '</div><div class="s">' + esc(last.title) + (last.date ? ' · ' + fmtDate(last.date) : '') + '</div></div>'
+        + '<div class="tile" style="--tc:var(--c-wc)"><div class="l"><i></i>الأعلى</div><div class="v">' + (st ? grNum(st.hi) : '—') + '</div><div class="s">من ' + grNum(last.max) + '</div></div>'
+        + '<div class="tile" style="--tc:var(--c-absent)"><div class="l"><i></i>الأدنى</div><div class="v">' + (st ? grNum(st.lo) : '—') + '</div><div class="s">من ' + grNum(last.max) + '</div></div>'
+        + '<div class="tile" style="--tc:var(--gold)"><div class="l"><i></i>النجاح</div><div class="v">' + (st ? ar(Math.round(100 * st.pass / st.n)) + '<small>٪</small>' : '—') + '</div><div class="s">' + (st ? ar(st.pass) + ' من ' + ar(st.n) + ' رُصدت درجاتُهم' : '') + '</div></div></div>';
+      var q = (S.grQ || '').trim();
+      html += '<div class="panel"><h3>كشفُ الدرجات</h3><div class="hint">' + (ro ? 'الخانةُ الفارغةُ لم تُرصَدْ بعد' : 'اكتبِ الدرجةَ في خانتِها فتُحفظُ وحدَها · انقرْ عنوانَ التقييمِ لتعديلِه · ✎ ملاحظةُ الأخطاء: مرّرْ عليها أو افتحْ صفحةَ المتعلّم') + '</div>'
+        + '<div class="searchbar"><input id="grQ" placeholder="ابحثْ باسمٍ أو حرف…" value="' + esc(q) + '"></div>'
+        + '<div class="sv-scroll"><table class="sv-mx gr-mx"><thead><tr><th class="nm">المتعلّم</th>'
+        + exams.map(function (x) { return '<th><button class="gr-h" data-x="' + x.id + '"' + (ro ? ' disabled' : '') + '><b>' + esc(x.title) + '</b><small>' + grKind(x.kind) + ' · من ' + grNum(x.max) + (x.date ? '<br>' + fmtDate(x.date) : '') + '</small></button></th>'; }).join('')
+        + (exams.length > 1 ? '<th>المجموع</th>' : '') + '<th>التقدير</th></tr></thead><tbody>'
+        + students.map(function (s, i) {
+          if (q && s.name.indexOf(q) < 0) return '';
+          var tt = grTotal(exams, s.id), lv = grLevel(tt.pct);
+          return '<tr data-sid="' + s.id + '"><td class="nm"><a class="sv-open" href="#/student/' + c._id + '/' + s.id + '"><span class="num">' + ar(i + 1) + '</span>' + esc(s.name) + '</a></td>'
+            + exams.map(function (x) {
+              var r = x.res[s.id] || {}, has = typeof r.v === 'number', low = has && r.v < x.max / 2;
+              return '<td class="gr-td' + (low ? ' low' : '') + '">' + (ro ? '<span class="gr-v">' + (has ? grNum(r.v) : '—') + '</span>' : '<input class="gr-in" inputmode="decimal" data-x="' + x.id + '" value="' + (has ? r.v : '') + '" aria-label="' + esc(x.title) + '">') + (r.n ? '<em class="gr-n" title="' + esc(r.n) + '">✎</em>' : '') + '</td>';
+            }).join('')
+            + (exams.length > 1 ? '<td class="num gr-tot">' + (tt.of ? grNum(tt.got) + '<small>/' + grNum(tt.of) + '</small>' : '—') + '</td>' : '')
+            + '<td>' + (lv ? '<span class="sv-lv ' + lv.c + '">' + lv.t + ' · ' + ar(tt.pct) + '٪</span>' : '<span class="sv-lv">لم يُرصَدْ</span>') + '</td></tr>';
+        }).join('')
+        + '</tbody><tfoot><tr><td class="nm">المتوسّط</td>' + exams.map(function (x) { var t = grStat(x, students); return '<td class="num">' + (t ? grNum(Math.round(t.avg * 10) / 10) : '—') + '</td>'; }).join('') + (exams.length > 1 ? '<td></td>' : '') + '<td></td></tr></tfoot></table></div></div>';
+      view.innerHTML = html;
+      bind();
+      $('grQ').oninput = function () { S.grQ = this.value; var pos = this.selectionStart; render(); var i = $('grQ'); i.focus(); i.setSelectionRange(pos, pos); };
+      if (ro) return;
+      view.querySelectorAll('.gr-h').forEach(function (b) { b.onclick = function () { examSheet(c, d, d.exams.filter(function (x) { return x.id === b.dataset.x; })[0], render); }; });
+      view.querySelector('.gr-mx').addEventListener('change', function (e) {
+        var inp = e.target.closest('.gr-in'); if (!inp) return;
+        var x = d.exams.filter(function (y) { return y.id === inp.dataset.x; })[0], sid = inp.closest('tr').dataset.sid;
+        var raw = inp.value.trim().replace(/[٠-٩]/g, function (ch) { return '٠١٢٣٤٥٦٧٨٩'.indexOf(ch); }).replace('٫', '.').replace(',', '.');
+        var r = x.res[sid] = x.res[sid] || {};
+        if (raw === '') delete r.v;
+        else { var v = parseFloat(raw); if (isNaN(v) || v < 0 || v > x.max) { toast('الدرجةُ بين ٠ و' + grNum(x.max), true); inp.value = typeof r.v === 'number' ? r.v : ''; return; } r.v = v; }
+        if (r.v === undefined && !r.n) delete x.res[sid];
+        grSave(c._id); render();
+      });
+      view.querySelector('.gr-mx').addEventListener('keydown', function (e) {
+        if (e.key !== 'Enter' || !e.target.classList.contains('gr-in')) return;
+        e.preventDefault(); var all = Array.prototype.slice.call(view.querySelectorAll('.gr-in[data-x="' + e.target.dataset.x + '"]')), j = all.indexOf(e.target);
+        e.target.blur(); var nx = view.querySelectorAll('.gr-in[data-x="' + e.target.dataset.x + '"]')[j + 1]; if (nx) { nx.focus(); nx.select(); }
+      });
+    }
+    function bind() {
+      $('grPrint').onclick = function () { window.print(); };
+      $('grCsv').onclick = function () {
+        var exams = grSorted(d);
+        downloadCSV('درجات ' + c.name + '.csv', [['م', 'الاسم'].concat(exams.map(function (x) { return x.title + ' (' + x.max + ')'; })).concat(['المجموع', 'النسبة', 'الملاحظات'])].concat(students.map(function (s, i) {
+          var tt = grTotal(exams, s.id);
+          return [i + 1, s.name].concat(exams.map(function (x) { var r = x.res[s.id]; return r && typeof r.v === 'number' ? r.v : ''; })).concat([tt.of ? tt.got : '', tt.pct === null ? '' : tt.pct + '%', exams.map(function (x) { var r = x.res[s.id]; return r && r.n ? x.title + ': ' + r.n : ''; }).filter(Boolean).join(' | ')]);
+        })));
+      };
+      if (!ro) $('grAdd').onclick = function () { examSheet(c, d, null, render); };
+    }
+    render();
+  }
+  /* ورقةُ إضافةِ تقييمٍ أو تعديلِه */
+  function examSheet(c, d, x, done) {
+    var isNew = !x;
+    openSheet('<div class="who"><div><h3>' + (isNew ? 'تقييمٌ جديد' : 'تعديلُ التقييم') + '</h3><small>' + esc(c.name) + '</small></div></div>'
+      + '<div class="row"><div class="field" style="flex:2"><label>العنوان</label><input id="xTitle" placeholder="الاختبارُ القصيرُ الأول" value="' + esc(x ? x.title : '') + '"></div>'
+      + '<div class="field"><label>النوع</label><select id="xKind">' + GR_KINDS.map(function (g) { return '<option value="' + g.k + '"' + ((x ? x.kind : 'quiz') === g.k ? ' selected' : '') + '>' + g.t + '</option>'; }).join('') + '</select></div></div>'
+      + '<div class="row"><div class="field"><label>الدرجةُ العظمى</label><input id="xMax" inputmode="decimal" value="' + (x ? x.max : 15) + '"></div><div class="field"><label>التاريخ</label><input type="date" id="xDate" value="' + esc(x ? x.date || '' : today()) + '"></div></div>'
+      + (isNew ? '' : '<div class="row" style="margin-top:4px"><button class="btn s d" id="xDel" style="flex:0 0 auto">حذفُ التقييمِ ودرجاتِه</button></div>')
+      + '<div class="foot"><button class="btn s" id="shClose">إلغاء</button><button class="btn p" id="xSave">حفظ</button></div>');
+    $('shClose').onclick = closeSheet;
+    $('xTitle').focus();
+    $('xSave').onclick = async function () {
+      var t = $('xTitle').value.trim(), m = parseFloat($('xMax').value.replace('٫', '.'));
+      if (!t) { $('xTitle').focus(); return; }
+      if (!(m > 0)) { $('xMax').focus(); return; }
+      if (isNew) { x = { id: uid('x'), res: {} }; d.exams.push(x); }
+      x.title = t; x.kind = $('xKind').value; x.max = m; x.date = $('xDate').value;
+      try { await grSave(c._id, true); log(isNew ? 'إضافةُ تقييم' : 'تعديلُ تقييم', c.name + ' — ' + t); closeSheet(); toast('حُفظ'); done(); } catch (err) { fail(err); }
+    };
+    if (!isNew) $('xDel').onclick = async function () {
+      if (!confirm('حذفُ «' + x.title + '» بكلِّ درجاتِه؟')) return;
+      d.exams = d.exams.filter(function (y) { return y !== x; });
+      try { await grSave(c._id, true); log('حذفُ تقييم', c.name + ' — ' + x.title); closeSheet(); toast('حُذف'); done(); } catch (err) { fail(err); }
+    };
+  }
+  /* لوحةُ الدرجاتِ في صفحةِ المتعلّم */
+  function grStudentPanel(c, s) {
+    var d = S.gr && S.gr[c._id]; if (!d || !d.exams.length) return '';
+    var exams = grSorted(d), tt = grTotal(exams, s.id), lv = grLevel(tt.pct);
+    var rows = exams.map(function (x) {
+      var r = x.res[s.id] || {}, has = typeof r.v === 'number', p = has ? Math.round(100 * r.v / x.max) : null;
+      return '<tr><td><b>' + esc(x.title) + '</b><br><small>' + grKind(x.kind) + (x.date ? ' · ' + fmtDate(x.date) : '') + '</small></td><td class="num gr-sv">' + (has ? grNum(r.v) + '<small>/' + grNum(x.max) + '</small>' : '—') + '</td><td>' + (has ? '<div class="sv-bar"><i style="width:' + p + '%;background:' + (p < 50 ? 'var(--c-absent)' : p < 75 ? 'var(--gold)' : 'var(--c-wc)') + '"></i><b class="num">' + ar(p) + '٪</b></div>' : '<span class="sv-lv">لم يُرصَدْ</span>') + '</td><td class="gr-note">' + (r.n ? esc(r.n) : '') + '</td></tr>';
+    }).join('');
+    return '<div class="panel gr-panel"><h3>الدرجات ' + (lv ? '<span class="sv-lv ' + lv.c + '">' + lv.t + ' · ' + ar(tt.pct) + '٪</span>' : '') + '</h3><div class="hint">' + (tt.of ? 'المجموع ' + grNum(tt.got) + ' من ' + grNum(tt.of) : 'لم تُرصَدْ له درجاتٌ بعد') + (RO() || c.archived ? '' : ' · <a href="#/class/' + c._id + '/grades" class="sv-link">كشفُ الدرجات ←</a>') + '</div>'
+      + '<table class="log gr-stu"><thead><tr><th>التقييم</th><th>الدرجة</th><th>النسبة</th><th>الأخطاء والملاحظات</th></tr></thead><tbody>' + rows + '</tbody></table></div>';
   }
 
   /* ---------------- تقريرُ الفصل ---------------- */
