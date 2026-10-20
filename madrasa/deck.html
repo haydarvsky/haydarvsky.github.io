@@ -126,6 +126,8 @@ body.rot .timer{top:auto}
 .verses .v em{font-style:normal;color:var(--gold);font-size:.62em;font-family:'Sakkal Saad Poster',serif;
   display:inline-grid;place-items:center;min-width:2.05em;height:2.05em;border-radius:50%;border:1.5px solid rgba(217,164,65,.5);margin-inline-start:.5em;vertical-align:.15em}
 .verses .src{color:var(--dim);font-size:var(--sm)}
+.verses.prose .v{font-size:clamp(16px,1.7vw,29px);line-height:1.95;font-weight:500;text-align:justify;text-align-last:right}
+.verses.prose .v em{float:left;margin:.15em .6em 0 0;min-width:auto;height:auto;padding:.1em .7em;border-radius:99px;font-size:.6em}
 
 /* ===== السؤال ===== */
 .q{font-size:var(--h3);color:var(--gold);font-weight:700;display:flex;gap:12px;align-items:flex-start}
@@ -633,7 +635,32 @@ var ART={
    +'<g class="c float"><path class="draw" d="M208 64c12-8 26-8 38 0M196 44c20-12 42-12 62 0"/></g><g class="w"><path class="draw" d="M80 70v30M65 85h30M70 75l20 20M90 75l-20 20"/><path class="draw" d="M330 190v24M318 202h24M322 194l16 16M338 194l-16 16"/><path class="draw" d="M100 200v18M91 209h18M300 60v14M293 67h14"/></g></svg>',
   /* نصفُ يوم: بوّابةُ المدرسةِ وساعتُها */
   school:'<svg viewBox="0 0 400 300"><path class="f" d="M170 250v-60a30 30 0 0 1 60 0v60z"/><g class="g"><path class="draw" d="M60 250V130l140-60 140 60v120"/><path class="draw" d="M170 250v-60a30 30 0 0 1 60 0v60"/><circle class="draw" cx="200" cy="122" r="22"/><path class="draw" d="M200 108v14l10 6"/></g>'
-   +'<g class="c"><path class="draw" d="M88 160h40v30H88zM272 160h40v30h-40z"/><path class="draw" d="M30 250h340"/><path class="draw" d="M200 190v60"/></g><g class="w float"><path class="draw" d="M40 60c20-8 40-8 60 0M300 50c20-8 40-8 60 0"/></g></svg>'
+   +'<g class="c"><path class="draw" d="M88 160h40v30H88zM272 160h40v30h-40z"/><path class="draw" d="M30 250h340"/><path class="draw" d="M200 190v60"/></g><g class="w float"><path class="draw" d="M40 60c20-8 40-8 60 0M300 50c20-8 40-8 60 0"/></g></svg>',
+  /* وصيّةٌ إلى ولدي: سُلَّمُ اللذّة — درجاتٌ ثلاثٌ تتوهّجُ قمّتُها (الجسم، العقل، الروح) */
+  ladder:'<svg viewBox="0 0 400 300"><path class="f" d="M262 100h98v150h-98z"/><g class="g"><path class="draw" d="M40 250h20v-50h100v-50h100v-50h100v150z"/></g>'
+   +'<g class="c"><path class="draw" d="M92 182h36c0 10-8 16-18 16s-18-6-18-16z"/><path class="draw" d="M104 174c-4-6 4-8 0-14M116 174c-4-6 4-8 0-14"/>'
+   +'<path class="draw" d="M186 138c8-6 16-6 24 0 8-6 16-6 24 0v-22c-8-6-16-6-24 0-8-6-16-6-24 0zM210 116v22"/></g>'
+   +'<g class="float"><circle class="f" cx="311" cy="70" r="13"/><g class="g"><circle class="draw" cx="311" cy="70" r="13"/><path class="draw" d="M311 48v-12M311 92v8M333 70h12M289 70h-12M327 54l9-9M295 54l-9-9M327 86l7 7M295 86l-7 7"/></g></g>'
+   +'<path class="w draw" d="M70 232c60-20 120-48 170-84s70-50 92-60" stroke-dasharray="4 7"/></svg>',
+  /* عاصفةُ المدنيّةِ الحديثة تزعزعُ الجذور */
+  storm:'<svg viewBox="0 0 400 300"><path class="f" d="M222 128c-12-30 18-62 54-56 30-30 76-6 72 24 26 10 16 46-14 46-20 20-62 16-76 0-26 6-46-4-36-14z"/>'
+   +'<g class="g"><path class="draw" d="M222 128c-12-30 18-62 54-56 30-30 76-6 72 24 26 10 16 46-14 46-20 20-62 16-76 0-26 6-46-4-36-14z"/><path class="draw" d="M198 240c6-40 16-70 36-110M214 240c4-36 14-64 36-104"/></g>'
+   +'<g class="c"><path class="draw" d="M30 240h340"/><path class="draw" d="M200 240c-10 10-30 14-46 12M205 242c-2 14-12 24-26 30M214 242c8 12 22 18 38 18M209 242c4 14 4 26 0 36"/></g>'
+   +'<g class="w"><path class="draw" d="M20 100c40-10 70 10 110 0s60-14 90-4"/><path class="draw" d="M10 146c50-8 80 8 120 0"/><path class="draw" d="M40 62c30-6 50 6 80 0"/><path class="draw" d="M24 196c34-6 58 6 92 0"/></g>'
+   +'<g class="g float"><path d="M336 50l9-5-2 10zM362 84l8-6v10zM118 40l9-3-3 9z"/></g></svg>',
+  /* الأرنبُ والأسد: بئرٌ يعكسُ ماؤه وجهَ الأسد */
+  well:'<svg viewBox="0 0 400 300"><circle class="f" cx="200" cy="150" r="68"/><g class="g"><circle class="draw" cx="200" cy="150" r="96"/><circle class="draw" cx="200" cy="150" r="68"/>'
+   +'<path class="draw" d="M200 54v14M296 150h-14M200 246v-14M104 150h14M268 82l-10 10M132 82l10 10M268 218l-10-10M132 218l10-10"/></g>'
+   +'<g class="c float"><path class="draw" d="M200 110L211 121L226 119L227 134L239 143L231 155L235 170L220 174L214 188L200 181L186 188L180 174L165 170L169 155L161 143L173 135L174 119L189 121z"/><circle class="draw" cx="200" cy="150" r="21"/><path class="draw" d="M190 144h4M206 144h4M194 156l6 6 6-6zM200 162v5M192 170c5 3 11 3 16 0"/></g>'
+   +'<g class="w"><path class="draw" d="M152 196c20 8 76 8 96 0M162 108c16-6 60-6 76 0"/></g>'
+   +'<g class="c"><path class="draw" d="M286 64c-6-22 0-38 8-42 6 10 4 28-2 44M300 68c0-22 10-36 18-38 4 12-2 28-12 42M280 74c4-10 30-12 36 2 4 12-8 20-20 20-12 0-20-10-16-22z"/></g></svg>',
+  /* صاحبةُ الكتّان: سفينةٌ مثقوبةٌ وطائرٌ يحملُ لفافةَ الكتّان */
+  ship:'<svg viewBox="0 0 400 300"><path class="f" d="M90 220h200l-30 30H120zM196 70v138h76c-6-54-34-106-76-138z"/><g class="g"><path class="draw" d="M90 220h200l-30 30H120zM190 220V58"/>'
+   +'<path class="draw" d="M196 70v138h76c-6-54-34-106-76-138zM184 86v122h-58c8-46 28-90 58-122z"/></g>'
+   +'<g class="c"><circle class="draw" cx="150" cy="235" r="4"/><path class="draw" d="M150 243v7M146 246v6M154 246v6"/></g>'
+   +'<g class="w"><path class="draw" d="M0 254c30-10 60-10 90 0s60 10 90 0 60-10 90 0 60 10 90 0 30-6 40-4"/><path class="draw" d="M0 276c30-10 60-10 90 0s60 10 90 0 60-10 90 0 60 10 90 0 30-6 40-4"/></g>'
+   +'<g class="float"><g class="g"><path class="draw" d="M300 80c12-6 26-6 36 2-10 2-18 8-24 10-6-2-10-6-12-12zM310 78c-6-14-20-22-34-22 10 10 16 18 18 26M322 80c4-14 16-24 30-28-6 12-10 20-12 28"/></g>'
+   +'<g class="c"><circle class="draw" cx="318" cy="106" r="8"/><path class="draw" d="M318 92v6M312 102h12M312 110h12"/></g><path class="w draw" d="M318 114c-10 10-30 14-50 30" stroke-dasharray="3 5"/></g></svg>'
 };
 
 /* ============ بناءُ الشرائح ============ */
@@ -662,7 +689,7 @@ var B={
   },
   verses:function(s){
     return (s.title?head(s.title):'')
-      +'<div class="verses">'+s.items.map(function(v,k){
+      +'<div class="verses'+(s.prose?' prose':'')+'">'+s.items.map(function(v,k){
         var t=nl(v.t); (v.hl||[]).forEach(function(w){t=t.split(esc(w)).join('<mark>'+esc(w)+'</mark>')});
         return '<div class="v step" data-s="'+k+'">'+t+(v.n?'<em>'+nl(v.n)+'</em>':'')+'</div>'}).join('')
       +(s.src?'<div class="src">'+nl(s.src)+'</div>':'')+'</div>';
