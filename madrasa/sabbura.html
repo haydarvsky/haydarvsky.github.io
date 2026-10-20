@@ -2572,8 +2572,8 @@ $('bLsn').onclick = openLsn; $('lcOpen').onclick = openLsn; $('lcView').onclick 
    ================================================================ */
 var BOOKN = { 'g10-arabi':'كتابُ اللغة العربية', 'g10-nahw':'قواعدُ النحو والصرف', 'g10-balagha':'فنونُ البلاغة' };
 var BOOKF = { 'g10-arabi':'arabi', 'g10-nahw':'nahw', 'g10-balagha':'balagha' };
-var PKIND = { intro:['تمهيد', 'spark'], verse:['أبيات', 'verse'], word:['معجم', 'def'], definition:['مفهوم', 'def'], rule:['قاعدة', 'alert'], list:['قائمة', 'list'], steps:['خطوات', 'steps'], table:['جدول', 'tbl'], compare:['موازنة', 'cmp'], example:['مثال', 'quote'], question:['سؤال', 'q'], idea:['فكرة', 'note'], image:['صورة', 'img'], quote:['اقتباس', 'quote'] };
-var PKORD = ['intro', 'verse', 'word', 'definition', 'rule', 'table', 'list', 'steps', 'compare', 'example', 'image', 'idea', 'quote', 'question'];
+var PKIND = { page:['صفحاتُ النص', 'img'], intro:['تمهيد', 'spark'], verse:['أبيات', 'verse'], word:['معجم', 'def'], definition:['مفهوم', 'def'], rule:['قاعدة', 'alert'], list:['قائمة', 'list'], steps:['خطوات', 'steps'], table:['جدول', 'tbl'], compare:['موازنة', 'cmp'], example:['مثال', 'quote'], question:['سؤال', 'q'], idea:['فكرة', 'note'], image:['صورة', 'img'], quote:['اقتباس', 'quote'] };
+var PKORD = ['page', 'intro', 'verse', 'word', 'definition', 'rule', 'table', 'list', 'steps', 'compare', 'example', 'image', 'idea', 'quote', 'question'];
 var PK = { id:null, data:null, cards:[], idx:[], gen:0, tab:'c', lib:null, at:0, pend:-1 };
 var PKEY = 'sabbura_pack' + ME.ws;
 if (SET.pkAuto == null) SET.pkAuto = true;
@@ -2640,6 +2640,8 @@ function pkCardScene(c){
     case 'question': return Object.assign(base, { type:'question', title:c.title, answer:c.text || '', items:pkItems(c.items) });
     case 'quote': return Object.assign(base, { type:'quote', title:c.text || c.title, subtitle:c.by || c.note || '' });
     case 'image': return Object.assign(base, { type:'image', title:c.title, img:'packs/img/crop/' + PK.id + '-' + c.id + '.jpg' });
+    /* صفحةُ النصِّ الأساسيِّ كاملةً من الكتاب (تُستدعى بالكلام كأيِّ بطاقة) */
+    case 'page': return Object.assign(pkPageScene(PK.data.book, c.page), { title:c.title || ((BOOKN[PK.data.book] || 'الكتاب') + ' · ص ' + dz(c.page - 1)), card:{ p:PK.id, id:c.id, page:0, book:PK.data.book } });
     default: return Object.assign(base, { type:'notes', title:c.title || (PKIND[c.kind] || ['فكرة'])[0], items:[{ label:c.text || c.title, value:keyword(c.text || '') }] });
   }
 }
@@ -2756,7 +2758,8 @@ function pkPaint(){
     if (!pg.length) h = '<div class="pk0">لا صفحاتَ محمّلة.</div>';
     else {
       var a = pg[0], z = pg[pg.length - 1], all = []; for (var k = Math.min(a, z); k <= Math.max(a, z); k++) all.push(k);
-      if (PK.data.extra) PK.data.extra.forEach(function(e){ if (all.indexOf(e) < 0) all.unshift(e); });
+      /* صفحاتُ النصِّ الأساسيِّ (extra) أوّلاً وبترتيبِها، ثمّ صفحاتُ الدرس */
+      if (PK.data.extra) all = PK.data.extra.filter(function(e){ return all.indexOf(e) < 0; }).concat(all);
       h = '<div class="pkpg">' + all.map(function(n){ return '<button type="button" data-pp="' + n + '"><img loading="lazy" src="packs/img/' + (BOOKF[PK.data.book] || '') + '-' + ('00' + n).slice(-3) + '.jpg" alt=""><span>ص ' + dz(n - 1) + '</span></button>'; }).join('') + '</div>'
         + '<p class="pk0" style="padding:12px 4px 0">أو افتح الكتابَ كاملاً: <a href="book.html?id=' + esc(PK.data.book) + '&p=' + a + '" target="_blank" rel="noopener">عارضُ الكتب ↗</a></p>';
     }
