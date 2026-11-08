@@ -41,7 +41,7 @@ app.boot = async function () {
 function intro() {
   const t = T(), el = $("#intro");
   el.innerHTML = `<div class="in-card">
-    <div class="in-top"><img src="${app.assets.img.logo}" alt=""><div><b>${t.school}</b><small>${t.google}</small></div></div>
+    <div class="in-top"><img src="${app.assets.img.logo}" alt=""><div><b>${t.school}</b><small>${t.district} · ${t.google}</small></div></div>
     <div class="in-main"><div class="in-av"><img src="${app.state.avatar || app.assets.img.avatar}" alt=""></div>
       <div class="in-txt"><h1>${t.app}</h1><h3>${t.appSub}</h3>
       <p class="in-verse" dir="rtl" lang="ar">﴿${app.assets.verses["41:53"].ar.split(" ").slice(0, 6).join(" ")}﴾</p>
@@ -55,6 +55,7 @@ function intro() {
       <button class="lang" id="inLang">${app.lang === "ar" ? "English" : "العربية"}</button>
     </div>
     <div class="in-load">${t.loading}</div>
+    <div class="in-cred"><b>${t.teamTitle}:</b> ${t.team.join(" · ")} — ${t.principal}<br>${t.rights}</div>
   </div>`;
   el.querySelectorAll(".go").forEach(b => b.onclick = () => begin(b.dataset.m));
   $("#inLang").onclick = () => switchLang();
@@ -294,6 +295,7 @@ function settings(open) {
     <label class="row"><span>${t.narration}</span><input type="checkbox" id="sVoice" ${RX.A.voice ? "checked" : ""}></label>
     <label class="row"><span>${t.unlockAll}</span><input type="checkbox" id="sUnlock" ${st.unlockAll ? "checked" : ""}></label>
     <div class="row"><span>${t.language}</span><button id="sLang">${app.lang === "ar" ? "English" : "العربية"}</button></div>
+    <div class="cred"><b>${t.teamTitle}</b><p>${t.school}${t.sep}${t.district}</p><p>${t.principal}</p>${t.team.map(x => `<p>${x}</p>`).join("")}<p>${t.rights}</p></div>
     <div class="cred"><b>${t.credits}</b>${t.credText.map(x => `<p>${x}</p>`).join("")}</div>
     <div class="row end"><button class="btn" id="sReset">${t.reset}</button><button class="btn pri" id="sClose">${t.close}</button></div>
   </div>`;

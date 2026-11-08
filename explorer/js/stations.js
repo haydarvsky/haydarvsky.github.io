@@ -379,7 +379,7 @@ ST.wara = async function (assets) {
   E.addTo(sc, listen, { onSelect: sc.playVerse, onHover: on => listen.scale.multiplyScalar(on ? 1.1 : 1 / 1.1) });
   E.addTo(sc, verse, { onSelect: sc.playVerse });
   // منارة هضبة الأحمدي على الاتجاه الحقيقي
-  sc.ahmadi = farLabel(sc, T.ahmadi, U.lang() === "ar" ? `${U.num(meta.ahmadi.km)} كم، ${U.num(meta.ahmadi.hmax)} م` : `${meta.ahmadi.km} km · ${meta.ahmadi.hmax} m`, AB, 10500, 640, 0xB3312A, {
+  sc.ahmadi = farLabel(sc, T.ahmadi, T.ahmadiDist, AB, 10500, 640, 0xB3312A, {
     onSelect: () => { if (!sc.steps[1]) { RX.A.sfx("find"); RX.app.stepDone(sc, 1); showProfile(); } }
   });
   sc.turnToAhmadi = function () { const y0 = E.yaw, y1 = yawOf(AB); let d = y1 - y0; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; U.tween(1400, k => { E.yaw = y0 + d * k; E.pitch = 0.03 * k + E.pitch * (1 - k); }); };

@@ -313,7 +313,7 @@ UI.passport = function (open) {
       <div class="pp-av"><img id="ppAv" src="${st.avatar || RX.app.assets.img.avatar}" alt=""></div>
       <label class="pp-name"><span>${T.yourName}</span><input id="ppName" value="${esc(st.name || "")}" maxlength="40"></label>
       <label class="pp-up">${T.changeAvatar}<input id="ppFile" type="file" accept="image/*"></label>
-      <div class="pp-school">${esc(T.school)}</div>
+      <div class="pp-school">${esc(T.school)}<br>${esc(T.district)}<br>${esc(T.rights)}</div>
     </div>
     <div class="pp-pages"><div class="pp-h">${U.num(Object.keys(st.stamps).length)} / ${U.num(5)}</div><div class="slots">${slots}</div>
       <div class="pp-acts"><button class="btn" id="ppPrint">${T.printPassport}</button><button class="btn pri" id="ppClose">${T.close}</button></div></div>
