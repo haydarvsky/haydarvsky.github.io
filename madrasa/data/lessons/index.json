@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-01",
+  "updated": "2026-11-25",
   "topics": [
     {
       "id": "qasas",
@@ -650,6 +650,112 @@
           ],
           "bpr": "٩٨–١٠٠",
           "pack": true
+        }
+      ]
+    },
+    {
+      "id": "dhuayb",
+      "grade": 10,
+      "sem": 1,
+      "title": "مرثيةُ أبي ذؤيب",
+      "unit": "الموضوعُ الخامس — أبو ذؤيب الهذلي",
+      "note": "تحضيرٌ مقترحٌ للمعلّمين — إعداد: د. سعد المكاوي، والعروضُ بإلقاء أ. حيدر المعاتيق",
+      "lessons": [
+        {
+          "id": "g10-dhuayb-fikri-1",
+          "title": "البناءُ الفكريّ ١",
+          "sub": "الشاعرُ والمناسبة، الإلقاء، شرحُ الأبيات",
+          "kind": "الفهم والاستيعاب",
+          "html": "dars/g10-dhuayb-fikri-1.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-dhuayb-fikri-2",
+          "title": "البناءُ الفكريّ ٢",
+          "sub": "الحزنُ والتجلّد، فلسفةُ الموت، الحوار",
+          "kind": "الفهم والاستيعاب",
+          "html": "dars/g10-dhuayb-fikri-2.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-dhuayb-mujam",
+          "title": "البناءُ الفكريّ والمعجمُ والدلالة",
+          "sub": "المفرداتُ والحقولُ الدلاليّة والتوصيل",
+          "kind": "الثروة اللغوية",
+          "html": "dars/g10-dhuayb-mujam.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-dhuayb-lughawi",
+          "title": "البناءُ اللغويّ وجمالياتُ النص",
+          "sub": "الأساليبُ والصورُ والعاطفة",
+          "kind": "لغة",
+          "html": "dars/g10-dhuayb-lughawi.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-dhuayb-tadrib",
+          "title": "التطبيقُ الخارجي",
+          "sub": "«أبا المغوار» لكعب بن سعد الغنوي",
+          "kind": "تدريب",
+          "html": "dars/g10-dhuayb-tadrib.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-aghrad-tashbih",
+          "title": "أغراضُ التشبيه",
+          "sub": "فنون البلاغة",
+          "kind": "بلاغة",
+          "html": "dars/g10-aghrad-tashbih.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-balaghat-tashbih",
+          "title": "بلاغةُ التشبيه",
+          "sub": "فنون البلاغة",
+          "kind": "بلاغة",
+          "html": "dars/g10-balaghat-tashbih.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-masadir-1",
+          "title": "المصادر ١",
+          "sub": "مصادرُ الفعلِ الثلاثي",
+          "kind": "نحو",
+          "html": "dars/g10-masadir-1.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-masadir-2",
+          "title": "المصادر ٢",
+          "sub": "مصادرُ غيرِ الثلاثي",
+          "kind": "نحو",
+          "html": "dars/g10-masadir-2.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-masadir-3",
+          "title": "المصادر ٣",
+          "sub": "حصّةٌ تقويميّة",
+          "kind": "نحو",
+          "html": "dars/g10-masadir-3.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-dhuayb-maqala-1",
+          "title": "فنُّ كتابةِ المقالة ١",
+          "sub": "الحصّةُ التدريبيّة",
+          "kind": "تعبير",
+          "html": "dars/g10-dhuayb-maqala-1.html",
+          "hdeck": true
+        },
+        {
+          "id": "g10-dhuayb-maqala-2",
+          "title": "فنُّ كتابةِ المقالة ٢",
+          "sub": "الحصّةُ التطبيقيّة: «الأمانة» للطنطاوي",
+          "kind": "تعبير",
+          "html": "dars/g10-dhuayb-maqala-2.html",
+          "hdeck": true
         }
       ]
     }
